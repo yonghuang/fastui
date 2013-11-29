@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Core-ClassManage'>/**
+</span> * @class fastDev.Core.ClassManage
+ * @singleton
+ * 控件类管理器，负责管理所有控件的类文件并建立维护类的别名与实际名称之间的关联
+ */
+fastDev.Core = {
+<span id='fastDev-Core-ClassManage-property-ClassManager'>	ClassManager : {
+</span>		_aliasMap : {},
+		_classMap : {},
+<span id='fastDev-Core-ClassManage-method-regClass'>		/**
+</span>		 * 注册类
+		 * @param {String} className 类名
+		 * @param {Object} clazz 类对象
+		 * @param {String} [classAlias] 类别名
+		 */
+		regClass : function(className, clazz, classAlias) {
+			classAlias = classAlias || className;
+			this._aliasMap[classAlias] = className;
+			this._classMap[className] = clazz;
+		},
+<span id='fastDev-Core-ClassManage-method-getClass'>		/**
+</span>		 * 根基类名或类别名获取类对象
+		 * @param {Object} name 类名或类别名
+		 * @return {Object|undefined}
+		 */
+		getClass : function(name) {
+			var Class;
+			if( Class = this._classMap[name]) {
+			} else if( Class = this._aliasMap[name]) {
+				Class = this._classMap[Class];
+			}
+			return Class ? (Class.Class || Class) : undefined;
+		}
+	}
+};
+</pre>
+</body>
+</html>

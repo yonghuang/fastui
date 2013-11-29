@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-CheckBoxGroup'>/**
+</span> * @class fastDev.Ui.CheckBoxGroup
+ * @extends fastDev.Ui.Component
+ * 复选框组控件，继承自component，表单类组件。&lt;p&gt;
+ * 作者： 姜玲
+ *
+ *		&lt;div itype=&quot;CheckBoxGroup&quot;  id=&quot;check2&quot;&gt;
+ *		  &lt;div value=&quot;1&quot; text=&quot;足球&quot; checked=true&gt;&lt;/div&gt;			
+ *		  &lt;div value=&quot;2&quot; text=&quot;排球&quot; checked=true&gt;&lt;/div&gt;
+ *		  &lt;div value=&quot;3&quot; text=&quot;羽毛球&quot;&gt;&lt;/div&gt;
+ *		  &lt;div value=&quot;4&quot; text=&quot;乒乓球&quot;&gt;&lt;/div&gt;
+ *		&lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.CheckBoxGroup&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;CheckBoxGroup&quot;,
+	_options : {
+<span id='fastDev-Ui-CheckBoxGroup-property-repeatItems'>		/**
+</span>		 * 每行或每列有几个复选框
+		 * @type {Number}
+		 */
+		repeatItems : null,
+<span id='fastDev-Ui-CheckBoxGroup-property-itemWidth'>		/**
+</span>		 * 每列的宽度
+		 * @type {String}
+		 */
+		itemWidth : &quot;&quot;,
+<span id='fastDev-Ui-CheckBoxGroup-property-itemHeight'>		/**
+</span>		 * 每列的高度
+		 * @type {String}
+		 */
+		itemHeight : &quot;&quot;,
+<span id='fastDev-Ui-CheckBoxGroup-property-repeatDirection'>		/**
+</span>		 * 布局的方式vertical:竖向排列, horizontal横向排列
+		 * @type {String}
+		 */
+		repeatDirection : &quot;horizontal&quot;,
+<span id='fastDev-Ui-CheckBoxGroup-property-items'>		/**
+</span>		 * 用于设置控件的初始项
+		 * @type {String}
+		 */
+		items : null,
+<span id='fastDev-Ui-CheckBoxGroup-property-name'>		/**
+</span>		 * 控件名称
+		 * @type {String}
+		 */
+		name : &quot;&quot;,
+<span id='fastDev-Ui-CheckBoxGroup-property-disabled'>		/**
+</span>		 * 设置是否禁用，默认false
+		 * @type {Boolean}
+		 */
+		disabled : false,
+<span id='fastDev-Ui-CheckBoxGroup-property-hide'>		/**
+</span>		 * 设置是否隐藏，默认false
+		 * @type {Boolean}
+		 */
+		hide : false,
+<span id='fastDev-Ui-CheckBoxGroup-property-value'>		/**
+</span>		 * 设置选中值
+		 * @type {String}
+		 */
+		value : &quot;&quot;,
+<span id='fastDev-Ui-CheckBoxGroup-property-allowMultiSelect'>		/**
+</span>		 * 是否允许多选
+		 * @type {Boolean}
+		 */
+		allowMultiSelect : true,
+<span id='fastDev-Ui-CheckBoxGroup-event-onchange'>		/**
+</span>		 * 值改变时发生
+		 * @event
+		 */
+		onchange : fastDev.noop,
+		onfocus:fastDev.noop,
+		onblur:fastDev.noop,
+<span id='fastDev-Ui-CheckBoxGroup-property-validateMode'>		/**
+</span>		 * 验证模式: blur(失去焦点验证),none(无验证)
+		 * @type {String}
+		 */
+		validateMode:&quot;none&quot;,
+<span id='fastDev-Ui-CheckBoxGroup-property-rule'>		/**
+</span>		 * 校验的规则，支持是否为空一种 required
+		 * @type {String}
+		 */
+		rule:&quot;&quot;,
+<span id='fastDev-Ui-CheckBoxGroup-property-errorConfig'>		/**
+</span>		 * 验证错误的提示消息配置
+		 * @type {String}
+		 */
+		errorConfig : null,
+<span id='fastDev-Ui-CheckBoxGroup-event-onBeforeValidation'>		/**
+</span>		 * 验证前发生
+		 * @event
+		 */
+		onBeforeValidation : fastDev.noop,
+<span id='fastDev-Ui-CheckBoxGroup-event-onAfterValidation'>		/**
+</span>		 * 验证后发生
+		 * @event
+		 */
+		onAfterValidation : fastDev.noop
+	},
+	_global : {
+		itemsLen : 0,
+		type : &quot;checkbox&quot;,
+		condiv:null,
+		box:null,
+		bodyClick:null,
+		infocus:false
+	},
+	/*template : [
+		'&lt;div id=&quot;#{id}&quot; class=&quot;ui-fakeborder #{cls}&quot;&gt;', 
+			'&lt;tpl dynamic&gt;', 
+				'&lt;tpl each&gt;',
+					'&lt;tpl if(&quot;#{repeatDirection}&quot;==&quot;vertical&quot; &amp;&amp; #{repeatItems}&amp;gt;1 &amp;&amp; ({row_id}==1 || {row_id}%#{repeatItems}==1))&gt;', 
+						'&lt;div class=&quot;ui-labelgroup&quot;&gt;', 
+					'&lt;/tpl&gt;', 
+						'&lt;div class=&quot;ui-form ui-#{type} ui-label-item&quot;&gt;&lt;label&gt;',
+					'&lt;tpl if({checked})&gt;',
+						'&lt;div class=&quot;ui-label-ico ui-label-checked&quot; name=&quot;#{name}&quot; value=&quot;{value}&quot; text=&quot;{text}&quot;&gt;&lt;/div&gt;', 
+					'&lt;tpl else&gt;', 
+						'&lt;div class=&quot;ui-label-ico&quot; name=&quot;#{name}&quot; value=&quot;{value}&quot; text=&quot;{text}&quot;&gt;&lt;/div&gt;', 
+					'&lt;/tpl&gt;', 
+					'&lt;div class=&quot;ui-label-text&quot;&gt;{text}&lt;/div&gt;&lt;/label&gt;&lt;/div&gt;', 
+					'&lt;tpl if(&quot;#{repeatDirection}&quot;==&quot;vertical&quot; &amp;&amp; #{repeatItems}&amp;gt;1 &amp;&amp; ({row_id}==#{itemsLen} || {row_id}%#{repeatItems}==0))&gt;', 
+						'&lt;/div&gt;', 
+					'&lt;/tpl&gt;', 
+				'&lt;/tpl&gt;', 
+			'&lt;/tpl&gt;', 
+		'&lt;/div&gt;'
+	],*/
+	staticTemplate : function(params) {
+	  return '&lt;div id=&quot;'+params.id+'&quot; class=&quot;ui-fakeborder '+params.cls+'&quot;&gt;&lt;/div&gt;';
+	},
+	dynamicTemplate : function(params,data){
+		var html = [];
+		for(var i=0,item;item=data[i];i++){
+			if(params.repeatDirection===&quot;vertical&quot; &amp;&amp; params.repeatItems&gt;1 &amp;&amp; (i===1 || i%params.repeatItems===1)){
+				html.push('&lt;div class=&quot;ui-labelgroup&quot;&gt;');
+			}
+			html.push('&lt;div class=&quot;ui-form ui-'+params.type+' ui-label-item&quot;&gt;&lt;label&gt;');
+			html.push('&lt;div class=&quot;ui-label-ico');
+			if(item.checked){
+				html.push(' ui-label-checked');
+			}
+			html.push('&quot; name=&quot;'+params.name+'&quot; value=&quot;'+item.value+'&quot; text=&quot;'+item.text+'&quot;&gt;&lt;/div&gt;');
+			html.push('&lt;div class=&quot;ui-label-text&quot;&gt;'+item.text+'&lt;/div&gt;&lt;/label&gt;&lt;/div&gt;');	
+			if(params.repeatDirection===&quot;vertical&quot; &amp;&amp; params.repeatItems&gt;1 &amp;&amp; (i===params.itemsLen || i%params.repeatItems===0)){
+				html.push('&lt;/div&gt;');
+			}
+		}
+		return html.join('');
+	},
+<span id='fastDev-Ui-CheckBoxGroup-property-errorTemplate'>	/**
+</span>	 * 错误提示信息模板
+	 * @private
+	 */
+	errorTemplate : ['&lt;div class=&quot;ui-tips-text ui-radius ui-shadow&quot;&gt;&lt;/div&gt;'],
+	tplParam : [&quot;type&quot;, &quot;name&quot;, &quot;repeatDirection&quot;, &quot;repeatItems&quot;, &quot;itemsLen&quot;,&quot;id&quot;,&quot;cls&quot;],
+	fields : [&quot;value&quot;, &quot;text&quot;, {
+		name : &quot;checked&quot;,
+		type:&quot;Boolean&quot;,
+		defaultValue : false
+	}],
+<span id='fastDev-Ui-CheckBoxGroup-method-ready'>	/**
+</span>	 * 面板参数准备
+	 * @protected
+	 */
+	ready : function(options, global) {
+		if(!options.name){
+			(options.name = &quot;chk&quot; + fastDev.getID());
+		}
+		//!options.repeatItems &amp;&amp; (options.repeatDirection == &quot;vertical&quot; &amp;&amp; (options.repeatItems = 1) || (options.repeatItems = 0));
+		if(!options.repeatItems){
+			 if(options.repeatDirection === &quot;vertical&quot;){
+				options.repeatItems = 1;
+			 }else{
+				options.repeatItems = 0;
+			 }
+		}
+		if(!options.allowMultiSelect){
+			global.type = &quot;radio&quot;;
+		}
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-construct'>	/**
+</span>	 * 控件创建
+	 * @protected
+	 */
+	construct : function(options,global){
+		if(!!this.proxyConfig){
+			this.proxyConfig.reader = {type:&quot;json&quot;};
+		}
+	},	
+<span id='fastDev-Ui-CheckBoxGroup-method-constructItems'>	/**
+</span>	 * 初始化控件列表
+	 * @param {Array} items数据项
+	 * @protected
+	 */
+	constructItems : function(items) {
+		this._global.itemsLen = this.dataset.getSize();
+		//this.renderDynamicHtml();
+		this._renderDynamicHtml(this.find(&quot;.ui-fakeborder&quot;));	
+		this.setConstruct();
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-setConstruct'>	/**
+</span>	 * 设置控件属性
+	 * @private
+	 */
+	setConstruct : function() {
+		var options = this._options, condiv = this.find(&quot;.ui-form&quot;),width=options.itemWidth;
+		this._global.condiv=condiv;
+		// 样式功能初始化		
+		if(options.repeatDirection === &quot;horizontal&quot;){
+			this.setHorizontal();
+		}else{
+			this.setVertical();	
+		}
+		if(width===&quot;&quot;){			
+			width=this.getMaxWidth(condiv.elems);
+		}
+		if(parseInt(width,10) &gt; 0){
+			condiv.css(&quot;width&quot;,width);
+		}
+		if(options.itemHeight){
+			condiv.css(&quot;height&quot;, options.itemHeight);
+		}
+		if(options.disabled){
+			this.disabled();
+		}
+		if(options.hide){
+			this.hide();
+		}				
+		if(options.value || options.value===0){
+			this.addValue(options.value);
+		}
+		var maxright=this.getMaxRight(condiv.elems);
+		fastDev(this.elems[0]).width(maxright);	
+		this.bindEvent();
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-getMaxRight'>	/**
+</span>	 * 得到最大right值
+	 * @private
+	 */
+	getMaxRight : function(condiv){
+		var maxRight=0,len=condiv.length,con,firstLeft=0;
+		for(var i=0;i&lt;len;i++){			
+			con=fastDev(condiv[i]);
+			if(i===0){
+				firstLeft=con.offset().left;
+			}
+			maxRight=Math.max(maxRight,con.offset().left+con.width());
+		}
+		return maxRight-firstLeft+15+&quot;px&quot;;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-getMaxWidth'>	/**
+</span>	 * 得到最大宽度
+	 * @private
+	 */
+	getMaxWidth : function(condiv){
+		var maxWidth=0,len=condiv.length,con;
+		for(var i=0;i&lt;len;i++){
+			con=fastDev(condiv[i]);
+			maxWidth=Math.max(maxWidth,con.width());
+		}
+		return maxWidth+&quot;px&quot;;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-getLabel'>	/**
+</span>	 * 得到label
+	 * @private
+	 */
+	getLabel : function(event) {
+			var target = event.target, label, evobj = fastDev(target);
+			if(evobj.hasClass(&quot;ui-label-text&quot;) || evobj.hasClass(&quot;ui-label-ico&quot;)) {
+				label = evobj.parent(&quot;label&quot;);
+			} else if(evobj.hasClass(&quot;ui-form&quot;)) {
+				label = evobj.children();
+			} else {
+				label = evobj;
+			}
+			if(label.find(&quot;.ui-label-disable&quot;).elems.length &gt; 0 || label.find(&quot;.ui-label-checked-disable&quot;).elems.length &gt; 0) {
+				return null;
+			}
+			return label;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-bindEvent'>	/**
+</span>	 * 绑定事件
+	 * @private
+	 */
+	bindEvent : function() {
+		var me = this, options = this._options, condiv = this._global.condiv;
+		//按钮鼠标滑入滑出样式改变事件
+		var condivMouseOver = function(event) {
+			var label = me.getLabel(event);
+			if(label &amp;&amp; label.hasClass(&quot;ui-label-over&quot;) === false){
+				label.addClass(&quot;ui-label-over&quot;);
+			}
+		};
+		var condivMouseOut = function(event) {
+			var label = me.getLabel(event);
+			if(label){
+				label.removeClass(&quot;ui-label-over&quot;);
+			}
+		};
+		var condivClick = function(event) {
+			var label = me.getLabel(event), item = {};
+			if(label) {
+				me._global.infocus=true;
+				var input = label.find(&quot;.ui-label-ico&quot;);
+				if(input.hasClass(&quot;ui-label-checked&quot;)) {
+					input.removeClass(&quot;ui-label-checked&quot;);
+					item.checked = false;
+				} else {
+					if(options.allowMultiSelect) {
+						input.addClass(&quot;ui-label-checked&quot;);
+					} else {
+						me.find(&quot;.ui-label-ico&quot;).removeClass(&quot;ui-label-checked&quot;);
+						input.addClass(&quot;ui-label-checked&quot;);
+					}
+					item.checked = true;
+				}
+				if(options.onchange !== fastDev.noop) {
+					item.value = input.attr(&quot;value&quot;);
+					item.text = input.attr(&quot;text&quot;);
+					options.onchange.call(this,event,item);					
+					//options.onfocus.call(this,item);
+					me.onFocus();
+				}
+			}
+		};
+		condiv.bind(&quot;mouseover&quot;, condivMouseOver).bind(&quot;mouseout&quot;, condivMouseOut);
+		condiv.bind(&quot;click&quot;, condivClick);
+		if(options.validateMode !== &quot;none&quot;) {
+			this.onBlur(fastDev.setFnInScope(me, me.validate));
+		}
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-onFocus'>	/**
+</span>	 * 得到焦点
+	 * @param {Function} handle
+	 */
+	onFocus:function(handle){
+		return this;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-onBlur'>	/**
+</span>	 * 失去焦点
+	 * @param {Function} handle
+	 */
+	onBlur:function(handle){
+		//绑定失去焦点事件
+		var me = this;
+		if(handle){			
+			var bodyClick=function(event){
+				var target = event.target;
+				if(!fastDev(me.elems[0]).contains(target) &amp;&amp; me._global.infocus){
+					me._global.infocus=false;
+					//options.onblur.call(this,event);
+					me.blur(event,handle);
+				}
+			};
+			this._global.bodyClick=bodyClick;
+			fastDev(&quot;body&quot;).bind(&quot;click&quot;,bodyClick);			
+		}
+		return this;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-blur'>	/**
+</span>	 * 执行失去焦点
+	 * @private
+	 */
+	blur:function(event,handle){
+		//让控件失去焦点
+		handle(event);
+		return this;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-focus'>	/**
+</span>	 * 执行得到焦点
+	 * @private
+	 */
+	focus:function(){
+		return this;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-addValue'>	/**
+</span>	 * 合并控件的值
+	 * @param {Array} value 值
+	 * @private
+	 */
+	addValue : function(value) {
+		if(value) {			
+			if(fastDev.isString(value)){
+				if(value.indexOf(&quot;,&quot;)&gt;0){
+					value=value.replace(&quot;[&quot;,&quot;&quot;).replace(&quot;]&quot;,&quot;&quot;);
+					value=value.replace(/&quot;/g,&quot;&quot;);
+					value=value.split(',');
+				}else{
+					value = [value];
+				}
+			}
+			if(fastDev.isNumber(value)){
+				value = [value];
+			}			
+			var controlList = this.find(&quot;.ui-label-ico&quot;).elems,con;
+			while(value.length &gt; 0) {
+				var v = value.pop();
+				for(var i = 0; i &lt; controlList.length; i += 1) {
+					con=fastDev(controlList[i]);
+					if(con.attr(&quot;value&quot;) === &quot;&quot; + v) {
+						if(!this._options.allowMultiSelect) {
+							this.unCheck();
+							if(this._options.disabled){
+								con.addClass(&quot;ui-label-checked-disable&quot;);
+							}else{
+								con.addClass(&quot;ui-label-checked&quot;);
+							}
+							break;
+						} else {
+							if(this._options.disabled){
+								con.addClass(&quot;ui-label-checked-disable&quot;);
+							}else{
+								con.addClass(&quot;ui-label-checked&quot;);
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-setValue'>	/**
+</span>	 * 设置控件的值，会先清空
+	 * @param {Array} value 值
+	 */
+	setValue : function(value) {
+		var control = this.find(&quot;.ui-label-ico&quot;),len= control.elems.length;
+		if(len===1 &amp;&amp; typeof value === &quot;boolean&quot;){
+			if(value){
+				control.addClass(&quot;ui-label-checked&quot;);
+			}else{
+				control.removeClass(&quot;ui-label-checked&quot;);
+			}
+		}else{
+			if(typeof value===&quot;number&quot;){
+				value=&quot;&quot;+value;
+			}
+			if(value.length&gt;0){
+				this.unCheck();
+				this.addValue(value);
+			}
+		}
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-getValue'>	/**
+</span>	 * 获取控件选中项的值
+	 * @return {Array}
+	 */
+	getValue : function() {		
+		var controlList = this.find(&quot;.ui-label-ico&quot;).elems, result =[],con,n=0,len= controlList.length;
+		if(len===1){
+			con=fastDev(controlList[0]);
+			return con.hasClass(&quot;ui-label-checked&quot;);
+		}else{
+			for(var i = 0; i &lt; len; i += 1) {
+				con=fastDev(controlList[i]);
+				if(con.hasClass(&quot;ui-label-checked&quot;) || con.hasClass(&quot;ui-label-checked-disable&quot;) ) {
+					result[n]=con.attr(&quot;value&quot;);
+					n+=1;
+				}
+			}
+			if(this._options.allowMultiSelect) {
+				return result.length &gt; 0 ?  result :&quot;&quot;;
+			}else{
+				return result.length &gt; 0 ?  result[0] :&quot;&quot;;
+			}
+		}
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-getValueStr'>	/**
+</span>	 * 获取控件选中项的值
+	 * @return {String}
+	 */
+	getValueStr : function() {		
+		var value, controlList = this.find(&quot;.ui-label-ico&quot;).elems, result = &quot;&quot;,con;
+		for(var i = 0; i &lt; controlList.length; i += 1) {
+			con=fastDev(controlList[i]);
+			if(con.hasClass(&quot;ui-label-checked&quot;) === true) {
+				value = '&quot;' + con.attr(&quot;value&quot;) + '&quot;';
+				if(result.length &gt; 0){
+					result += &quot;,&quot; + value;
+				}else{
+					result += value;
+				}
+			}
+		}
+		return result.length &gt; 0 ?  result :&quot;&quot;;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-setVertical'>	/**
+</span>	 * 设置为竖向排列
+	 * @private
+	 */
+	setVertical : function() {
+		var options = this._options, cdiv = this.find(&quot;.ui-labelgroup&quot;), condiv = this._global.condiv;
+		if(options.itemWidth) {
+			cdiv.css(&quot;width&quot;, options.itemWidth);
+		} else if(options.repeatItems) {
+			var lastWidth = this.getItemWidth(options);
+			cdiv.css(&quot;width&quot;, lastWidth);
+			condiv.css(&quot;width&quot;, &quot;100%&quot;);
+		}
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-addItems'>	/**
+</span>	 * 增加选项
+	 * @param {JsonObject/Array[JsonObject]} items
+	 */
+	addItems : function(items) {
+		// 数据兼容性处理
+		if(!fastDev.isArray(items)) {
+			items = [items];
+		}
+		var value = this.getValue();		
+		// 保存数据至数据集
+		this.dataset.fill(items);
+		// 重新初始化动态模板内容
+		this.constructItems();
+		// 重新设置当前选中项
+		this.setValue(value);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-getItemWidth'>	/**
+</span>	 * 算出项宽度
+	 * @private
+	 */
+	getItemWidth:function(options){
+		  var width = (100 / options.repeatItems);
+		  var containerWidth = fastDev(options.container).width();
+		  var lastWidth = fastDev.Util.StringUtil.stripUnits(width + &quot;%&quot;, containerWidth) -11;//每个都有10px的外边距，为防止除法四舍五入时有误差，多减去1
+		  if(fastDev.Browser.isIE6){
+			lastWidth = width - 1 + &quot;%&quot;;
+		  }
+		  return lastWidth;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-setHorizontal'>	/**
+</span>	 * 设置为横向排列
+	 * @private
+	 */
+	setHorizontal : function() {
+		var options = this._options, div = fastDev(this.elems[0]), condiv =this._global.condiv;
+		condiv.addClass(&quot;ui-label-inline&quot;);
+		if(options.repeatItems) {
+			var lastWidth = this.getItemWidth(options);
+			condiv.css(&quot;width&quot;, lastWidth);
+		}
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-setItemsWidth'>	/**
+</span>	 * 设置每个复选框的宽度
+	 * @param {String} width宽度
+	 */
+	setItemsWidth : function(width) {
+		var condiv =this._global.condiv;
+		condiv.css(&quot;width&quot;, width);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-getCheckedItems'>	/**
+</span>	 * 获取控件选中项的值和文本
+	 * @return {Array}
+	 */
+	getCheckedItems : function(isjson) {
+		var value, text, data, controlList = this.find(&quot;.ui-label-ico&quot;).elems, result = &quot;&quot;,con;
+		for(var i = 0; i &lt; controlList.length; i += 1) {
+			con=fastDev(controlList[i]);
+			if(con.hasClass(&quot;ui-label-checked&quot;) === true) {
+				value = con.attr(&quot;value&quot;);
+				text = con.attr(&quot;text&quot;);
+				data = &quot;{value:\&quot;&quot; + value + &quot;\&quot;,text:\&quot;&quot; + text + &quot;\&quot;}&quot;;
+				if(result.length &gt; 0){
+					result += &quot;,&quot; + data;
+				}else{
+					result += data;
+				}
+			}
+		}
+		if(isjson){
+			return  (new Function(&quot;return [&quot; + result + &quot;]&quot;))();
+		}else{
+			return &quot;[&quot; + result + &quot;]&quot;;
+		}
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-disabled'>	/**
+</span>	 * 禁用控件
+	 */
+	disabled : function() {
+		this.find(&quot;.ui-label-ico&quot;).addClass(&quot;ui-label-disable&quot;);
+		this.find(&quot;.ui-label-ico.ui-label-checked&quot;).removeClass(&quot;ui-label-checked&quot;).addClass(&quot;ui-label-checked-disable&quot;);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-unCheck'>	/**
+</span>	 * 清空方法
+	 */
+	unCheck : function() {
+		this.find(&quot;.ui-label-ico.ui-label-checked&quot;).removeClass(&quot;ui-label-checked&quot;);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-clean'>	/**
+</span>	 * 清空选项方法
+	 */
+	clean : function(){
+		this.reset();
+		this.dataset.remove();
+		this.constructItems();
+		return this;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-reset'>	/**
+</span>	 * 清空值方法
+	 */
+	reset : function(){
+		this.unCheck();
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-allCheck'>	/**
+</span>	 * 全选方法　
+	 */
+	allCheck : function() {
+		this.find(&quot;.ui-label-ico&quot;).addClass(&quot;ui-label-checked&quot;);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-invertCheck'>	/**
+</span>	 * 反选方法
+	 */
+	invertCheck : function() {
+		this.find(&quot;[class='ui-label-ico']&quot;).addClass(&quot;ui-label-checked1&quot;);
+		this.find(&quot;.ui-label-ico.ui-label-checked&quot;).removeClass(&quot;ui-label-checked&quot;);
+		this.find(&quot;.ui-label-checked1&quot;).removeClass(&quot;ui-label-checked1&quot;).addClass(&quot;ui-label-checked&quot;);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-unDisabled'>	/**
+</span>	 * 启用控件
+	 */
+	unDisabled : function() {
+		this.find(&quot;.ui-label-disable&quot;).removeClass(&quot;ui-label-disable&quot;);
+		this.find(&quot;.ui-label-ico.ui-label-checked-disable&quot;).removeClass(&quot;ui-label-checked-disable&quot;).addClass(&quot;ui-label-checked&quot;);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-enable'>	/**
+</span>	 * 启用控件
+	 */
+	enable : function(){
+		this.unDisabled();
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-destroy'>	/**
+</span>	 * 销毁当前对象Dom集
+	 */
+	destroy : function() {
+		fastDev(this.elems).remove();
+		var bodyClick=this._global.bodyClick;
+		fastDev(&quot;body&quot;).unbind(&quot;click&quot;,bodyClick);
+	},
+	bind : function(){
+		return this;
+	},
+	fire : function(){
+		return this;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-hasError'>	/**
+</span>	 * 是否验证不通过
+	 */
+	hasError : function(){
+		return fastDev(this.elems[0]).hasClass(&quot;ui-tips-text-err&quot;);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-validate'>	/**
+</span>	 * 调用配置中的验证规则对输入值进行验证
+	 * @return {String}
+	 */
+	validate : function() {		
+		var options = this._options, errorMsg=&quot;&quot;;
+		if(options.rule){
+			var value = this.getValue(), validation = fastDev.Core.Validation;
+			var box=fastDev(this.elems[0]);
+			var height=box.children().height();
+			//box.css(&quot;height&quot;,height);
+			this._global.box=box;
+			var errorConfig=options.errorConfig;
+			errorMsg = fastDev.Core.Validation.validate(options.rule, value, errorConfig);
+			if(errorMsg) {
+				this.initError(errorMsg);
+			} else {
+				this.destroyError();
+			}	
+		}
+		return errorMsg;
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-initError'>	/**
+</span>	 *  初始化错误提示
+	 * @param {Object} errorMsg 错误信息
+	 * @private
+	 */
+	initError : function(errorMsg) {
+		var global = this._global,
+		// 输入框
+		box = global.box,
+		// 错误提示框
+		errorDiv = global.errorDiv = fastDev(this.errorTemplate.join(&quot;&quot;)),
+		// 鼠标滑入输入框事件
+		boxMouseoverHandle = global.boxMouseoverHandle,
+		// 鼠标滑出输入框事件
+		boxMouseoutHandle = global.boxMouseoutHandle;
+		if(!boxMouseoverHandle) {
+			boxMouseoverHandle = global.boxMouseoverHandle = function(event) {
+				if(box.hasClass(&quot;ui-tips-text-err&quot;)){
+				errorDiv.css({
+					left : event.pageX + 10 + &quot;px&quot;,
+					top : event.pageY + 10 + &quot;px&quot;
+				}).show();
+				}
+			};
+			boxMouseoutHandle = global.boxMouseoutHandle = function() {
+				errorDiv.hide();
+			};
+		}
+		// 渲染错误提示框并隐藏
+		errorDiv.setText(errorMsg).css({
+			position : &quot;absolute&quot;
+		}).hide().appendTo(document.body);
+		box.addClass(&quot;ui-tips-text-err&quot;);
+		box.bind(&quot;mouseover&quot;, boxMouseoverHandle).bind(&quot;mouseout&quot;, boxMouseoutHandle);
+	},
+<span id='fastDev-Ui-CheckBoxGroup-method-destroyError'>	/**
+</span>	 * 销毁错误提示
+	 * @private
+	 */
+	destroyError : function() {
+		var global = this._global, errorDiv = global.errorDiv;
+		if(!errorDiv) {
+			return;
+		}
+		var box = global.box, textMouseoverHandle = global.textMouseoverHandle, textMouseoutHandle = global.textMouseoutHandle;
+		box.removeClass(&quot;ui-tips-text-err&quot;);
+		//box.removeClass(&quot;ui-fakeborder&quot;);
+		box.unbind(&quot;mouseover&quot;, textMouseoverHandle).unbind(&quot;mouseout&quot;, textMouseoutHandle);
+		errorDiv.remove();
+	}
+});
+</pre>
+</body>
+</html>

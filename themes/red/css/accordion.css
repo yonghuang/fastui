@@ -1,0 +1,198 @@
+    @charset "utf-8";
+	
+    /*
+     * 手风琴外壳div样式
+     * */
+    div.accordion {
+    	font-size:12px;
+    	color:#333;
+    	text-align:left;
+    	width:100%;
+    }
+    div.accordion div {
+    	background:url(../images/accordion/menu_bg_hover.gif) repeat-x;
+    	border-bottom:1px solid #f5cac9;
+    	overflow:hidden;
+    }
+    * html div.accordion div {
+    	width:100%;
+    }
+    /*
+     * 二级菜单展开样式
+     * */
+    div.accordion .childdoor {
+    	background:#fffefa;
+    	border-bottom:1px solid #fff;
+    	border-top:1px solid #fff;
+    	display:block;
+    	text-indent:36px;
+    }
+    div.accordion .childdoor li {
+    	border-bottom:1px solid #f5cac9;
+    	border-top:1px solid #fff;
+    	color:#333;
+    	line-height:26px;
+    }
+    /*
+     * 二级菜单收缩样式
+     * */
+    div.accordion .hidechilddoor {
+    	background:none;
+    	border-bottom:none;
+    	display:none;
+    }
+    div.accordion .hidechilddoor li {
+    	background:none repeat scroll 0 0 #fffce9;
+    	border-bottom:1px solid #f5cac9;
+    	border-top:1px solid #fff;
+    	line-height:26px;
+    	padding-left:20px;
+    }
+    /*
+     * 二级菜单展开文字样式
+     * */
+    div.accordion div span {
+    	background:url(../images/accordion/menu_bg_hover_ico.gif) no-repeat 5px 5px;
+    	color:#d43a00;
+    	cursor:pointer;
+    	display:block;
+    	font-weight:bold;
+    	line-height:27px;
+    	margin-left:10px;
+    	padding-left:30px;
+    	text-align:left;
+    }
+    /*
+     * 一级菜单文字样式
+     * */
+    div.accordion .leftdoor .spana {
+    	background:url(../images/accordion/menu_left_top_dot.GIF) no-repeat scroll left center transparent;
+    	color:#FFFFFF;
+    	font:bold 12px/26px "宋体";
+    	height:26px;
+    	margin:0 0 0 10px;
+    	padding:0 0 0 20px;
+    }
+    /*
+     * 二级菜单收缩图标样式
+     * */
+    div.accordion div a.anchor {
+    	background:url(../images/accordion/menu_bg_ico.gif) no-repeat 5px 5px;
+    	color:#d43a00;
+    	cursor:pointer;
+    	display:block;
+    	line-height:27px;
+    	margin-left:10px;
+    	padding-left:30px;
+    	text-align: left;
+    }
+    div.accordion div a.anchor:hover {
+    	color: #d43a00;
+    }
+    /*
+     * 二级菜单展开图标样式
+     * */
+    div.accordion div a.canchor {
+    	background:url(../images/accordion/menu_bg_hover_ico.gif) no-repeat 5px 5px;
+    	color:#d43a00;
+    	cursor:pointer;
+    	display:block;
+    	font-weight:bold;
+    	line-height:27px;
+    	margin-left:10px;
+    	padding-left:30px;
+    	text-align:left;
+    }
+    div.accordion div a.canchor:hover {
+    	color:#d43a00;
+    }
+    /*
+     * a标签样式
+     * */
+    div.accordion div span a {
+    	background:none;
+    	border:0;
+    	display:block;
+    	font-size:12px;
+    	line-height:27px;
+    	padding:0;
+    }
+    /*
+     * 二级菜单样式
+     * */
+    div.accordion div.collapsed {
+    	background:url(../images/accordion/menu_bg.gif) repeat-x;
+    	color:#333;
+    	height:27px;
+    	width:100%;
+    }
+    div.accordion div.collapsed span {
+    	background:url(../images/accordion/menu_bg_ico.gif) no-repeat 5px 5px;
+    	color:#333;
+    	font-weight:normal;
+    	line-height:27px;
+    }
+    /*
+     * 三级菜单样式
+     * */
+    div.accordion div a {
+    	background:url(../images/accordion/menu_sub_icon.gif) no-repeat 25px 7px #fff;
+    	border-bottom:1px solid #fff;
+    	color:#d43a00;
+    	display:block;
+    	font-size:12px;
+    	line-height:28px;
+    	padding-left:45px;
+    	text-align:left;
+    	text-decoration:none;
+    }
+    div.accordion div a.current {
+    	background:url(../images/accordion/linkarrow.gif) no-repeat 25px 7px #fffefa;
+    	color:#d43a00;
+    }
+    div.accordion div span a.current {
+    	background:none;
+    	color:#fff
+    }
+    div.accordion div a:hover {
+    	background:url(../images/accordion/menu_sub_icon.gif) no-repeat 25px 7px #fffefa;
+    	text-decoration: none;
+    }
+    div.accordion div span a:hover {
+    	background:none;
+    }
+    /*
+     * 一级菜单样式
+     * */
+    div.accordion .leftdoor {
+    	background:url(../images/accordion/menu_left_topbg.GIF) repeat-x scroll 0 0 transparent;
+    	color:#fff;
+    	display:block;
+    	font:bold 12px/26px "宋体";
+    	height:26px;
+    	text-align:left;
+    	vertical-align: middle;
+    }
+    div.accordion .leftdoor span {
+    	background:url(../images/accordion/menu_left_top_dot.GIF) no-repeat scroll left transparent;
+    	color:#fff;
+    	height:26px;
+    	line-height:26px;
+    	margin:0 0 0 10px;
+    	padding:0 0 0 20px;
+    }
+    div.accordion .leftdoor span a {
+    	color:#fff;
+    	font-size:12px;
+    	text-decoration:none;
+    }
+    /*
+     * lable 样式
+     * */
+    .labelh {
+    	line-height:30px
+    }
+    div.accordion div {
+    	background:none;
+    	border-bottom:none;
+    }

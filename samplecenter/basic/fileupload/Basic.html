@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>
+			<ul>
+				<li>
+					FileUpload控件使用纯HTML方式实现页面无刷新的文件上传。
+				</li>
+				<li>
+					控件并不依赖于特定的后台处理程序来完成文件上传功能。
+				</li>
+				<li>
+					更多的情况下，用户需自定义onUploadComplete回调，以处理后台处理程序所返回的上传结果（该处理也是很简便的，详情请参考控件事件回调API说明）。
+				</li>
+				<li>
+					某些浏览器（如IE）不支持客户端脚本获取文件大小，此时需后台验证文件大小（或使用Flash上传文件）。
+				</li>
+				<li>
+					autoUpload属性可指定是否在文件选取成功后自动开始上传该文件（默认为false）。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 文件类型错误回调
+			function chooseError(file, code, msg) {
+				switch(code) {
+					case 1:
+						fastDev.tips("仅能上传jpg和png类型图片");
+						break;
+					case 2:
+						fastDev.tips("仅能上传小于10KB的文件");
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				默认配置
+			</div>
+			<input itype="FileUpload" action="../../data/fileupload.jsp"/>
+			<br />
+			<div class="ui-layout-text">
+				限制文件类型
+			</div>
+			<input itype="FileUpload" typeLimit="jpg,png"  onChooseError="chooseError()" action="../../data/fileupload.jsp"/>
+			<br />
+			<div class="ui-layout-text">
+				限制文件大小
+			</div>
+			<!-- sizeLimit属性值使用的单位为KB -->
+			<input itype="FileUpload" sizeLimit="10" onChooseError="chooseError()" action="../../data/fileupload.jsp"/>
+			<br />
+			<div class="ui-layout-text">
+				自动上传
+			</div>
+			<input itype="FileUpload" autoUpload="true" action="../../data/fileupload.jsp"/>
+		</div>
+	</body>
+</html>

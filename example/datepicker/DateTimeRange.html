@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>日期时间范围控制</title>
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+		<script src="../../src/fastDev-import.js"></script>
+	</head>
+	<body>
+		<div style="margin: 30px;">
+			<div>
+				<p>
+					minDate与maxDate属性
+				</p>
+				<!-- 支持精确到秒的时间范围控制 -->
+				<input itype="DatePicker" minDate="2011-11-11 11:11:11" maxDate="2012-11-11 11:11:11" format="yyyy-MM-dd HH:mm:ss"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					日期控件前后限制
+				</p>
+				<table>
+					<tr>
+						<td>起始时间：</td>
+						<td>
+						<input itype="DatePicker" id="start" timeBefore="end" format="yyyy-MM-dd HH:mm:ss"/>
+						</td>
+						<td>&nbsp;&nbsp;&nbsp;</td>
+						<td>结束时间：</td>
+						<td>
+						<input itype="DatePicker" id="end" timeAfter="start" format="yyyy-MM-dd HH:mm:ss"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<br />
+			<div>
+				<p>
+					日期时间包含表达式
+				</p>
+				<!-- 使用Cron表达式限制日期范围时，若使用DatePicker.main.js，则还需DatePicker.expression.js -->
+				<!-- 下面Cron表达式的指定的日期时间范围为：2012年至2013年的1,5,7,9月的所有工作日的上午9点到下午17点，每隔10分钟的日期时间，秒钟始终为0 -->
+				<input itype="DatePicker" includes="0 10/10 9-17 * 1,5,7,9 MON-FRI 2012,2013" format="yyyy-MM-dd HH:mm:ss"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					日期时间排除表达式
+				</p>
+				<!-- 包含与排除表达式中都可以省略 "秒，分，时，年" 子表达式，省略的子表达式自动以 "*"代替  -->
+				<!-- 包含与排除表达式可同时声明，也可以同时声明多个表达式 （表达式数组）-->
+				<!-- 下面表达式表示排除星期三，星期六和星期日（也可以用数字表示，星期日为1，星期一为2，星期三为4，依此类推）  -->
+				<input itype="DatePicker" excludes="* * WED,SAT,SUN"  format="yyyy-MM-dd"/>
+			</div>
+		</div>
+	</body>
+</html>
+

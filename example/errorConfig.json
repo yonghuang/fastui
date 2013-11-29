@@ -1,0 +1,24 @@
+﻿{
+	defaultInfo:{
+		requires:"不能为空",
+		isEmail:"邮件地址不合法",
+		isCode:"邮编不合法",
+		isIdcard:"不是有效的身份证",
+		isIp:"非法IP地址",
+		minLength:"长度只能在#{minLength}以上",
+		maxLength:"长度只能在#{maxLength}以内",
+		lengthEqual:"长度只能是#{lengthEqual}"
+	},
+	test9:{
+		requires:"不填东西怎么和后面文本框对比呀",
+	},
+	test16:{		
+		selfRegular:"必须是html元素格式"
+	},
+	test17:{		
+		selfRegular:"必须是数字"
+	},
+	test18:{		
+		selfRegular:"必须是中文"
+	},
+}

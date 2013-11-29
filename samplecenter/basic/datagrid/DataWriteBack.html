@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>当前示例为DataGrid数据的添加功能，数据来源于表单，表单未将数据提交至后台而是增加至DataGrid中进行展现</li>
+				<li>用到的是DataGrid的addRow方法，该方法接收一个JsonObject对象</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function entering() {
+				var data = fastDev.getInstance("form1").getItems();
+				fastDev.getInstance("grid1").addRow(data);
+			}
+
+			function onChange(value, text) {
+				fastDev.getInstance("positionName").setValue(text);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">DataGrid添加数据行</div>
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" id="grid1" showSeqColumn=true saveInstance=true width="98%" keyword="empno">
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="10%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用" itype="boolean" trueText="是" falseText="否"></div>
+				<div width="15%" name="positionName" text="职位" idColumn="position"></div>
+				<div width="10%" name="pay" text="薪资" itype="number" format="0,0.00"></div>
+				<div width="10%" name="datesemployed" text="入职时间" itype="date" format="yyyy年MM月dd日"></div>
+				<div width="15%" name="birthday" text="生日" itype="date" format="yyyy年MM月dd日" defaultValue="1985-01-01"></div>
+			</div>
+		</div>
+		<div style="margin: 10px">
+			<form itype="Form" id="form1">
+				<table width="100%" class="ui-form-list">
+					<tr>
+						<td width="80px">员工工号:</td>
+						<td>
+						<input itype="TextBox" id="empno">
+						</input></td>
+						<td width="80px">姓名:</td>
+						<td>
+						<input itype="TextBox" id="name" >
+						</input></td>
+					</tr>
+					<tr>
+						<td>所属部门:</td>
+						<td>
+						<input itype="TextBox" id="department" value="技术研发部" disabled="true">
+						</input></td>
+						<td>是否可用:</td>
+						<td id="isuse_c">
+						<div itype="CheckBoxGroup" id="isuse"  >
+							<div text="" value="true"></div>
+						</div></td>
+					</tr>
+					<tr>
+						<td>职位:</td>
+						<td >
+						<select itype="Select" id="position"  onchange="onChange()" inside=false>
+							<option>---请选择---</option>
+							<option value="position1">前端工程师</option>
+							<option value="position2">后台工程师</option>
+							<option value="position3">技术经理</option>
+							<option value="position4">项目经理</option>
+						</select>
+						<input itype="TextBox" type="hidden" id="positionName" >
+						</input></td>
+						<td>薪资:</td>
+						<td>
+						<input itype="TextBox" id="pay" >
+						</input></td>
+					</tr>
+					<tr>
+						<td>入职时间:</td>
+						<td ><div itype="DatePicker" id="datesemployed" ></div></td>
+						<td>生日:</td>
+						<td><div itype="DatePicker" id="birthday" ></div></td>
+					</tr>
+					<tr>
+						<td colspan="2" >
+						<input itype="Button" text="录入" onclick="entering()">
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<input type="hidden" />
+	</body>
+</html>

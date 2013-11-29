@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Data-Tree'>/**
+</span> * @class fastDev.Data.Tree
+ * 多叉树结构化对象，实现将普通的一维数组的树数据转化成多叉树结构的数据
+ */
+fastDev.define(&quot;fastDev.Data.Tree&quot;, {
+	alias : &quot;S_Tree&quot;,
+	prototype : function(fields) {
+		this.map = {};
+		this.invalid = [];
+		this.nodeclass = fields ? this.careteNodePrototype(fields) : fastDev.Data.Node;
+	}
+});
+
+fastDev.apply(fastDev.Data.Tree.prototype.prototype, {
+<span id='fastDev-Data-Tree-method-initNodes'>	/**
+</span>	 *  初始化节点之间的父子关系
+	 */
+	initNodes : function() {
+		for(var i = 0, len = this.invalid.length, invalid = []; i &lt; len; i++) {// 在无效节点数组中需找到有效节点
+			var node = this.invalid[i], parentid = node.parentid, // 获取节点的父节点id
+			parentnode = this.map[parentid];
+			// 获取父节点
+
+			if(parentnode) {// 如果父节点存在则将当前节点添加至父节点
+				this.map[parentid].addChild(node);
+			} else if(parentid === null || parentid === undefined || parentid === &quot;&quot;) {// 如果没有父节点且节点中的父节点id无效则当前节点应是根节点
+				this.root = node;
+			} else {// 不满足以上条件的节点为游离在数结构之外的无效节点
+				invalid.push(node);
+			}
+		}
+		if(len !== 0 || len !== invalid.length) {
+			this.invalid = invalid;
+		}
+	},
+<span id='fastDev-Data-Tree-method-addNode'>	/**
+</span>	 * 增加一个节点
+	 * @param {JsonObject} nodeinfo 节点描述信息
+	 */
+	addNode : function(nodeinfo) {
+		var node = this.map[nodeinfo.id], parentnode = this.map[nodeinfo.parentid];
+
+		if(parentnode) {
+			if(node) {
+				this.updateNode(nodeinfo);
+			} else {
+				node = this.createNode(nodeinfo);
+				parentnode.addChild(node);
+			}
+		} else {
+			if(!node) {
+				node = this.createNode(nodeinfo);
+				this.invalid.push(node);
+			}
+		}
+	},
+<span id='fastDev-Data-Tree-method-createNode'>	/**
+</span>	 * 创建一个节点对象
+	 * @param {JsonObject} nodeinfo 节点描述信息
+	 * @private
+	 */
+	createNode : function(nodeinfo) {
+		var node = this.nodeclass.constructor(nodeinfo);
+		this.map[nodeinfo.id] = node;
+		return node;
+	},
+<span id='fastDev-Data-Tree-method-removeNode'>	/**
+</span>	 * 删除一个节点
+	 * @param {String} id 节点id
+	 */
+	removeNode : function(id) {
+		var ids = id.split(&quot;,&quot;), node, parentnode;
+		for(var i = 0; id = ids[i]; i++) {
+			node = this.map[id];
+			if(!node) {
+				continue;
+			}
+			parentnode = this.map[node.parentid];
+			if(parentnode) {
+				parentnode.removeChild(node);
+			}
+		}
+	},
+<span id='fastDev-Data-Tree-method-updateNode'>	/**
+</span>	 * 更改一个节点信息（节点ID不可更改）
+	 * @param {JsonObject} nodeinfo
+	 */
+	updateNode : function(nodeinfo) {
+		var id = nodeinfo.id, node = this.map[id];
+		if(node) {
+			node.update(nodeinfo.parentid, nodeinfo.text);
+		}
+	},
+<span id='fastDev-Data-Tree-method-getRoot'>	/**
+</span>	 * 获取根节点
+	 * @return {fastDev.Data.Node}
+	 */
+	getRoot : function() {
+		return this.root;
+	},
+<span id='fastDev-Data-Tree-method-getNode'>	/**
+</span>	 * 根据id指定获取节点
+	 * @param {String} id 节点id
+	 * @return {fastDev.Data.Node}
+	 */
+	getNode : function(id) {
+		return this.map[id];
+	},
+<span id='fastDev-Data-Tree-method-moveNode'>	/**
+</span>	 * 移动节点至指定父节点
+	 * @param {String} id 待移动节点id
+	 * @param {String} parentid 目标节点id
+	 */
+	moveNode : function(id, parentid) {
+		var node = this.map[id], parentnode = this.map[parentid];
+		if(node &amp;&amp; parentnode) {
+			this.removeNode(id);
+			parentnode.addChild(node);
+		}
+	},
+	sort : function() {
+		this.root.sort();
+	},
+	getSize : function() {
+		return this.root.getSize();
+	},
+<span id='fastDev-Data-Tree-method-careteNodePrototype'>	/**
+</span>	 * 构建节点对象原型
+	 * @param {Array} fields 属性数组
+	 * @private
+	 */
+	careteNodePrototype : function(fields) {
+		var prototype = [], nodeclass = function() {
+		}, name;
+		nodeclass.prototype = fastDev.Data.Node;
+		nodeclass = new nodeclass();
+		for(var key in fields) {
+			prototype.push(&quot;\tthis.&quot; + key + &quot; = &quot; + &quot;setting.&quot; + key + &quot;;\n&quot;);
+		}
+		prototype.push(&quot;\tthis.children = [];\n&quot;);
+		nodeclass.prototype = fastDev.Util.ObjectUtil.parseObject(&quot;setting&quot;, prototype.join(''));
+		fastDev.apply(nodeclass.prototype.prototype, fastDev.Data.Node.prototype.prototype);
+		return nodeclass;
+		//this.nodeclass = nodeclass;
+	}
+});
+
+fastDev.Data.Tree.constructor = function(fields) {
+	return new this.prototype(fields);
+};
+</pre>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="../../../themes/default/css/ui-main.css"/>
+		<script src="../../../src/library/FastDev.js"></script>
+		<script src="../../../src/library/Query.js"></script>
+		<script src="../../../src/library/Dom.js"></script>
+		<script src="../../../src/library/Ajax.js"></script>
+		<script src="../../../src/library/Event.js"></script>
+		<script src="../../../src/library/Browser.js"></script>
+		<script src="../../../src/library/Queue.js"></script>
+		<script src="../../../src/library/Tools.js"></script>
+		<script src="../../../src/library/Library_Patch.js"></script>
+
+		<script src="../../../src/core/ClassManager.js"></script>
+		<script src="../../../src/core/EventManager.js"></script>
+		<script src="../../../src/core/Base.js"></script>
+		<script src="../../../src/core/Template.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+		<script src="../../../src/core/Core_Patch.js"></script>
+
+		<script src="../../../src/data/Proxy.js"></script>
+		<script src="../../../src/data/DataSet.js"></script>
+		<script src="../../../src/data/Record.js"></script>
+		<script src="../../../src/data/Field.js"></script>
+		<script src="../../../src/data/Reader.js"></script>
+		<script src="../../../src/data/Data_Patch.js"></script>
+		<script src="../../../src/core/DomObject.js"></script>
+		<script src="../../../src/core/ControlBus.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+
+		<script src="../../../src/component/Component.js"></script>
+
+		<script src="../../../src/component/form/Box.js"></script>
+		<script src="../../../src/component/form/DatePicker.js"></script>
+		<script src="../../../src/component/form/DatePicker_Patch.js"></script>
+
+		<script type="text/javascript">
+			fastDev(function() {
+				talkweb.Components.Datepicker({
+					container : "example",
+					readOnly : true, //设置后文本框中内容只能读，点击后也不会弹出面板
+					width : "300px"//设置日历控件文本框的宽度
+				});
+			});
+		</script>
+		<title>高级应用示例</title>
+	</head>
+	<body>
+		<div id="example">
+			
+		</div>
+		<br/>
+		<br/>
+		readOnly属性为true时，日历控件只读，默认为false. width属性设置文本框的宽度。面板的宽度由Datepicker.css的datepicker-div样式控制.
+	</body>
+</html>

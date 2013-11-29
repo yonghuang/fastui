@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-DataGrid'>/**
+</span> * @class fastDev.Ui.DataGrid
+ * @extends fastDev.Ui.Component
+ * 表格控件，提供后台数据通过表格的方式进行展现，方便用户浏览数据，支持拖动列宽、排序、分页等常用操作&lt;p&gt;
+ * 作者：袁刚
+ *
+ *		&lt;div itype=&quot;DataGrid&quot; initSource=&quot;../../data/griddata.json&quot; pagePosition=&quot;none&quot; showSeqColumn=true&gt;
+ *			&lt;div width=&quot;10%&quot; name=&quot;empno&quot; text=&quot;员工工号&quot;&gt;&lt;/div&gt;
+ *			&lt;div width=&quot;12%&quot; name=&quot;department&quot; text=&quot;所属部门&quot;&gt;&lt;/div&gt;
+ *			&lt;div width=&quot;8%&quot; name=&quot;isuse&quot; text=&quot;是否可用&quot;&gt;&lt;/div&gt;
+ *			&lt;div width=&quot;15%&quot; name=&quot;position&quot; text=&quot;职位&quot;&gt;&lt;/div&gt;
+ *			&lt;div width=&quot;10%&quot; name=&quot;pay&quot; text=&quot;薪资&quot;&gt;&lt;/div&gt;
+ *			&lt;div width=&quot;10%&quot; name=&quot;datesemployed&quot; text=&quot;入职时间&quot;&gt;&lt;/div&gt;
+ *			&lt;div width=&quot;15%&quot; name=&quot;birthday&quot; text=&quot;生日&quot; defaultValue=&quot;1985-01-01&quot;&gt;&lt;/div&gt;
+ *		&lt;/div&gt;
+ */
+
+fastDev.define(&quot;fastDev.Ui.DataGrid&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;DataGrid&quot;,
+	_options : {
+<span id='fastDev-Ui-DataGrid-property-columns'>		/**
+</span>		 * 表格列配置信息
+		 * @type {JsonObject}
+		 */
+		columns : null,
+<span id='fastDev-Ui-DataGrid-property-allowResizeColumn'>		/**
+</span>		 * 是否允许调整列宽
+		 * @type {Boolean}
+		 */
+		allowResizeColumn : false,
+<span id='fastDev-Ui-DataGrid-property-showCheckColumn'>		/**
+</span>		 * 是否显示CheckBox列
+		 * @type {Boolean}
+		 */
+		showCheckColumn : false,
+<span id='fastDev-Ui-DataGrid-property-showRadioColumn'>		/**
+</span>		 * 是否显示RadioBox列
+		 * @type {Boolean}
+		 */
+		showRadioColumn : false,
+<span id='fastDev-Ui-DataGrid-property-showSeqColumn'>		/**
+</span>		 * 是否显示序号列
+		 * @type {Boolean}
+		 */
+		showSeqColumn : false,
+<span id='fastDev-Ui-DataGrid-property-toolBar'>		/**
+</span>		 * 工具栏配置信息，参见ToolBar组件Api
+		 */
+		toolBar : null,
+<span id='fastDev-Ui-DataGrid-property-pagePosition'>		/**
+</span>		 * 分页栏位置设置 top(顶部放置分页栏)、bottom(底部放置分页栏)、all(顶部和底部都放置分页栏)、none(不带分页栏)
+		 * @type {String}
+		 */
+		pagePosition : &quot;bottom&quot;,
+<span id='fastDev-Ui-DataGrid-property-pageSizeList'>		/**
+</span>		 * 分页栏中的下拉选项设置
+		 * @type {Array[JsonObject]}
+		 */
+		pageSizeList : null,
+<span id='fastDev-Ui-DataGrid-property-pageSize'>		/**
+</span>		 * 每页显示条数设置
+		 * @type {Number}
+		 */
+		pageSize : 10,
+<span id='fastDev-Ui-DataGrid-property-pageCurrent'>		/**
+</span>		 * 当前页码设置
+		 * @type {Number}
+		 */
+		pageCurrent : 1,
+<span id='fastDev-Ui-DataGrid-property-pageItems'>		/**
+</span>		 * 分页工具栏的附加子项，常用于在分页对象上添加自定义功能按钮
+		 * @type {Array{JsonObject}}
+		 */
+		pageItems : null,
+<span id='fastDev-Ui-DataGrid-property-allowAutoFillRow'>		/**
+</span>		 * 当数据行数不够默认的行数时，是否自动填充行
+		 * @type {Boolean}
+		 */
+		allowAutoFillRow : true,
+<span id='fastDev-Ui-DataGrid-property-allowMoveColumn'>		/**
+</span>		 * 是否允许鼠标拖动列重新排列
+		 * @type {Boolean}
+		 */
+		allowMoveColumn : false,
+<span id='fastDev-Ui-DataGrid-property-allowCellMerge'>		/**
+</span>		 * 是否允许值相同单元格合并
+		 * @type {Boolean}
+		 */
+		allowCellMerge : false,
+<span id='fastDev-Ui-DataGrid-property-sort'>		/**
+</span>		 * 为client时,开启客户端排序(单页排序);为server时,开启服务端排序;默认为&quot;none&quot;,不进行排序.
+		 * @type {String}
+		 */
+		sort : &quot;none&quot;,
+<span id='fastDev-Ui-DataGrid-property-sortby'>		/**
+</span>		 * 排序规则 asc为升序;desc为降序
+		 * @type {String}
+		 */
+		sortby : &quot;asc&quot;,
+<span id='fastDev-Ui-DataGrid-property-sortField'>		/**
+</span>		 * 排序依赖字段
+		 * @type {String}
+		 */
+		sortField : &quot;&quot;,
+<span id='fastDev-Ui-DataGrid-property-rowDetail'>		/**
+</span>		 * 行内信息配置
+		 * @type {String}
+		 */
+		rowDetail : &quot;&quot;,
+<span id='fastDev-Ui-DataGrid-property-allowRollback'>		/**
+</span>		 * 记录修改信息，用户取消用户对当前DataGrid数据的修改，值为false时，rollbackModify方法无效
+		 *  @type {Boolean}
+		 */
+		allowRollback : false,
+<span id='fastDev-Ui-DataGrid-property-summaryTpl'>		/**
+</span>		 * 统计显示模板定义
+		 * @type {String}
+		 */
+		summaryTpl : null,
+<span id='fastDev-Ui-DataGrid-property-action'>		/**
+</span>		 * 数据修改后的保存地址
+		 */
+		action : &quot;&quot;,
+<span id='fastDev-Ui-DataGrid-property-keyword'>		/**
+</span>		 * 主键列名
+		 * @type {String}
+		 */
+		keyword : &quot;&quot;,
+<span id='fastDev-Ui-DataGrid-property-allowDelayLoad'>		/**
+</span>		 * 是否延时加载数据(大数据量不分页，或每页展示行数过大时使用)
+		 * @type {Boolean}
+		 */
+		allowDelayLoad : false,
+<span id='fastDev-Ui-DataGrid-property-backup'>		/**
+</span>		 * @private
+		 */
+		backup : true,
+<span id='fastDev-Ui-DataGrid-property-enableDataProxy'>		/**
+</span>		 * @private
+		 */
+		enableDataProxy : false,
+<span id='fastDev-Ui-DataGrid-event-onAfterSave'>		/**
+</span>		 * @event
+		 * 保存数据后回调事件
+		 */
+		onAfterSave : fastDev.noop,
+<span id='fastDev-Ui-DataGrid-event-onRowClick'>		/**
+</span>		 * 单击行事件
+		 * @event
+		 * @param {Event} event 事件对象
+		 * @param {Number} rowindex 行索引
+		 * @param [JsonObject] data 包含当前行所有列数据的对象
+		 */
+		onRowClick : fastDev.noop,
+<span id='fastDev-Ui-DataGrid-event-onRowDblClick'>		/**
+</span>		 * 双击行事件
+		 * @event
+		 * @param {Event} event 事件对象
+		 * @param {Number} rowindex 行索引
+		 * @param [JsonObject] data 包含当前行所有列数据的对象
+		 */
+		onRowDblClick : fastDev.noop,
+<span id='fastDev-Ui-DataGrid-event-onCellClick'>		/**
+</span>		 * 单击列事件
+		 * @event
+		 * @param {Event} event 事件对象
+		 * @param {Number} cellindex 列索引
+		 * @param {String} content 当前列内容
+		 */
+		onCellClick : fastDev.noop,
+<span id='fastDev-Ui-DataGrid-event-onCellDblClick'>		/**
+</span>		 * 双击列事件
+		 * @event
+		 * @param {Event} event 事件对象
+		 * @param {Number} cellindex 列索引
+		 * @param {String} content 当前列内容
+		 */
+		onCellDblClick : fastDev.noop
+	},
+	_global : {
+		rowspan : 1,
+		summaryInfo : null,
+		innerPage : 1,
+		bodyScroll : false
+	},
+	template : ['&lt;div class=&quot;ui-datagrid&quot; style=&quot;width: #{width}px;&quot;&gt;', '&lt;div class=&quot;ui-datagrid-panel ui-datagrid-box&quot; style=&quot;width:#{bodyWidth}px;&quot;&gt;', '&lt;div name=&quot;ui-top-toolbar&quot;&gt;&lt;/div&gt;&lt;div style=&quot;display:none&quot;&gt;&lt;/div&gt;', '&lt;div class=&quot;ui-datagrid-header&quot; style=&quot;width: #{bodyWidth}px; &quot;&gt;', '&lt;tpl dynamic name=header&gt;', '&lt;table class=&quot;ui-datagrid-table&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;', '&lt;tbody&gt;', '&lt;tr name=&quot;colwidthlimit&quot;&gt;',
+	// 宽度设定列
+	'#{colWidthTpl}', '&lt;/tr&gt;', '#{colTitleTpl}', '&lt;/tbody&gt;', '&lt;/table&gt;', '&lt;/tpl&gt;', '&lt;div class=&quot;ui-datagrid-splitters&quot;&gt;',
+	// 调整列宽的感应区域
+	'#{colSplitTpl}', '&lt;/div&gt;', '&lt;/div&gt;', '&lt;div class=&quot;ui-datagrid-body&quot; style=&quot;width: #{bodyWidth}px;height:100% &quot;&gt;', '&lt;tpl dynamic name=body&gt;', '&lt;table class=&quot;ui-datagrid-table&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;', '&lt;tbody&gt;', '&lt;tr name=&quot;colwidthlimit&quot;&gt;',
+	// 宽度设定列
+	'#{colWidthTpl}', '&lt;/tr&gt;', '&lt;tpl each&gt;', '&lt;tr class=&quot;ui-datagrid-row', '&lt;tpl if({row_id}%2===0)&gt;', ' ui-datagrid-row-alt', '&lt;/tpl&gt;', '&quot;&gt;',
+	// 数据内容列
+	'#{colContentTpl}', '&lt;/tr&gt;', '&lt;tpl if(#{buildRowDetail})&gt;', '&lt;tr style=&quot;display:none&quot;&gt;&lt;td class=&quot;ui-datagrid-cell&quot; colSpan=&quot;#{colspan}&quot;&gt;&lt;div class=&quot;ui-datagrid-cell-content&quot;&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;', '&lt;/tpl&gt;', '&lt;/tpl&gt;', '&lt;/tbody&gt;', '&lt;/table&gt;', '&lt;/tpl&gt;', '&lt;/div&gt;', '&lt;div class=&quot;ui-datagrid-count&quot; style=&quot;width: #{bodyWidth}px; display:none&quot;&gt;&lt;/div&gt;', '&lt;div name=&quot;ui-bottom-toolbar&quot;&gt;&lt;/div&gt;', '&lt;/div&gt;', '&lt;/div&gt;'],
+	tplParam : [&quot;bodyWidth&quot;, &quot;colWidthTpl&quot;, &quot;colTitleTpl&quot;, &quot;colSplitTpl&quot;, &quot;colContentTpl&quot;, &quot;moveCell&quot;, &quot;width&quot;, &quot;buildRowDetail&quot;, &quot;colspan&quot;],
+<span id='fastDev-Ui-DataGrid-method-ready'>	/**
+</span>	 * 组件参数准备方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	ready : function(options, global) {
+		// 初始化数据字段配置
+		this.fields = [];
+		// 内置用于保存修改信息字段，新增以及修改DataGrid数据时用
+		this.fields.push({
+			name : &quot;gird_modify&quot;,
+			type : &quot;String&quot;
+		});
+
+		if(options.showCheckColumn === true || options.showRadioColumn === true) {
+			this.fields.push({
+				name : &quot;gird_checked&quot;,
+				type : &quot;Boolean&quot;,
+				defaultValue : false
+			});
+			// 选择框互斥处理
+			if(options.showCheckColumn === options.showRadioColumn) {
+				options.showRadioColumn = false;
+			}
+		}
+		global.displayJobs = [];
+		global.logs = [];
+		// 判断是否需要生成行内信息结构
+		global.buildRowDetail = !!options.rowDetail;
+		// 系统生成列占用宽度值
+		global.systemWidth = this.parseQuickConfig(options, global);
+		// 容器宽度
+		global.containerWidth = options.container.width();
+		global.containerHeight = options.container.height();
+		// 获取DataGrid宽度配置，没有则取容器宽度
+		// 初始化静态模板
+		this.initTemplate(options.columns, this.calculateWidth(options.width || global.containerWidth, true));
+	},
+<span id='fastDev-Ui-DataGrid-method-construct'>	/**
+</span>	 * 组件构造方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	construct : function(options, global) {
+		global.dataContainer = this.find(&quot;.ui-datagrid-body&quot;);
+		global.headerContainer = this.find(&quot;.ui-datagrid-header&quot;);
+		global.topToolbar = this.find(&quot;div [name='ui-top-toolbar']&quot;);
+		global.bottomToolbar = this.find(&quot;div [name='ui-bottom-toolbar']&quot;);
+		var reqParams = {}, pageSize = options.pageSize, pagePosition = options.pagePosition;
+		// 设定数据根节点
+		this.dataset.setRoot(&quot;data&quot;);
+		// 如果开启允许回滚修改操作功能则设置数据集对应参数开启此功能
+		//this.dataset.setBackup(options.allowRollback);
+		// 设置DataGrid的数据提交地址
+		this.initProxy.setAction(options.action);
+
+		// 初始化头部工具栏
+		if(fastDev.isValid(options.toolBar)) {
+			options.toolBar.container = global.topToolbar;
+			fastDev.create(&quot;Toolbar&quot;, options.toolBar);
+		}
+
+		// 初始化分页栏设置
+		if(pagePosition !== &quot;none&quot;) {
+			var position, config = this.buildPageBarConfig(options);
+			if(pagePosition !== &quot;all&quot;) {
+				position = pagePosition;
+			} else {
+				position = &quot;bottom&quot;;
+				config.container = global.topToolbar;
+				global.clonePageBar = fastDev.create(&quot;Toolbar&quot;, config);
+			}
+
+			config.container = position === &quot;bottom&quot; ? global.bottomToolbar : global.topToolbar;
+			global.pageBar = fastDev.create(&quot;Toolbar&quot;, config);
+			// 给代理添加一个任务解析分页信息
+
+			this.initProxy.bindAfterLoad(fastDev.setFnInScope(this, this.initPageBar));
+
+			this.dataset.setOptions({
+				pageSize : pageSize,
+				replenish : options.allowAutoFillRow
+			});
+		} else {
+			pageSize = options.pageSize = 999999;
+		}
+		reqParams.page = 1;
+		reqParams.pageSize = pageSize;
+
+		if(!fastDev.isEmptyObject(this._global.summaryInfo)) {
+			this.buildSummaryCol(options, global);
+		}
+
+		this.initProxy.setParam(reqParams);
+
+	},
+<span id='fastDev-Ui-DataGrid-method-init'>	/**
+</span>	 * 组件初始化方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	init : function(options, global) {
+		this.listeningScroll();
+
+		if(options.sort !== &quot;none&quot;) {
+			this.initSortColumn(options);
+		}
+
+		this.initEditInline();
+		this.initEvent(options, global);
+
+	},
+<span id='fastDev-Ui-DataGrid-method-initEvent'>	/**
+</span>	 * 初始化组件静态Dom事件
+	 * @private
+	 */
+	initEvent : function(options, global) {
+
+		if(!fastDev.isNoop(options.onCellClick) || !fastDev.isNoop(options.onRowClick) || global.buildRowDetail) {
+			var dataGridBodyClick = fastDev.setFnInScope(this, this.dataGridBodyClick);
+			global.dataContainer.bind(&quot;click&quot;, dataGridBodyClick);
+
+		}
+
+		if(!fastDev.isNoop(options.onCellDblClick) || !fastDev.isNoop(options.onRowDblClick)) {
+			var dataGridBodyDblClick = fastDev.setFnInScope(this, this.dataGridBodyDblClick);
+			global.dataContainer.bind(&quot;dblclick&quot;, dataGridBodyDblClick);
+		}
+
+		// 鼠标滑过行高亮事件
+		var trMouseover = fastDev.setFnInScope(this, this.trMouseoverHandle),
+		// 行内编辑输入结束事件
+		entryComplete = fastDev.setFnInScope(this, this.entryCompleteHandle);
+		global.dataContainer.bind(&quot;mouseover&quot;, trMouseover).bind(&quot;keyup&quot;, entryComplete);
+	},
+<span id='fastDev-Ui-DataGrid-method-entryCompleteHandle'>	/**
+</span>	 * 回车结束行内编辑
+	 * @private
+	 */
+	entryCompleteHandle : function(event) {
+		if(event.keyCode === 13) {
+			this.writeBackCell(true);
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-trMouseoverHandle'>	/**
+</span>	 * 鼠标滑过行高亮
+	 * @private
+	 */
+	trMouseoverHandle : function(event) {
+		var trDom = fastDev(event.target).parents(&quot;tr:eq(0)&quot;);
+		if(trDom.hasClass(&quot;ui-datagrid-row&quot;)) {
+			this.find(&quot;.ui-datagrid-row-selected&quot;).removeClass(&quot;ui-datagrid-row-selected&quot;);
+			trDom.addClass(&quot;ui-datagrid-row-selected&quot;);
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-constructItems'>	/**
+</span>	 * 构造组件数据
+	 * @private
+	 */
+	constructItems : function() {
+		var options = this._options, global = this._global, data, reset = false;
+		// 开启了数据动态渲染功能时，会自动计算当前的显示数据块
+		if(options.allowDelayLoad) {
+			data = this.dataset.selectByPage(global.innerPage,50);
+		}
+
+		// 当数据小于每页显示行数设置时，开启自动填充空白数据会临时补充空白行至数据集中，界面渲染完成时删除临时数据
+		if(options.allowAutoFillRow) {
+			reset = this.addBlankRow(this._options.pageSize);
+		}
+
+		this.renderDynamicHtml(&quot;header&quot;);
+		global.bodyScroll = false;
+		this.renderDynamicHtml(&quot;body&quot;, data);
+
+		if(reset) {
+			this.removeBlankData();
+		}
+
+		// 调用渲染器渲染整体表格
+		this.processingGrid();
+		// 计算内容部分高度并使表头适应当前高度(滚动条问题)
+		if(options.height) {
+			this.caculateHeight(options.height);
+		}
+
+		// 调整列宽功能
+		if(this._options.allowResizeColumn === true) {
+			this.initResizeColumn(global);
+		}
+
+		// 表格融合功能
+		if(this._options.allowCellMerge === true) {
+			this.mergeCell();
+		}
+
+		// 复选框全选功能
+		if(this._options.showCheckColumn === true) {
+			this.initSelectAll();
+		}
+		global.lockRefresh = false;
+	},
+<span id='fastDev-Ui-DataGrid-method-addBlankRow'>	/**
+</span>	 * 增加空白行
+	 * @private
+	 */
+	addBlankRow : function(pagesize) {
+		var i = this.dataset.getSize();
+
+		if(i === pagesize || pagesize === 999999) {
+			return false;
+		}
+
+		for(; i &lt; pagesize; i++) {
+			this.dataset.insert({}, false, false);
+		}
+		return true;
+	},
+<span id='fastDev-Ui-DataGrid-method-removeBlankData'>	/**
+</span>	 * 删除补充空白行产生的临时数据
+	 * @private 
+	 */
+	removeBlankData : function(){
+		this.dataset.rollback();	
+	},
+<span id='fastDev-Ui-DataGrid-method-initTemplate'>	/**
+</span>	 * 初始化组件模板
+	 * @param {Array[Jsonobject]} columns 列配置信息数组
+	 * @param {Number} effectiveWidth 各列可用总宽度
+	 * @private
+	 */
+	initTemplate : function(columns, effectiveWidth) {
+		var options = this._options, global = this._global,
+		// 调整列宽配置
+		allowResizeColumn = options.allowResizeColumn,
+		// 第一列的样式有所不同
+		firstTdCls = &quot; ui-datagrid-cell-special ui-datagrid-cell-first&quot;,
+		// 宽度限制列模板
+		colWidthTplList = [],
+		// 内容列模板
+		colContentTplList = [],
+		// 列宽调整的感应区域模板
+		colSplitTplList = [],
+		// 最后一个显示列索引
+		index = 0,
+		// 列数，IE6下隐藏列不占列索引
+		colNum = 0;
+		// 剩余宽度
+		global.surplus = effectiveWidth;
+		// 如果配置了多表头，则从配置列中寻找真实的列配置
+		if(this.buildTitleTpl(columns.slice(0)) === true) {
+			this.correctColumns(columns);
+		}
+		// 寻找最后一个显示列索引值，在所有列宽加起来小于总宽的情况下，做宽度补足
+		index = this.getRepairColIndex(columns);
+		// 生成数据行展现模板
+		for(var i = 0, len = columns.length; i &lt; len; i++) {
+			var column = columns[i], cls = &quot;&quot;,
+			// 如果配置为隐藏列则设置对应样式
+			hidden = column.hidden === true ? &quot;display:none&quot; : &quot;&quot;;
+			// 处理IE6、7下隐藏列不占索引位置问题
+			if(!hidden &amp;&amp; (fastDev.Browser.isIE6 || fastDev.Browser.isIE7)){
+				colNum++;
+			}
+			// 计算宽度限制列的宽度
+			// 计算最后一个显示列宽度时会将剩余宽度传入与当前宽度进行比较
+			colWidthTplList.push(this.buildColWidthTpl(column, effectiveWidth, i === index ? global.surplus : 0));
+			// 设置第一个显示列的样式
+			if(firstTdCls &amp;&amp; !hidden) {
+				cls = firstTdCls;
+				firstTdCls = &quot;&quot;;
+			}
+			colContentTplList.push(this.parseColumn(column, cls, hidden));
+			// 如果开启了列宽调整功能，则生成该功能感应区域
+			// 感应区域个数为显示列个数-1
+			if(allowResizeColumn === true &amp;&amp; i !== 0 &amp;&amp; column.hidden !== true) {
+				colSplitTplList.push('&lt;div class=&quot;ui-datagrid-splitter&quot; id=&quot;' + i + '&quot;style=&quot;height:23px;&quot;&gt;&lt;/div&gt;');
+			}
+		}
+		// 配置了行内信息时，记录行内信息所需要合并的列数
+		if(global.buildRowDetail) {
+			global.colspan = colNum || len;
+		}
+
+		// 保存各部分模板
+		fastDev.apply(global, {
+			colWidthTpl : colWidthTplList.join(&quot;&quot;),
+			colSplitTpl : colSplitTplList.join(&quot;&quot;),
+			colContentTpl : colContentTplList.join(&quot;&quot;)
+		});
+	},
+<span id='fastDev-Ui-DataGrid-method-processingGrid'>	/**
+</span>	 *  Grid显示处理
+	 * @private
+	 */
+	processingGrid : function() {
+		var handle, i = 0, displayJobs = this._global.displayJobs;
+		for(; handle = displayJobs[i]; i++) {
+			handle.call(this);
+		}
+		fastDev.Core.ControlBus.compile(null, this.elems);
+	},
+<span id='fastDev-Ui-DataGrid-method-initRefresh'>	/**
+</span>	 * 刷新数据
+	 * @param {JsonObject} config 刷新参数
+	 * @private
+	 */
+	initRefresh : function(config) {
+		var options = this._options, global = this._global;
+		if(global.lockRefresh !== true) {
+			global.lockRefresh = true;
+		} else {
+			return;
+		}
+
+		if(options.sort === &quot;server&quot;) {
+			config = config || {};
+			fastDev.apply(config, {
+				sortField : options.sortField,
+				sortBy : options.sortby
+			});
+		}
+
+		fastDev.Ui.DataGrid.superClass.initRefresh.call(this, config);
+
+		if(options.sort === &quot;server&quot; &amp;&amp; global.sortHandle) {
+			global.queue.add(global.sortHandle);
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-dataGridBodyClick'>	/**
+</span>	 * 列/行单击事件句柄
+	 * @param {Event} event
+	 * @private
+	 */
+	dataGridBodyClick : function(event) {
+		var dom = fastDev(event.target), options = this._options, type = event.type;
+		if(type === &quot;click&quot;) {
+			this.fireBodyEvent(dom, options, event, type, &quot;Click&quot;);
+		} else {
+			this.fireBodyEvent(dom, options, event, type, &quot;DblClick&quot;);
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-dataGridBodyDblClick'>	/**
+</span>	 *  列/行双击事件句柄
+	 * @param {Event} event
+	 * @private
+	 */
+	dataGridBodyDblClick : function(event) {
+		this.dataGridBodyClick(event);
+	},
+<span id='fastDev-Ui-DataGrid-method-fireBodyEvent'>	/**
+</span>	 * 执行单击/双击事件
+	 * @private
+	 */
+	fireBodyEvent : function(dom, options, event, type, method) {
+		if(!fastDev.isNoop(options[&quot;onCell&quot; + method])) {
+			this.execCellEvent(dom, options, event, type);
+		}
+
+		if(!fastDev.isNoop(options[&quot;onRow&quot; + method])) {
+			this.execRowEvent(dom, options, event, type);
+		}
+
+		if(this._global.buildRowDetail &amp;&amp; method === &quot;Click&quot;) {
+			this.execRowDetailEvent(dom, options);
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-execCellEvent'>	/**
+</span>	 * 执行列的单击/双击事件
+	 * @private
+	 */
+	execCellEvent : function(dom, options, event, type) {
+		var td = dom.parents(&quot;td:eq(0)&quot;);
+		if(!td.isEmpty()) {
+			// 获取当前列数据
+			var value = dom.attr(&quot;newValue&quot;) || dom.attr(&quot;value&quot;),
+			// 获取当前列的索引值
+			cellIndex = td.prop(&quot;cellIndex&quot;);
+			// 触发用户绑定事件
+			options[&quot;onCell&quot; + (type === &quot;click&quot; ? &quot;Click&quot; : &quot;DblClick&quot;)].call(this, event, cellIndex, value);
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-execRowEvent'>	/**
+</span>	 * 执行行的单击/双击事件
+	 * @private
+	 */
+	execRowEvent : function(dom, options, event, type) {
+		var tr = dom.parents(&quot;tr:eq(0)&quot;);
+		if(!tr.isEmpty()) {
+			// 获取当前行数据
+			var data = this.getValueImpl(tr),
+			// 获取当前行索引值
+			rowIndex = tr.prop(&quot;rowIndex&quot;);
+			// 触发用户绑定事件
+			options[&quot;onRow&quot; + (type === &quot;click&quot; ? &quot;Click&quot; : &quot;DblClick&quot;)].call(this, event, rowIndex, data);
+		}
+	},
+	execRowDetailEvent : function(dom, options) {
+		var tr = dom.parents(&quot;tr:eq(0)&quot;);
+		if(!tr.isEmpty()) {
+			// 获取当前时间目标样式
+			var className = dom.getClass(),
+			// 获取当前行数据
+			data = this.getValueImpl(tr);
+			// 行内信息的展开与收缩处理
+			if(/ui-datagrid-node/.test(className)) {
+				this.processRowDetail(className, dom, tr, options, data);
+			}
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-getTr'>	/**
+</span>	 * 获取行对象
+	 * @private
+	 */
+	getTr : function(elem) {
+		if(fastDev.isElement(elem)) {
+			if(elem.tagName === &quot;TR&quot;) {
+				elem = fastDev(elem);
+			} else {
+				elem = fastDev(elem).parents(&quot;tr:eq(0)&quot;);
+			}
+		} else if(fastDev.isDomObject(elem) || fastDev.isComponent(elem)) {
+			return this.getTr(elem.elems[0]);
+		} else {
+			elem = this.find(&quot;[name='dg_choose']:checked&quot;).parents(&quot;tr&quot;);
+		}
+		return elem;
+	},
+<span id='fastDev-Ui-DataGrid-method-getValue'>	/**
+</span>	 * 不传参是获取选中数据，传入事件源的话，如果事件源Element是在表格行内则可获得那一行的数据
+	 * @param {Element} [elem] 事件发生所在元素
+	 */
+	getValue : function(elem) {
+		var values = [], elems = this.getTr(elem).elems;
+		for(var i = 0; elem = elems[i]; i++) {
+			values.push(this.getValueImpl(fastDev(elem)));
+		}
+		return values;
+	},
+<span id='fastDev-Ui-DataGrid-method-getValueByIndex'>	/**
+</span>	 * 根据指定行索引获取行数据
+	 * @param {Number} index 索引值，从1开始
+	 */
+	getValueByIndex : function(index) {
+		return this.getValueImpl(this._global.dataContainer.find(&quot;tr:eq(&quot; + index + &quot;)&quot;));
+	},
+<span id='fastDev-Ui-DataGrid-method-getValueByText'>	/**
+</span>	 * 根据指定文本查找行数据
+	 * @param {String} text 文本
+	 * @param {String} [fieldname] 数据列名
+	 * @return {Array[JsonObject]}
+	 */
+	getValueByText : function(text, fieldname) {
+		return this.dataset.fuzzySelect(text, fieldname);
+	},
+<span id='fastDev-Ui-DataGrid-method-getValueImpl'>	/**
+</span>	 * 获得指定行对象的数据
+	 * @private
+	 */
+	getValueImpl : function(dom) {
+		var columns = this._options.columns, i = this._global.dataColStart, data = {}, tds = dom.find(&quot;td&quot;).elems;
+		for(var column; column = columns[i]; i++) {
+			if(!column.name) {
+				continue;
+			}
+			var value, div = fastDev(tds[i]).find(&quot;div&quot;);
+			if(column.itype === &quot;control&quot;) {
+				var id = div.prop(&quot;id&quot;);
+				value = fastDev.getInstance(id).getValue();
+			} else {
+				value = div.attr(&quot;newValue&quot;);
+				value = !fastDev.isValid(value) ? div.attr(&quot;value&quot;) : value;
+			}
+			data[column.name] = value;
+		}
+		return data;
+	},
+<span id='fastDev-Ui-DataGrid-method-getAllValue'>	/**
+</span>	 * 获取当前页所有数据
+	 */
+	getAllValue : function() {
+		var trList = this._global.dataContainer.find(&quot;tr:gt(0)&quot;).elems, values = [], len = this.dataset.getSize();
+		for(var i = 0; i &lt; len; i++) {
+			values.push(this.getValueImpl(fastDev(trList[i])));
+		}
+		return values;
+	},
+<span id='fastDev-Ui-DataGrid-method-addRow'>	/**
+</span>	 * 新增一行数据(必须配置keyword属性才可使用)
+	 * @param {JsonObject} data 行数据
+	 * @param {Boolean} [modify=true] 是否添加修改样式
+	 * @param {Number} index 数据行目标位置索引
+	 */
+	addRow : function(data, modify, index, renderer) {
+		this.writeBackCell();
+		data = data || {};
+		data[this._options.keyword] = data[this._options.keyword] || &quot;grid_keyword_&quot; + fastDev.getID();
+		data.gird_modify = modify !== false ? &quot;all&quot; : &quot;&quot;;
+
+		this.dataset.insert(data);
+		this.dataset.changeIndex(&quot;last&quot;, fastDev.isNumber(index) ? index : &quot;last&quot;);
+		if(renderer !== false) {
+			this.renderDynamicHtml(&quot;body&quot;);
+			this.processingGrid();
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-addRows'>	/**
+</span>	 * 新增多行行数据(必须配置keyword属性才可使用)
+	 * @param {Array[JsonObject]} data 行数据
+	 * @param {Boolean} [modify=true] 是否添加修改样式
+	 * @param {Number} index 数据行目标位置索引
+	 */
+	addRows : function(data, modify, index) {
+		if(!fastDev.isArray(data)) {
+			data = [data];
+		}
+		var len = data.length, renderer = false;
+
+		for(var i = 0; i &lt; len; i++) {
+			if(i === len - 1) {
+				renderer = true;
+			}
+			this.addRow(data[i], modify, index, renderer);
+		}
+		return this;
+	},
+<span id='fastDev-Ui-DataGrid-method-addFirstRow'>	/**
+</span>	 * 增加一行数据至表格首行(必须配置keyword属性才可使用)
+	 * @param {JsonObject} data 行数据
+	 * @param {Boolean} [modify=true] 是否添加修改样式
+	 */
+	addFirstRow : function(data, modify) {
+		this.addRow(data, modify, 0);
+	},
+<span id='fastDev-Ui-DataGrid-method-addLastRow'>	/**
+</span>	 * 增加一行数据至表格末行(必须配置keyword属性才可使用)
+	 * @param {JsonObject} data 行数据
+	 * @param {Boolean} [modify=true] 是否添加修改样式
+	 */
+	addLastRow : function(data, modify) {
+		this.addRow(data, modify);
+	},
+<span id='fastDev-Ui-DataGrid-method-updateRow'>	/**
+</span>	 * 修改一行数据((必须配置keyword属性才可使用))
+	 * @param {JsonObject} data 行数据
+	 * @param {Boolean} renderer 是否立即显示修改内容
+	 */
+	updateRow : function(newdata, renderer) {
+		// 为防止当前正处于行内编辑状态导致数据丢失，先调用数据回写
+		this.writeBackCell();
+		// 得到当前主键列名
+		var keywordName = this._options.keyword, 
+		// 得到当前数据主键值
+		keyword = newdata[keywordName];
+		// 删除数据主键，因为数据集中的主键列只读
+		delete newdata[keywordName];
+		
+		// 如果数据主键无效则当次数据更新无效
+		if(!fastDev.isValid(keyword)) {
+			return;
+		}
+		
+		// 根据当前数据主键查询数据集中地记录
+		var olddata = this.dataset.select(function(index, data){
+			return data[keywordName] === keyword;
+		})[0],
+		gird_modify = olddata.gird_modify;
+		
+		// 如果数据集中不存在当前主键值得数据则当前数据更新无效
+		if(!olddata){
+			return;
+		}
+		
+		// 比对数据修改前与修改后的状态值，生成新的状态值
+		for(var key in newdata){
+			if(!RegExp(&quot;all|&quot; + key).test(gird_modify)) {
+				gird_modify = gird_modify ? key + &quot;,&quot; : &quot;,&quot; + key + &quot;,&quot;;
+			}
+		}
+		// 保存数据状态值
+		newdata.gird_modify = gird_modify;
+		
+		// 更新数据集
+		this.dataset.update(function(index,data){
+			if(data[keywordName] === keyword){
+				return newdata;
+			}
+		});
+		// 如果更新数据后补需要立即显示到界面，则放弃重新生成
+		if(renderer === false){
+			return;
+		}
+		// 重新生成数据界面
+		this.renderDynamicHtml(&quot;body&quot;);
+		// 重新处理数据界面
+		this.processingGrid();
+		return this;
+	},
+<span id='fastDev-Ui-DataGrid-method-updateRows'>	/**
+</span>	 * 修改多行数据((必须配置keyword属性才可使用))
+	 * @param {Array[JsonObject]} data 行数据数组
+	 */
+	updateRows : function(data) {
+		if(!fastDev.isArray(data)) {
+			data = [data];
+		}
+		var len = data.length, renderer = false;
+
+		for(var i = 0; i &lt; len; i++) {
+			if(i === len - 1) {
+				renderer = true;
+			}
+			this.updateRow(data[i], renderer);
+		}
+		return this;
+	},
+<span id='fastDev-Ui-DataGrid-method-delRow'>	/**
+</span>	 * 删除一行数据(必须配置keyword属性才可使用)
+	 * @param {String} keyword 主键值
+	 */
+	delRow : function(keyword, renderer) {
+		this.writeBackCell();
+		var keywordName = this._options.keyword;
+		if(fastDev.isValid(keyword)) {
+			if(keywordName) {
+				this.dataset.remove(function(index,data){
+					return data[keywordName] === keyword;
+				});
+				//this.dataset.remove(keywordName + &quot;=&quot; + keyword);
+				this.addLog(&quot;delete&quot;, keywordName, keyword);
+			}
+		}
+		if(renderer !== false) {
+			this.renderDynamicHtml(&quot;body&quot;);
+			this.processingGrid();
+		}
+		return this;
+	},
+	delRows : function(keyword) {
+		var keys = (keyword || &quot;&quot;).split(&quot;,&quot;), renderer = false;
+		for(var i = 0, len = keys.length; i &lt; len; i++) {
+			if(i === len - 1) {
+				renderer = true;
+			}
+			this.delRow(keys[i], renderer);
+		}
+		return this;
+	},
+<span id='fastDev-Ui-DataGrid-method-clean'>	/**
+</span>	 * 删除当前所有数据(必须配置keyword属性才可使用)
+	 */
+	clean : function() {
+		var records = this.dataset.select();
+		var keywordName = this._options.keyword;
+		if(fastDev.isValid(keywordName)) {
+			for(var i = 0, record; record = records[i]; i++) {
+				this.addLog(&quot;delete&quot;, keywordName, record.get(keywordName));
+			}
+			this.dataset.remove();
+		}
+		this.renderDynamicHtml(&quot;body&quot;);
+		this.processingGrid();
+	},
+<span id='fastDev-Ui-DataGrid-method-delSelectedRow'>	/**
+</span>	 * 删除选中行数据
+	 */
+	delSelectedRow : function() {
+		this.writeBackCell();
+		var elem, elems = this.find(&quot;[name='dg_choose']:checked&quot;).elems;
+		while( elem = elems.shift()) {
+			var keywordName = this._options.keyword, row = fastDev(elem).parents(&quot;tr&quot;), keyword = this.getValueImpl(row)[keywordName];
+			
+			this.dataset.remove(this.removeData,keywordName,keyword);
+			
+			if(/grid_keyword_/.test(keyword)) {
+				continue;
+			}
+			this.addLog(&quot;delete&quot;, keywordName, keyword);
+		}
+		this.renderDynamicHtml(&quot;body&quot;);
+		this.processingGrid();
+		return this;
+	},
+	removeData : function(index, data, keywordname, keyword){
+		return data[keywordname] === keyword;
+	},
+<span id='fastDev-Ui-DataGrid-method-rollbackModify'>	/**
+</span>	 * 回滚当前未保存值至上一次加载状态(需配置allowRollback属性为true)
+	 */
+	rollbackModify : function() {
+		this.dataset.rollback();
+		this.renderDynamicHtml(&quot;body&quot;);
+		this._global.logs = [];
+	},
+<span id='fastDev-Ui-DataGrid-method-addLog'>	/**
+</span>	 * 增加一条数据操作日志
+	 * @private
+	 */
+	addLog : function(oper, keywordName, keyword, data) {
+		var log = {};
+		log.oper = oper;
+		fastDev.each(data, function(key, value) {
+			log[key] = value;
+		});
+		log[keywordName] = keyword;
+		this._global.logs.push(log);
+	},
+<span id='fastDev-Ui-DataGrid-method-saveToServer'>	/**
+</span>	 * 保存当前修改数据至服务器(需配置action属性)
+	 */
+	saveToServer : function() {
+		this.writeBackCell();
+		var data = this.getAllModifyInfo();
+		this.initProxy.save(data, this._options.onAfterSave, true, true);
+		this._global.logs = [];
+		this.refreshData();
+	},
+<span id='fastDev-Ui-DataGrid-method-getModify'>	/**
+</span>	 * 获取当前修改值
+	 * @param {Element} elem 数据容器
+	 * @param {JsonObject} rowdata 行数据对象
+	 * @param {Array{JsonObject}} columns 列配置
+	 * @private
+	 */
+	getModify : function(elem, rowdata, columns) {
+		var cell = fastDev(elem), name = columns[cell.parents(&quot;td&quot;).prop(&quot;cellIndex&quot;)].name, value = cell.attr(&quot;newValue&quot;);
+		value = !fastDev.isValid(value) ? cell.attr(&quot;value&quot;) : value;
+		rowdata[name] = value;
+	},
+<span id='fastDev-Ui-DataGrid-method-getAllModifyInfo'>	/**
+</span>	 * 获取当前数据修改信息(自行提交DataGrid修改信息时使用)
+	 */
+	getAllModifyInfo : function(reset) {
+		var i = 0, logs = this._global.logs;
+		if(reset === true) {
+			var log, len = logs.length;
+			for(; log = logs[i]; i++) {
+				if(/insert|update/.test(log.oper)) {
+					logs.splice(i--, 1);
+				}
+			}
+		}
+
+		var rows = this._global.dataContainer.find(&quot;tr:gt(0)&quot;).elems, rowdata, keyword, keywordName, row;
+		for( i = 0; row = rows[i]; i++) {
+			keywordName = this._options.keyword;
+			rowdata = this.getValueImpl(fastDev(row));
+			keyword = rowdata[keywordName];
+			if(/grid_keyword_/.test(keyword)) {
+				this.addLog(&quot;insert&quot;, keywordName, keyword, rowdata);
+				continue;
+			}
+			var changeCells = fastDev(row).find(&quot;.ui-datagrid-change-cell&quot;), columns = this._options.columns;
+			if(changeCells.hasElem()) {
+				rowdata = {};
+				fastDev(row).find(&quot;.ui-datagrid-change-cell&quot;).each(this.getModify, rowdata, columns);
+				this.addLog(&quot;update&quot;, keywordName, keyword, rowdata);
+			}
+		}
+		return this._global.logs;
+	},
+<span id='fastDev-Ui-DataGrid-method-cleanSelected'>	/**
+</span>	 * 根据值取消选中行，若值为空，清除所有选中行
+	 * @param {String} [values] 某列数据,可多个格式为(value1,value2)
+	 */
+	cleanSelected : function(values) {
+		if(!fastDev.isValid(values)) {
+			this.find(&quot;[name='dg_choose']:checked&quot;).prop(&quot;checked&quot;, false);
+		} else {
+			this.findChooseBox(values).prop(&quot;checked&quot;, false);
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-setSelected'>	/**
+</span>	 * 根据值设置选中行(如果值不是唯一，选中可能会有误)
+	 * @param {String} values 某列数据,可多个格式为(value1,value2)
+	 */
+	setSelected : function(values) {
+		this.findChooseBox(values).prop(&quot;checked&quot;, true);
+	},
+<span id='fastDev-Ui-DataGrid-method-disableChooseBox'>	/**
+</span>	 * 根据值禁用选择框
+	 * @param {String} values 某列数据,可多个格式为(value1,value2)
+	 */
+	disableChooseBox : function(values) {
+		this.findChooseBox(values).prop(&quot;disabled&quot;, true);
+	},
+<span id='fastDev-Ui-DataGrid-method-enableChooseBox'>	/**
+</span>	 * 根据值启用选择框
+	 * @param {String} values 某列数据,可多个格式为(value1,value2)
+	 */
+	enableChooseBox : function(values) {
+		this.findChooseBox(values).removeProp(&quot;disabled&quot;);
+	},
+<span id='fastDev-Ui-DataGrid-method-findChooseBox'>	/**
+</span>	 * 根据指定值查找当前行选择框
+	 * @param {String} values 某列数据,可多个格式为(value1,value2)
+	 * @private
+	 */
+	findChooseBox : function(values) {
+		var selector = &quot;div &quot;, conds = [];
+		values = values.split(&quot;,&quot;);
+		while(values[0]) {
+			conds.push(&quot;[value='&quot; + values.shift() + &quot;']&quot;);
+		}
+		selector += conds.join(&quot;,&quot;);
+		return this.find(selector).parents(&quot;tr&quot;).find(&quot;[name='dg_choose']&quot;);
+	},
+<span id='fastDev-Ui-DataGrid-method-move'>	/**
+</span>	 * @param {Element} elem
+	 * @param {String} type
+	 * @param {String} method
+	 * @private
+	 */
+	move : function(elem, type, method) {
+		var target, domList = this.getTr(elem).elems;
+		if(type === &quot;next&quot;) {
+			domList.reverse();
+		}
+		fastDev.each(domList, function(i, dom) {
+			dom = fastDev(dom);
+			target = dom[type]();
+			if(type === &quot;prev&quot; &amp;&amp; target.prop(&quot;rowIndex&quot;) === 0) {
+				return;
+			}
+			dom[method](target);
+			if(fastDev.Browser.isIE6) {
+				dom.find(&quot;[name='dg_choose']&quot;).prop(&quot;checked&quot;, true);
+			}
+		});
+	},
+<span id='fastDev-Ui-DataGrid-method-moveUp'>	/**
+</span>	 * 将选中行向上移动
+	 * @param {Object} elem
+	 */
+	moveUp : function(elem) {
+		this.move(elem, &quot;prev&quot;, &quot;insertBefore&quot;);
+	},
+<span id='fastDev-Ui-DataGrid-method-moveDown'>	/**
+</span>	 * 将选中行向下移动
+	 * @param {Object} elem
+	 */
+	moveDown : function(elem) {
+		this.move(elem, &quot;next&quot;, &quot;insertAfter&quot;);
+	},
+<span id='fastDev-Ui-DataGrid-method-calculateWidth'>	/**
+</span>	 * 计算DataGrid各部分宽度值
+	 * @param {Number} width
+	 * @private
+	 */
+	calculateWidth : function(width, inner) {
+		var options = this._options, global = this._global, effectiveWidth;
+		// DataGrid总宽度
+		options.width = fastDev.Util.StringUtil.stripUnits(width, global.containerWidth);
+		// 第二层容器的边框宽度2
+		global.bodyWidth = options.width - 2;
+		// 配置列可用宽度为总宽度-内置功能列宽度-纵向滚动条预留宽度
+		effectiveWidth = global.bodyWidth - global.systemWidth - 19;
+
+		if(inner === true) {
+			return effectiveWidth;
+		}
+		// 重新计算列宽
+		var columnWidths = [], colWidthTplList = [], columns = options.columns, limit = columns.length, index = this.getRepairColIndex(columns);
+		global.surplus = effectiveWidth;
+		for(var i = 0, column; column = columns[i]; i++) {
+			var ret = this.buildColWidthTpl(column, effectiveWidth, i === index ? global.surplus : 0, true);
+			columnWidths.push(ret[0]);
+			colWidthTplList.push(ret[1]);
+		}
+		this.template.setParam({
+			colWidthTpl : global.colWidthTpl = colWidthTplList.join(&quot;&quot;)
+		});
+		// 重设宽度限制列宽
+		var elem, elems = this.find(&quot;[name='colwidthlimit'] td&quot;).elems;
+		for( i = 0; elem = elems[i]; i++) {
+			// 表头和表内容的宽度限制列都需要更改
+			index = i &gt;= limit ? i - limit : i;
+			fastDev(elem).width(columnWidths[index]);
+		}
+	},
+<span id='fastDev-Ui-DataGrid-method-caculateHeight'>	/**
+</span>	 * 计算DataGrid内容部分高度值
+	 * @param {Number} height
+	 * @private
+	 */
+	caculateHeight : function(height) {
+		var options = this._options, global = this._global, bodyHeight = options.height = fastDev.Util.StringUtil.stripUnits(height, global.containerHeight);
+		// DataGrid内容部分高度 = 总高度 - 标题行高度 - 头部工具栏高度 - 底部工具栏高度
+		bodyHeight = parseInt(options.height, 10) - (global.headerContainer.height() + global.topToolbar.height() + global.bottomToolbar.height());
+		// 重设DataGrid内容部分高度
+		global.dataContainer.css(&quot;height&quot;, bodyHeight);
+		// 修改标题行宽度以适应DataGrid内容显示不全时出现的滚动条占位问题
+		this.adaptWidth(global, bodyHeight);
+		options.height = height;
+	},
+<span id='fastDev-Ui-DataGrid-method-setWidth'>	/**
+</span>	 * 重设DataGrid宽度
+	 * @param {Number} width 目标宽度值
+	 */
+	setWidth : function(width) {
+		width = this._options.width = fastDev.Util.StringUtil.stripUnits(width, this._global.containerWidth);
+		// 重设DataGrid总宽度
+		fastDev(this.elems).width(width);
+		// 重设DataGrid二层容器宽度
+		this.find(&quot;.ui-datagrid-panel&quot;).width(width - 2).children().width(width - 2);
+		// 重设DataGrid限制列宽度
+		this.calculateWidth(width);
+		// 重设DataGrid标题表格总宽度
+		this._global.headerContainer.find(&quot;table&quot;).width(width - 2);
+		if(fastDev.Browser.isIE6 || fastDev.Browser.isIE7) {
+			// 重设DataGrid内容表格总宽度
+			this._global.dataContainer.find(&quot;table&quot;).width(width - 2);
+		}
+		return this;
+	},
+<span id='fastDev-Ui-DataGrid-method-setHeight'>	/**
+</span>	 * 重设DataGrid高度
+	 * @param {Number} height 目标高度值
+	 */
+	setHeight : function(height) {
+		this.caculateHeight(height);
+		return this;
+	},
+<span id='fastDev-Ui-DataGrid-method-resize'>	/**
+</span>	 * 重设DataGrid宽高
+	 * @param {Number} width 目标宽度值
+	 * @param {Number} height 目标高度值
+	 */
+	resize : function(width, height) {
+		return this.setWidth(width).setHeight(height);
+	},
+<span id='fastDev-Ui-DataGrid-method-filterData'>	/**
+</span>	 * 静态查询当前页显示数据
+	 * @param {String} text 文本
+	 * @param {String} [fieldname] 数据列名
+	 */
+	filterData : function(text, fieldname) {
+		var data = this.dataset.fuzzySelect(text, fieldname, true);
+		this.renderDynamicHtml(&quot;body&quot;, data);
+	}
+});
+</pre>
+</body>
+</html>

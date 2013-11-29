@@ -1,0 +1,538 @@
+	.ui-tree {
+		border-top-style: none;
+		color: #445566;
+		font-size: 12px;
+		font-family: Verdana, Arial, Helvetica, AppleGothic, sans-serif;
+		/*height: 100%;*/
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+	.ui-select-tree {
+		/*position: relative;*/
+	}
+	.ui-tree div{padding:0}
+	.ui-select-tree-ul {
+		background-color: #fff;
+		border: 1px solid #A0BCD4;
+		border-top: 0 none;
+		color: #333;
+	  /* _height:expression(this.scrollHeight > 300 ? "300px" : ( this.scrollHeight < 100 ? "100px" : "auto"));
+		//max-height: 300px;
+		//min-height: 100px;
+		height:1px;*/
+		overflow: auto;
+		position: absolute;/*datagrid selecttree*/
+		top:auto;
+		padding: 0;
+		left:auto;
+        *left:0;
+        *top:20px;
+		/* width: 128px;*/
+		z-index: 999;
+	}
+	.ui-select-tree input[type="text"] {
+
+	}
+	.ui-tree input {
+		vertical-align: middle;
+	}
+	.ui-tree ul {
+		margin: 0;
+		padding-left: 17px;
+	}
+	.ui-tree li {
+		list-style: none;
+		line-height: 18px;
+		/*overflow: hidden;*/
+	}
+	.ui-tree li a {
+		color: #333;
+		cursor: pointer;
+		padding: 0;
+		margin: 0 10px 0 0;
+		text-decoration: none;
+	}
+	.ui-tree li a:hover {
+		text-decoration: underline;
+	}
+	.ui-tree li input {
+		float: left;
+	    *padding: 0;
+	    *margin: 0;
+	}
+	.ui-tree-ul-show {
+		display: block;
+	}
+	.ui-tree-ul-hidden {
+		display: none;
+	}
+	/*
+	 * ul����
+	 * */
+	.ui-tree-ul-line {
+		background: url(../images/tree/line_conn.gif) 0 0 repeat-Y;
+	}
+	.ui-tree-ul-line div {
+		white-space: nowrap;
+		_white-space:normal;
+		display:block;
+	}
+	/*
+	 * ulû�ߺ����һ��?
+	 * */
+	.ui-tree-ul-line-no {
+	    margin:0;
+		padding-left: 10px;
+		background: #fff;
+	}
+	/*
+	 * �򿪵�֦�ڵ�ͼƬ
+	 * */
+	.ui-tree-span-ico-open {
+		background: url(../images/tree/folder_Open.gif) 0 -1px no-repeat;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ��£��֦�ڵ�ͼƬ
+	 * */
+	.ui-tree-span-ico-close {
+		background: url(../images/tree/folder_Close.gif) 0 -1px no-repeat;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * Ҷ�ڵ�ͼƬ
+	 * */
+	.ui-tree-span-ico-leaf {
+		background: url(../images/tree/page.gif) center 0 no-repeat;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ����-
+	 * */
+	.ui-tree-s-fh-cut {
+		background: url(../images/tree/minus_center.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ����+
+	 * */
+	.ui-tree-s-fh-add {
+		background: url(../images/tree/plus_center.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * �������һ��?
+	 * */
+	.ui-tree-s-fh-cut-last {
+		background: url(../images/tree/minus_bottom.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * �������һ��?
+	 * */
+	.ui-tree-s-fh-add-last {
+		background: url(../images/tree/plus_bottom.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ��һ��-
+	 * */
+	.ui-tree-s-fh-cut-first {
+		background: url(../images/tree/minus_top.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ��һ+
+	 * */
+	.ui-tree-s-fh-add-first {
+		background: url(../images/tree/plus_top.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ��һ��β-
+	 * */
+	.ui-tree-s-fh-cut-only {
+		background: url(../images/tree/minus_root.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ��һ��β+
+	 * */
+	.ui-tree-s-fh-add-only {
+		background: url(../images/tree/plus_root.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * û��-
+	 * */
+	.ui-tree-s-fh-cut-noline {
+		background: url(../images/tree/minus_noLine.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * û��+
+	 * */
+	.ui-tree-s-fh-add-noline {
+		background: url(../images/tree/plus_noLine.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * �����м�Ҷ
+	 * */
+	.ui-tree-s-leaf-mid {
+		background: url(../images/tree/line_center.gif) 0 0 repeat-y;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ����ĩβҶ
+	 * */
+	.ui-tree-s-leaf-last {
+		background: url(../images/tree/line_bottom.gif) 0 0 no-repeat;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * û��Ҷ
+	 * */
+	.ui-tree-s-leaf-noline {
+		background: url(../images/tree/line_none.gif) 0 0 no-repeat;
+		display: block;
+		float: left;
+		height: 18px;
+		width: 18px;
+		position:relative;
+	}
+	/*
+	 * ��ͨ�ı�
+	 * */
+	.ui-tree-s-text {
+		border: 1px solid #fff;
+		color: #075587;
+		cursor: pointer;
+		/*
+		 * ���ֹ��ʱ��IE8,firefox,chrome��
+		 display:block;
+		 position: relative;
+		 * */
+		display: inline-block;
+	    position: relative;
+		/*height: 14px;*/
+		line-height: 15px;
+		padding: 1px 1px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	span.ui-tree-s-text:hover {
+		background: url(../images/tree/tree_oncliknofile.gif) repeat-x;
+		border: 1px solid #7ECDE5;
+		color: #075587;
+	}
+	/*
+	 * ��ǰ�ı�
+	 * */
+	.ui-tree-s-text-current .ui-tree-s-text {
+		background: url(../images/tree/tree_oncliknofile.gif) repeat-x;
+		border: 1px solid #7ECDE5;
+		color: #075587;
+		cursor: pointer;
+		/*
+		 * ���ֹ��ʱ��IE8,firefox,chrome��
+		 display:block;
+		 position: relative;
+		 * */
+		display: inline-block;
+		position: relative;
+		*position: static;
+		height: 14px;
+		line-height: 15px;
+		padding: 1px 1px;
+		overflow: hidden;
+	}
+	.ui-tree-s-text-chked .ui-tree-s-text,.ui-tree-s-text-radioed .ui-tree-s-text {
+		background-color: #ecf7fb;
+		color: #075587;
+		cursor: pointer;
+		/*
+		 * ���ֹ��ʱ��IE8,firefox,chrome��
+		 display:block;
+		 position: relative;
+		 * */
+		display: inline-block;
+		position: relative;
+		*position: static;
+		height: 14px;
+		line-height: 15px;
+		overflow: hidden;
+	}
+	.ui-tree-select-div {
+	}
+	.ui-tree-select-txt {
+		background: url(../images/tree/ddl.gif) right center no-repeat;
+		border: 1px solid #A0BCD4;
+		height: 18px;
+		padding-right: 22px;
+		vertical-align: middle;
+		width: 150px;
+		position: relative;
+	}
+	.datagrid .ui-tree-select-txt {
+		background: url(../images/tree/ddl.gif) right center no-repeat;
+		border: 1px solid #A0BCD4;
+		vertical-align: middle;
+		position: relative;
+	}
+	/*
+	 * ���صȴ���
+	 * */
+	.ui-tree-loading {
+		background: url(../images/tree/loading.gif) 0 0 no-repeat;
+		display: block;
+		height: 18px;
+		width: 18px;
+	}
+	.ui-tree-hiden {
+		display: none
+	}
+	.errormsg {
+		background: url(../images/tree/line_none.gif) 0 0 no-repeat;
+		border: none;
+		color: #f00;
+		display: block;
+		font-weight: bold;
+	}
+	/*
+	 * button��ʽ
+	 * */
+	.treebuttonSubmit, .treebuttonClose {
+		background: #F2F9FC url(../images/btnbg.gif) repeat-x;
+		border: 1px solid #D0E1E6;
+		border-radius: 2px;
+		color: #0A2A43;
+		cursor: pointer;
+		display: block;
+		float: left;
+		font-size: 12px;
+		font-weight: normal;
+		height: 22px;
+		line-height: 22px;
+		_line-height: 22px;
+		margin: 1px 7px;
+		padding: 0 8px;
+		text-transform: uppercase;
+		text-decoration: none;
+		-moz-border-radius: 2px;
+		-webkit-border-radius: 2px;
+	}
+	.ui-tree-chk, .ui-tree-chk-part, .ui-tree-chk-selected,.ui-tree-chk-readonly,.ui-tree-chk-readonly-selected,.ui-tree-readonly-chk,.ui-tree-readonly-chk-selected{
+		background: url(../images/tree/checkbox.png) no-repeat 0 0;
+		/*
+		 * @ FF 1+2
+		 * */
+		display: -moz-inline-box;
+		/*
+		 * Required to make a span sizeable
+		 * */
+		display: inline-block;
+		float: left;
+		margin: 2px 1px 0 0;
+		height: 13px;
+		vertical-align: top;
+		width: 13px;
+		position:relative;
+        _font-size:1px;
+	}
+	.ui-tree-chk {
+		background-position: 0 0;
+	}
+	.ui-tree-chk:hover {
+		background-position: 0 -12px;
+	}
+	.ui-tree-chk-selected {
+		background-position: 0 -24px;
+	}
+	.ui-tree-chk-selected:hover {
+		background-position: 0 -36px;
+	}
+	.ui-tree-chk-readonly-selected {
+		background-position: 0 -48px;
+	}
+	.ui-tree-chk-readonly {
+		background-position: 0 -60px;
+	}
+	.ui-tree-chk-part {
+		background-position: 0 -72px;
+	}
+	.ui-tree-chk-part:hover {
+		background-position: 0 -84px;
+	}
+	.ui-tree-readonly-chk{
+		background-position: 0 -97px;
+	}
+	.ui-tree-readonly-chk-selected{
+		background-position: 0 -109px;
+	}
+	.ui-tree-radio, .ui-tree-radio-part, .ui-tree-radio-selected,.ui-tree-radio-readonly,.ui-tree-radio-readonly-selected,.ui-tree-readonly-radio,.ui-tree-readonly-radio-selected{
+		background: url(../images/tree/radio.png) no-repeat 0 0;
+		_background: url(../images/tree/radio.gif) no-repeat 0 0;
+		/*
+		 * @ FF 1+2
+		 * */
+		display: -moz-inline-box;
+		/*
+		 * Required to make a span sizeable
+		 * */
+		display: inline-block;
+		position:relative;
+		float: left;
+		margin: 2px 1px 0 0;
+		height: 13px;
+		vertical-align: top;
+		width: 13px;
+
+_font-size:1px;
+	}
+	.ui-tree-radio {
+		background-position: 0 0;
+	}
+	.ui-tree-radio:hover {
+		background-position: 0 -12px;
+	}
+	.ui-tree-radio-selected {
+		background-position: 0 -24px;
+	}
+	.ui-tree-radio-selected:hover {
+		background-position: 0 -36px;
+	}
+	.ui-tree-radio-readonly-selected {
+		background-position: 0 -48px;
+	}
+	.ui-tree-radio-readonly {
+		background-position: 0 -60px;
+	}
+	.ui-tree-radio-part {
+		background-position: 0 -72px;
+	}
+	.ui-tree-radio-part:hover {
+		background-position: 0 -84px;
+	}
+	.ui-tree-readonly-radio{
+		background-position: 0 -97px;
+	}
+	.ui-tree-readonly-radio-selected{
+		background-position: 0 -109px;
+	}
+	 .ui-tree-drag-node{
+			position:absolute; border:solid 1px #849BCA;left:10px;top:10px;filter:alpha(opacity=100);opacity:1;
+	 }
+	 .ui-tree-move-node:hover{
+			background-color:#006;
+	 }
+
+
+	 .DataGrid .ui-tree {
+		border-top-style: none;
+		color: #445566;
+		font-size: 12px;
+		font-family: Verdana, Arial, Helvetica, AppleGothic, sans-serif;
+		/*height: 100%;*/
+		margin: 0;
+		padding: 0;
+		position:static;
+		*position:relative;
+	}
+	.DataGrid .ui-tree-select-txt {
+		background: url(../images/tree/ddl.gif) right center no-repeat;
+		border: 1px solid #A0BCD4;
+		height: 18px;
+		/*padding-right: 15px;*/
+		padding-right:0;
+		vertical-align: middle;
+		position: relative;
+	}
+	.DataGrid .ui-select-tree {
+		/*position: relative;*/
+	}
+	.DataGrid .ui-select-tree-ul {
+		background-color: #fff;
+		border: 1px solid #A0BCD4;
+		border-top: 0 none;
+		color: #333;
+	  /* _height:expression(this.scrollHeight > 300 ? "300px" : ( this.scrollHeight < 100 ? "100px" : "auto"));
+		//max-height: 300px;
+		//min-height: 100px;
+		height:1px;*/
+		overflow: auto;
+		position: absolute;/*datagrid selecttree*/
+		top:auto;
+		padding: 0;
+		left:auto;
+        *left:0;
+        *top:20px;
+        _top:22px;
+		/* width: 128px;*/
+		z-index: 999;
+	}
+	
+.DataGrid td .ui-select-tree input[type="text"] {
+	padding-right: 5px;
+}

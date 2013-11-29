@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					窗体拖拽定位示例。
+				</li>
+				<li>
+					fixed定位（静止定位）时，窗体位置不受滚动条滚动影响。
+				</li>
+				<li>
+					fixed定位功能兼容IE6浏览器。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 可视区域拖拽
+			function showInviewWindow() {
+				// visible属性为true时，仅能在当前可视区域内拖动（默认）
+				fastDev.create("Window", {
+					visible : false,
+					modal : false
+				});
+			}
+
+			// fixed定位类型
+			function showFixedWindow() {
+				// fixed属性可开启或关闭静态定位
+				// Fixed定位功能兼容IE6
+				// 模态窗口下默认会锁滚动条，因此，在非模态窗口下fixed定位功能才有意义
+				fastDev.create("Window", {
+					fixed : true,
+					modal : false
+				});
+			}
+
+			// 禁用窗体拖动
+			function showNoDragWindow() {
+				// allowDrag属性可开启或禁用拖动
+				fastDev.create("Window", {
+					allowDrag : false,
+					modal : false
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				拖拽定位
+			</div>
+			<div>
+				<input itype="Button" text="fixed定位" onclick="showFixedWindow()"/>
+			</div>
+			<br/>
+			<div>
+				<input itype="Button" text="可拖出当前可视区域" onclick="showInviewWindow()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="禁用窗体拖动" onclick="showNoDragWindow()"/>
+			</div>
+			<br />
+			<div style="height: 600px">
+				<h2 style="color: red;">顶部</h2>
+			</div>
+			<div style="height:600px;">
+				<h2 style="color: red;">中部</h2>
+			</div>
+			<div style="height: 200px;">
+				<h2 style="color: red;">底部</h2>
+			</div>
+		</div>
+	</body>
+</html>
+

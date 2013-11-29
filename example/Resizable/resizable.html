@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Resizable</title>
+
+		<link rel="stylesheet" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script type="text/javascript">
+			var resizer;
+			fastDev(function() {
+				fastDev.create("Resizable", {
+					element : "#example1", // 元素选择器格式需满足fastDev选择器格式
+					handles : "all"	// 可调方向，all表示所有方向，即8个方向
+				});
+				fastDev.create("Resizable", {
+					element : "#example2", // 元素选择器格式需满足fastDev选择器格式
+					handles : "all",
+					ratio : 16 / 9
+				});
+				fastDev.create("Resizable", {
+					element : "#example3", // 元素选择器格式需满足fastDev选择器格式
+					handles : "e,s"
+				});
+				fastDev.create("Resizable", {
+					element : "#example4", // 元素选择器格式需满足fastDev选择器格式
+					handles : "e,s,se",
+					ghost : false // 此属性指定是否使用辅助层来调整大小
+				});
+				resizer = fastDev.create("Resizable", {
+					element : "#example5" // 元素选择器格式需满足fastDev选择器格式
+				});
+				fastDev.create("Resizable", {
+					element : "#example6" // 元素选择器格式需满足fastDev选择器格式
+				});
+				fastDev.create("Resizable", {
+					element : "#example7",
+					handles : "all"
+				});
+			});
+
+			// 禁用大小调整
+			function disable() {
+				resizer.disable();
+			}
+
+			// 启用大小调整
+			function enable() {
+				resizer.enable();
+			}
+
+			// 注销大小调整
+			function destroy() {
+				resizer.destroy();
+			}
+		</script>
+	</head>
+	<body>
+		<div id="example1" style="background-color: orange;width: 200px;height: 100px;">
+			可调大小的层
+			<br />
+			属性说明及事件回调请参见API文档
+		</div>
+		<br />
+		<div id="example2" style="background-color: yellow;width: 200px;height: 100px;">
+			宽高以16 : 9调整大小
+		</div>
+		<br />
+		<div id="example3" style="background-color: #00ff00;width: 200px;height: 100px;">
+			仅东方、南方边界可触发大小调整
+		</div>
+		<br />
+		<div id="example4" style="background-color: #FF0066;width: 200px;height: 100px;">
+			不使用辅助层而直接调整元素大小
+		</div>
+		<br />
+		<div id="example5" style="background-color: #FF6633;width: 200px;height: 100px;">
+			<button class="button" onclick="disable()">
+				禁用大小调整
+			</button>
+			<button class="button" onclick="enable()">
+				启用大小调整
+			</button>
+			<button class="button" onclick="destroy()">
+				注销大小调整（不可恢复）
+			</button>
+		</div>
+		<div style="position:absolute;right:0;top:0; background-color: #808080;width: 900px;height: 600px;">
+			特殊元素自动包装
+			<br />
+			<select id="example6">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+			</select>
+			<br />
+			选择器允许选择多个元素
+			<br />
+			<input  id="example7" />
+			<br />
+		</div>
+		<br />
+	</body>
+</html>
+

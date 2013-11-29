@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>iframeB</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+		<script src="../../src/component/MessageBox.js"></script>
+		<script type="text/javascript">
+			function _alert() {
+				fastDev.alert("警告，非法访问！", function() {
+					fastDev.tips("你点击了确定按钮");
+				});
+			};
+			function _prompt() {
+				fastDev.prompt("你的姓名是？", function(value) {
+					fastDev.tips(value + ",你好！");
+				});
+			};
+			function _prompt2() {
+				fastDev.prompt("你的姓名是？", function(value) {
+					fastDev.tips(value + ",你好！");
+				}, "无名氏");
+			};
+			function _prompt3() {
+				fastDev.prompt({
+					textarea : {
+						rows : 5,
+						cols : 30
+					},
+					msg : "请输入个性签名:",
+					title : "个人信息",
+					value : "我是一个帅小伙啊！",
+					width : "300px",
+					height : "180px",
+					ok : function(value) {
+						fastDev.tips(value);
+					}
+				});
+			};
+			function _confirm() {
+				fastDev.confirm("你是帅哥吗？", function() {
+					fastDev.tips("太臭美了！");
+					this.shake();
+					//this指向当前控件
+					//return false可以阻止关闭
+					return false;
+				}, function() {
+					fastDev.tips("其实你很帅的！");
+				});
+			};
+		</script>
+	</head>
+	<body>
+		<div>
+			<button class="button" onclick="_alert()">
+				alert
+			</button>
+		</div>
+		<div>
+			<button class="button" onclick="_prompt()">
+				prompt
+			</button>
+			<button class="button" onclick="_prompt2()">
+				prompt 带默认值
+			</button>
+			<button class="button" onclick="_prompt3()">
+				prompt 文本域
+			</button>
+		</div>
+		<div>
+			<button class="button" onclick="_confirm()">
+				confirm
+			</button>
+		</div>
+	</body>
+</html>
+

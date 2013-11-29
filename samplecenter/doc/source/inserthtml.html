@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+/*
+ * @description 插入内容
+ * @name baidu.editor.execCommand
+ * @param   {String}   cmdName     inserthtml插入内容的命令
+ * @param   {String}   html                要插入的内容
+ * @author zhanyi
+    */
+    UE.commands['inserthtml'] = {
+        execCommand: function (command,html){
+            var me = this,
+                range,deletedElms, i,ci,
+                div,
+                tds = me.currentSelectedArr;
+
+            range = me.selection.getRange();
+
+            div = range.document.createElement( 'div' );
+            div.style.display = 'inline';
+            div.innerHTML = utils.trim( html );
+
+            try{
+                me.adjustTable &amp;&amp; me.adjustTable(div);
+            }catch(e){}
+
+
+            if(tds &amp;&amp; tds.length){
+                for(var i=0,ti;ti=tds[i++];){
+                    ti.className = ''
+                }
+                tds[0].innerHTML = '';
+                range.setStart(tds[0],0).collapse(true);
+                me.currentSelectedArr = [];
+            }
+
+            if ( !range.collapsed ) {
+
+                range.deleteContents();
+                if(range.startContainer.nodeType == 1){
+                    var child = range.startContainer.childNodes[range.startOffset],pre;
+                    if(child &amp;&amp; domUtils.isBlockElm(child) &amp;&amp; (pre = child.previousSibling) &amp;&amp; domUtils.isBlockElm(pre)){
+                        range.setEnd(pre,pre.childNodes.length).collapse();
+                        while(child.firstChild){
+                            pre.appendChild(child.firstChild);
+
+                        }
+                        domUtils.remove(child);
+                    }
+                }
+
+            }
+
+
+            var child,parent,pre,tmp,hadBreak = 0;
+            while ( child = div.firstChild ) {
+                range.insertNode( child );
+                if ( !hadBreak &amp;&amp; child.nodeType == domUtils.NODE_ELEMENT &amp;&amp; domUtils.isBlockElm( child ) ){
+
+                    parent = domUtils.findParent( child,function ( node ){ return domUtils.isBlockElm( node ); } );
+                    if ( parent &amp;&amp; parent.tagName.toLowerCase() != 'body' &amp;&amp; !(dtd[parent.tagName][child.nodeName] &amp;&amp; child.parentNode === parent)){
+                        if(!dtd[parent.tagName][child.nodeName]){
+                            pre = parent;
+                        }else{
+                            tmp = child.parentNode;
+                            while (tmp !== parent){
+                                pre = tmp;
+                                tmp = tmp.parentNode;
+    
+                            }    
+                        }
+                        
+                       
+                        domUtils.breakParent( child, pre || tmp );
+                        //去掉break后前一个多余的节点  &lt;p&gt;|&lt;[p&gt; ==&gt; &lt;p&gt;&lt;/p&gt;&lt;div&gt;&lt;/div&gt;&lt;p&gt;|&lt;/p&gt;
+                        var pre = child.previousSibling;
+                        domUtils.trimWhiteTextNode(pre);
+                        if(!pre.childNodes.length){
+                            domUtils.remove(pre);
+                        }
+                        hadBreak = 1;
+                    }
+                }
+                var next = child.nextSibling;
+                if(!div.firstChild &amp;&amp; next &amp;&amp; domUtils.isBlockElm(next)){
+
+                    range.setStart(next,0).collapse(true);
+                    break;
+                }
+                range.setEndAfter( child ).collapse();
+
+            }
+//            if(!range.startContainer.childNodes[range.startOffset] &amp;&amp; domUtils.isBlockElm(range.startContainer)){
+//                next = editor.document.createElement('br');
+//                range.insertNode(next);
+//                range.collapse(true);
+//            }
+            //block为空无法定位光标
+
+            child = range.startContainer;
+            //用chrome可能有空白展位符
+            if(domUtils.isBlockElm(child) &amp;&amp; domUtils.isEmptyNode(child)){
+                child.innerHTML = browser.ie ? '' : '&lt;br/&gt;'
+            }
+            //加上true因为在删除表情等时会删两次，第一次是删的fillData
+            range.select(true);
+
+
+            setTimeout(function(){
+                range = me.selection.getRange();
+                range.scrollToView(me.autoHeightEnabled,me.autoHeightEnabled ? domUtils.getXY(me.iframe).y:0);
+            },200)
+
+
+
+            
+        }
+    };
+</pre>
+</body>
+</html>

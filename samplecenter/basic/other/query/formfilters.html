@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>表单元素选择器进阶</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function() {
+				var container = fastDev("#example");
+				function clearCss() {
+					container.find("*").parent().css("border", "1px solid #fff");
+				}
+				clearCss();
+
+				fastDev("#btn1").bind("click", function() {
+					clearCss();
+					// 查找所有可用的input元素
+					container.find("input:enabled").parent().css("border", "2px dotted blue");
+				});
+
+				fastDev("#btn2").bind("click", function() {
+					clearCss();
+					// 查找所有禁用的input元素
+					container.find("input:disabled").parent().css("border", "2px dotted blue");
+				});
+
+				fastDev("#btn3").bind("click", function() {
+					clearCss();
+					// 查找所有选中的复选框/单选框元素
+					container.find("input:checked").parent().css("border", "2px dotted blue");
+				});
+				fastDev("#btn4").bind("click", function() {
+					clearCss();
+					// 获取被选中的下拉框文本
+					fastDev.tips(container.find("select option:selected").getText());
+				});
+
+			});
+		</script>
+	</head>
+	<body>
+		查找所有可用的input元素:<a id="btn1" href="#">input:enabled</a><br>
+		查找所有禁用的input元素:<a id="btn2" href="#">input:disabled</a><br> 
+		查找所有选中的复选框/单选框元素:<a id="btn3" href="#">input:checked</a><br>
+		获取被选中的下拉框文本:<a id="btn4" href="#">select option:selected</a><br>
+		
+
+		<!-- HTML元素测试区 -->
+		<div id="example">
+			<form>
+			  <div><input name="email" disabled="disabled" /></div><br>
+			  <div><input name="id" /><br>
+			  <div><input type="checkbox" name="checkbox" checked="checked" value="checkbox1" /></div><br>
+	  		  <div><input type="checkbox" name="checkbox" value="checkbox2" /></div><br>
+	  		  <div><input type="checkbox" name="checkbox" checked="checked" value="checkbox3" /></div><br>
+	  		  <div><input type="radio" name="radio" value="radio1" /></div><br>
+	  		  <div><input type="radio" name="radio" value="radio2" /></div><br>
+	  		  <div><input type="radio" name="radio" checked="checked" value="radio3" /></div><br>
+	  		  <div><select>
+				  <option value="1">item1</option>
+				  <option value="2" selected="selected">item2</option>
+				  <option value="3">item3</option>
+			  </select></div>
+			</form>
+		</div>
+	</body>
+</html>
+

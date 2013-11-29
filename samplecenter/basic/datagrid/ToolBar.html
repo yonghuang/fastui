@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>DataGrid工具栏为外置的，也就是说虽然配置是写在DataGrid中，但实现却是由工具栏控件完成的</li>
+				<li>所以工具栏的使用请参考工具栏的Api与示例，当前示例只介绍在DataGrid中，工具栏配置应该如何写</li>
+				<li>工具栏配置在DataGrid中属于特殊属性配置，所以需要定义在列配置的同级标签上，并将name属性值设置为"top-toolbar"</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+			function add(){
+				fastDev.tips("新增");
+			}
+			
+			function edit(){
+				fastDev.tips("修改");
+			}
+			
+			function save(){
+				fastDev.tips("保存");
+			}
+			
+			function remove(){
+				fastDev.tips("删除")
+			}
+			
+			function search(){
+				fastDev.tips("文本框中的查询字符串为:"+fastDev.getInstance("cond").getValue());
+			}
+			
+			function refresh(){
+				fastDev.tips("刷新");
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">DataGrid工具栏配置</div>
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" id="datagrid" saveInstance=true>
+				<div name="top-toolbar">
+					<div plain=true text="增加" iconCls="icon-add" onclick="add()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="修改" iconCls="icon-edit" onclick="edit()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="保存" iconCls="icon-save" onclick="save()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="删除" iconCls="icon-delete" onclick="remove()"></div>
+					<div itype="separator"></div>
+					<div itype="end"></div>
+					<div itype="textbox" id="cond" saveInstance=true></div>
+					<div text="查询" iconCls="icon-search" onclick="search()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="刷新" iconCls="icon-refresh" onclick="refresh()"></div>
+				</div>
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>获取当前选中行的值</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function entering() {
+				var data = fastDev.getInstance("form1").getItems();
+				fastDev.getInstance("grid1").addRow(data);
+			}
+
+			function onChange(value, text) {
+				fastDev.getInstance("positionName").setValue(text);
+			}
+
+			function mappingPosition(value) {
+				switch(value) {
+					case "position1" :
+						return "前端工程师";
+					case "position2" :
+						return "后台工程师";
+					case "position3" :
+						return "技术经理";
+					case "position4" :
+						return "项目经理";
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id="example" style="margin: 20px">
+			<div itype="DataGrid" showSeqColumn=true saveInstance=true id="grid1" initSource="data.jsp">
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="10%" name="name" text="姓名" editby="TextBox" renderer="renderer1()"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用" itype="boolean" trueText="是" falseText="否" editby="CheckBoxGroup">
+					<div name="controlCfg">
+						<div value="true"></div>
+					</div>
+				</div>
+				<div width="10%" name="position"  text="职位ID" editby="Select" renderer="mappingPosition()">
+					<div name="controlCfg">
+						<div value="position1" text="前端工程师"></div>
+						<div value="position2" text="后台工程师"></div>
+						<div value="position3" text="技术经理"></div>
+						<div value="position4" text="项目经理"></div>
+					</div>
+				</div>
+				<div width="15%" name="positionName" text="职位" editby="Select" idColumn="position">
+					<div name="controlCfg">
+						<div value="position1" text="前端工程师"></div>
+						<div value="position2" text="后台工程师"></div>
+						<div value="position3" text="技术经理"></div>
+						<div value="position4" text="项目经理"></div>
+					</div>
+				</div>
+				<div width="10%" name="pay" text="薪资" itype="number" format="0,0.00" editby="TextBox"></div>
+				<div width="10%" name="datesemployed" text="入职时间" itype="date" format="yyyy年MM月dd日" editby="DatePicker"></div>
+				<div width="15%" name="birthday" text="生日" itype="date" format="yyyy年MM月dd日" defaultValue="1985-01-01"></div>
+			</div>
+		</div>
+		<div id="example1" style="margin: 20px">
+			<form itype="Form" id="form1">
+				<table>
+					<tr>
+						<td>员工工号:</td>
+						<td>
+						<input itype="TextBox" id="empno">
+						</input></td>
+						<td>姓名:</td>
+						<td>
+						<input itype="TextBox" id="name" >
+						</input></td>
+					</tr>
+					<tr>
+						<td>所属部门:</td>
+						<td>
+						<input itype="TextBox" id="department" value="技术研发部" disabled>
+						</input></td>
+						<td>是否可用:</td>
+						<td id="isuse_c">
+						<div itype="CheckBoxGroup" id="isuse"  >
+							<div text="" value="true"></div>
+						</div></td>
+					</tr>
+					<tr>
+						<td>职位:</td>
+						<td >
+						<select itype="Select" id="position"  onValueChange="onChange()">
+							<option text="前端工程师" value="position1"></option>
+							<option text="后台工程师" value="position2"></option>
+							<option text="技术经理" value="position3"></option>
+							<option text="项目经理" value="position4"></option>
+						</select>
+						<input itype="TextBox" type="hidden" id="positionName" >
+						</input></td>
+						<td>薪资:</td>
+						<td>
+						<input itype="TextBox" id="pay" >
+						</input></td>
+					</tr>
+					<tr>
+						<td>入职时间:</td>
+						<td ><div itype="DatePicker" id="datesemployed" ></div></td>
+						<td>生日:</td>
+						<td><div itype="DatePicker" id="birthday" ></div></td>
+					</tr>
+					<tr>
+						<td colspan="2" >
+						<input itype="Button" text="录入" onBtnClick="entering()">
+		</div>
+		</td>
+		</tr>
+		</table>
+		</form>
+		</div>
+		<input type="hidden" />
+	</body>
+</html>

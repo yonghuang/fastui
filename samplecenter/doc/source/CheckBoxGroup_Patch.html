@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">// CheckBoxGroup兼容子类 
+fastDev.namespace(&quot;talkweb.Components&quot;);
+
+fastDev.define(&quot;fastDev.Patch.CheckBoxGroup&quot;,{
+	extend : &quot;fastDev.Ui.CheckBoxGroup&quot;,
+	alias : &quot;Patch.CheckBoxGroup&quot;,
+	mapping :{
+		&quot;columnsCount&quot; : &quot;repeatItems&quot;,
+		&quot;columnsWidth&quot; : &quot;itemWidth&quot;,	
+		&quot;click&quot; : &quot;onValueChange&quot;
+	},
+	// CheckBoxGroup兼容属性属性解析 
+	parseAttr : function(config){
+	  return fastDev.create(&quot;Patch.CheckBoxGroup&quot;,fastDev.parseMapping(config,this.mapping));
+	},
+<span id='global-method-reConstruct'>	/**
+</span>	 * 根据html重新构建控件的方法
+	 * @private
+	 */
+	reConstruct : function(obj) {
+		var controlList = this._global.controlList || [];
+		for(var i = 0; i &lt; obj.length; i += 1) {
+			controlList.push(talkweb.Components.CheckBoxGroup.CheckBox({}, false).reConstruct(obj[i]));
+			var id = $(obj[i]).attr(&quot;id&quot;);
+			id &amp;&amp; (this._options.id = id);
+		}
+		this._options.isReConstruct = true;
+		this._global.controlList = controlList;
+		return this;
+	}
+});
+
+talkweb.Components.CheckBoxGroup = function(config){
+	return fastDev.Patch.CheckBoxGroup.parseAttr(config);
+}
+
+
+</pre>
+</body>
+</html>

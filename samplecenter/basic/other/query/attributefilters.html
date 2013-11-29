@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>属性选择器</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function() {
+				var container = fastDev("#example");
+				
+				function clearCss() {
+					container.find("div").css("border", "1px dashed #fff");
+					container.find("input").parent().css("border", "1px dashed #fff");
+				}
+
+
+				fastDev("#btn1").bind("click", function() {
+					clearCss();
+					// 查找所有含有 id 属性的 div 元素
+					container.find("div[id]").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn2").bind("click", function() {
+					clearCss();
+					// 查找所有 name 属性是 test1 的 input 元素
+					container.find("input[name='test1']").parent().css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn3").bind("click", function() {
+					clearCss();
+					// 查找所有 name 属性不是 test1 的 input 元素
+					container.find("input[name!='test1']").parent().css("border", "1px dashed #f00");
+				});
+				fastDev("#btn4").bind("click", function() {
+					clearCss();
+					// 查找所有 name 以 'test' 开始的 input 元素
+					container.find("input[name^='test']").parent().css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn5").bind("click", function() {
+					clearCss();
+					// 查找所有 name 以 '1' 结束的 input 元素
+					container.find("input[name$='1']").parent().css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn6").bind("click", function() {
+					clearCss();
+					// 查找所有 name 包含 'test1' 的 input 元素
+					container.find("input[name*='est']").parent().css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn7").bind("click", function() {
+					clearCss();
+					// 查找所有含有 id 属性，并且它的 name 属性是以 1 结尾的
+					container.find("input[id][name$='1']").parent().css("border", "1px dashed #f00");
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="ui-other-content">
+		<p>查找所有含有 id 属性的 div 元素:<a id="btn1" href="#">div[id]</a></p>
+		<p>查找所有 name 属性是 test1 的 input 元素:<a id="btn2" href="#">input[name='test1']</a></p>
+		<p>查找所有 name 属性不是 test1 的 input 元素:<a id="btn3" href="#">input[name!='test1']</a></p>
+		<p>查找所有 name 以 'test' 开始的 input 元素:<a id="btn4" href="#">input[name^='test']</a></p>
+		<p>查找所有 name 以 '1' 结束的 input 元素:<a id="btn5" href="#">input[name$='test']</a></p>
+		<p>查找所有 name 包含 'test1' 的 input 元素:<a id="btn6" href="#">input[name*='test']</a></p>
+		<p>查找所有含有 id 属性，并且它的 name 属性是以 1 结尾的:<a id="btn7" href="#">input[id][name$='1']</a></p>
+		
+		<p>&nbsp;</p>
+		<!-- HTML元素测试区 -->
+		<div id="example">
+			<div id="test2"><p>&lt;div id="test2">&lt;/div></p></div>
+			<span><input id="chk1" type="checkbox" name="test1" value="Hot Fuzz" /></span>&lt;input id="chk1" type="checkbox" name="test1" value="Hot Fuzz" /><br/>
+			<span><input type="checkbox" name="test1" value="Cold Fusion" /></span>&lt;input type="checkbox" name="test1" value="Cold Fusion" /><br/>
+			<span><input type="checkbox" name="test2" value="Evil Plans" /></span>&lt;input type="checkbox" name="test2" value="Evil Plans" /><br/>
+		</div>
+		</div>
+	</body>
+</html>
+

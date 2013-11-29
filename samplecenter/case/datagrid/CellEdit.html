@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>datagrid-行内编辑</h4> 
+			<ul>
+				<li>datagird在行内直接编辑的功能</li>
+				</ul>
+			</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function add(){
+				fastDev.getInstance("grid1").addRow();
+			}
+			
+			
+			function remove(){
+				fastDev.getInstance("grid1").delSelectedRow();
+			}
+			
+			function rollback(){
+				fastDev.getInstance("grid1").rollbackModify();
+			}
+			
+			function save(){
+				fastDev.getInstance("grid1").saveToServer();
+			}
+			
+			function saveCallback(msg){
+				fastDev.alert("此数据为jsp返回："+msg.text);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div itype="DataGrid" initSource="../../data/griddata1.json" 
+			action="../../data/gridsubmitdata.jsp" id="grid1" showSeqColumn=true 
+			showCheckColumn=true saveInstance=true keyword="name" saveCallback="saveCallback()">
+				<div name="top-toolbar">
+					<div plain=true text="增加" iconCls="icon-add" onclick="add()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="删除" iconCls="icon-delete" onclick="remove()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="还原" iconCls="icon-save" onclick="rollback()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="保存" iconCls="icon-save" onclick="save()"></div>
+				</div>
+			
+			<div width="15%" name="name" text="姓名" ></div>
+				<div width="15%" name="chinese" text="语文"  editby="TextBox"></div>
+				<div width="15%" name="maths" text="数学"   editby="TextBox"></div>
+				<div width="15%" name="english" text="英文"  editby="TextBox"></div>
+				<div width="15%" name="physics" text="物理"  editby="TextBox"></div>
+				<div width="15%" name="chemistry" text="化学"  editby="TextBox"></div>
+				<div name="position" hidden=true></div>
+			</div>
+		</div>
+	</body>
+</html>

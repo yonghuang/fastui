@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><ul>       
+         <li>在表单中使用富文本框需注意将表单的requestType设置为"post"</li>
+         <li>为防止脚本注入的问题，提交后的内容用js的 escape 编码过了。</li>
+         <li>前台在获取编码过的值时会自动解码。后台也可以进行相关解码</li>
+        </ul></title>
+<script src="../../../src/fastDev-import.js"></script>
+<script language="javascript" src="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/editor_config.js"></script>
+<script language="javascript" src="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/editor_all.js"></script>
+<link rel="stylesheet" type="text/css" href="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/themes/default/ueditor.css"/>	
+<script>
+			var submit=function(){
+				var form=fastDev.getInstance("form1");
+				form.submit();
+			}
+			var submitSuccess=function(data){		
+				fastDev.tips("提交成功");	
+			}
+</script>
+</head>
+
+<body>
+<form itype="Form" action="../../data/editor_example_submit.jsp" requestType="post" id="form1"  saveInstance="true" dataSource="../../data/editor_example_1_load.jsp"   onSubmitSuccess="submitSuccess()">
+	<div id="example" style="width:500px; height:400px;margin: 10px">
+    <div class="ui-layout-text">表单中使用</div>
+		<div itype="Editor"  container="example" id="editor1" saveInstance="true" value="sssssddd"></div>
+	</div>
+    <div style="margin-left: 10px">
+  	  <div itype="Button" container="example3" text="提交" onclick="submit()" ></div>
+    </div>
+    </form>   
+</body>
+</html>

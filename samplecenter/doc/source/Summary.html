@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.apply(fastDev.Ui.DataGrid, {
+<span id='global-method-parseSummaryInfo'>	/**
+</span>	 * 解析统计配置
+	 * @param {JsonObject} column 列配置对象
+	 * @private
+	 */
+	parseSummaryInfo : function(column) {
+		// 解析用户定义的统计信息
+		var summaryInfo = this._global.summaryInfo || {};
+		summaryInfo[column.name] = {
+			type : column.summaryType,
+			renderer : column.summaryRenderer,
+			text : column.summaryText,
+			hidden : column.hidden
+		};
+		this._global.summaryInfo = summaryInfo;
+	},
+<span id='global-method-buildSummaryCol'>	/**
+</span>	 *  生成统计显示区域
+	 * @param {Object} options
+	 * @param {Object} global
+	 * @private
+	 */
+	buildSummaryCol : function(options, global) {
+		// 列配置信息
+		var columns = options.columns,
+		// 统计信息
+		summaryInfo = global.summaryInfo, rendererList = [];
+		// 如果用户没有定义统计模板则生成默认模板统计模板否则使用用户所定义的模板做展现
+		if(!options.summaryTpl) {
+			global.displayJobs.push(function() {
+				var html = [], renderer = &quot;&quot;;
+				// 应用列宽限制模板
+				html.push(&quot;&lt;table&gt;&lt;tr&gt;&quot; + global.colWidthTpl + &quot;&lt;/tr&gt;&lt;tr&gt;&quot;);
+				for(var i = 0, column; column = columns[i]; i++) {
+					var summaryColumn = summaryInfo[column.name], summaryValue;
+					html.push('&lt;td' + (column.hidden === true?' style=&quot;display:none&quot;' : ''));
+					if(summaryColumn) {
+						summaryValue = summaryColumn.text + this.dataset[summaryColumn.type](column.name);
+						if(summaryColumn.renderer) {
+							var processid = fastDev.getID();
+							renderer = &quot; dg_renderer='&quot; + processid + &quot;'&quot;;
+							rendererList.push({
+								id : processid,
+								handle : summaryColumn.renderer,
+								value : summaryValue
+							});
+							html.push(renderer);
+						}
+						html.push(&quot;&gt;&quot; + summaryValue);
+					} else {
+						html.push(&quot;&gt;&quot;);
+					}
+					html.push(&quot;&lt;/td&gt;&quot;);
+				}
+				html.push(&quot;&lt;/tr&gt;&quot;);
+				this.find(&quot;.ui-datagrid-count&quot;).show().empty().append(fastDev(html.join(&quot;&quot;)));
+				this.buildSummaryRenderer(rendererList);
+			});
+		} else {
+			global.displayJobs.push(function() {
+				var html = options.summaryTpl, summaryValue;
+				for(var p in summaryInfo) {
+					var summaryColumn = summaryInfo[p];
+					summaryValue = summaryColumn.text + this.dataset[summaryColumn.type](p);
+					html = html.replace(RegExp(&quot;{&quot; + p + &quot;}&quot;, &quot;g&quot;), summaryValue);
+				}
+				this.find(&quot;.ui-datagrid-count&quot;).show().empty().append(fastDev(html));
+			});
+		}
+	},
+<span id='global-method-buildSummaryRenderer'>	/**
+</span>	 * 构建默认统计列的渲染器
+	 * @param {Object} rendererList
+	 * @private
+	 */
+	buildSummaryRenderer : function(rendererList) {
+		this._global.displayJobs.push(function() {
+			fastDev.each(rendererList, function(index, rendererInfo) {
+				var elem = this.find(&quot;[dg_renderer='&quot;+rendererInfo.id+&quot;']&quot;).elems[0];
+				rendererInfo.handle.call(elem, rendererInfo.value);
+			}, this);
+		});
+	}
+});
+</pre>
+</body>
+</html>

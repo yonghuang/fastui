@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>关系选择器</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<style>
+			body {
+				font-size: 14px;
+			}
+			form {
+				border: 1px green solid;
+				padding: 2px;
+				margin: 0;
+				background: #efe;
+			}
+			div {
+				color: #333;
+			}
+			input {
+				width:"200px"
+			}
+			input{border:1px solid #8FB1DB}
+		</style>
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function(){
+				var container = fastDev("#example");
+				function clearCss() {
+					// 如果input没有指定type="text",由浏览器默认解析，则在IE8以上火狐谷歌中找到
+					container.find("*").removeCss("border");
+				}
+
+
+				fastDev("#btn1").bind("click", function() {
+					clearCss();
+					// 在给定的祖先元素下匹配所有的后代元素
+					container.find("form input").css("border", "1px dashed #f00");
+				});
+				
+				fastDev("#btn2").bind("click", function() {
+					clearCss();
+					// 在给定的父元素下匹配所有的子元素
+					container.find("form > input").css("border", "1px dashed #f00");
+				});
+				
+				fastDev("#btn3").bind("click", function() {
+					clearCss();
+					// 匹配所有紧接在 prev 元素后的 next 元素
+					container.find("label + input").css("border", "1px dashed #f00");
+				});
+				
+				fastDev("#btn4").bind("click", function() {
+					clearCss();
+					// 匹配 prev 元素之后的所有 siblings 元素
+					container.find("label ~ input").css("border", "1px dashed #f00");
+				});
+				
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="ui-other-content">
+		<p>查找form元素中的所有input元素：
+		<a id="btn1" href="#">form input</a></p>
+		<p>查找form的直接子元素是input的元素：
+		<a id="btn2" href="#">form > input</a></p>
+		<p>查找上一个或者下一个兄弟元素是label的input元素：
+		<a id="btn3" href="#">label + input</a></p>
+		<p>查找同级中有label元素的input元素：
+		<a id="btn4" href="#">label ~ input</a></p>
+		<p>&nbsp;</p>
+		<div id="example">
+		<!-- HTML元素测试区 -->
+		<form>
+			<div>
+				绿色边框范围为表单
+			</div>
+			<label>这个input为表单子元素:</label>
+			<input name="input1" type="text"  style="width: 200px"/>
+
+			<fieldset>
+				<input name="input2" type="text" value="这个input为表单孙子元素" style="width: 200px"/>
+			</fieldset>
+			<input name="input3" type="text" value="这个input为表单子元素" style="width: 200px"/>
+
+		</form>
+		<label>这个input为表单之外的元素</label>
+		<input name="input3" type="text" style="width: 200px"/>
+		</div>
+		</div>
+	</body>
+</html>
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>ajax</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-07-17 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script>
+		fastDev.Ajax.doGet("data.json",{
+			data : "test1=111&test2=222",
+			complete : function(rsp){
+				alert(rsp.text);
+			}
+		});
+		
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>
+

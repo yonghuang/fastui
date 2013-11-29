@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function(){
+	fastDev.define(&quot;talkweb.BaseControl.Input&quot;,{
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			id : null,
+			name : null,
+			className : &quot;input&quot;,
+			value : null,
+			readOnly : false,
+			type : &quot;text&quot;
+		},
+		construct : function(){
+			var input = this.create(&quot;input&quot;),options = this.getOptions();
+			input.setAttribute(&quot;type&quot;,options.type);
+			this.storage(input);
+		},
+		init : function(){
+			var options = this.getOptions();
+			options.readOnly?this.setReadOnly(true):this.setReadOnly(false);
+			//talkweb.BaseControl.Input.Class.superClass.init.call(this);
+		},
+		setReadOnly : function(readOnly){
+			readOnly === true ? this.attr(&quot;readOnly&quot;,readOnly):this.removeAttr(&quot;readOnly&quot;);
+		}
+		
+	});
+	
+})()</pre>
+</body>
+</html>

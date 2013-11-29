@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>设定某列头样式</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<style type="text/css">
+			.cls1 {
+				background-color: #111;
+			}
+			.cls3 {
+				background-color: #333;
+			}
+			.cls5 {
+				background-color: #555;
+			}
+			.cls7 {
+				background-color: #777;
+			}
+		</style>
+		<script src="../../src/fastDev-import.js"></script>
+	</head>
+	<body>
+		<div style="margin: 20px">
+			<div itype="DataGrid" initSource="data.jsp" showSeqColumn=true>
+				<div width="10%" name="empno" text="员工工号" titleCls="cls1"></div>
+				<div width="20%" name="name" text="姓名" titleStyle="background-color:#222;"></div>
+				<div width="12%" name="department" text="所属部门" titleCls="cls3"></div>
+				<div width="8%" name="isuse" text="是否可用" titleStyle="background-color:#444;"></div>
+				<div width="15%" name="position" text="职位" titleCls="cls5"></div>
+				<div width="10%" name="pay" text="薪资" titleStyle="background-color:#666;"></div>
+				<div width="10%" name="datesemployed" text="入职时间" titleCls="cls7"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01" titleStyle="background-color:#888;"></div>
+			</div>
+		</div>
+
+	</body>
+</html>

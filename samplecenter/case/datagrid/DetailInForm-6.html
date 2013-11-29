@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>datagrid测试场-Datagrid-From表格外显示详细表单</h4></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" showSeqColumn=true>
+				<div name="rowDetail">
+					<form itype="Form" id="form1">
+						<table>
+							<tr>
+								<td>姓名：</td>
+								<td><div itype="TextBox" id="name" saveInstance="true" value={name}></div></td>
+								<td>职位：</td>
+								<td>
+								<select itype="Select" id="position" value="{position}">
+									<option text="前端工程师" value="position1"></option>
+									<option text="后台工程师" value="position2"></option>
+									<option text="技术经理" value="position3"></option>
+									<option text="项目经理" value="position4"></option>
+								</select></td>
+								<td>是否可用：</td>
+								<td>
+								<div itype="CheckBoxGroup" id="isuse" value="{isuse}">
+									<div text="" value="true"></div>
+								</div></td>
+								<td>入职时间：</td>
+								<td><div itype="DatePicker" id="datesemployed" value="{datesemployed}"></div></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+			</div>
+		</div>
+
+	</body>
+</html>

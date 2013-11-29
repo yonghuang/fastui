@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>
+					SWFFileUpload封装开源的Flash上传控件（<a href="http://code.google.com/p/swfupload/" target="_blank">SWFUpload</a>）来实现客户端页面无刷新文件上传，以解决纯HTML文件上传控件的某些功能限制。
+				</li>
+				<li>
+					本控件提供与FileUpload控件完全兼容的属性、方法以及界面，这意味着，可以很方便的从FileUpload控件切换至SWFFileUpload控件。
+				</li>
+				<li>
+					与FileUpload纯HTML文件上传控件不同的是，SWFFileUpload能提供不依赖于浏览器的客户端文件大小验证，上传进度实现显示更新等功能。
+				</li>
+				<li>
+					另外，使用SWFFileUpload控件，需指定Flash文件（swf文件）的URL。可通过flashUrl参数指定，该参数默认值为当前文件所在目录下的swfupload.swf文件。
+				</li>
+				<li>
+					需说明的是，由于Flash文件上传依赖于浏览器的Flash播放器插件，其跨平台（不同的浏览器、浏览器版本、Flash播放器版本等）的兼容性并没有纯HTML实现的文件上传控件好。
+				</li>
+				<li>
+					更多关于Flash控件的信息，请参考<a href="http://demo.swfupload.org/Documentation" target="_blank">SWFUpload官方文档</a>（目前并没有发现明显的影响控件功能使用的兼容性问题）。
+				</li>
+			</ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/component/thirdparty/swffileupload/swfupload.js"></script>
+		<script src="../../../src/fastDev-import.js"></script>
+		
+		<script type="text/javascript">
+			// 文件类型错误回调
+			function chooseError(file, code, msg) {
+				switch(code) {
+					case 1:
+						fastDev.tips("仅能上传jpg和png类型图片");
+						break;
+					case 2:
+						fastDev.tips("仅能上传小于10KB的文件");
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				默认配置
+			</div>
+			<input itype="SWFFileUpload" flashUrl="../../data/swfupload.swf" action="../../data/fileupload.jsp"/>
+			<br />
+			<div class="ui-layout-text">
+				限制文件类型
+			</div>
+			<input itype="SWFFileUpload" flashUrl="../../data/swfupload.swf" typeLimit="jpg,png" fileTypeDescription="图片文件"  onChooseError="chooseError()" action="../../data/fileupload.jsp"/>
+			<br />
+			<div class="ui-layout-text">
+				限制文件大小
+			</div>
+			<!-- sizeLimit属性值使用的单位为KB -->
+			<input itype="SWFFileUpload" flashUrl="../../data/swfupload.swf" sizeLimit="10" onChooseError="chooseError()" action="../../data/fileupload.jsp"/>
+			<br />
+			<div class="ui-layout-text">
+				自动上传
+			</div>
+			<input itype="SWFFileUpload" flashUrl="../../data/swfupload.swf" autoUpload="true" action="../../data/fileupload.jsp"/>
+		</div>
+	</body>
+</html>

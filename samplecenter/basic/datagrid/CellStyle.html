@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>通过列的渲染器功能，用户可以定义单元格的显示值、结构以及样式</li>
+				<li>renderer1方法做的是样式改变，将isuse列中值为true的单元格背景设置绿色，为false的设置为红色</li>
+				<li>renderer2方法做的是值改变，将position列中用户不识别的数据转化为可识别数据</li>
+				<li>renderer3方法做的是结构改变，将pay列中大于5000的数据添加绿色向上图标，其余的添加红色向下图标</li>
+			</ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script src="../../resource/parsepath.js"></script>
+		<script type="text/javascript">
+			function renderer1(value) {
+				if(value === "false") {
+					fastDev(this).css("background-color", "red");
+				} else {
+					fastDev(this).css("background-color", "green");
+				}
+			}
+
+			function renderer2(value) {
+				switch(value) {
+					case "position1":
+						return "前端工程师";
+					case "position2":
+						return "后台工程师";
+					case "position3":
+						return "技术经理"
+				}
+			}
+
+			function renderer3(value) {
+				if(parseInt(value, 10) > 5000) {
+					return value + '<img src="'+path+'samplecenter/resource/up.gif"></img>';
+				} else {
+					return value +  '<img src="'+path+'samplecenter/resource/down.gif"></img>';
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">自定义单元格</div>
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" showSeqColumn=true saveInstance=true id="grid1">
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名" ></div>
+				<div width="12%" name="department" text="所属部门" ></div>
+				<div width="8%" name="isuse" text="是否可用" renderer="renderer1()"></div>
+				<div width="15%" name="position" text="职位" renderer="renderer2()"></div>
+				<div width="10%" name="pay" text="薪资" renderer="renderer3()"></div>
+				<div width="10%" name="datesemployed" text="入职时间" ></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01" ></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

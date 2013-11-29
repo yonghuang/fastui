@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>form </title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>     
+        <script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/form/Box.js"></script>
+        <script src="../../src/component/form/TextBox.js"></script>
+        <script src="../../src/component/form/Select.js"></script>
+        <script src="../../src/component/form/DatePicker.js"></script>
+        <script src="../../src/component/form/CheckBoxGroup.js"></script>
+        <script src="../../src/component/form/RadioGroup.js"></script>
+        <script src="../../src/component/form/Form.js"></script> 
+     <script>
+			$(function() {
+				$.create("Form", {
+					container : "example",
+					id:"form1",
+					name:"form1",
+					errorFile:"errorConfig.txt",
+					items : [{
+						itype:"button",						
+						id:"btn1",
+						name:"btn1",
+						text:"无图按钮"						
+					}, {
+						itype:"checkboxgroup",
+						items :[{
+									  value : "1",
+									  text : "旅游"
+								  }, {
+									  value : "2",
+									  text : "唱歌"
+								  }],
+						id : "ckb1",
+						name:"ckb1"
+					}, {
+						itype:"textbox",
+						id : "text1",
+						name:"text1",
+						text : "文本1"
+					}]
+				});
+				
+			});
+		
+	
+		
+	</script>
+</head>
+<body>
+	<div id="example">
+    <form id="form1" name="form1">
+   <div id="d1"><input itypt="" name="text1" /></div>
+   <div id="d2"><input name="ckb1" /></div>
+   <div id="d3"><input name="btn1" /></div>
+    </form>
+    </div>
+</body>
+</html>
+

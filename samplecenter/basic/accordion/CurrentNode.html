@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+        <ul>
+        <li>初始定位指的是默认展开那个项</li>
+        <li>可以按索引，默认打开第几个项，索引从0开始，代表第1个链接。默认值为0</li>
+        <li>也可以按项id，即指定手风琴的currentNode属性为某个id</li>
+        </ul>
+        </title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>	
+        <style>
+       
+        </style>
+	</head>
+	<body>
+		<div id="example" style="margin:10px;width:100%">
+			 <div style="width:30%; float: left">       
+        	<div class="ui-layout-text">currentNode定位</div>        	
+        <div itype="Accordion" currentNode="accordion2" height="300px" width="300px" >
+			<div id="accordion1" text="文本">				
+                我们的名字的灵感来自于宋代超过800年前写的一首诗。这首诗比较搜索撤退的美，在混乱的魅力，寻找一个人的梦想，提供最好的为
+                网上找到他们想要的东西的内容。在过去的十年中，我们一直努力仔细聆听用户的需求，并希望完成这一使命。
+			</div>
+			<div id="accordion2" text="currentNode定位">
+				<ul><li>第1条数据</li><li>第2条数据</li><li>第3条数据</li><li>第4条数据</li></ul>
+			</div>           
+			<div id="accordion4" text="树">
+			 <div itype="Tree" initSource="../../data/treedata1.txt" showIco="true" topParentid="0" openFloor=2 ></div>
+			</div>
+		</div>
+        </div>
+         <div style="width:40%;float: left">    
+        	<div class="ui-layout-text">activeIndex定位</div>
+        <div itype="Accordion" activeIndex="2"  height="300px" width="300px" >
+			<div id="accordion1" text="文本">				
+                我们的名字的灵感来自于宋代超过800年前写的一首诗。这首诗比较搜索撤退的美，在混乱的魅力，寻找一个人的梦想，提供最好的为
+                网上找到他们想要的东西的内容。在过去的十年中，我们一直努力仔细聆听用户的需求，并希望完成这一使命。
+			</div>
+			<div id="accordion2" text="列表">
+				<ul><li>第1条数据</li><li>第2条数据</li><li>第3条数据</li><li>第4条数据</li></ul>
+			</div>           
+			<div id="accordion4" text="activeIndex定位">
+			<ul><li>第5条数据</li><li>第5条数据</li><li>第7条数据</li><li>第8条数据</li></ul>
+             </div>
+			</div>
+     	 </div>
+		</div>
+	</body>
+</html>

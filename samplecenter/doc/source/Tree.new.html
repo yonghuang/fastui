@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.define(&quot;fastDev.Ui.Tree&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;Tree&quot;,
+	_options : {
+		roottext : &quot;&quot;
+	},
+	staticTemplate : function(params) {
+		return '&lt;div id=&quot;' + params.id + '&quot; class=&quot;ui-tree-panel&quot; style=&quot;width:' + params.width + '; height:' + params.height + ';&quot;&gt;&lt;/div&gt;';
+	},
+	dynamicTemplate : function(params, root) {
+		var html;
+		if(params.text){
+			html = ['&lt;ul class=&quot;ui-tree&quot;&gt;'];
+			html.push('&lt;li&gt;');
+			html.push('&lt;div class=&quot;ui-tree-node&quot;&gt;');
+			html.push('&lt;span class=&quot;ico-node-open-frist&quot;&gt;&lt;/span&gt;');
+			html.push('&lt;span class=&quot;ui-tree-content&quot;&gt;');
+			html.push('&lt;span class=&quot;ui-tree-text&quot;&gt;' + root.val + '&lt;/span&gt;');
+			html.push('&lt;/span&gt;');
+			html.push('&lt;/div&gt;');
+			html = html.concat(this.nodeTemplate(root.children));
+			html.push('&lt;li&gt;');
+			html.push('&lt;/ul&gt;');
+		}else{
+			html = this.nodeTemplate(root.children, true);
+		}
+		return html.join('');
+	},
+	nodeTemplate : function(nodes, noroot) {
+		var html = ['&lt;ul class=&quot;'+(noroot?&quot;ui-tree&quot;:&quot;ui-line&quot;)+'&quot;&gt;'];
+		if(nodes.length) {
+			for(var i = 0, node; node = nodes[i]; i++) {
+				html.push('&lt;li&gt;');
+				html.push('&lt;div class=&quot;ui-tree-node&quot;&gt;');
+				html.push('&lt;span class=&quot;ico-node-open'+(noroot?&quot;-frist&quot;:&quot;&quot;)+'&quot;&gt;&lt;/span&gt;');
+				html.push('&lt;span class=&quot;ui-tree-content&quot;&gt;');
+				html.push('&lt;span class=&quot;ui-tree-text&quot;&gt;' + node.val + '&lt;/span&gt;');
+				html.push('&lt;/span&gt;');
+				html.push('&lt;/div&gt;');
+				if(node.children.length) {
+					html = html.concat(this.nodeTemplate(node.children));
+				}
+				html.push('&lt;li&gt;');
+			}
+		}
+		html.push('&lt;/ul&gt;');
+		return html;
+	},
+	tplParam : [&quot;id&quot;, &quot;height&quot;, &quot;width&quot;, &quot;ulCls&quot;, &quot;treeTypeCls&quot;, &quot;showIco&quot;, &quot;itemsLen&quot;, &quot;asyncDataSource&quot;],
+	fields : [&quot;id&quot;, &quot;pid&quot;, &quot;val&quot;, {
+		name : &quot;chk&quot;,
+		defaultValue : &quot;false&quot;
+	}, {
+		name : &quot;radio&quot;,
+		defaultValue : &quot;false&quot;
+	}, {
+		name : &quot;asyn&quot;,
+		defaultValue : &quot;false&quot;
+	}, {
+		name : &quot;font&quot;,
+		defaultValue : &quot;&quot;
+	}, {
+		name : &quot;ico&quot;,
+		defaultValue : &quot;&quot;
+	}, {
+		name : &quot;readonly&quot;,
+		defaultValue : &quot;false&quot;
+	}, {
+		name : &quot;disabled&quot;,
+		defaultValue : &quot;false&quot;
+	}, {
+		name : &quot;nocheck&quot;,
+		defaultValue : &quot;false&quot;
+	}],
+	ready : function(options) {
+		options.items = fastDev.isArray(options.items) ? options.items.concat([{
+			id : &quot;0&quot;,
+			parentid : &quot;&quot;,
+			text : options.roottext
+		}]) : options.items;
+	},
+	constructItems : function() {
+		this._renderDynamicHtml(this.find(&quot;.ui-tree-panel&quot;));
+	}
+});
+</pre>
+</body>
+</html>

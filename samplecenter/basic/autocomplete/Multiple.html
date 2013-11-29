@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>
+			<ul>
+				<li>
+					multiple属性可开启多值输入模式。
+				</li>
+				<li>
+					allowAutoCreate属性指定控件在遇到用户输入制表、分号、逗号时，是否允许将当前输入框的值以一个新的值项创建（默认为false）。
+				</li>
+				<li>
+					selectFirst属性指定控件在遇到用户输入回车键时，是否将匹配结果（如果有的话）的第一项默认作为值选取（默认为false）。
+				</li>
+				<li>
+					hintItems属性可开启对默认值项的提示（类似于可搜索的下拉列表），如果该值为true则提示项使用静态数据源，也可以通过API动态设置提示项。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				多值输入智能提示框
+			</div>
+			<div itype="AutoComplete" multiple="true" allowAutoCreate="true" selectFirst="true" hintItems="true" width="400px" noResultsText="没有相关结果">
+				<div text="Aaron" value="1"></div>
+				<div text="Baird" value="2"></div>
+				<div text="Christian" value="3"></div>
+				<div text="David" value="4"></div>
+				<div text="Emmanuel" value="5"></div>
+				<div text="Franklin" value="6"></div>
+				<div text="Gavin" value="7"></div>
+				<div text="Harlan" value="8"></div>
+				<div text="Jack" value="9"></div>
+				<div text="King" value="10"></div>
+				<div text="Lance" value="11"></div>
+				<div text="Marcus" value="12"></div>
+				<div text="Norton" value="13"></div>
+				<div text="Oscar" value="14"></div>
+				<div text="Quinn" value="15"></div>
+				<div text="Robin" value="16"></div>
+				<div text="Virgil" value="17"></div>
+				<div text="Xavier" value="18"></div>
+			</div>
+		</div>
+	</body>
+</html>

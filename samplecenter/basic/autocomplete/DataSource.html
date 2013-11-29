@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>
+			<ul>
+				<li>
+					控件可支持多种形式的数据源，除JSON对象格式数据外，还支持值以逗号分隔的字符串，字符串数组，对象数组等。
+				</li>
+				<li>
+					此外，通过配置字段映射，控件还能对其他控件的JSON格式数据进行静态检索。
+				</li>
+				<li>
+					每一控件实例同时只能使用一种数据源类型，两种数据源均指定时，优先使用静态数据源数据（可通过API清除静态数据从而开启远程数据检索）。
+				</li>
+				<li>
+					使用静态数据源时，控件代理根据关键字对数据源进行过滤，而使用远程数据源时，控件只发送请求并处理结果的展示，并不会对远程数据进行关键字过滤操作（理应由后台完成）。
+				</li>
+				<li>
+					matchContains属性可指定数据过滤操作是否匹配关键字包含情况（相反则仅匹配以关键字开头的字符，默认为true）。
+				</li>
+				<li>
+					matchCase属性可指定数据过滤操作是否匹配关键字字符大小写情况（相反则忽略关键字字符大小写，默认为false）。
+				</li>
+				<li>
+					可通过fields属性来配置数据的字段映射。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text" style="color: green;">
+				静态数据源
+			</div>
+			<div class="ui-layout-text">
+				逗号分隔的字符串值
+			</div>
+			<input itype="AutoComplete" maxItems="5" matchContains="true" matchCase="false" items="Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin,Felix,Gavin,Greg,Harlan,Jack,Jeff,Kelly,King,Lance,Levi,Marcus,Newman,Norton,Ivan,Oscar,Peter,Quinn,Robin,Simon,Sam,Tiffany,Virgil,Will,Xavier,Zachary"  hintText="输入英文字母查询" searchingText="正在搜索中.." noResultsText="未找到相关结果"/>
+			<br />
+			<div class="ui-layout-text">
+				对象数组
+			</div>
+			<!-- input标签不能包含子标签，声明静态数据时，控件声明标签请用div标签  -->
+			<div itype="AutoComplete" maxItems="5" hintText="输入英文字母查询" searchingText="正在搜索中.." noResultsText="未找到相关结果">
+				<div text="Aaron" value="1"></div>
+				<div text="Baird" value="2"></div>
+				<div text="Christian" value="3"></div>
+				<div text="David" value="4"></div>
+				<div text="Emmanuel" value="5"></div>
+				<div text="Franklin" value="6"></div>
+				<div text="Gavin" value="7"></div>
+				<div text="Harlan" value="8"></div>
+				<div text="Jack" value="9"></div>
+				<div text="King" value="10"></div>
+				<div text="Lance" value="11"></div>
+				<div text="Marcus" value="12"></div>
+				<div text="Norton" value="13"></div>
+				<div text="Oscar" value="14"></div>
+				<div text="Quinn" value="15"></div>
+				<div text="Robin" value="16"></div>
+				<div text="Virgil" value="17"></div>
+				<div text="Xavier" value="18"></div>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				使用字段映射
+			</div>
+			<div itype="AutoComplete" maxItems="5" hintText="输入英文字母查询" searchingText="正在搜索中.." noResultsText="未找到相关结果">
+				<div name="fields">
+					<div name="val" mapping="text"></div>
+				</div>
+				<div val="Aaron" id="1"></div>
+				<div val="Baird" id="2"></div>
+				<div val="Christian" id="3"></div>
+				<div val="David" id="4"></div>
+				<div val="Emmanuel" id="5"></div>
+				<div val="Franklin" id="6"></div>
+				<div val="Gavin" id="7"></div>
+				<div val="Harlan" id="8"></div>
+				<div val="Jack" id="9"></div>
+				<div val="King" id="10"></div>
+				<div val="Lance" id="11"></div>
+				<div val="Marcus" id="12"></div>
+				<div val="Norton" id="13"></div>
+				<div val="Oscar" id="14"></div>
+				<div val="Quinn" id="15"></div>
+				<div val="Robin" id="16"></div>
+				<div val="Virgil" id="17"></div>
+				<div val="Xavier" id="18"></div>
+			</div>
+			<br />
+			<div class="ui-layout-text" style="color: green;">
+				远程数据源
+			</div>
+			<div class="ui-layout-text">
+				对象数组JSON格式
+			</div>
+			<!-- 静态数据支持的数据类型，同样可以被远程数据源使用  -->
+			<input itype="AutoComplete" initSource="../../data/autocomplete.jsp" maxItems="5" hintText="输入英文字母查询" searchingText="正在搜索中.." noResultsText="未找到相关结果"/>
+		</div>
+	</body>
+</html>

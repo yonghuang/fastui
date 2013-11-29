@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///import uicore
+(function (){
+    var utils = baidu.editor.utils,
+        uiUtils = baidu.editor.ui.uiUtils,
+        UIBase = baidu.editor.ui.UIBase;
+    
+    var TablePicker = baidu.editor.ui.TablePicker = function (options){
+        this.initOptions(options);
+        this.initTablePicker();
+    };
+    TablePicker.prototype = {
+        defaultNumRows: 10,
+        defaultNumCols: 10,
+        maxNumRows: 20,
+        maxNumCols: 20,
+        numRows: 10,
+        numCols: 10,
+        lengthOfCellSide: 22,
+        initTablePicker: function (){
+            this.initUIBase();
+        },
+        getHtmlTpl: function (){
+            return '&lt;div id=&quot;##&quot; class=&quot;edui-tablepicker %%&quot;&gt;' +
+                 '&lt;div class=&quot;edui-tablepicker-body&quot;&gt;' +
+                  '&lt;div class=&quot;edui-infoarea&quot;&gt;' +
+                   '&lt;span id=&quot;##_label&quot; class=&quot;edui-label&quot;&gt;&lt;/span&gt;' +
+                   '&lt;span class=&quot;edui-clickable&quot; onclick=&quot;$$._onMore();&quot;&gt;更多&lt;/span&gt;' +
+                  '&lt;/div&gt;' +
+                  '&lt;div class=&quot;edui-pickarea&quot;' +
+                   ' onmousemove=&quot;$$._onMouseMove(event, this);&quot;' +
+                   ' onmouseover=&quot;$$._onMouseOver(event, this);&quot;' +
+                   ' onmouseout=&quot;$$._onMouseOut(event, this);&quot;' +
+                   ' onclick=&quot;$$._onClick(event, this);&quot;' +
+                  '&gt;' +
+                    '&lt;div id=&quot;##_overlay&quot; class=&quot;edui-overlay&quot;&gt;&lt;/div&gt;' +
+                  '&lt;/div&gt;' +
+                 '&lt;/div&gt;' +
+                '&lt;/div&gt;';
+        },
+        _UIBase_render: UIBase.prototype.render,
+        render: function (holder){
+            this._UIBase_render(holder);
+            this.getDom('label').innerHTML = '0列 x 0行';
+        },
+        _track: function (numCols, numRows){
+            var style = this.getDom('overlay').style;
+            var sideLen = this.lengthOfCellSide;
+            style.width = numCols * sideLen + 'px';
+            style.height = numRows * sideLen + 'px';
+            var label = this.getDom('label');
+            label.innerHTML = numCols + '列 x ' + numRows + '行';
+            this.numCols = numCols;
+            this.numRows = numRows;
+        },
+        _onMouseOver: function (evt, el){
+            var rel = evt.relatedTarget || evt.fromElement;
+            if (!uiUtils.contains(el, rel) &amp;&amp; el !== rel) {
+                this.getDom('label').innerHTML = '0列 x 0行';
+                this.getDom('overlay').style.visibility = '';
+            }
+        },
+        _onMouseOut: function (evt, el){
+            var rel = evt.relatedTarget || evt.toElement;
+            if (!uiUtils.contains(el, rel) &amp;&amp; el !== rel) {
+                this.getDom('label').innerHTML = '0列 x 0行';
+                this.getDom('overlay').style.visibility = 'hidden';
+            }
+        },
+        _onMouseMove: function (evt, el){
+            var style = this.getDom('overlay').style;
+            var offset = uiUtils.getEventOffset(evt);
+            var sideLen = this.lengthOfCellSide;
+            var numCols = Math.ceil(offset.left / sideLen);
+            var numRows = Math.ceil(offset.top / sideLen);
+            this._track(numCols, numRows);
+        },
+        _onClick: function (){
+            this.fireEvent('picktable', this.numCols, this.numRows);
+        },
+        _onMore: function (){
+            this.fireEvent('more');
+        }
+    };
+    utils.inherits(TablePicker, UIBase);
+})();
+</pre>
+</body>
+</html>

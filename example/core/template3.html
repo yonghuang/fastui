@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>template</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-06 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/Template.js"></script>
+
+		<script>
+			$.ready(function() {
+				var length  =100;
+				var data = {
+				    list: []
+				};
+				
+				for (var i = 0; i < length; i ++) {
+				    data.list.push({
+				        index: i,
+				        user: '<strong style="color:red">糖饼</strong>',
+				        site: 'http://www.planeart.cn',
+				        weibo: 'http://weibo.com/planeart',
+				        QQweibo: 'http://t.qq.com/tangbin'	
+				    });	
+				};
+				
+				var htmlList = [
+					'<tpl dynamic name=testTpl>',
+						'<tpl each>',
+							      '<li>{index}. 用户: {user}/ 网站：{site}</li>',
+						'</tpl>',
+					'</tpl>'
+				];
+				var template = fastDev.create("Template", {
+					htmlList : htmlList,
+					parseType:"normal"
+				});
+				
+				//document.getElementById("example").innerHTML = html;
+				
+				var tplStr = template._global.dynamicTpl["testTpl"];
+				var handlestr = template.compile(tplStr);
+				var handle = new Function("dataList",handlestr);
+				handle(data.list);
+		
+			});
+		</script>
+	</head>
+	<body>
+		<div id="example"></div>
+	</body>
+</html>
+

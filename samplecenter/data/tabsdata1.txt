@@ -1,0 +1,22 @@
+[
+    {
+        "title": "百度",
+        "url": "dd.html",
+        "showCloseBtn": false
+    },
+    {
+        "title": "网易邮箱",
+		 "url": "cc.html",
+         "selected": true
+    },
+    {
+        "title": "单选框",
+        "url": "bb.html",
+        "type": "ajax"
+    },
+    {
+        "title": "手风琴",
+        "url": "aa.html",
+        "iconCls": "icon-add"
+    }
+]

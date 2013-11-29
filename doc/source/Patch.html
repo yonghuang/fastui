@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+	fastDev.namespace(&quot;talkweb.Tools&quot;);
+	fastDev.namespace(&quot;talkweb.Components&quot;);
+	fastDev.namespace(&quot;talkweb.Business&quot;);
+	fastDev.namespace(&quot;talkweb.Bus&quot;);
+
+	talkweb.Tools.extend = fastDev.extend;
+	talkweb.Tools.extendProperty = fastDev.apply;
+	talkweb.Tools.clone = fastDev.clone;
+	talkweb.Tools.toJsonString = function(obj) {
+		var str = &quot;&quot;;
+		for(var p in obj) {
+			str += &quot;,&quot; + p + &quot;:&quot; + obj[p];
+		}
+		return &quot;{&quot; + str.slice(1) + &quot;}&quot;;
+	};
+	talkweb.Tools.queueFn = (function() {
+		var fn = {
+			fnBody : function(param) {
+			},
+			fnType : &quot;nomal&quot;,
+			url : null,
+			type : &quot;GET&quot;,
+			parameters : &quot;&quot;,
+			callback : function(param) {
+			}
+		};
+		return {
+			getInstance : function(param) {
+				return $.extend(talkweb.Tools.clone(fn), param);
+			}
+		}
+	})();
+	
+	
+	talkweb.Tools.executeQueue = (function() {
+		var state = &quot;stop&quot;;
+		// 队列执行类型{nomal}
+		var queue = new Array();
+		var addElement = function(executeObj) {
+			if(talkweb.DataBus.getGlobal().checkResult === true) {
+				var element = new Array();
+				element.push(executeObj);
+				queue = element.concat(queue);
+				execute();
+			}
+		};
+		var cutInLine = function(executeObj) {
+			talkweb.DataBus.getGlobal().checkResult === true &amp;&amp; queue.push(executeObj);
+		};
+		var queueStart = function() {
+			if(queue.length &gt; 0) {
+				var element = queue.pop();
+				with(element) {
+					if(fnType == &quot;ajax&quot; &amp;&amp; url) {
+						$.ajax({
+							type : type,
+							url : url,
+							cache : false,
+							data : parameters,
+							success : function(msg) {
+
+							},
+							error : function(msg) {
+
+							},
+							complete : function(XMLHttpRequest, textStatus) {
+								callback(XMLHttpRequest.responseText);
+								queueStart();
+							}
+						});
+					} else {
+						callback(element[&quot;fnBody&quot;](parameters));
+						queueStart();
+					}
+				}
+			} else {
+				state = &quot;stop&quot;;
+			}
+		};
+		var execute = function(permit_no) {
+			if(state == &quot;stop&quot; &amp;&amp; queue.length &gt; 0) {
+				var queue_permit_no = talkweb.DataBus.getCache(&quot;queue_permit_no&quot;);
+				var options = talkweb.DataBus.getOptions();
+				if((permit_no &amp;&amp; queue_permit_no &amp;&amp; permit_no === queue_permit_no) || (!options.checkFnBody || !(/(^nomal$)|(^ajax$)/g.test(options.checkFnType)) || (/^ajax$/g.test(options.checkFnType) &amp;&amp; !options.checkUrl))) {
+					state = &quot;start&quot;;
+					queueStart();
+				} else {
+					var permitNo = talkweb.ControlBus.getID();
+					var checkcallback = function(data) {
+						if(options.checkFnBody(data) === false) {
+							talkweb.Tools.executeQueue.clear(permitNo);
+							talkweb.DataBus.setGlobal({
+								checkResult : false
+							});
+							options.callback &amp;&amp; options.callback();
+						} else {
+							talkweb.DataBus.setGlobal({
+								checkResult : true
+							});
+						}
+					};
+					var checkfnOptions = {
+						fnType : options.checkFnType,
+						url : options.checkUrl
+					};
+					options.checkFnType === &quot;ajax&quot; ? checkfnOptions.callback = checkcallback : checkfnOptions.fnBody = checkcallback;
+					var checkFn = talkweb.Tools.queueFn.getInstance(checkfnOptions);
+					talkweb.DataBus.setCache(&quot;queue_permit_no&quot;, permitNo);
+					talkweb.Tools.executeQueue.cutIn(checkFn);
+					talkweb.Tools.executeQueue.execute(permitNo);
+				}
+			}
+		};
+		var clearQueue = function(permit_no) {
+			var queue_permit_no = talkweb.DataBus.getCache(&quot;queue_permit_no&quot;);
+			if(permit_no &amp;&amp; queue_permit_no &amp;&amp; permit_no === queue_permit_no) {
+				queue = [];
+			}
+		};
+		return {
+			add : addElement,
+			cutIn : cutInLine,
+			execute : execute,
+			clear : clearQueue
+		}
+	})();
+	talkweb.Tools.analyticClassPath = function(classPath) {
+		if(!classPath) {
+			return false;
+		}
+		var clazz = talkweb;
+		var paths = classPath.split(&quot;.&quot;);
+		for(var i = 0; i &lt; paths.length; i += 1) {
+			clazz = clazz[paths[i]];
+		}
+		return clazz;
+	}
+
+	talkweb.ControlBus = fastDev.create(&quot;fastDev.Core.ControlBus&quot;);
+	talkweb.DataBus = fastDev.create(&quot;fastDev.Core.DataBus&quot;);
+	talkweb.Bus.ready = talkweb.ControlBus.ready;
+	
+	
+	fastDev.Core.ClassManager.addAlias = function(alias,className){
+		this._aliasMap[alias] = className;
+	};
+})();
+
+</pre>
+</body>
+</html>

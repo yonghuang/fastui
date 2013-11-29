@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>基本功能</h4>
+        <ul>       
+         <li>构建一颗树的最基本配置就是有数据源，动态数据源配置initSource属于一个地址，静态数据配置items一个json格式的数据</li>
+         <li>数据源的节点数据必须有id,pid,val三个属性</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+			//var mapping={"parentid":"pid","text":"val"} initSource="../timeTest/init_data2.jsp"
+		</script>
+   </head>
+	<body>
+    <div style="margin:10px;">		
+             <div class="ui-layout-text">默认</div>
+            <div itype="Tree" initSource="../../data/tree_data.txt" openFloor=2 showIco="true" treeType="multitree" topParentid="0" ></div>
+     </div>
+	</body>
+</html>

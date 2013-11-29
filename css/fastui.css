@@ -1,0 +1,726 @@
+﻿@charset "utf-8";
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,p,blockquote,th,td,hr {margin:0;padding:0;}
+body {font:12px Verdana,Arial,sans-serif, "宋体"; color:#333;}
+html{_background:url(about:blank); }/* 阻止闪动 in IE6 , 把空文件换成about:blank , 减少请求 */
+table {border-spacing:0;*border-collapse:collapse;}
+fieldset,img,a img {border:none;}
+abbr,acronym {border:none;font-variant:normal; border-style:groove}
+ins {text-decoration:none;}
+del {text-decoration:line-through;}
+address,caption,cite,code,dfn,em,th,var {font-style:normal;font-weight:500;}
+ol,ul {list-style:none;}
+h1,h2,h3,h4,h5,h6 {font-weight:bold;}
+q:before,q:after {content:'';}
+a {blr:expression(this.onFocus=this.blur());}
+a {outline:none; cursor:pointer;}
+.fastui-clear {clear:both;}
+#fastui-body {
+	background:#FEFEFE;
+}
+#fastui-container {
+	margin:0 auto;
+	width:100%;
+}
+.fastui-top-panel {
+	position:relative;
+	background:url(../images/top-bg.gif) repeat-x;
+	height:38px;
+	width:100%;
+	margin:0 auto;
+	border-bottom:1px solid #00576A;
+	border-top:1px solid #205662;
+}
+.fastui-top {
+	width:995px;
+	margin:0 auto;
+	overflow:hidden;
+}
+.fastui-logo {
+	float:left;
+	width:auto;
+	height:38px;
+	line-height:38px;
+}
+.fastui-logo-img {
+	float:left;
+	background: url(../images/logo.gif) no-repeat center center;
+	width:33px;
+	height:37px;
+}
+.fastui-logo-title {
+	font:22px/38px Arial, Helvetica, sans-serif "微软雅黑";
+	margin-left:10px;
+	color:#fff;
+}
+.fastui-menu-panel {
+	float:right;
+	color:#fff;
+	font:15px/38px "微软雅黑" "宋体"
+}
+.fastui-menu {
+    list-style: none;
+	position:relative;
+	top:0;
+	right:0;
+}
+.fastui-menu:after {
+    display: block;
+    clear: both;
+    content: " ";
+}
+.fastui-menu li {
+    float: left;
+    margin: 0;
+	height:38px;
+}
+
+.fastui-menu a, .fastui-menu a span {
+    display: block;
+    padding: 0 16px;
+}
+.fastui-menu a {
+    margin: 0; 
+    padding-left: 0;
+    color: #fff;
+	font-weight:bold;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap; /* IE 6 */    
+    outline: 0; /* Firefox */
+}
+.fastui-menu .fastui-menu-selected a {
+    z-index: 200;
+	font-weight: bold;
+    color: #fff;
+	text-decoration: none;
+}
+.fastui-menu a span {
+	width: 60px;
+	min-width: 60px;
+	height: 38px;
+	min-height: 38px;
+	padding-right: 0;
+}
+*>.fastui-menu a span {
+    width: auto;
+    height: auto;
+	text-decoration: none;
+	line-height:38px;
+}
+.fastui-menu .fastui-menu-selected a span {
+}
+.fastui-menu .fastui-menu-selected a, .fastui-menu a:hover, .fastui-menu a:focus, .fastui-menu a:active {
+	background:url(../images/menu-bg-selected.gif) repeat-x;
+	text-decoration: none;
+}
+.fastui-menu .fastui-menu-selected a:link, .fastui-menu .fastui-menu-selected a:visited, .fastui-menu .fastui-menu-disabled a:link, .fastui-menu .fastui-menu-disabled a:visited { 
+    cursor: text;
+}
+.fastui-menu a:hover, .fastui-menu a:focus, .fastui-menu a:active { 
+    cursor: pointer;
+}
+.fastui-menu-disabled {
+    opacity: .4;
+    filter: alpha(opacity=40);
+}
+.fastui-search-panel {
+	position:relative;
+	margin-left:20px;
+	top:7px;
+	float:right;
+	display:block;
+}
+.fastui-search {
+	border:1px solid #1C4E71;
+	background:#fff;
+	width:180px;
+	height:20px;
+}
+.fastui-search-input {
+	border:none;
+	background:transparent;
+	width:158px;
+	height:20px;
+	line-height:20px;
+	margin:0;
+	padding:0;
+	float:left;
+}
+.fastui-search-ico {
+	float:right;
+	width:20px;
+	height:20px;
+	border-left:1px solid #1C4E71;
+	background:url(../images/search-ico.gif) no-repeat;
+}
+.fastui-banner-panel{
+	width:100%;
+	margin:10px auto 0;
+	text-align:center;
+}
+.fastui-banner {
+	width:995px;
+	position:relative;
+	margin:0 auto;
+	overflow:hidden
+}
+/* 焦点图 */
+.fastui-banner-img {width:995px;height:330px;overflow:hidden;}
+.fastui-banner-img img {width:995px;height:330px;}
+.fastui-banner-dot {
+	width:100%;
+	position:relative;
+	list-style:none;
+	padding:0
+}
+.fastui-banner-dot-nav {
+	height:51px;
+	width:31px;
+	position:absolute;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	top:50%;left:0;opacity:0.5;
+	text-indent:-9999px;
+	overflow:hidden;
+	text-decoration:none;
+	background:url(../images/arrow.png) no-repeat 0 0;
+	margin-top:-28px;
+	display:none;
+}
+.fastui-banner-dot-nav:active {opacity:1.0}
+.fastui-banner-dot-nav.next {
+	left:auto;
+	background-position:-31px 0;
+	right:0
+}
+.fastui-banner-dot-tabs {
+	width:995px;
+	_display:block;
+	margin:0 auto;
+	text-align:center; 
+	position:relative; 
+	top:-22px;
+	*left:47%;
+	clear:both;
+}
+.fastui-banner-dot-tabs li {
+	display:inline;
+	float:none;
+	*float:left;
+	margin-right:5px;
+}
+.fastui-banner-dot-tabs a{
+	text-indent:-9999px;
+	overflow:hidden; 
+	background:url(../images/pagination.png) no-repeat left 0;
+	_background:url(../images/pagination.gif) no-repeat left 0;
+	display:inline-block;
+	*display:block;
+	width:10px;
+	height:16px;
+}
+.fastui-banner-dot-tabs .fastui-banner-dot-here a{
+	background-position:left -16px;
+}
+.fastui-content {
+	width:995px;
+	margin:20px auto 0;
+	overflow:hidden;
+}
+.fastui-content-news {
+	float:left;
+	width:324px;
+	height:auto;
+	text-align:left;
+}
+.fastui-content-case {
+	float:left;
+	margin:0 40px;
+	width:350px;
+}
+.fastui-content-course-left {
+	float:left; 
+	width:733px; 
+	padding:10px;
+	height:auto;
+	background:#F8F9F9;
+	border:1px solid #E0E2DF;
+}
+.fastui-content-course-right {
+	float:right; 
+	width:230px; 
+	height:auto;
+}
+.fastui-content-img {
+	margin-bottom:10px;
+	width:230px;
+	height:70px;
+}
+.fastui-content-img img {
+	width:230px;
+	height:70px;
+}
+.fastui-content-guide {
+	float:right;
+	width:238px;
+	_width:235px;
+	border:1px solid #E0E2DF;
+}
+.fastui-content-guide .fastui-content-title span, .fastui-licenses .fastui-content-title span{
+	padding-left:5px;
+}
+.fastui-content-title {
+	position:relative;
+	font:16px/40px "微软雅黑";
+	font-weight:bold;
+	color:#333;
+	border-bottom:1px solid #E0E2DF;
+}
+.fastui-content-title .fastui-content-date {
+	color:#9E9E9E;
+	font-size:12px;
+	line-height:24px;
+	font-weight:normal;
+}
+.fastui-content-title span {
+	position:relative;
+}
+.fastui-content-title a {
+	position:absolute;
+	right:3px;
+	top:15px;
+	*top:6px;
+	color:#3372A2;
+	text-decoration:none;
+	font:12px "宋体";
+}
+.fastui-news-title {
+	position:relative;
+	font:16px/40px "微软雅黑";
+	font-weight:bold;
+	color:#333;
+	border-bottom:1px solid #E0E2DF;
+	margin:10px 0;
+	background:url(../images/page.gif) 0 center no-repeat;
+}
+.fastui-news-title span {
+	padding-left:20px;
+}
+.fastui-licenses {
+	width:228px;
+	border:1px solid #E0E2DF;
+	background:#fff;
+}
+.fastui-licenses a{
+	line-height:30px;
+	text-decoration:underline;
+	padding-left:5px;
+	color:#3372A2;
+}
+.fastui-licenses a:hover {
+	color:#f00;
+}
+.fastui-content-list {
+	margin: 10px 0 0;
+	text-align: left;
+	line-height:25px;
+}
+.fastui-content-list li {
+	width: 100%; 
+	padding:0; 
+	font-size:12px; 
+	background:url(../images/list-dot.gif) left center no-repeat; 
+	list-style:none; 
+}
+.fastui-content-list li a {
+	color:#3372A2; 
+	line-height:28px; 
+	text-decoration:none;
+	display:inline-block;
+	padding-left:10px;
+	width:240px;
+	white-space:nowrap;
+	text-overflow: ellipsis; 
+	overflow:hidden;
+}
+.fastui-news-content .fastui-content-list li a {
+	width:auto;
+}
+.fastui-content-list li span {
+	float: right;
+	text-align: right; 
+	font-family:Arial, Helvetica, sans-serif; 
+	color:#9E9E9E; 
+	font-size:12px; 
+	line-height:25px;
+}
+.fastui-content-list li a:hover {
+	color: #f00; 
+	text-decoration:none
+}
+.fastui-content-case-img {
+	position:relative;
+	float:left;
+	margin:10px 6px 0;
+	_margin:10px 5px 0;
+	width:162px;
+	height:75px;
+	overflow:hidden;
+	background:#fff;
+	display:block;
+}
+.fastui-content-case-img img {
+	border:none;
+	width:162px;
+	height:75px;
+}
+.fastui-content-case-name {
+	position:absolute;
+	left:0;
+	bottom:0;
+	width:100%;
+	height:20px;
+	background:#0A3E6B;
+	color:#fff;
+	text-decoration:none;
+	text-align:center;
+	font-size:12px;
+	line-height:20px;
+	filter:alpha(opacity=80);
+	-moz-opacity:.8;
+	-khtml-opacity: .8;
+	opacity: .8;
+}
+.fastui-content-case-img a:hover .fastui-content-case-name{
+	filter:alpha(opacity=90);
+	-moz-opacity:.9;
+	-khtml-opacity: .9;
+	opacity: .9;
+}
+.fastui-content-guide-item {
+
+}
+.fastui-content-guide-item li {
+	height:32px;
+	margin:10px 0 0 15px;
+}
+.fastui-content-guide-ico {
+	float:left;
+	margin-right:10px;
+	width:28px;
+	height:28px;
+}
+.fastui-content-guide-ico img {
+	width:28px;
+	height:28px;
+}
+.fastui-content-guide-item li a, .fastui-content-guide-text {
+	color:#3372A2;
+	font-size:14px;
+	text-decoration:none;
+	line-height:32px;
+}
+a:hover .fastui-content-guide-text{
+	color:#f00;
+}
+#fastui-footer {
+	margin:40px auto 10px;
+	width:995px;
+	border-top:1px solid #E0E2DF;
+	padding-top:5px;
+	text-align:center;
+}
+.fastui-footer-copyright {
+	color:#9E9E9E;
+	font:12px/30px Arial, Helvetica, sans-serif "宋体";
+	margin-right:30px
+}
+.fastui-footer-about a{
+	color:#3372A2;
+	text-decoration:none;
+	margin-right:10px;
+}
+.fastui-footer-about a:hover {
+	color:red;
+}
+.fastui-about-bg {
+	background: #F2F3F2; 
+}
+
+.fastui-about-content { 
+	height:auto !important; 
+	height:100px; 
+	margin:30px;
+}
+.fastui-content-text {
+	color:#333;
+	font-size:12px;
+	line-height:30px;
+}
+.fastui-news-text p {
+	text-indent:2em;
+}
+.fastui-about-content-panel {
+	float:left;
+	margin:10px 28px 10px 10px;
+	_margin:10px 20px 10px 10px;
+	width:197px;
+	height:300px;
+}
+.fastui-about-content-member, .fastui-panle-huang .fastui-about-content-member, .fastui-panle-yuan .fastui-about-content-member, .fastui-panle-jiang .fastui-about-content-member, .fastui-panle-cheng .fastui-about-content-member, .fastui-panle-zhan .fastui-about-content-member, .fastui-panle-yi .fastui-about-content-member, .fastui-panle-zhang .fastui-about-content-member, .fastui-panle-fan .fastui-about-content-member {
+	position:relative;
+	width:197px;
+	height:285px;
+	background:url(../images/member-01.gif) center center no-repeat;
+}
+.fastui-panle-huang .fastui-about-content-member, .fastui-panle-zhan .fastui-about-content-member, .fastui-panle-hai .fastui-about-content-member {
+	background:url(../images/member-01.gif) center center no-repeat;
+}
+.fastui-panle-yuan .fastui-about-content-member, .fastui-panle-yi .fastui-about-content-member {
+	background:url(../images/member-02.gif) center center no-repeat;
+}
+.fastui-panle-jiang .fastui-about-content-member, .fastui-panle-zhang .fastui-about-content-member {
+	background:url(../images/member-03.gif) center center no-repeat;
+}
+.fastui-panle-cheng .fastui-about-content-member, .fastui-panle-fan .fastui-about-content-member {
+	background:url(../images/member-04.gif) center center no-repeat;
+}
+.fastui-about-content-member img {
+	border:none;
+	padding:1px;
+	margin:0 auto;
+}
+.fastui-about-content-member-text {
+	height:30px;
+	font:14px/30px "微软雅黑";
+	color:#333;
+	text-align:left;
+	text-indent:1em;
+	padding-top:5px;
+}
+.fastui-about-content-member-title {
+	position:absolute;
+	bottom:0;
+	height:30px;
+	font:14px/26px "微软雅黑";
+	color:#fff;
+	text-align:center;
+	margin:0 auto;
+	width:100%;
+}
+.fastui-about-shadow {
+	width:197px;
+	height:10px;
+	background:url(../images/about-shadow.png) no-repeat center center;
+	_background:none;
+	margin:5px auto 0;
+}
+/*news*/
+.fastui-news-content { 
+	float:left; 
+	width:973px;
+	height:auto !important; 
+	height:100px; 
+	border:1px solid #E0E2DF;
+	padding:0 10px;
+}
+.fastui-news-content .fastui-content-title {
+	margin:0 auto;
+	font-size:20px;
+	text-align:center;
+	border-bottom-style: dashed;
+}
+/*case*/
+.fastui-case {
+	float:left;
+	color:#333;
+	border:5px solid #F2F3F2;
+	background:#F8F9F9;
+	width:260px;
+	height:270px;
+	padding:0 10px 10px;
+	margin:0 59px 20px 0;
+}
+.fastui-case:hover {
+	background:#F2F3F2;
+}
+.fastui-case-last {
+	margin-right:0;
+}
+.fastui-content h4 {
+	font:16px/30px "微软雅黑";
+	font-weight:bold;
+	display:block;
+	width:260px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.fastui-content h3 a {
+	text-decoration:none;
+	color:#333;
+}
+.fastui-content h3 a:hover {
+	color:#3372A2;
+}
+.fastui-content h4 {
+	font:14px/30px "微软雅黑";
+	font-weight:bold;
+}
+.fastui-content p {
+	line-height:30px;
+	text-align:left;
+}
+.fastui-content-pre {
+	border:1px solid #D2D2D2;
+	background:#F1F1F1;
+	padding:10px;
+	width:710px;
+	height:auto !important;
+	height:100px;
+	color:#666;
+	line-height:20px;
+}
+.fastui-case-text {
+	width:260px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	line-height: 20px;
+	white-space:nowrap;
+}
+.fastui-case-text a {
+	text-decoration:underline;
+	color:#3372A2;
+	white-space:nowrap;
+}
+.fastui-case-text span {
+	white-space:nowrap;
+}
+.fastui-case-introduce {
+	height:60px;
+	white-space:normal;
+}
+.fastui-case p{
+	text-indent:2em;
+	line-height:20px;
+	font-size:12px;
+}
+.fastui-case-img {
+	margin:10px auto;
+	text-align:center;
+}
+.fastui-case-img img {
+	width:250px;
+	height:120px;
+	border:1px solid #F8F9F9;
+}
+.fastui-case-img img:hover {
+	border:1px solid #3372A2;
+}
+.fastui-case-show {
+	color: #333;
+	border: 1px solid #F2F3F2;
+	background: #F8F9F9;
+	width: 975px;
+	padding: 10px;
+	margin: 0 auto;
+}
+.fastui-case-show-item {
+	display:block;
+	clear:both;
+	margin:5px 0;
+}
+.fastui-case-show-left {
+	width:80px;
+	text-align:left;
+	float:left;
+	font:14px/30px "微软雅黑";
+	font-weight:bold;
+}
+.fastui-case-show-right {
+	text-align:left;
+	margin-left:80px;
+	line-height:30px;
+}
+.fastui-case-show-right p {
+	text-indent:2em;
+	line-height:30px;
+	font-size:12px;
+}
+/*表单样式*/
+.fastui-datagrid{
+		border-collapse: collapse;
+		color:#075587;
+		font-size:12px;
+		width:100%;
+		margin-top:10px;
+
+}
+.fastui-datagrid th{
+		text-align: left;
+		background: #EFEFEF;
+		border: 1px #D2D2D2 solid;
+		/*white-space:nowrap;*/
+		height:28px;
+		line-height:28px;
+		font-weight:normal;
+		font-size:12px;
+		color:#333;
+		font-weight:bold;
+}
+.fastui-datagrid td{
+		padding:0 1px;
+		text-align:left;	
+		border-collapse: collapse;
+		border: 1px solid #D5E3E7;
+		height:28px;
+		line-height:28px;
+		color:#565656;
+}
+.fastui-datagrid .head{
+		text-align: center;
+		background: #EFEFEF;
+		border: 1px #D5E3E7 solid;
+		text-align:center;
+		white-space:nowrap;
+		height:28px;
+		line-height:28px;
+		font-weight:normal;
+		font-size:12px;
+		color:#004983;
+}
+.fastui-datagrid a{
+	text-decoration:underline;
+	padding:0;
+	color:#3372A2;
+}
+.fastui-datagrid a:hover {
+	color:red;
+}
+.fastui-btn-down, .fastui-btn-demo {
+	width:154px;
+	height:33px;
+	position:absolute;
+	top:240px;
+}
+.fastui-btn-down {
+	left:557px;
+	background:url(../images/btn-down.gif) center center no-repeat;
+}
+.fastui-btn-demo {
+	left:740px;
+	background:url(../images/btn-demo.gif) center center no-repeat;
+}
+.fastui-content-ul {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+.fastui-content-ul li{
+	height:30px;
+	line-height:30px;
+	white-space:nowrap;
+	float:left;
+	margin-right:40px;
+	display:inline-block;
+	font-weight:bold;
+}

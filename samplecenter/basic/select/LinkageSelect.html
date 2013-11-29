@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>当前示例中第二个下拉框的数据取决于第一个下拉框的选中值</li>
+				<li>实现该功能主要用到的是下拉框的onValueChange事件</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+			function onChange(value) {
+				var select2 = fastDev.getInstance("select2");
+				select2.clean(true);
+				select2.setInitReqParam({
+					value : value
+				});
+				select2.initRefresh();
+			}
+		</script>
+	</head>
+	<body>
+		<table style="margin: 10px">
+			<tr>
+				<td><div class="ui-layout-text">联动下拉框</div></td>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td>
+				<select itype="Select" onchange="onChange()">
+					<option>-----请选择-----</option>
+					<option value="data1">本地数据1</option>
+					<option value="data2">本地数据2</option>
+					<option value="data3">本地数据3</option>
+					<option value="data4">本地数据4</option>
+				</select></td>
+				<td style="width: 20px"></td>
+				<td><select itype="Select" initSource="../../data/select.jsp" id="select2" saveInstance=true>
+					<option>-----请选择-----</option>
+				</select></td>
+			</tr>
+		</table>
+		</div>
+	</body>
+</html>

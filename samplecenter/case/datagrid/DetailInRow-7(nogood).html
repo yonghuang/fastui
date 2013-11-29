@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		
+		<title><h4>datagrid内嵌详细表单</h4>
+			<ul><li>datagrid行中内嵌详细表单。点击行前+号打开内嵌的表单。</li></ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+		
+			function updateRow()
+			{
+			var txtName = fastDev.getInstance("name");
+			var data = fastDev.getInstance("form1").getItems();
+			alert("取得数据是"+data);//此处数据来自文本文件，无法很好实现后台数据的修改再到前台展示，只将获取的数据打印。
+			var grid = fastDev.getInstance("grid1");
+			//refreshData(true);//加参数是刷新并回到第一页
+			grid.refreshData();//不加参数是刷新当前页
+			//fastDev.getInstance("grid1").addRow(data);
+
+			}
+		</script>
+	</head>
+	<body>
+		
+		<div style="margin: 10px">
+			<div itype="DataGrid" initSource="../../data/gooddata.json" showSeqColumn=true id="grid1" saveInstance="true">
+				<div name="rowDetail">
+					
+							<form itype="Form" id="form1">
+								<table>
+									<tr>
+										<td>备注 ：</td>
+										<td><div itype="TextBox" id="remark" saveInstance="true" value={remark}></div></td>
+										
+										
+										<td>上架时间：</td>
+										<td><div itype="DatePicker" id="selldate" value="{selldate}"></div></td>
+										<td><div itype="Button" onclick="updateRow()" id="btnupdate" text="update"></div></td>
+									</tr>
+								</table>
+							</form>
+						
+				</div>
+			<div width="10%" name="empno" text="商品编号"></div>
+				<div width="20%" name="name" text="商品名"></div>
+				<div width="12%" name="address" text="产地"></div>
+				<div width="8%" name="mader" text="生产商"></div>
+				<div width="15%" name="date" text="生产日期"></div>
+				<div width="10%" name="price" text="价格"></div>
+				<div width="10%" name="class" text="等级"></div>
+			</div>
+		</div>
+		
+	</body>
+</html>

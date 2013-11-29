@@ -1,0 +1,156 @@
+<%@page import="jofc2.model.axis.XAxis"%>
+<%@page import="jofc2.model.axis.YAxis"%>
+<%@page import="jofc2.model.Chart"%>
+<%@page import="java.util.Random"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="jofc2.model.elements.LineChart"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+	List data_1 = new ArrayList(9);
+	List data_2 = new ArrayList(9);
+	List data_3 = new ArrayList(9);
+
+	Random random = new Random();
+
+	// 生成一些模拟数据
+	for (int i = 0; i < 9; i++) {
+		data_1.add(random.nextInt(6) + 1);
+		data_2.add(random.nextInt(6) + 7);
+		data_3.add(random.nextInt(6) + 14);
+	}
+
+	// 定义线
+	LineChart lineA = new LineChart();
+	lineA.setDotSize(5);
+	lineA.setColour("#DFC329");
+	lineA.setWidth(4);
+	lineA.addValues(data_1);
+	lineA.setText("Line 1");
+	
+	LineChart lineB = new LineChart();
+	lineB.setDotSize(5);
+	lineB.setWidth(1);
+	lineB.setColour("#6363AC");
+	lineB.addValues(data_2);
+	lineB.setText("Line 2");
+
+	LineChart lineC = new LineChart();
+	lineC.setDotSize(5);
+	lineC.setWidth(3);
+	lineC.setColour("#5E4725");
+	lineC.addValues(data_3);
+	lineC.setText("Line 3");
+
+	// 定义图表
+	Chart chart = new Chart("线性图");
+	
+	// 定义X轴
+	XAxis xAxis = new XAxis();
+	String[] labels = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
+	xAxis.setLabels(labels);
+	
+	// 定义Y轴
+	YAxis yAxis = new YAxis();
+	yAxis.setRange(0, 20, 5);
+	
+	// 组装
+	chart.setXAxis(xAxis);
+	chart.setYAxis(yAxis);
+	
+	chart.addElements(lineA);
+	chart.addElements(lineB);
+	chart.addElements(lineC);
+	
+	// 输出
+	out.print(chart.toString());
+%>
+
+<%
+// JSON数据格式
+/* 
+	{
+	   "elements": [
+	      {
+	         "colour": "#DFC329",
+	         "dot-size": 5,
+	         "font-size": 10,
+	         "text": "Line 1",
+	         "type": "line",
+	         "values": [
+	            5,
+	            5,
+	            1,
+	            1,
+	            4,
+	            5,
+	            3,
+	            3,
+	            5
+	         ],
+	         "width": 4
+	      },
+	      {
+	         "colour": "#6363AC",
+	         "dot-size": 5,
+	         "font-size": 10,
+	         "text": "Line 2",
+	         "type": "line",
+	         "values": [
+	            7,
+	            7,
+	            10,
+	            11,
+	            7,
+	            11,
+	            12,
+	            9,
+	            10
+	         ],
+	         "width": 1
+	      },
+	      {
+	         "colour": "#5E4725",
+	         "dot-size": 5,
+	         "font-size": 10,
+	         "text": "Line 3",
+	         "type": "line",
+	         "values": [
+	            15,
+	            17,
+	            16,
+	            19,
+	            16,
+	            19,
+	            14,
+	            19,
+	            17
+	         ],
+	         "width": 3
+	      }
+	   ],
+	   "is_decimal_separator_comma": 0,
+	   "is_fixed_num_decimals_forced": 0,
+	   "is_thousand_separator_disabled": 0,
+	   "num_decimals": 2,
+	   "title": {"text": "线性图"},
+	   "x_axis": {"labels": {"labels": [
+	      "A",
+	      "B",
+	      "C",
+	      "D",
+	      "E",
+	      "F",
+	      "G",
+	      "H",
+	      "I"
+	   ]}},
+	   "y_axis": {
+	      "max": 20,
+	      "min": 0,
+	      "steps": 5
+	   }
+	} 
+*/
+%>

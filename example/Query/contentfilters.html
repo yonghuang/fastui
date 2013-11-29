@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Content Filters</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script>
+			$(function() {
+				function clearCss() {
+					// 如果input没有指定type="text",由浏览器默认解析，则在IE8以上火狐谷歌中找到
+					$("div,td,p").css("border", "none");
+				}
+
+
+				$("#btn1").bind("click", function() {
+					clearCss();
+					// 匹配包含给定文本的元素
+					$("div:contains('p')").css("border", "2px dotted blue");
+				});
+
+				$("#btn2").bind("click", function() {
+					clearCss();
+					// 匹配所有不包含子元素或者文本的空元素
+					//$("td:empty").css({"background-color": "blue"});
+					$("td:empty").css("border", "2px dotted blue");
+				});
+
+				$("#btn3").bind("click", function() {
+					clearCss();
+					// 匹配含有选择器所匹配的元素的元素
+					$("div:has(p)").css("border", "2px dotted blue");
+				});
+
+				$("#btn4").bind("click", function() {
+					clearCss();
+					// 匹配含有子元素或者文本的元素
+					$("p:parent").css("border", "2px dotted blue");
+				});
+
+			});
+		</script>
+	</head>
+	<body>
+		匹配包含给定文本的元素:<input type="button" value="div:contains('p')" id="btn1"/><br>
+		匹配所有不包含子元素或者文本的空元素:<input type="button" value="td:empty" id="btn2"/><br>
+		匹配含有选择器所匹配的元素的元素:<input type="button" value="div:has(p)" id="btn3"/><br>
+		匹配含有子元素或者文本的元素:<input type="button" value="p:parent" id="btn4"/><br>
+
+		<!-- HTML元素测试区 -->
+		<div>div</div>
+		<div><p>p div</p></div>
+		<div>div</div>
+		<div>div</div>
+		
+		<table>
+		  <tr><td>Value 1</td><td><p>Value 2</p></td></tr>
+		  <tr><td>Value 3</td><td></td></tr>
+		</table>
+	</body>
+</html>
+

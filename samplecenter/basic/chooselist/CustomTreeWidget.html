@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					控件已内置树控件的操作定义，因此可直接使用相关API。
+				</li>
+				<li>
+
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function getValue1() {
+				var value = fastDev.getInstance("list1").getValue();
+				fastDev.tips(value.toString());
+			}
+
+			function getValue2() {
+				var value = fastDev.getInstance("list2").getValue();
+				fastDev.tips(value.toString());
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				可选目录节点
+			</div>
+			<!-- chooselist控件的dataSource属性，可配置已选值的数据源  -->
+			<!-- primaryKey属性用来定义记录的主键字段，该字段用来标识记录的唯一性 -->
+			<div itype="ChooseList" id="list1" saveInstance="true" leftWidth="220px" primaryKey="id" dataSource="../../data/chooselist_tree_select.json" rightWidth="200px" height="180px">
+				<!-- leftWidget属性定义左部数据展现控件  -->
+				<div name="leftWidget">
+					<!-- 以下声明为树控件的HTML模式声明 -->
+					<div itype="Tree" initSource="../../data/chooselist_tree.json" onlySelectedLeaf="false" showIco="true">
+						<!-- 树的静态数据声明如下： -->
+						<!--
+						<div pid="" id="" val=""></div>
+						<div pid="" id="" val=""></div>
+						-->
+					</div>
+				</div>
+				<!-- 定义右部数据展现控件  -->
+				<div name="rightWidget" textField="val" valueField="id">
+					<!-- 未在此处声明子控件，则默认使用内置的列表控件  -->
+					<!-- 默认的列表控件不能识别树控件的数据，所以需配置textField和valueField来作字段映射  -->
+				</div>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取选择结果" onclick="getValue1()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				仅可选叶子节点
+			</div>
+			<div itype="ChooseList" id="list2" saveInstance="true" leftWidth="220px" primaryKey="id" dataSource="../../data/chooselist_tree_select.json" rightWidth="200px" height="180px">
+				<div name="leftWidget">
+					<div itype="Tree" initSource="../../data/chooselist_tree.json" onlySelectedLeaf="true" mTreeShowCkb="false" showIco="true"></div>
+				</div>
+				<div name="rightWidget" textField="val" valueField="id"></div>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取选择结果" onclick="getValue2()"/>
+			</div>
+		</div>
+	</body>
+</html>

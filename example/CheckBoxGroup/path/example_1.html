@@ -1,0 +1,88 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="../../../themes/default/css/ui-main.css">
+        <script src="../../../src/library/jquery-1.5.1.min.js"></script>
+        
+		<script src="../../../src/library/FastDev.js"></script>
+		<script src="../../../src/library/Ajax.js"></script>
+		<script src="../../../src/library/Tools.js"></script>
+		<script src="../../../src/library/Dom.js"></script>
+		<script src="../../../src/library/Query.js"></script>
+		<script src="../../../src/library/Event.js"></script>
+		<script src="../../../src/library/Browser.js"></script>
+		<script src="../../../src/library/Queue.js"></script>
+        <script src="../../../src/library/Library_Patch.js"></script>
+        
+		<script src="../../../src/core/ClassManager.js"></script>
+		<script src="../../../src/core/EventManager.js"></script>
+		<script src="../../../src/core/Base.js"></script>
+		<script src="../../../src/core/ControlBus.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+		<script src="../../../src/core/DomObject.js"></script>
+		<script src="../../../src/core/Template.js"></script>
+		<script src="../../../src/data/Proxy.js"></script>
+		<script src="../../../src/data/DataSet.js"></script>
+		<script src="../../../src/data/Record.js"></script>
+		<script src="../../../src/data/Field.js"></script>
+		<script src="../../../src/data/Reader.js"></script>
+        
+        <script src="../../../src/component/Component.js"></script>
+		<script src="../../../src/component/layout/Panel.js"></script>
+        
+
+        <script src="../../../src/core/Core_Patch.js"></script>
+
+		
+        <script src="../../../src/component/form/CheckBoxGroup.js"></script>
+        <script src="../../../src/component/form/CheckBoxGroup_Patch.js"></script>
+		<script type="text/javascript">
+		/*
+		 *	classPath 指定该控件位于控件库的相对路径 
+		 *	container 指定生成的控件显示在哪
+		 * 	items 用于设置控件的初始值
+		 *  value 用于设置控件的选中值
+		 */
+		 var data= [{value:11,text:"为解决多个复选框对齐问题"},{value:12,text:"提供了3中解决方案"},{value:13,text:"1.默认自适应宽度并对齐"},{value:1,text:"其列宽度可以按最长的文本自动计算，"},{value:2,text:"规则是按(字数*13)+25算。"},{value:3,text:"2：自行设置列数，"},{value:4,text:"方法是添加属性："},{value:5,text:"columnsCount"},{value:6,text:"值为一个数字"},{value:7,text:"支持1-20。"},{value:8,text:"3：自行设置列宽度"},{value:9,text:"属性columnsWidth"},{value:10,text:"值可以是像素和百分比"},{value:14,text:"三种方法用一种即可"},{value:15,text:"可以满足你的需求了吧"}];
+			talkweb.Bus.ready({
+				items : [{
+					classPath : "Components.CheckBoxGroup",
+					options : {
+						container : "CheckBoxGroupexample1",							
+						items :data,
+						value : [11,12]
+					}
+				},
+				{
+					classPath : "Components.CheckBoxGroup",
+					options : {
+						container : "CheckBoxGroupexample2",	
+						columnsCount:2,	//每列多少个
+						items :data,
+						value : [11,12]
+					}
+				},
+				{
+					classPath : "Components.CheckBoxGroup",
+					options : {
+						container : "CheckBoxGroupexample3",	
+						columnsWidth:"300px",	//每列宽度
+						items :data,
+						value : [11,12]
+					}
+				}]
+			})
+		</script>
+		<title>通过items属性值来配置选项</title>
+	</head>
+	<body>		
+				<div id="CheckBoxGroupexample1" style="height:150px;"></div>
+                <br/> <br/> <br/>
+                <div id="CheckBoxGroupexample2" style="height:150px;"></div>
+                 <br/> <br/> <br/>
+                <div id="CheckBoxGroupexample3" style="height:150px;"></div>
+                
+                
+	</body>
+	</html>

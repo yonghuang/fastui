@@ -1,0 +1,9 @@
+[{
+value : "4",
+checked:true,
+text : "音乐"
+},{
+value : "5",
+checked:true,
+text : "电影"
+}]

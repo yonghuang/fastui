@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>DataGrid一共有4个内置列，分别为复选框列、单选框列、以及序号列另外一个内置列是搭配行内信息使用的，详情参见行内信息示例</li>
+				<li>复选框列和单选框列是互斥的，同时存在的话只会显示复选框列</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+		/*
+			function saveAndCloseWindow() {
+				
+			 var tree=fastDev.getInstance("tree2");
+			 var Nodes=tree.getValues("radioedNodesIdVal"); 
+			 var rs = [],rs1=[];
+			 var txt="";
+			 var val="";
+			 
+			 var values = [];
+					var texts=[];
+					 for(var i=0;i<Nodes.length;i++){
+					 	//Nodes[i]["id"] && values.push(Nodes[i]["id"]);
+					 	//Nodes[i]["val"] && texts.push(Nodes[i]["val"]);
+					//rs.push(values.join(",")); 	
+					values.push(Nodes[i]["id"]);
+					texts.push(Nodes[i]["val"]);
+			 }
+			 alert("值是"+values);
+			 alert("文本是"+texts);
+			
+			var parent = fastDev.Ui.Window.getData("parent");
+			
+		
+			 
+				parent.fastDev.getInstance("txtName").setValue(texts);
+				
+				parent.fastDev("#selecteduserids").prop("value",values);
+				parent.fastDev.getInstance("window_1").close();
+			}
+			*/
+			
+			function saveAndCloseWindow() {
+				
+			 var tree=fastDev.getInstance("tree2");
+			  
+			// alert(tree.getRadioedIds("allradioValue"));
+			 var Nodes=tree.getRadioedIds("allradioValue"); 
+			 var texts = tree.getValsByids(Nodes);
+			
+			var parent = fastDev.Ui.Window.getData("parent");
+			
+			if(Nodes.length>0)
+			{
+			
+				parent.fastDev.getInstance("txtName").setValue(texts);
+				
+				parent.fastDev("#selecteduserids").prop("value",Nodes);
+			}
+				parent.fastDev.getInstance("window_1").close();
+			}
+			
+			
+			function onload()
+			{
+				
+				try
+				{
+				var users = fastDev.Ui.Window.getData("selecteduser");
+				
+				if(users.length>0)
+				{
+				var tree = fastDev.getInstance("tree2");
+				
+				tree.setValue(users);
+				//tree.setValue("15");
+				
+				//tree.setValue([6,5]);
+				}			
+			}
+			catch(ex){}
+			}
+			
+ 			function closeWindow()
+ 			{
+ 				parent.fastDev.getInstance("window_1").close();
+ 			}
+			
+			
+		</script>
+	</head>
+	<body>
+		
+		  	<div style="margin: 10px">
+    	<div class="ui-layout-text">整颗树只能选中一个节点</div>
+			<div itype="Tree"  initSource="treegriddata.txt" radioType="all" treeType="radiotree" 
+			showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true"  onAfterInitRender="onload()" ></div>
+	</div>
+		<div style="margin: 10px;text-align:center;">
+		<div itype="Button" text="选 中" iconCls="icon-add" iconPosition="top" onclick="saveAndCloseWindow()"></div>
+		<div itype="Button" text="关 闭" iconCls="icon-close" iconPosition="top" onclick="closeWindow()"></div>
+		</div>
+</html>
+

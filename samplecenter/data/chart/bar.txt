@@ -1,0 +1,52 @@
+<%@page import="jofc2.model.elements.BarChart.Style"%>
+<%@page import="jofc2.model.Chart"%>
+<%@page import="jofc2.model.elements.BarChart"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.Random"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+	List datas = new ArrayList();
+
+	Random random = new Random();
+
+	// 生成一些模拟数据
+	for (int i = 0; i < 9; i++) {
+		datas.add(random.nextInt(10));
+	}
+	
+	BarChart bar = new BarChart(Style.GLASS);
+	bar.addValues(datas);
+	
+	Chart chart = new Chart("柱状图");
+	
+	chart.addElements(bar);
+	
+	out.print(chart.toDebugString());
+%>
+<%
+/*
+	{
+	  "elements": [{
+      "type": "bar_glass",
+      "values": [
+         {"top": 7},
+         {"top": 4},
+         {"top": 4},
+         {"top": 9},
+         {"top": 6},
+         {"top": 6},
+         {"top": 6},
+         {"top": 0},
+         {"top": 1}
+      ]
+   }],
+   "is_decimal_separator_comma": 0,
+   "is_fixed_num_decimals_forced": 0,
+   "is_thousand_separator_disabled": 0,
+   "num_decimals": 2,
+   "title": {"text": "柱状图"}
+ }
+*/
+%>

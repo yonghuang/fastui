@@ -1,0 +1,213 @@
+.toolbar{
+	margin:0; padding:0;
+}
+.toolbar dl{
+	list-style:none;
+	margin:0 ; padding:0;
+	z-index:9999;
+}
+.toolbar dd{
+	display:block;
+	float:left;
+	margin:0 2px;
+	_margin:0 2px 0 0;
+}
+.toolbar dd a{
+	border:1px solid #D0E1E6;
+	background: #F2F9FC url(images/btn/btnbg.gif) repeat-x;
+	margin:0 3px;
+	padding:0 8px;
+	display:block;
+	float:left;
+	color:#0A2A43;
+	text-transform:uppercase;
+	text-decoration:none;
+	font-size:12px;
+	font-weight:normal;
+	height: 22px;
+	line-height:24px; _line-height:22px;	
+}
+.toolbar dd a span{
+	color:#0A2A43;
+	font-size:12px;
+	text-transform:lowercase;
+	font-family:Geneva, Arial, Helvetica, sans-serif;
+	font-weight:normal;
+
+}
+.toolbar dd a:hover{
+	border:1px solid #B8D0D6;
+	color:#ff0000;
+	text-decoration:none;
+	background: #E0EFF4 url(images/btn/btnbg_hover.gif) repeat-x;
+}
+.toolbar a.add span{
+background: url(images/btn/add.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+.toolbar a.delete span{
+background: url(images/btn/delete.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+.toolbar a.save span{
+background: url(images/btn/save.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+.toolbar a.edit span{
+background: url(images/btn/edit.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*����*/
+.toolbar a.export span{
+background: url(images/btn/export.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*�ļ�����*/
+.toolbar a.import span{
+background: url(images/btn/import.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+.toolbar a.return span{
+background: url(images/btn/return.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*��Ʒ��������*/
+.toolbar a.sort span{
+background: url(images/btn/sort.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*ͬ����ѡ�̻�*/
+.toolbar a.synchronous span{
+background: url(images/btn/synchronous.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+.toolbar a.search span{
+background: url(images/btn/search.gif) no-repeat left center;
+padding-left:22px;
+margin-left:-75px;
+hide-focus:expression(this.hideFocus=true);
+}
+.toolbar a.select input{
+	filter:alpha(opacity=0);
+	opacity:0;
+	width:70px; _width:50px;
+	margin:0;_margin-left:-30px;
+	height:14px; _height:18px;
+	cursor:hand;
+	hide-focus:expression(this.hideFocus=true);
+}
+.toolbar a.select span{
+background: url(images/btn/select.gif) no-repeat left center;
+padding-left:22px;
+margin-left:-75px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*�ϴ�*/
+.toolbar a.upload span{
+background: url(images/btn/upload.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*Ⱥ���������*/
+.toolbar a.task span{
+background: url(images/btn/task.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*��ʷվ����*/
+.toolbar a.history span{
+background: url(images/btn/history.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*�˹����*/
+.toolbar a.artificial span{
+background: url(images/btn/artificial.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*�ӿ����*/
+.toolbar a.interface span{
+background: url(images/btn/interface.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*�ҵ�վ����     ��հ�ť*/
+.toolbar a.empty span{
+background: url(images/btn/empty.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+/*�������*/
+.toolbar a.batch span{
+background: url(images/btn/batch.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+/*�ռ��� TAB��ʽ*/
+.emailtab{
+	margin:0; padding:0;
+}
+.emailtab dl{
+	list-style:none;
+	margin:0 ; padding:0;
+	z-index:9999;
+}
+.emailtab dd{
+	display:block;
+	float:left;
+	margin:0 2px 10px;
+	_margin:0 2px 10px 0;
+}
+.emailtab dd a{
+	border:1px solid #BFD8E0;
+	background: #F2F9FC url(images/email_tab.gif) repeat-x;
+	margin:0 3px;
+	padding:0 8px;
+	width:145px;
+	display:block;
+	float:left;
+	text-align:center;
+	color:#0A2A43;
+	text-transform:uppercase;
+	text-decoration:none;
+	font-size:14px;
+	font-weight:normal;
+	height: 26px;
+	line-height:26px; _line-height:26px;	
+}
+.emailtab dd a span{
+	color:#075587;
+	font-size:12px;
+	text-transform:lowercase;
+	font-family:Geneva, Arial, Helvetica, sans-serif;
+	font-weight:normal;
+
+}
+.emailtab dd a:hover{
+	border:1px solid #0195C5;
+	color:#ff0000;
+	text-decoration:none;
+	background: #9FDCF0 url(images/email_tab_hover.gif) repeat-x;
+}
+
+.emailtab a.active{
+	border:1px solid #0195C5;
+	color:#ff0000;
+	text-decoration:none;
+	background: #9FDCF0 url(images/email_tab_hover.gif) repeat-x;
+}
+.emailtab a.add span{
+/*background: url(images/btn/add.gif) no-repeat left center;
+padding-left:22px;*/
+}

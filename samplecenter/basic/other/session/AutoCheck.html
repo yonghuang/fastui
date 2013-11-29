@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					利用后台返回的异常信息检测Session是否过期(如页面与后台无交互则此方法不可用)
+				</li>
+			</ul></title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			function submit(){
+				var form=fastDev.getInstance("form1");
+				form.submit();
+			}
+			
+			fastDev(function() {
+				fastDev.Core.ControlBus.bindCheckComplete(function(msg) {
+					fastDev.tips(msg);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<form itype="Form" action="../../../data/timeout.json" id="form1" initSource="../../../data/form_example_1_init.jsp" dataSource="../../../data/form_example_1_load.jsp" requestType="post" saveInstance="true">
+			<table width="800px" border="0" style="margin:10px;" class="ui-form-list">
+				<tr>
+					<td colspan="2">
+					<div class="ui-layout-text">
+						修改表单(模拟修改表单被打开很久导致Session过期时，用户点击提交操作引发的异常)
+					</div></td>
+				</tr>
+				<tr>
+					<td>text:</td>
+					<td>
+					<input itype="TextBox" id="txt1" >
+					</td>
+				</tr>
+				<tr>
+					<td>password:</td>
+					<td>
+					<input itype="TextBox" id="pwd1" type="password" >
+					</td>
+				</tr>
+				<tr>
+					<td>textarea:</td>
+					<td>					<textarea itype="TextBox" id="area1" type="textarea" height="50px" width="400px"></textarea></td>
+				</tr>
+			</table>
+			<div style="width:400px; text-align:center">
+				<div itype="Button" text="修改" onclick="submit()" ></div>
+			</div>
+		</form>
+	</body>
+</html>
+

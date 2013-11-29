@@ -1,0 +1,235 @@
+	@charset "utf-8";
+	
+    .talkweb_dialog_overlay {
+        background-color: #fff;
+        filter: alpha(opacity=30);
+        -moz-opacity: 0.30;
+        opacity: 0.30;
+        line-height: 200%;
+        font-size: 14px;
+        position: absolute;
+    }
+    .talkweb_dialog_title {
+        float: left;
+        background: url(dialog_titlebg.gif) repeat-x;
+        height: 30px;
+        line-height: 30px;
+    }
+    .talkweb_dialog_close {
+        float: right;
+    }
+    .talkweb_dialog_content {
+        width: 100%;
+    }
+		
+	
+	/*
+     * 控件（圆角）外层 div样式
+     * */
+	 .dialog_alphadiv {
+        position: absolute;
+        z-index: 99;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #000;
+        width: 100%;
+        height: 100%;
+        filter: alpha(opacity=20);
+        opacity: 0.20;
+        -moz-opacity: 0.20;
+        -khtml-opacity: 0.20;
+    }
+	.dialog_updiv {
+		margin: auto; 
+	    position: relative;
+        width: 450px;
+        z-index: 300;
+	}
+	.dialog_updiv .headerdiv, .dialog_updiv .contentdiv, .dialog_updiv .footerdiv {
+	    width:100%;
+	}
+	/*
+     * 控件header div样式
+     * */
+	.dialog_updiv .headerdivL, .dialog_updiv .headerdivC, .dialog_updiv .headerdivR, 
+	.dialog_updiv .footerdivL, .dialog_updiv .footerdivC, .dialog_updiv .footerdivR,
+	.dialog_updiv .footerdivL_btn, .dialog_updiv .footerdivC_btn, .dialog_updiv .footerdivR_btn {
+        background: url(../images/dialog.png);
+		_background: url(../images/dialog.gif);
+		margin:0;
+		padding:0;
+    }
+	.dialog_updiv .headerdivL {
+		background-repeat: no-repeat;
+	    background-position: left 0;
+		float:left;
+		height:38px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: 24px;
+    }
+	.dialog_updiv .headerdivC {
+		background-repeat: repeat-x;
+	    background-position: left -40px;
+		height:38px;
+		margin:0 50px 0 24px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: auto;
+    }
+	.dialog_updiv .headerdivR {
+        background-repeat: no-repeat;
+	    background-position: right 0;
+		height:38px;
+		_margin:0 -3px;
+		float:right;
+        width: 50px;
+    }
+	.dialog_updiv .headerdivC span {
+	    color: #2a4f8a;
+	    font: bold 14px/20px Arial, "宋体";
+		display:inline-block;
+		margin:15px 0 0 0;
+		_margin:12px 0 0 0;
+	}
+    .dialog_updiv .headerdivR a {
+	    background: url(../images/dialog.png) no-repeat left -368px;
+        border: 0;
+        cursor: pointer;
+		float:right;
+		margin:15px 14px 0 0;
+        height: 16px;
+        text-decoration: none;
+        text-indent: -30000px;
+        vertical-align: bottom;
+        width: 16px;
+    }
+    .dialog_updiv .headerdivR a:hover {
+	    background: url(../images/dialog.png) no-repeat -16px -368px;
+    }
+	.dialog_updiv .headerdivR span {
+	    display:none;
+	}
+	/*
+     * 控件content div样式
+     * */
+    .dialog_updiv .contentdivL {
+		background: url(../images/messageboxbg.png) repeat-y left 0;
+		_background: url(../images/messageboxbg.gif) repeat-y left 0;
+		float:left;
+		/*height:80px;*/
+		_margin:0 -3px;
+		padding:0;
+        width: 9px;
+    }
+	.dialog_updiv .contentdivC {
+		/*background-color: #c6dfe6 #b6d5df;*/
+		background: #fff /*url(../images/messageboxbg2.png) repeat*/;
+		_background: #fff /*url(../images/messageboxbg2.gif) repeat*/;
+		/*height:80px;*/
+		margin:0 9px;
+		_margin:0 -3px;
+		padding:0;/*0 5px 0;*/
+        width: auto;
+		white-space:nowrap;
+		border-bottom: 1px solid #97A8AE;
+    }
+	
+	.dialog_updiv .contentdivR {
+		background: url(../images/messageboxbg.png) repeat-y right 0;
+		_background: url(../images/messageboxbg.gif) repeat-y right 0;
+		float:right;
+		/*height:80px;*/
+		_margin:0 -3px;
+		padding:0;
+        width: 9px;
+    }
+     .dialog_iframe{
+     	width:100%;
+     	height:100%;
+     	top:0;
+     	left:0;     	
+     }
+	/*
+     * 控件content div样式
+     * */
+	.dialog_updiv .contentdivC .content {
+	    background: #ecf5f7;
+	    border: 1px solid #b7c8ce;
+	    color: #3d464f;
+        font: bold 14px/120% "宋体", Verdana;
+		height: 100%;
+        margin: 0;
+		padding: 8px;
+		text-align:left;
+		white-space: normal;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+	.dialog_updiv .footerdivC_btn .btndiv {
+		margin: 0;
+		padding: 0 0 12px;
+        text-align: right;
+    }
+	.dialog_button {
+	    background:url(../images/dialog-btn.gif) no-repeat 0 0;
+		border:0;
+		color:#427085;
+		font:normal 12px/24px Arial, Helvetica, sans-serif, "宋体";
+		margin:3px 0;
+		padding:0;
+		height:22px;
+		width:82px;
+	} 
+	.dialog_button:hover {
+	    background:url(../images/dialog-btn.gif) no-repeat 0 -22px;
+	}
+	
+	/*
+     * 控件footer不带botton div样式
+     * */
+	.dialog_updiv .footerdivL, .dialog_updiv .footerdivL_btn {
+		background-repeat: no-repeat;
+	    background-position: left -430px;
+		float:left;
+		height:16px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: 15px;
+    }
+	.dialog_updiv .footerdivC, .dialog_updiv .footerdivC_btn {
+		background-repeat: repeat-x;
+	    background-position: left -490px;
+		height:16px;
+		margin:0 15px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+		text-align:right;
+        width: auto;
+    }
+	.dialog_updiv .footerdivR, .dialog_updiv .footerdivR_btn {
+        background-repeat: no-repeat;
+	    background-position: right -430px;
+		height:16px;
+		_margin:0 -3px;
+		float:right;
+        width: 15px;
+    }
+	/*
+     * 控件footer带botton div样式
+     * */
+	.dialog_updiv .footerdivL_btn {
+	    background-position: left -410px;
+	    height:36px;
+	}
+	.dialog_updiv .footerdivC_btn {
+	    background-position: left -470px;
+	    height:36px;
+	}
+	.dialog_updiv .footerdivR_btn {
+	    background-position: right -410px;
+	    height:36px;
+	}

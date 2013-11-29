@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Created by JetBrains PhpStorm.
+ * User: taoqili
+ * Date: 12-2-20
+ * Time: 上午11:19
+ * To change this template use File | Settings | File Templates.
+ */
+var video = {};
+
+(function(){
+    video.init = function(){
+        switchTab(&quot;videoTab&quot;);
+        createAlignButton( [&quot;videoFloat&quot;] );
+        addUrlChangeListener($G(&quot;videoUrl&quot;));
+        addOkListener();
+        addSearchListener();
+
+        //编辑视频时初始化相关信息
+        (function(){
+            var img = editor.selection.getRange().getClosedNode(),url;
+            if(img &amp;&amp; img.className == &quot;edui-faked-video&quot;){
+                $G(&quot;videoUrl&quot;).value = url = img.getAttribute(&quot;_url&quot;);
+                $G(&quot;videoWidth&quot;).value = img.width;
+                $G(&quot;videoHeight&quot;).value = img.height;
+                updateAlignButton(img.getAttribute(&quot;align&quot;));
+            }
+            createPreviewVideo(url);
+        })();
+    };
+    /*
+     * 监听确认和取消两个按钮事件，用户执行插入或者清空正在播放的视频实例操作
+     */
+    function addOkListener(){
+        dialog.onok = function(){
+            $G(&quot;preview&quot;).innerHTML = &quot;&quot;;
+            var currentTab =  findFocus(&quot;tabHeads&quot;,&quot;tabSrc&quot;);
+            switch(currentTab){
+                case &quot;video&quot;:
+                    return insertSingle();
+                    break;
+                case &quot;videoSearch&quot;:
+                    return insertSearch(&quot;searchList&quot;);
+                    break;
+            }
+        };
+        dialog.oncancel = function(){
+            $G(&quot;preview&quot;).innerHTML = &quot;&quot;;
+        };
+    }
+
+    function selectTxt(node){
+        if(node.select){
+            node.select();
+        }else{
+            var r = node.createTextRange &amp;&amp; node.createTextRange();
+            r.select();
+        }
+    }
+
+    /*
+     * 依据传入的align值更新按钮信息
+     * @param align
+     */
+    function updateAlignButton( align ) {
+        var aligns = $G( &quot;videoFloat&quot; ).children;
+        for ( var i = 0, ci; ci = aligns[i++]; ) {
+            if ( ci.getAttribute( &quot;name&quot; ) == align ) {
+                if ( ci.className !=&quot;focus&quot; ) {
+                    ci.className = &quot;focus&quot;;
+                }
+            } else {
+                if ( ci.className ==&quot;focus&quot; ) {
+                    ci.className = &quot;&quot;;
+                }
+            }
+        }
+    }
+
+    /*
+     * 将单个视频信息插入编辑器中
+     */
+    function insertSingle(){
+        var width = $G(&quot;videoWidth&quot;),
+            height = $G(&quot;videoHeight&quot;),
+            url=$G('videoUrl').value,
+            align = findFocus(&quot;videoFloat&quot;,&quot;name&quot;);
+        if(!url) return false;
+        if ( !checkNum( [width, height] ) ) return false;
+        editor.execCommand('insertvideo', {
+            url: convert_url(url),
+            width: width.value,
+            height: height.value,
+            align: align
+        });
+    }
+
+    /*
+     * 将元素id下的所有代表视频的图片插入编辑器中
+     * @param id
+     */
+    function insertSearch(id){
+        var imgs = domUtils.getElementsByTagName($G(id),&quot;img&quot;),
+            videoObjs=[];
+        for(var i=0,img; img=imgs[i++];){
+            if(img.getAttribute(&quot;selected&quot;)){
+                videoObjs.push({
+                    url:img.getAttribute(&quot;ue_video_url&quot;),
+                    width:420,
+                    height:280,
+                    align:&quot;none&quot;
+                });
+            }
+        }
+        editor.execCommand('insertvideo',videoObjs);
+    }
+
+    /*
+     * 找到id下具有focus类的节点并返回该节点下的某个属性
+     * @param id
+     * @param returnProperty
+     */
+    function findFocus( id, returnProperty ) {
+        var tabs = $G( id ).children,
+                property;
+        for ( var i = 0, ci; ci = tabs[i++]; ) {
+            if ( ci.className==&quot;focus&quot; ) {
+                property = ci.getAttribute( returnProperty );
+                break;
+            }
+        }
+        return property;
+    }
+    function convert_url(s){
+        return s.replace(/http:\/\/www\.tudou\.com\/programs\/view\/([\w\-]+)\/?/i,&quot;http://www.tudou.com/v/$1&quot;)
+            .replace(/http:\/\/www\.youtube\.com\/watch\?v=([\w\-]+)/i,&quot;http://www.youtube.com/v/$1&quot;)
+            .replace(/http:\/\/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i,&quot;http://player.youku.com/player.php/sid/$1&quot;)
+            .replace(/http:\/\/www\.56\.com\/u\d+\/v_([\w\-]+)\.html/i, &quot;http://player.56.com/v_$1.swf&quot;)
+            .replace(/http:\/\/www.56.com\/w\d+\/play_album\-aid\-\d+_vid\-([^.]+)\.html/i, &quot;http://player.56.com/v_$1.swf&quot;)
+            .replace(/http:\/\/v\.ku6\.com\/.+\/([^.]+)\.html/i, &quot;http://player.ku6.com/refer/$1/v.swf&quot;);
+    }
+
+    /*
+      * 检测传入的所有input框中输入的长宽是否是正数
+      * @param nodes input框集合，
+      */
+     function checkNum( nodes ) {
+         for ( var i = 0, ci; ci = nodes[i++]; ) {
+             var value = ci.value;
+             if ( !isNumber( value ) &amp;&amp; value) {
+                 alert( &quot;请输入正确的长度或者宽度值！例如：123，400&quot; );
+                 ci.value = &quot;&quot;;
+                 ci.focus();
+                 return false;
+             }
+         }
+         return true;
+     }
+
+    /*
+     * 数字判断
+     * @param value
+     */
+    function isNumber( value ) {
+        return /(0|^[1-9]\d*$)/.test( value );
+    }
+
+    /*
+     * tab切换
+     * @param tabParentId
+     * @param keepFocus   当此值为真时，切换按钮上会保留focus的样式
+     */
+    function switchTab( tabParentId,keepFocus ) {
+        var tabElements = $G( tabParentId ).children,
+                tabHeads = tabElements[0].children,
+                tabBodys = tabElements[1].children;
+        for ( var i = 0, length = tabHeads.length; i &lt; length; i++ ) {
+            var head = tabHeads[i];
+            domUtils.on( head, &quot;click&quot;, function () {
+                //head样式更改
+                for ( var k = 0, len = tabHeads.length; k &lt; len; k++ ) {
+                    if(!keepFocus)tabHeads[k].className = &quot;&quot;;
+                }
+                this.className = &quot;focus&quot;;
+                //body显隐
+                var tabSrc = this.getAttribute( &quot;tabSrc&quot; );
+                for ( var j = 0, length = tabBodys.length; j &lt; length; j++ ) {
+                    var body = tabBodys[j],
+                        id = body.getAttribute( &quot;id&quot; );
+
+                    if ( id == tabSrc ) {
+                        body.style.display = &quot;&quot;;
+                        if(id==&quot;videoSearch&quot;){
+                            selectTxt($G(&quot;videoSearchTxt&quot;));
+                        }
+                        if(id==&quot;video&quot;){
+                            selectTxt($G(&quot;videoUrl&quot;));
+                        }
+
+                    } else {
+                        body.style.display = &quot;none&quot;;
+                    }
+                }
+            } );
+        }
+    }
+    /*
+      * 创建图片浮动选择按钮
+      * @param ids
+      */
+     function createAlignButton( ids ) {
+         for ( var i = 0, ci; ci = ids[i++]; ) {
+             var floatContainer = $G( ci ),
+                     nameMaps = {&quot;none&quot;:&quot;默认&quot;, &quot;left&quot;:&quot;左浮动&quot;, &quot;right&quot;:&quot;右浮动&quot;, &quot;center&quot;:&quot;独占一行&quot;};
+             for ( var j in nameMaps ) {
+                 var div = document.createElement( &quot;div&quot; );
+                 div.setAttribute( &quot;name&quot;, j );
+                 if ( j == &quot;none&quot; ) div.className=&quot;focus&quot;;
+                 div.style.cssText = &quot;background:url(../../themes/default/images/&quot; + j + &quot;_focus.jpg);&quot;;
+                 div.setAttribute( &quot;title&quot;, nameMaps[j] );
+                 floatContainer.appendChild( div );
+             }
+             switchSelect( ci );
+         }
+     }
+
+    /*
+     * 选择切换
+     * @param selectParentId
+     */
+    function switchSelect( selectParentId ) {
+        var selects = $G( selectParentId ).children;
+        for ( var i = 0, ci; ci = selects[i++]; ) {
+            domUtils.on( ci, &quot;click&quot;, function () {
+                for ( var j = 0, cj; cj = selects[j++]; ) {
+                    cj.className = &quot;&quot;;
+                    cj.removeAttribute &amp;&amp; cj.removeAttribute( &quot;class&quot; );
+                }
+                this.className = &quot;focus&quot;;
+            } )
+        }
+    }
+
+    /*
+     * 监听url改变事件
+     * @param url
+     */
+    function addUrlChangeListener(url){
+        if (browser.ie) {
+            url.onpropertychange = function () {
+                createPreviewVideo( this.value );
+            }
+        } else {
+            url.addEventListener( &quot;input&quot;, function () {
+                createPreviewVideo( this.value );
+            }, false );
+        }
+    }
+
+    /*
+     * 根据url生成视频预览
+     * @param url
+     */
+    function createPreviewVideo(url){
+        if ( !url )return;
+        if(!endWith(url,[&quot;.swf&quot;,&quot;.flv&quot;,&quot;.wmv&quot;])){
+            $G(&quot;preview&quot;).innerHTML = &quot;您输入的视频地址有误，请检查后确认！&quot;;
+            return;
+        }
+        $G(&quot;preview&quot;).innerHTML = '&lt;embed type=&quot;application/x-shockwave-flash&quot; pluginspage=&quot;http://www.macromedia.com/go/getflashplayer&quot;' +
+        ' src=&quot;' + url + '&quot;' +
+        ' width=&quot;' + 420  + '&quot;' +
+        ' height=&quot;' + 280  + '&quot;' +
+        ' wmode=&quot;transparent&quot; play=&quot;true&quot; loop=&quot;false&quot; menu=&quot;false&quot; allowscriptaccess=&quot;never&quot; allowfullscreen=&quot;true&quot; &gt;&lt;/embed&gt;';
+    }
+
+    /*
+     * 末尾字符检测
+     * @param str
+     * @param endStrArr
+     */
+    function endWith(str,endStrArr){
+        for(var i=0,len = endStrArr.length;i&lt;len;i++){
+            var tmp = endStrArr[i];
+            if(str.length - tmp.length&lt;0) return false;
+
+            if(str.substring(str.length-tmp.length)==tmp){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*
+     * ajax获取视频信息
+     */
+    function getMovie(){
+        var keywordInput =  $G(&quot;videoSearchTxt&quot;);
+        if(!keywordInput.getAttribute(&quot;hasClick&quot;) ||!keywordInput.value){
+            selectTxt(keywordInput);
+            return;
+        }
+        $G( &quot;searchList&quot; ).innerHTML = &quot; &amp;nbsp;视频加载中，请稍后……&quot;;
+        var keyword = keywordInput.value,
+                type = $G(&quot;videoType&quot;).value,
+            str=&quot;&quot;;
+        ajax.request(editor.options.UEDITOR_HOME_URL +&quot;server/submit/jsp/getMovie.jsp&quot;,{
+            searchKey:keyword,
+            videoType:type,
+            onsuccess:function(xhr){
+                try{
+                    var info = eval(&quot;(&quot;+xhr.responseText+&quot;)&quot;);
+                }catch(e){
+                    return;
+                }
+
+                var videos = info.multiPageResult.results;
+                var html=[&quot;&lt;table width='530'&gt;&quot;];
+                for(var i=0,ci;ci = videos[i++];){
+                    html.push(
+                        &quot;&lt;tr&gt;&quot; +
+                            &quot;&lt;td&gt;&lt;img title='单击选中视频' ue_video_url='&quot;+ci.outerPlayerUrl+&quot;' alt='&quot;+ci.tags+&quot;' width='106' height='80' src='&quot;+ci.picUrl+&quot;' /&gt; &lt;/td&gt;&quot; +
+                            &quot;&lt;td&gt;&quot; +
+                                &quot;&lt;p&gt;&lt;a target='_blank' title='访问源视频' href='&quot;+ci.itemUrl+&quot;'&gt;&quot;+ci.title.substr(0,30)+&quot;&lt;/a&gt;&lt;/p&gt;&quot; +
+                                &quot;&lt;p style='height: 62px;line-height: 20px' title='&quot;+ci.description+&quot;'&gt; &quot;+ ci.description.substr(0,95) +&quot; &lt;/p&gt;&quot; +
+                            &quot;&lt;/td&gt;&quot; +
+                       &quot;&lt;/tr&gt;&quot;
+                    );
+                }
+                html.push(&quot;&lt;/table&gt;&quot;);
+                $G(&quot;searchList&quot;).innerHTML = str = html.length ==2 ?&quot; &amp;nbsp; &amp;nbsp;抱歉，未搜到任何相关视频！&quot; : html.join(&quot;&quot;);
+                var imgs = domUtils.getElementsByTagName($G(&quot;searchList&quot;),&quot;img&quot;);
+                if(!imgs)return;
+                for(var i=0,img;img = imgs[i++];){
+                    domUtils.on(img,&quot;click&quot;,function(){
+                        changeSelected(this);
+                    })
+                }
+            }
+        });
+    }
+
+    /*
+     * 改变对象o的选中状态
+     * @param o
+     */
+    function changeSelected(o){
+        if ( o.getAttribute( &quot;selected&quot; ) ) {
+            o.removeAttribute( &quot;selected&quot; );
+            o.style.cssText = &quot;filter:alpha(Opacity=100);-moz-opacity:1;opacity: 1;border: 2px solid #fff&quot;;
+        } else {
+            o.setAttribute( &quot;selected&quot;, &quot;true&quot; );
+            o.style.cssText = &quot;filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;border:2px solid blue;&quot;;
+        }
+    }
+
+    /*
+     * 视频搜索相关注册事件
+     */
+    function addSearchListener(){
+        domUtils.on($G(&quot;videoSearchBtn&quot;),&quot;click&quot;,getMovie);
+        domUtils.on($G( &quot;videoSearchTxt&quot; ),&quot;click&quot;,function () {
+            if ( this.value == &quot;请输入搜索关键词&quot; ) {
+                this.value = &quot;&quot;;
+            }
+            this.setAttribute(&quot;hasClick&quot;,&quot;true&quot;);
+            selectTxt(this);
+        });
+        $G( &quot;videoSearchTxt&quot; ).onkeyup = function(){
+            this.setAttribute(&quot;hasClick&quot;,&quot;true&quot;);
+            this.onkeyup = null;
+        };
+        domUtils.on($G( &quot;videoSearchReset&quot; ),&quot;click&quot;,function () {
+            var txt = $G( &quot;videoSearchTxt&quot; );
+            txt.value = &quot;&quot;;
+            selectTxt(txt);
+            $G( &quot;searchList&quot; ).innerHTML = &quot;&quot;;
+        });
+        domUtils.on($G( &quot;videoType&quot; ),&quot;change&quot;, getMovie);
+        domUtils.on($G( &quot;videoSearchTxt&quot; ), &quot;keyup&quot;, function ( evt ) {
+            if ( evt.keyCode == 13 ) {
+                getMovie();
+            }
+        } )
+    }
+
+
+
+})();</pre>
+</body>
+</html>

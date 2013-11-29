@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title><h4>修改时的用法</h4>
+        <ul>
+        <li>选人组件，在修改场景时的用法</li>
+        <li>修改时组件需要获取点击修改时的反选值,这里给出了一种方法，只要能在页面打开时将值按指定的字符串格式传给isHideData控件,计即可获得反选的值</li>
+        <li>注:此组件是基于fastui现有的控件开发,不存在于fastui控件库中,使用时需要下载组件的相关页面、js和css文件(下载地址:http://sip.talkweb.com.cn:8090/pages/viewpage.action?pageId=11078022)</li>
+        <li>无法下载或者使用时有问题，请联系禄铭。</li>
+        </ul></title>
+<script type="text/javascript" src="fastui/fastDev-import.js"></script>
+<script type="text/javascript">
+function update(){
+	var name = fastDev.getInstance("name").getValue();
+	var id = fastDev.getInstance("id").getValue();
+	var pid = fastDev.getInstance("pid").getValue();
+	fastDev.create("Dialog", {
+		height : "400px",
+		width : "630px",
+		minHeight : "400px",
+		minWidth : "630px",
+		src : "basic/selectuser/selectupdate.html?id="+id+"&name="+name+"&pid="+pid,
+		inside : false,
+
+		buttons : [{
+			text : "保存",
+			align : "center",
+			iconCls : "icon-save",
+			onclick : function(event, that, win, fast) {
+				fastDev.tips("你点击了保存按钮");
+
+				that.close();
+			}
+		}, {
+			text : "关闭",
+			align : "center",
+			iconCls : "icon-close",
+			onclick : function(event, that, win, fast) {
+				that.close();
+			}
+		}]
+	});
+}
+</script>
+</head>
+<body>
+<div class="ui-layout-text">在修改场景时的用法</div>
+<input itype="TextBox" saveInstance="true" id="name" value="孙耀华" />
+<input itype="TextBox" type="hidden" saveInstance="true" id="id" value="2" />
+<input itype="TextBox" type="hidden" saveInstance="true" id="pid" value="2" />
+<input itype="Button" saveInstance="true" text="修改" onclick="update()" />
+</body>
+</html>

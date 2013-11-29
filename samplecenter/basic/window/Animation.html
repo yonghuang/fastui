@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					窗体动画效果示例。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 定义动画速度
+			function showCustomSpeedWindow() {
+				fastDev.create("Window", {
+					// 单位为毫秒，加大该值将延长动画的持续事件（亦即动画会变慢）
+					animateSpeed : 800
+				});
+			}
+
+			// 禁用窗体动画
+			function showNoAnimationWindow() {
+				fastDev.create("Window", {
+					// 当速度指定为0时，将禁用动画效果
+					// 也可以通过fastDev.Ui.Panel.launchAnimation全局开关属性开启或禁用当前页面所有窗体的动画效果
+					// 建议在低版本低性能的浏览器（如IE6）下禁用动画效果
+					animateSpeed : 0
+				});
+			}
+
+			// 重置动画算法
+			function showEasingWindow() {
+				fastDev.create("Window", {
+					// 可通过animateEasing属性将所有动画使用的算法重置为某一相同类型的算法
+					// 默认情况下，该属性值是将所有动画算法重置为线性算法的（liner）
+					// 可以将该值设置为空，或者设置为一个想要使用的算法类型（参考动画组件算法说明）
+					animateEasing : "",
+					animateSpeed : 500
+				});
+			}
+
+			// 定义动画参照目标
+			function showTargetWindow() {
+				fastDev.create("Window", {
+					// 通过该属性，可使得窗体依据某一目标元素来显示动画效果
+					// 可传递标签元素对象、标签元素ID属性值或者控件的实例
+					// 若窗口跨级展现，控件则会首先从原父页面寻找目标元素对象，若未找到则从展现页面上寻找
+					// 此属性在模拟桌面应用任务栏时，将会变得很有作用
+					// 因为按钮控件的点击事件回调中作用域（this）指向按钮控件本身，所以，下面可直接使用this来设置参照对象
+					animateTarget : this,
+					// 开启跨级展现属性，示例跨级动画目标效果
+					inside : false,
+					content : "定义了动画参照目标对象的窗体"
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				动画速度
+			</div>
+			<div>
+				<input itype="Button" text="定义动画速度" onclick="showCustomSpeedWindow()"/>
+				<input itype="Button" text="禁用窗体动画" onclick="showNoAnimationWindow()"/>
+			</div>
+			<div class="ui-layout-text">
+				动画算法
+			</div>
+			<div>
+				<input itype="Button" text="重置动画算法" onclick="showEasingWindow()"/>
+			</div>
+			<div class="ui-layout-text">
+				动画目标
+			</div>
+			<div>
+				<input itype="Button" text="定义动画参照目标" onclick="showTargetWindow()"/>
+			</div>
+		</div>
+	</body>
+</html>

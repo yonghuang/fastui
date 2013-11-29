@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-ProgressBar'>/**
+</span> * @class fastDev.Ui.ProgressBar
+ * @extends fastDev.Ui.Component
+ * @author chengwei
+ * &lt;p&gt;进度条控件。&lt;/p&gt;
+ * &lt;p&gt;有2种可选模式：progress（进度条样式）、graphical（Loading图标）。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *     
+ *     fastDev.create(&quot;ProgressBar&quot;, {
+ *          container : &quot;example&quot;
+ *     });
+ */
+fastDev.define(&quot;fastDev.Ui.ProgressBar&quot;, {
+    alias: &quot;ProgressBar&quot;,
+    extend: &quot;fastDev.Ui.Component&quot;,
+    _options: {
+<span id='fastDev-Ui-ProgressBar-property-model'>        /**
+</span>         * 控件展现模式，可选值：graphical（图形）、progress（进度条）
+         * @type {String}
+         */
+        model: &quot;graphical&quot;,
+<span id='fastDev-Ui-ProgressBar-property-width'>        /**
+</span>         * 进度条模式时进度条的宽度值
+         * @type {String}
+         */
+        width: &quot;200px&quot;,
+<span id='fastDev-Ui-ProgressBar-property-text'>        /**
+</span>         * 文本提示信息
+         * @type {String}
+         */
+        text: '',
+<span id='fastDev-Ui-ProgressBar-property-textAlign'>        /**
+</span>         * 文本对齐方式，可选值：left、center、right
+         * @type {String}
+         */
+        textAlign: &quot;center&quot;,
+<span id='fastDev-Ui-ProgressBar-property-totalValue'>        /**
+</span>         * 进度条分段总数
+         * @type {Number}
+         */
+        totalValue: 100,
+<span id='fastDev-Ui-ProgressBar-property-value'>        /**
+</span>         * 当前进度值
+         * @type {Number}
+         */
+        value: 0,
+<span id='fastDev-Ui-ProgressBar-property-opacity'>        /**
+</span>         * 遮罩层透明度（小数） 
+         * @type {Number}
+         */
+        opacity: 0.1,
+<span id='fastDev-Ui-ProgressBar-property-allowLock'>        /**
+</span>         * 是否使用遮罩
+         * 图形模式下有效
+         * @type {Boolean}
+         */
+        allowLock: true,
+<span id='fastDev-Ui-ProgressBar-property-allowAutoClose'>        /**
+</span>         * 是否在满进度时自动关闭
+         * 在图形模式下有效
+         * @type {Boolean}
+         */
+        allowAutoClose: true,
+<span id='fastDev-Ui-ProgressBar-property-zIndex'>        /**
+</span>         * 索引重置
+         * @type {Number}
+         */
+        zIndex: 2015,
+<span id='fastDev-Ui-ProgressBar-event-onValueChange'>        /**
+</span>         * 进度改变时的回调函数
+         * 传递参数为当前进度值和总进度值，this指向当前ProgressBar控件实例
+         * @type {Function}
+         * @event
+         */
+        onValueChange: fastDev.noop,
+<span id='fastDev-Ui-ProgressBar-event-onOverlayClick'>        /**
+</span>         * 加载图标模式时，遮罩被点击时的事件
+         * &lt;p&gt;this指向当前ProgressBar控件实例
+         * @type {Function}
+         * @event 
+         */
+        onOverlayClick: fastDev.noop,
+<span id='fastDev-Ui-ProgressBar-property-enableInitProxy'>        /**
+</span>         * @private 
+         */
+        enableInitProxy: false,
+<span id='fastDev-Ui-ProgressBar-property-enableDataProxy'>        /**
+</span>         * @private 
+         */
+        enableDataProxy: false,
+        enableDataSet: false
+    },
+<span id='fastDev-Ui-ProgressBar-method-staticTemplate'>    /**
+</span>     * 静态模板
+     * @param {Object} params 模板参数
+     * @private 
+     */
+    staticTemplate: function (params) {
+        var html = [];
+        if (/progress/i.test(params.model)) {
+            html.push('&lt;div class=&quot;ui-progressbar&quot; style=&quot;width:' + params.width + '&quot;&gt;');
+            html.push('&lt;div class=&quot;ui-progressbar-gradient&quot;&gt;');
+            html.push('&lt;span class=&quot;ui-progressbar-text&quot; style=&quot;width:' + params.width + ';text-align:' + params.textAlign + '&quot;&gt;' + params.text + '&lt;/span&gt;');
+            html.push('&lt;/div&gt;&lt;/div&gt;');
+        } else {
+            html.push('&lt;span name=&quot;loading&quot;&gt;&lt;div class=&quot;ui-progressbar-ico ' + params.loadingCls + '&quot;&gt;&lt;/div&gt;');
+            html.push('&lt;span class=&quot;ui-progressbar-ico-text&quot;&gt;' + params.text + '&lt;/span&gt;&lt;/span&gt;');
+        }
+        if (params.allowLock) {
+            html.push('&lt;div id=&quot;progressbar-mask&quot; class=&quot;ui-opacity&quot;&gt;&lt;/div&gt;');
+        }
+        return html.join(&quot;&quot;);
+    },
+    tplParam: [&quot;model&quot;, &quot;width&quot;, &quot;text&quot;, &quot;textAlign&quot;, &quot;allowLock&quot;, &quot;loadingCls&quot;],
+<span id='fastDev-Ui-ProgressBar-method-ready'>    /**
+</span>     * 进度条参数准备
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    ready: function (options, global) {
+        options.container = fastDev(fastDev.isComponent(options.container) ? options.container.elems[0] : options.container);
+        var fn = fastDev.Util.StringUtil.stripUnits;
+        // 进度条模式时，减去阴影3px左右宽度，默认200px宽
+        options.width = (fn(options.width, Math.max(options.container.width() - 3, 0)) || 200) + &quot;px&quot;;
+        options.value = parseFloat(options.value) || 0;
+        options.totalValue = parseFloat(options.totalValue) || 100;
+        options.zIndex = parseInt(options.zIndex, 10) || 2012;
+        options.opacity = parseFloat(options.opacity) || 0.6;
+        options.loadingCls = options.loadingCls || &quot;&quot;;
+        if (!options.text) {
+            options.text = options.model === &quot;graphical&quot; ? &quot;&quot; : this.getPercentage();
+        }
+    },
+<span id='fastDev-Ui-ProgressBar-method-construct'>    /**
+</span>     * 控件构造
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    construct: function (options, global) {
+        global.mask = this.find(&quot;[id='progressbar-mask']&quot;);
+        if (typeof options.onOverlayClick === &quot;function&quot; &amp;&amp; !fastDev.isNoop(options.onOverlayClick)) {
+            global.mask.bind(&quot;click&quot;, fastDev.setFnInScope(this, options.onOverlayClick));
+        }
+        global.box = this.find(options.model === &quot;progress&quot; ? &quot;.ui-progressbar&quot; : &quot;[name='loading']&quot;);
+        this.elems.splice(1, 0, &quot;none&quot;);
+    },
+<span id='fastDev-Ui-ProgressBar-method-init'>    /**
+</span>     * 初始化
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    init: function (options, global) {
+        var box = global.box;
+        // 默认的进度更新事件
+        if (options.onValueChange === fastDev.noop || typeof options.onValueChange !== &quot;function&quot;) {
+            options.onValueChange = function () {
+                this.setText(this.getPercentage());
+            };
+        }
+        if ( !! options.value) {
+            options.onValueChange.call(this);
+        }
+        if (options.model === &quot;progress&quot;) {
+            // 进度条模式
+            if (options.left) {
+                box.css(&quot;left&quot;, options.left);
+            }
+            if (options.top) {
+                box.css(&quot;top&quot;, options.top);
+            }
+            global.gradient = this.find(&quot;.ui-progressbar-gradient&quot;).css(&quot;width&quot;, this.getPercentage());
+        } else if (options.display &amp;&amp; options.display !== &quot;none&quot;) {
+            this.position(box);
+        }
+    },
+<span id='fastDev-Ui-ProgressBar-method-position'>    /**
+</span>     * 定位
+     * @param {DomObject} elem 需定位的元素
+     * @private
+     */
+    position: function (elem) {
+        // 图形模式
+        var options = this._options,
+            container = options.container;
+        if (options.model === &quot;graphical&quot; &amp;&amp; !this._global.closed &amp;&amp; !container.isEmpty()) {
+            var global = this._global,
+                // offsetWidth变量用来取特殊属性值，用来触发浏览器刷新DOM操作（reflow），以便读取正确的绝对坐标值
+                offsetWidth = container.elems[0].offsetWidth,
+                offset = container.offset(),
+                width = container.width(),
+                height = container.height(),
+                fixed = container.css(&quot;position&quot;) === &quot;fixed&quot;,
+                body = global.body || (global.body = fastDev(document.body)),
+                bodyBorder = {
+                    left: fixed ? 0 : parseInt(body.css(&quot;borderLeftWidth&quot;), 10) || 0,
+                    top: fixed ? 0 : parseInt(body.css(&quot;borderTopWidth&quot;), 10) || 0
+                },
+                loading = elem.find(&quot;.ui-progressbar-ico&quot;),
+                left, top;
+            // 容器内部居中坐标计算，需算上容器的相应边框及边距
+            // borderTopWidth属性即上边框的高度，注意，没有borderTopHeight样式属性
+            left = offset.left + bodyBorder.left + (parseInt(container.css(&quot;borderLeftWidth&quot;), 10) || 0) + (parseInt(container.css(&quot;paddingLeft&quot;), 10) || 0);
+            top = offset.top + bodyBorder.top + (parseInt(container.css(&quot;borderTopWidth&quot;), 10) || 0) + (parseInt(container.css(&quot;paddingTop&quot;), 10) || 0);
+            // 定位
+            elem.css({
+                position: &quot;absolute&quot;,
+                left: Math.max(0.5 * (width - elem.outerWidth(true)) + left, left),
+                // 0.382系数为黄金分割比例位置，如果需要完全居中，改为0.5系数即可
+                top: Math.max(0.42 * (height - loading.outerHeight(true)) + top, top),
+                zIndex: options.zIndex + 1
+            }).appendTo(document.body);
+            if (options.allowLock) {
+                // 使用遮罩覆盖容器内部
+                global.mask.css({
+                    position: &quot;absolute&quot;,
+                    left: left,
+                    top: top,
+                    width: width,
+                    height: height,
+                    zIndex: options.zIndex,
+                    opacity: options.opacity
+                }).appendTo(document.body);
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-ProgressBar-method-valueChange'>    /**
+</span>     * 进度值改变处理
+     * @param {Number} oldValue
+     * @param {Number} oldTotal
+     * @param {Number} newValue
+     * @param {Number} newTotal
+     * @private
+     */
+    valueChange: function (oldValue, oldTotal, newValue, newTotal) {
+        var options = this._options,
+            global = this._global;
+        if ((oldValue / oldTotal) !== (newValue / newTotal)) {
+            options.onValueChange.call(this, newValue, newTotal);
+        }
+        if (options.allowAutoClose &amp;&amp; !global.gradient &amp;&amp; !global.closed &amp;&amp; newValue === newTotal) {
+            this.close();
+        }
+        return this;
+    },
+<span id='fastDev-Ui-ProgressBar-method-getPercentage'>    /**
+</span>     * 获取当前进度百分比
+     * 注意，返回值为一个字符串类型的百分数
+     * @return {String} xx%
+     */
+    getPercentage: function () {
+        return (Math.floor(Math.abs(100 * (this.getValue() / (parseFloat(this._options.totalValue) || 100))))) + &quot;%&quot;;
+    },
+<span id='fastDev-Ui-ProgressBar-method-setValue'>    /**
+</span>     * 设置当前进度值
+     * 用于刷新当前进度值
+     * @param {Number} value 当前进度值
+     * @param {Number} [total] 总进度值（可选）
+     * @return {fastDev.Ui.ProgressBar}
+     */
+    setValue: function (value, total) {
+        var options = this._options,
+            gradient = this._global.gradient,
+            oldValue = this.getValue(),
+            oldTotal = this.getTotalValue();
+        options.value = value;
+        if (total !== undefined) {
+            options.totalValue = total;
+        }
+        if (gradient) {
+            gradient.css(&quot;width&quot;, this.getPercentage());
+        }
+        return this.valueChange(oldValue, oldTotal, this.getValue(), this.getTotalValue()).position(this._global.box);
+    },
+<span id='fastDev-Ui-ProgressBar-method-setText'>    /**
+</span>     * 设置显示文本
+     * 可用于刷新文本提示信息
+     * @return {fastDev.Ui.ProgressBar}
+     */
+    setText: function (text) {
+        if (this._global.closed) {
+            return this;
+        }
+        this.find(this._options.model === &quot;progress&quot; ? &quot;.ui-progressbar-text&quot; : &quot;.ui-progressbar-ico-text&quot;).setText(text);
+        return this.position(this._global.box);
+    },
+<span id='fastDev-Ui-ProgressBar-method-getValue'>    /**
+</span>     * 获取当前进度值
+     * @return {Number}
+     */
+    getValue: function () {
+        var options = this._options;
+        return Math.min(parseFloat(options.totalValue) || 100, Math.max(parseFloat(options.value) || 0, 0));
+    },
+<span id='fastDev-Ui-ProgressBar-method-setTotalValue'>    /**
+</span>     * 设置进度条的总数值
+     * @param {Number} value 总进度值
+     * @return {fastDev.Ui.ProgressBar}
+     */
+    setTotalValue: function (value) {
+        return this.setValue(this.getValue(), value);
+    },
+<span id='fastDev-Ui-ProgressBar-method-getTotalValue'>    /**
+</span>     * 获取进度条的总数值
+     * @return {Number}
+     */
+    getTotalValue: function () {
+        return parseFloat(this._options.totalValue) || 100;
+    },
+<span id='fastDev-Ui-ProgressBar-method-toggle'>    /**
+</span>     * 显示隐藏切换
+     * @param {Boolean} show 是否是显示
+     * @private
+     */
+    toggle: function (show) {
+        var global = this._global;
+        if (global.closed) {
+            return this;
+        }
+        if ( !! global.mask) {
+            global.mask[show ? &quot;show&quot; : &quot;hide&quot;]();
+        }
+        if ( !! global.box) {
+            global.box[show ? &quot;show&quot; : &quot;hide&quot;]();
+        }
+        return this;
+    },
+<span id='fastDev-Ui-ProgressBar-method-show'>    /**
+</span>     * 显示进度条控件
+     * @return {fastDev.Ui.ProgressBar}
+     */
+    show: function () {
+        return this.toggle(true).position(this._global.box);
+    },
+<span id='fastDev-Ui-ProgressBar-method-hide'>    /**
+</span>     * 隐藏进度条控件
+     * @return {fastDev.Ui.ProgressBar}
+     */
+    hide: function () {
+        return this.toggle();
+    },
+<span id='fastDev-Ui-ProgressBar-method-close'>    /**
+</span>     * 关闭并销毁进度条控件
+     */
+    close: function () {
+        var global = this._global;
+        if (global.closed) {
+            return this;
+        }
+        this.destroy();
+        global.closed = true;
+        return this;
+    }
+});</pre>
+</body>
+</html>

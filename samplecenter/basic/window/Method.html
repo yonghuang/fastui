@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					弹窗功能方法示例。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			var win;
+
+			// 创建弹窗
+			function create() {
+				win = fastDev.create("Window", {
+					modal : false,
+					inside : false,
+					onBeforeClose : function() {
+						win = null;
+					}
+				});
+			}
+
+			// 关闭弹窗
+			function close() {
+				if (!!win) {
+					win.close();
+					win = null;
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 隐藏弹窗
+			function hide() {
+				if (!!win) {
+					win.hide();
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 显示弹窗
+			function show() {
+				if (!!win) {
+					win.show();
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 最大化窗口
+			function maximize() {
+				if (!!win) {
+					win.maximize();
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 最小化窗口
+			function minimize() {
+				if (!!win) {
+					win.minimize();
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 折叠窗口
+			function collapse() {
+				if (!!win) {
+					win.collapse();
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 展开窗口
+			function expand() {
+				if (!!win) {
+					win.expand();
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 还原窗口
+			function reset() {
+				if (!!win) {
+					win.reset();
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 移动窗口
+			var left = 100;
+			function move() {
+				// 参数为坐标信息对象，包含left和top属性
+				// 可使用百分比和数字，px单位等
+				if (!!win) {
+					win.move({
+						left : (left -= 10) + "%",
+						top : 200
+					});
+					left = left || 100;
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 改变尺寸
+			var width = 10, height = 60;
+			function resize() {
+				// 参数为尺寸信息对象，包含width和height属性
+				// 可使用百分比和数字，px单位等
+				if (!!win) {
+					win.resize({
+						width : (width += 10) + "%",
+						height : height += 10
+					});
+					width = width === 100 ? 10 : width;
+					height = height === 150 ? 60 : height;
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 设置标题
+			var title = 0;
+			function setTitle() {
+				if (!!win) {
+					win.setTitle("标题" + (++title));
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 抖动窗体
+			function shake() {
+				if (!!win) {
+					// 可以传递一个正整数来表示晃动频率（默认为20）
+					win.shake();
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+			// 超时关闭
+			function closeTimeout() {
+				if (!!win) {
+					win.setTitle("3秒后关闭").closeTimeout(3);
+				} else {
+					fastDev.tips("请先创建弹窗");
+				}
+			}
+
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				功能方法
+			</div>
+			<div>
+				<input itype="Button" text="创建弹窗" onclick="create()"/>
+				<input itype="Button" text="关闭弹窗" onclick="close()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="隐藏弹窗" onclick="hide()"/>
+				<input itype="Button" text="显示弹窗" onclick="show()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="最大化窗口" onclick="maximize()"/>
+				<input itype="Button" text="最小化窗口" onclick="minimize()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="折叠窗口" onclick="collapse()"/>
+				<input itype="Button" text="展开窗口" onclick="expand()"/>
+				<input itype="Button" text="还原窗口" onclick="reset()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="移动窗口" onclick="move()"/>
+				<input itype="Button" text="改变尺寸" onclick="resize()"/>
+				<input itype="Button" text="设置标题" onclick="setTitle()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="抖动窗体" onclick="shake()"/>
+				<input itype="Button" text="超时关闭" onclick="closeTimeout()"/>
+			</div>
+		</div>
+	</body>
+</html>

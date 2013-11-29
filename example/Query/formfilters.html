@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Form Filters</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script>
+			$(function() {
+				function clearCss() {
+					$("input").css("border", "1px solid");
+				}
+				clearCss();
+
+				$("#btn1").bind("click", function() {
+					clearCss();
+					// 查找所有可用的input元素
+					$("input:enabled").css("border", "2px dotted blue");
+				});
+
+				$("#btn2").bind("click", function() {
+					clearCss();
+					// 查找所有不可用的input元素
+					$("input:disabled").css("border", "2px dotted blue");
+				});
+
+				$("#btn3").bind("click", function() {
+					clearCss();
+					// 查找所有选中的复选框/单选框元素
+					$("input:checked").css("border", "2px dotted blue");
+				});
+				$("#btn4").bind("click", function() {
+					clearCss();
+					// 打印被选中的下拉框文本
+					alert($("select option:selected").getText());
+				});
+
+			});
+		</script>
+	</head>
+	<body>
+		查找所有可用的input元素:<a id="btn1" href="#">input:enabled</a><br>
+		查找所有不可用的input元素:<a id="btn2" href="#">input:disabled</a><br> 
+		查找所有选中的复选框/单选框元素:<a id="btn3" href="#">input:checked</a><br>
+		打印被选中的下拉框文本:<a id="btn4" href="#">select option:selected</a><br>
+		
+
+		<!-- HTML元素测试区 -->
+		<form>
+		  <input name="email" disabled="disabled" />
+		  <input name="id" />
+		  <input type="checkbox" name="checkbox" checked="checked" value="checkbox1" />
+  		  <input type="checkbox" name="checkbox" value="checkbox2" />
+  		  <input type="checkbox" name="checkbox" checked="checked" value="checkbox3" />
+  		  <input type="radio" name="radio" value="radio1" />
+  		  <input type="radio" name="radio" value="radio2" />
+  		  <input type="radio" name="radio" checked="checked" value="radio3" />
+  		  <select>
+			  <option value="1">item1</option>
+			  <option value="2" selected="selected">item2</option>
+			  <option value="3">item3</option>
+		  </select>
+		</form>
+	</body>
+</html>
+

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>dataset</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-07 -->
+		<script src="../../../src/library/FastDev.js"></script>
+		<script src="../../../src/library/Query.js"></script>
+		<script src="../../../src/library/Dom.js"></script>
+		<script src="../../../src/library/Ajax.js"></script>
+		<script src="../../../src/library/Event.js"></script>
+		<script src="../../../src/library/Browser.js"></script>
+		<script src="../../../src/library/Queue.js"></script>
+		<script src="../../../src/library/Tools.js"></script>
+		<script src="../../../src/core/ClassManager.js"></script>
+		<script src="../../../src/core/EventManager.js"></script>
+		<script src="../../../src/core/Base.js"></script>
+		<script src="../../../src/core/Template_old.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+		<script src="../../../src/data/Proxy.js"></script>
+		<script src="../../../src/data/DataSet.js"></script>
+		<script src="../../../src/data/Record.js"></script>
+		<script src="../../../src/data/Field.js"></script>
+		<script src="../../../src/data/Reader.js"></script>
+		<script src="../../../src/core/DomObject.js"></script>
+	</head>
+	<script>
+		$(function(){
+			var paging=fastDev.create("Record"),data = fastDev.create("DataSet",{
+				fields: [
+					 "empno",
+					 "name",
+					 "department",
+					 "position",
+					 "pay",
+					 "datesemployed"
+				]
+			});
+			
+			var reader = fastDev.create("Reader",{
+				type : "json",
+				targets : [{
+					object : data,
+					root:"data"
+				},{
+					object : paging,
+					root: "info"
+				}]
+			});
+			
+			var proxy = fastDev.create("Proxy",{
+				url : "data.json",
+				reader : reader,
+				onAfterLoad:function(){
+					debugger;
+				}
+			});
+			proxy.load();
+		});
+	</script>
+	<body>
+
+	</body>
+</html>
+

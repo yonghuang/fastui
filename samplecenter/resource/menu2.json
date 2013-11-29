@@ -1,0 +1,57 @@
+﻿[
+	{
+		"id": "chooseusers",
+		"pid": "0",
+		"val": "选人控件"
+	},	
+	{
+		"id": "chooseusers_1",
+		"pid": "chooseusers",
+		"val": "基本功能",
+		"exampleUrl": "basic/chooseusers/chooseusers.html",
+		"dataUrl": "basic/chooseusers/chooseusersdata.json",
+		"apiUrl" : "api/fastDev.Ui.Chooseusers"
+	},	
+	{
+		"id": "chooseusers_2",
+		"pid": "chooseusers",
+		"val": "配置数据源",
+		"exampleUrl": "basic/chooseusers/chooseusers2.html",
+		"dataUrl": "basic/chooseusers/chooseusersdata.json",
+		"apiUrl" : "api/fastDev.Ui.Chooseusers"
+	},
+	{
+		"id": "selectuser",
+		"pid": "0",
+		"val": "选人组件"
+	},
+	{
+		"id": "selectuser_1",
+		"pid": "selectuser",
+		"val": "基本功能",
+		"exampleUrl": "basic/selectuser/select.html",
+		"dataUrl": "basic/selectuser/chooseusersdata.json",
+		"apiUrl" : "api/fastDev.Ui.Chooseusers"
+	},
+	{
+		"id": "selectuser_2",
+		"pid": "selectuser",
+		"val": "修改场景用法",
+		"exampleUrl": "basic/selectuser/update.html",
+		"dataUrl": "basic/selectuser/chooseusersdata.json",
+		"apiUrl" : "api/fastDev.Ui.Chooseusers"
+	},
+	{
+		"id": "selectdepartment",
+		"pid": "0",
+		"val": "选部门组件"
+	},
+	{
+		"id": "selectdepartment_1",
+		"pid": "selectdepartment",
+		"val": "基本功能",
+		"exampleUrl": "basic/department/selectde.html",
+		"dataUrl": "basic/selectuser/chooseusersdata.json",
+		"apiUrl" : "api/fastDev.Ui.Chooseusers"
+	}
+]

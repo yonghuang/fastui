@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-MessageBox'>/**
+</span> * @class fastDev.Ui.MessageBox
+ * @extends fastDev.Ui.Dialog
+ * @author chengwei
+ * &lt;p&gt;消息提示框控件。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *
+ *     fastDev.create(&quot;MessageBox&quot;, {
+ *        width : &quot;200px&quot;,
+ *        height : &quot;150px&quot;,
+ *        content : &quot;消息内容&quot;,
+ *        icon : &quot;tip&quot;
+ *     })
+ */
+fastDev.define(&quot;fastDev.Ui.MessageBox&quot;, {
+    alias: &quot;MessageBox&quot;,
+    extend: &quot;fastDev.Ui.Dialog&quot;,
+    _options: {
+<span id='fastDev-Ui-MessageBox-property-fixed'>        /**
+</span>         * 是否固定定位
+         * @type {Boolean}
+         */
+        fixed: true,
+<span id='fastDev-Ui-MessageBox-property-title'>        /**
+</span>         * 标题内容
+         * @type {String}
+         */
+        title: &quot;消息&quot;,
+<span id='fastDev-Ui-MessageBox-property-animateSpeed'>        /**
+</span>         * 动画速度
+         * @type {Number} 
+         */
+        animateSpeed: 180,
+<span id='fastDev-Ui-MessageBox-property-allowResize'>        /**
+</span>         * 是否允许调节大小
+         * @type {Boolean}
+         */
+        allowResize: false,
+<span id='fastDev-Ui-MessageBox-property-inside'>        /**
+</span>         * 是否在当前父容器展现
+         * @type {Boolean}
+         */
+        inside: false,
+<span id='fastDev-Ui-MessageBox-property-minWidth'>        /**
+</span>         * 最小宽度
+         * @type {String|Number}
+         */
+        minWidth: 255,
+<span id='fastDev-Ui-MessageBox-property-showMaxBtn'>        /**
+</span>         * 是否显示最大化按钮
+         * @type {Boolean}
+         */
+        showMaxBtn: false,
+<span id='fastDev-Ui-MessageBox-property-showMinBtn'>        /**
+</span>         * 是否显示最小化按钮
+         * @type {Boolean}
+         */
+        showMinBtn: false,
+<span id='fastDev-Ui-MessageBox-property-showCollapseBtn'>        /**
+</span>         * 是否显示折叠按钮
+         * @type {Boolean}
+         */
+        showCollapseBtn: false
+    },
+<span id='fastDev-Ui-MessageBox-property-queue'>    /**
+</span>     * 内置消息框队列 
+     * @private
+     */
+    queue: [],
+<span id='fastDev-Ui-MessageBox-method-construct'>    /**
+</span>     * 构造结构
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    construct: function (options, global) {
+        global.box.removeClass(&quot;ui-dialog&quot;).addClass(&quot;ui-messagebox&quot;);
+    },
+<span id='fastDev-Ui-MessageBox-method-getBtnCallback'>    /**
+</span>     * @param {Function} callback 按钮点击回调
+     * @param {String} [name] 按钮名
+     * @return {Function}
+     * @private 
+     */
+    getBtnCallback: function (callback, name) {
+        if (typeof callback !== &quot;function&quot; &amp;&amp; (name = /^@MESSAGEBOX#(ALERT|CONFIRM|PROMPT|SAVE)#(OK|YES|NO|CANCEL)$/.exec(name))) {
+            callback = function (event, that) {
+                if ((that._options[&quot;on&quot; + name[2] + &quot;BtnClick&quot;] || fastDev.noop).apply(that, [/CONFIRM|PROMPT/i.test(name[1]) ? name[2] === &quot;OK&quot; : name[2].toLowerCase(), /PROMPT/i.test(name[1]) ? that.find(&quot;[name='input']&quot;).prop(&quot;value&quot;) : undefined]) !== false) {
+                    that.close();
+                }
+            };
+        }
+        return fastDev.Ui.Window.getBtnCallback.call(this, callback);
+    },
+<span id='fastDev-Ui-MessageBox-method-initPredefineBox'>    /**
+</span>     * 初始预设的消息框
+     * @param {String} type 消息框类型
+     * @param {Object} options 配置对象
+     * @param {Boolean} queued 是否属队列操作
+     * @return {fastDev.Ui.MessageBox}
+     * @private 
+     */
+    initPredefineBox: function (type, options, queued) {
+        var top = fastDev.Util.position.top,
+            box = fastDev.Ui.MessageBox,
+            queue = box.queue;
+        if (!queued) {
+            queue.push({
+                type: type,
+                options: options
+            });
+            if (queue.length === 1) {
+                return box.initPredefineBox(type, options, true);
+            }
+        } else {
+            var msger = fastDev.Ui.Window.getData(&quot;@MESSAGEBOX#&quot; + type),
+                fn = options.callback,
+                callback = typeof fn === &quot;function&quot; ? function () {
+                    try {
+                        fn.apply(msger, arguments);
+                    } catch (e) {
+                        fastDev.error(&quot;fastDev&quot;, type, &quot;消息框回调函数执行异常。[&quot; + e + &quot;]&quot;);
+                    }
+                } : fastDev.noop,
+                common = {
+                    animateSpeed: fastDev.Ui.Panel.launchAnimation ? 180 : 0,
+                    onCloseBtnClick: function () {
+                        return callback.apply(this, [/CONFIRM|PROMPT/i.test(type) ? false : &quot;cancel&quot;, /PROMPT/i.test(type) ? this.find(&quot;[name='input']&quot;).prop(&quot;value&quot;) : undefined]);
+                    },
+                    onAfterOpen: type === &quot;prompt&quot; ? function () {
+                        var elem = this.find(&quot;[name='input']&quot;).elems[0];
+                        elem.focus();
+                        elem.select();
+                    } : fastDev.noop,
+                    onCANCELBtnClick: callback,
+                    onYESBtnClick: callback,
+                    onOKBtnClick: callback,
+                    onNOBtnClick: callback,
+                    onAfterClose: function () {
+                        var box = fastDev.Ui.MessageBox,
+                            queue = box.queue;
+                        if (queue) {
+                            var settings;
+                            queue.shift();
+                            if (settings = queue[0]) {
+                                box.initPredefineBox(settings.type, settings.options, true);
+                            }
+                        }
+                    }
+                };
+            options.content = fastDev.isValid(options.content) ? options.content : &quot;&quot;;
+            if (msger) {
+                fastDev.apply(msger._options, fastDev.apply({
+                    icon: options.icon || &quot;&quot;,
+                    height: &quot;auto&quot;,
+                    width: &quot;auto&quot;
+                }, common));
+                msger.setContent(options.content).move({
+                    left: &quot;50%&quot;,
+                    top: &quot;38.2%&quot;
+                }).show().setTitle(options.title || &quot;消息&quot;, options.iconCls || &quot;&quot;);
+            } else {
+                options.persisted = true;
+                fastDev.Ui.Window.setData(&quot;@MESSAGEBOX#&quot; + type, msger = top.fastDev.create(&quot;MessageBox&quot;, fastDev.apply(options, common)));
+            }
+            fastDev(window).unbind(&quot;unload&quot;, box._winUnloadEventHandler || fastDev.noop).bind(&quot;unload&quot;, box._winUnloadEventHandler = function () {
+                box.queue = [];
+                msger.hide(true, false);
+            });
+            return msger;
+        }
+    }
+});
+fastDev.apply(fastDev, {
+<span id='fastDev-Ui-MessageBox-method-confirm'>    /**
+</span>     * 确认框
+     * @param {String} content 消息内容
+     * @param {String} [title] 标题内容
+     * @param {Function} [callback] 回调函数，参数为true为点击确定按钮，参数为false为点击取消按钮，this指向消息框控件，返回false则默认不关闭消息框
+     * @param {String} [iconCls] 标题图标样式名
+     * @return {fastDev.Ui.MessageBox}
+     */
+    confirm: function (content, title, callback, iconCls) {
+        return fastDev.Ui.MessageBox.initPredefineBox(&quot;confirm&quot;, {
+            title: title || &quot;确认&quot;,
+            zIndex: 999999998,
+            callback: callback,
+            content: content,
+            iconCls: iconCls,
+            icon: &quot;help&quot;,
+            buttons: [{
+                    text: &quot;确定&quot;,
+                    width: &quot;63px&quot;,
+                    name: &quot;@MESSAGEBOX#CONFIRM#OK&quot;
+                }, {
+                    text: &quot;取消&quot;,
+                    width: &quot;63px&quot;,
+                    name: &quot;@MESSAGEBOX#CONFIRM#CANCEL&quot;
+                }
+            ]
+        });
+    },
+<span id='fastDev-Ui-MessageBox-method-prompt'>    /**
+</span>     * 提问框
+     * @param {String} content 提问内容
+     * @param {String} [title] 标题内容
+     * @param {Function} [callback] 回调函数，第一个参数为true表示点击确定按钮，为false则表示点击取消或关闭按钮，第二个参数为输入框或文本域的值，this指向消息框控件，返回false则默认不关闭消息框
+     * @param {Boolean} [multiline] 输入框是否是文本域
+     * @param {String} [value] 输入框或文本域中初始时的默认值
+     * @param {String} [iconCls] 标题图标样式名
+     * @return {fastDev.Ui.MessageBox}
+     */
+    prompt: function (content, title, callback, multiline, value, iconCls) {
+        value = fastDev.isValid(value) ? value : &quot;&quot;;
+        var width = multiline ? &quot;304px&quot; : &quot;299px&quot;,
+            height = multiline ? &quot;188px&quot; : &quot;132px&quot;,
+            html = '&lt;div style=&quot;margin:3px 10px&quot;&gt;&lt;div style=&quot;height:' + (content ? &quot;&quot; : &quot;18px&quot;) + ';margin-bottom:2px;width:' + (multiline ? 259 : 254) + 'px;word-wrap:break-word;word-break:break-all&quot;&gt;' + content + '&lt;/div&gt;';
+        if (multiline) {
+            html += '&lt;div style=&quot;width:259px;height:81px;&quot;&gt;&lt;div style=&quot;width:259px&quot; class=&quot;ui-form&quot;&gt;&lt;div class=&quot;ui-form-wrap ui-textarea&quot;&gt;&lt;div style=&quot;width:100%&quot;&gt;&lt;textarea name=&quot;input&quot; value=&quot;' + value + '&quot; class=&quot;ui-form-field ui-form-input&quot; autocomplete=&quot;off&quot; aria-invalid=&quot;false&quot; style=&quot;resize:none;overflow:auto;height:77px&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;';
+        } else {
+            html += '&lt;div style=&quot;width:254px;&quot;&gt;&lt;div style=&quot;width:254px&quot; class=&quot;ui-form&quot;&gt;&lt;div class=&quot;ui-form-wrap ui-input&quot;&gt;&lt;input name=&quot;input&quot; value=&quot;' + value + '&quot; type=&quot;input&quot; class=&quot;ui-form-field ui-form-input&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;';
+        }
+        html += &quot;&lt;/div&gt;&quot;;
+        return fastDev.Ui.MessageBox.initPredefineBox(&quot;prompt&quot;, {
+            title: title || &quot;输入&quot;,
+            zIndex: 999999997,
+            callback: callback,
+            minHeight: height,
+            maxHeight: 5000,
+            content: html,
+            iconCls: iconCls,
+            buttons: [{
+                    text: &quot;确定&quot;,
+                    width: &quot;63px&quot;,
+                    name: &quot;@MESSAGEBOX#PROMPT#OK&quot;
+                }, {
+                    text: &quot;取消&quot;,
+                    width: &quot;63px&quot;,
+                    name: &quot;@MESSAGEBOX#PROMPT#CANCEL&quot;
+                }
+            ]
+        });
+    },
+<span id='fastDev-Ui-MessageBox-method-alert'>    /**
+</span>     * 提示框
+     * @param {String} content 提示内容
+     * @param {String} [title] 标题内容
+     * @param {String} [icon] 图标名
+     * @param {Function} [callback] &quot;确定&quot;按钮点击回调，回调内this指向当前消息框控件实例，返回false则默认不关闭消息框
+     * @param {String} [iconCls] 标题图标样式名
+     * @return {fastDev.Ui.MessageBox}
+     */
+    alert: function (content, title, icon, callback, iconCls) {
+        return fastDev.Ui.MessageBox.initPredefineBox(&quot;alert&quot;, {
+            title: title || &quot;消息&quot;,
+            zIndex: 999999999,
+            callback: callback,
+            content: content,
+            iconCls: iconCls,
+            icon: icon,
+            buttons: {
+                text: &quot;确定&quot;,
+                width: &quot;63px&quot;,
+                name: &quot;@MESSAGEBOX#ALERT#OK&quot;
+            }
+        });
+    },
+<span id='fastDev-Ui-MessageBox-method-save'>    /**
+</span>     * YES_NO_CANCEL三按钮提示框
+     * @param {String} content 消息内容
+     * @param {String} [title] 标题内容
+     * @param {Function} [callback] 回调函数，参数为以下枚举值：
+     * &lt;p&gt;-yes &quot;是&quot;按钮点击 &lt;/p&gt;
+     * &lt;p&gt;-no &quot;否&quot;按钮点击 &lt;/p&gt;
+     * &lt;p&gt;-cancel &quot;取消或关闭&quot;按钮点击 &lt;/p&gt;
+     * 返回false则默认不关闭消息框
+     * @param {String} [iconCls] 标题图标样式名
+     * @return {fastDev.Ui.MessageBox}
+     */
+    save: function (content, title, callback, iconCls) {
+        return fastDev.Ui.MessageBox.initPredefineBox(&quot;save&quot;, {
+            title: title || &quot;消息&quot;,
+            zIndex: 999999998,
+            callback: callback,
+            content: content,
+            iconCls: iconCls,
+            icon: &quot;help&quot;,
+            buttons: [{
+                    text: &quot;是&quot;,
+                    width: &quot;58px&quot;,
+                    name: &quot;@MESSAGEBOX#SAVE#YES&quot;
+                }, {
+                    text: &quot;否&quot;,
+                    width: &quot;58px&quot;,
+                    name: &quot;@MESSAGEBOX#SAVE#NO&quot;
+                }, {
+                    text: &quot;取消&quot;,
+                    width: &quot;58px&quot;,
+                    name: &quot;@MESSAGEBOX#SAVE#CANCEL&quot;
+                }
+            ]
+        });
+    },
+<span id='fastDev-Ui-MessageBox-method-tips'>    /**
+</span>     * 简短提示消息标签
+     * @param {String} content 提示消息内容
+     * @param {String} [icon=&quot;tip&quot;] 内容图标名
+     * @param {Boolean|Number} [shake=false] 是否启用摇晃效果，数值参数时为摇晃的频率
+     * @param {Number} [time=2] 显示时长，单位为秒
+     * @return {fastDev.Ui.Window}
+     */
+    tips: function (content, icon, shake, time) {
+        return fastDev.create(&quot;Window&quot;, {
+            content: '&lt;div name=&quot;tips&quot; style=&quot;white-space:nowrap;&quot;&gt;' + (fastDev.isValid(content) ? content : &quot;&quot;) + '&lt;/div&gt;',
+            icon: icon = fastDev.isValid(icon) ? icon : &quot;tip&quot;,
+            showHeader: false,
+            display: false,
+            allowResize: false,
+            allowDrag: false,
+            modal: false,
+            inside: false,
+            fixed: true,
+            top: &quot;36.2%&quot;,
+            minHeight: 58,
+            maxHeight: 58,
+            minWidth: 120,
+            maxWidth: function (boxWidth) {
+                return Math.max(Math.min(boxWidth - 40, 800), 120);
+            },
+            onBeforeClose: function () {
+                this.close(true, {
+                    stop: {
+                        top: &quot;15%&quot;,
+                        opacity: 0
+                    }
+                });
+                return false;
+            },
+            onAnimateStart: function () {
+                this.showContent();
+                this._global.content.css(&quot;overflow&quot;, &quot;hidden&quot;);
+            },
+            onAnimateStop: function () {
+                this._global.content.css(&quot;overflow&quot;, &quot;hidden&quot;);
+            }
+        }).open(true, {
+            start: function () {
+                var global = this._global,
+                    options = this._options,
+                    height = options.height - 12,
+                    width = options.width - 12,
+                    tips = this.find(&quot;div[name='tips']&quot;),
+                    align = &quot;center&quot;;
+                for (var elems = [&quot;box&quot;, &quot;body&quot;], elem; elem = elems.shift();) {
+                    global[elem].css({
+                        &quot;-webkit-border-radius&quot;: &quot;5px&quot;,
+                        &quot;-moz-border-radius&quot;: &quot;5px&quot;,
+                        &quot;border-radius&quot;: &quot;5px&quot;
+                    });
+                }
+                global.content.css(&quot;padding&quot;, &quot;5px 15px&quot;);
+                if (icon &amp;&amp; fastDev.isString(icon)) {
+                    tips.parent().css({
+                        margin: &quot;7px 0px&quot;,
+                        height: (height -= 14)
+                    });
+                    width -= 40;
+                    align = &quot;left&quot;;
+                }
+                global.box.width(options.width + 20);
+                tips.css({
+                    lineHeight: height - 3 + &quot;px&quot;,
+                    textOverflow: !fastDev.Browser.isIE ? &quot;ellipsis&quot; : &quot;&quot;,
+                    overflow: &quot;hidden&quot;,
+                    width: width,
+                    textAlign: align,
+                    height: height
+                });
+                return {
+                    opacity: 0,
+                    left: &quot;50%&quot;
+                };
+            },
+            stop: {
+                top: &quot;30%&quot;,
+                opacity: 1
+            },
+            callback: function () {
+                if (shake) {
+                    this.shake(shake);
+                }
+                this.closeTimeout(Math.abs(parseFloat(time) || 2));
+            }
+        });
+    },
+<span id='fastDev-Ui-MessageBox-method-notice'>    /**
+</span>     * 通知框
+     * &lt;p&gt;除3个特定参数（time、showTime、position）外，其他配置参数继承自MessageBox
+     * @param {String} [options] 参数配置对象
+     * @param {String} [options.itype] 控件类型，可选值为：Window、Dialog、MessageBox
+     * @param {String} [options.time] 显示时长，单位为秒
+     * @param {String} [options.position] 弹出位置（left-top、top、right-top、left、right、left-bottom、right-bottom、bottom）
+     * @param {Boolean} [options.showTime] 是否在标题栏显示关闭倒计时信息
+     * @param {String|Number} [options.horizontalOffset] 弹窗在水平方向（X轴）上的最终显示位置相对可视区域边界的偏移量（百分比值相对于可视区域计算）
+     * @param {String|Number} [options.verticalOffset] 弹窗在垂直方向（Y轴）上的最终显示位置相对于可视区域边界的偏移量（百分比值相对于可视区域计算）
+     * @param {String} [options.showTime] 是否在标题栏显示关闭倒计时信息
+     * @param {String} [options.onBeforeAutoClose] 自动关闭前的回调函数。（此回调先于onBeforeClose回调执行）
+     * @return {fastDev.Ui.MessageBox}
+     */
+    notice: function (options) {
+        var getPosition = function (global) {
+            var docLeft = global.doc.scrollLeft(),
+                docTop = global.doc.scrollTop(),
+                width = global.box.width(),
+                height = global.box.height();
+            return {
+                left: /^left$/i.test(position) ? docLeft - width : /^right$/i.test(position) ? docLeft + global.win.width() + width : /.*left.*/i.test(position) ? docLeft : /.*right.*/i.test(position) ? &quot;100%&quot; : &quot;50%&quot;,
+                top: /.*top.*/i.test(position) ? docTop - height : /.*bottom.*/i.test(position) ? global.win.height() + docTop + height : &quot;50%&quot;,
+                visible: false,
+                opacity: 0
+            };
+        }, position = (options = fastDev.isPlainObject(options) ? options : {}).position || &quot;right-bottom&quot;,
+            onBeforeAutoClose = options.onBeforeAutoClose || fastDev.noop;
+        fastDev.apply(options, {
+            animateSpeed: fastDev.isValid(options.animateSpeed) ? options.animateSpeed : 600,
+            maxHeight: options.maxHeight || 453,
+            minHeight: options.minHeight || 96,
+            maxWidth: options.maxWidth || 280,
+            minWidth: options.minWidth || 155,
+            allowResize: !! options.allowResize || false,
+            fixed: options.fixed === undefined ? true : !! options.fixed,
+            showCollapseBtn: !!options.showCollapseBtn || false,
+            modal: !! options.modal || false,
+            inside: !! options.inside || false,
+            display: false,
+            visible: true,
+            onAnimateStart: function (target, queue, type) {
+                if (/open|close/.test(type)) {
+                    this.showContent();
+                    if (fastDev.isValid(options.horizontalOffset) || fastDev.isValid(options.verticalOffset)) {
+                        var global = this._global,
+                            cWidth = global.win.width(),
+                            cHeight = global.win.height(),
+                            fx = fastDev.Util.StringUtil.stripUnits,
+                            left = fx(options.horizontalOffset, cWidth),
+                            top = fx(options.verticalOffset, cHeight),
+                            animation;
+                        queue = fastDev.isArray(queue) ? queue : [queue || {}];
+                        fastDev.each([&quot;start&quot;, &quot;stop&quot;], function (i, val) {
+                            animation = queue[0][val];
+                            animation.left += (!isNaN(left) ? /.*right.*/i.test(position) ? -left : left : 0);
+                            animation.top += (!isNaN(top) ? /.*bottom.*/i.test(position) ? -top : top : 0);
+                        });
+                    }
+                }
+            },
+            onCloseBtnClick: function () {
+                this.close(false, {
+                    stop: getPosition(this._global)
+                });
+                return false;
+            }
+        });
+        return fastDev.create(/(Window|Dialog|MessageBox)/i.test(options.itype) ? RegExp.$1 : &quot;MessageBox&quot;, options).open(true, {
+            start: function () {
+                return getPosition(this._global);
+            },
+            stop: {
+                left: /.*left.*/i.test(position) ? 0 : /.*right.*/i.test(position) ? &quot;100%&quot; : &quot;50%&quot;,
+                top: /.*top.*/i.test(position) ? 0 : /.*bottom.*/i.test(position) ? &quot;100%&quot; : &quot;50%&quot;,
+                visible: true,
+                opacity: 1
+            },
+            callback: function () {
+                var that = this,
+                    global = this._global,
+                    time = Math.abs(parseInt(options.time, 10));
+                if (time &amp;&amp; options.showTime) {
+                    global.windowCloseTimer = window.setInterval(function () {
+                        that.setTitle(options.title + &quot;（&quot; + (--time) + &quot; 秒后自动关闭）&quot;);
+                        if (!time) {
+                            window.clearInterval(global.windowCloseTimer);
+                            onBeforeAutoClose.call(that);
+                            that.close(false, {
+                                stop: getPosition(global)
+                            });
+                        }
+                    }, 1000);
+                } else if (!isNaN(time)) {
+                    global.windowCloseTimer = window.setTimeout(function () {
+                        onBeforeAutoClose.call(that);
+                        that.close(false, {
+                            stop: getPosition(global)
+                        });
+                    }, time * 1000);
+                }
+            }
+        });
+    }
+});</pre>
+</body>
+</html>

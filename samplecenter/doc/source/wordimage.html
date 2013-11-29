@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Created by JetBrains PhpStorm.
+ * User: taoqili
+ * Date: 12-1-30
+ * Time: 下午12:50
+ * To change this template use File | Settings | File Templates.
+ */
+var wordImage = {};
+//(function(){
+var g = baidu.g,
+	flashObj;
+wordImage.init = function(opt, callbacks) {
+	showLocalPath(&quot;localPath&quot;);
+	//createCopyButton(&quot;clipboard&quot;,&quot;localPath&quot;);
+	createFlashUploader(opt, callbacks);
+	addUploadListener();
+	addOkListener();
+};
+
+function addOkListener() {
+	dialog.onok = function() {
+		if (!imageUrls.length) return;
+		var images = domUtils.getElementsByTagName(editor.document,&quot;img&quot;);
+		for (var i = 0,img; img = images[i++];) {
+			var src = img.getAttribute(&quot;word_img&quot;);
+			if (!src) continue;
+			for (var j = 0,url; url = imageUrls[j++];) {
+				if (src.indexOf(url.title) != -1) {
+					img.src = editor.options.imagePath + url.url;
+					img.setAttribute(&quot;data_ue_src&quot;, editor.options.imagePath + url.url);  //同时修改&quot;data_ue_src&quot;属性
+					parent.baidu.editor.dom.domUtils.removeAttributes(img, [&quot;word_img&quot;,&quot;style&quot;,&quot;width&quot;,&quot;height&quot;]);
+					editor.fireEvent(&quot;selectionchange&quot;);
+					break;
+				}
+			}
+		}
+	};
+}
+
+/*
+ * 绑定开始上传事件
+ */
+function addUploadListener() {
+	g(&quot;upload&quot;).onclick = function () {
+		flashObj.upload();
+		this.style.display = &quot;none&quot;;
+	};
+}
+
+function showLocalPath(id) {
+    //单张编辑
+    if(editor.word_img.length==1){
+        g(id).value = editor.word_img[0];
+        return;
+    }
+	var path = editor.word_img[0];
+    var leftSlashIndex  = path.lastIndexOf(&quot;/&quot;)||0,  //不同版本的doc和浏览器都可能影响到这个符号，故直接判断两种
+            rightSlashIndex = path.lastIndexOf(&quot;\\&quot;)||0,
+            separater = leftSlashIndex &gt; rightSlashIndex ? &quot;/&quot;:&quot;\\&quot; ;
+
+	path = path.substring(0, path.lastIndexOf(separater)+1);
+	g(id).value = path;
+}
+
+function createFlashUploader(opt, callbacks) {
+	var option = {
+		createOptions:{
+			id:'flash',
+			url:opt.flashUrl,
+			width:opt.width,
+			height:opt.height,
+			errorMessage:'Flash插件初始化失败，请更新您的FlashPlayer版本之后重试！',
+			wmode:browser.safari ? 'transparent' : 'window',
+			ver:'10.0.0',
+			vars:opt,
+			container:opt.container
+		}
+	};
+	option = extendProperty(callbacks, option);
+	flashObj = new baidu.flash.imageUploader(option);
+}
+
+function extendProperty(fromObj, toObj) {
+	for (var i in fromObj) {
+		if (!toObj[i]) {
+			toObj[i] = fromObj[i];
+		}
+	}
+	return toObj;
+}
+
+//})();
+
+function getPasteData(id) {
+	baidu.g(&quot;msg&quot;).innerHTML = &quot;　图片地址已复制成功！&lt;/br&gt;&quot;;
+	setTimeout(function() {
+		baidu.g(&quot;msg&quot;).innerHTML = &quot;&quot;;
+	}, 5000);
+	return baidu.g(id).value;
+}
+
+function createCopyButton(id, dataFrom) {
+	baidu.swf.create({
+			id:&quot;copyFlash&quot;,
+			url:&quot;fClipboard_ueditor.swf&quot;,
+			width:&quot;58&quot;,
+			height:&quot;25&quot;,
+			errorMessage:&quot;&quot;,
+			bgColor:&quot;#CBCBCB&quot;,
+			wmode:&quot;transparent&quot;,
+			ver:&quot;10.0.0&quot;,
+			vars:{
+				tid:dataFrom
+			}
+		}, id
+	);
+
+	var clipboard = baidu.swf.getMovie(&quot;copyFlash&quot;);
+	var clipinterval = setInterval(function() {
+		if (clipboard &amp;&amp; clipboard.flashInit) {
+			clearInterval(clipinterval);
+			clipboard.setHandCursor(true);
+			clipboard.setContentFuncName(&quot;getPasteData&quot;);
+			//clipboard.setMEFuncName(&quot;mouseEventHandler&quot;);
+		}
+
+	}, 500);
+}
+createCopyButton(&quot;clipboard&quot;, &quot;localPath&quot;);</pre>
+</body>
+</html>

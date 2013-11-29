@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>inline edit </title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function add(){
+				fastDev.getInstance("grid1").addRow();
+			}
+			
+			
+			function remove(){
+				fastDev.getInstance("grid1").delSelectedRow();
+			}
+			
+			function rollback(){
+				fastDev.getInstance("grid1").rollbackModify();
+			}
+			
+			function save(){
+				fastDev.getInstance("grid1").saveToServer();
+			}
+			
+			function saveCallback(msg){
+				alert("此数据为jsp返回："+msg.text);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 20px">
+			<div itype="DataGrid" initSource="data.jsp" action="submitData.jsp" id="grid1" showSeqColumn=true showCheckColumn=true saveInstance=true keyword="empno" saveCallback="saveCallback()">
+				<div name="top-toolbar">
+					<div plain=true text="增加" iconCls="icon-add" onBtnClick="add()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="删除" iconCls="icon-delete" onBtnClick="remove()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="还原" iconCls="icon-save" onBtnClick="rollback()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="保存" iconCls="icon-save" onBtnClick="save()"></div>
+				</div>
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名" editby="TextBox"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用" itype="boolean" trueText="是" falseText="否" editby="CheckBoxGroup">
+					<div name="controlCfg">
+						<div value="true"></div>
+					</div>
+				</div>
+				<div width="15%" name="positionName" text="职位" editby="Select" idColumn="position">
+					<div name="controlCfg">
+						<div value="position1" text="前端工程师"></div>
+						<div value="position2" text="后台工程师"></div>
+						<div value="position3" text="技术经理"></div>
+						<div value="position4" text="项目经理"></div>
+					</div>
+				</div>
+				<div width="10%" name="pay" text="薪资" itype="number" format="0,0.00" editby="TextBox"></div>
+				<div width="10%" name="datesemployed" text="入职时间" itype="date" format="yyyy年MM月dd日" editby="DatePicker"></div>
+				<div width="15%" name="birthday" text="生日" itype="date" format="yyyy年MM月dd日" defaultValue="1985-01-01"></div>
+				<div name="position" hidden=true></div>
+			</div>
+		</div>
+	</body>
+</html>

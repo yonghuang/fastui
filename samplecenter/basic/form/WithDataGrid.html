@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>提交刷新Datagrid</h4></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+	  <script>			
+			var submit=function(){
+				var form=fastDev.getInstance("form1");
+				form.submit();
+			}
+			var submitSuccess=function(data){				
+				alert("成功将数据"+data.text+"提交到后台");	
+			}				
+			var clear=function(){
+				var form=fastDev.getInstance("form1");
+				form.cleanData();
+			}
+		</script>
+	</head>
+	<body>
+		 <form itype="Form" action="example_submit.jsp" id="form1" initSource="example_1_init.jsp" dataSource="example_1_load.jsp" requestType="get" saveInstance="true" onSubmitSuccess="submitSuccess()">
+		<table width="800px" border="0" cellspacing="0" cellpadding="0"  style="margin:10px;" class="ui-form-table">
+		  <tr>
+		    <td class="ui-form-table-dt">text：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt1" ></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">password：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="pwd1"   type="password" ></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt" style="height:57px;">textarea：</td>
+		    <td class="ui-form-table-dd"><textarea itype="TextBox" id="area1"   type="textarea" height="50px" width="400px"></textarea></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">智能提示框：</td>
+		    <td class="ui-form-table-dd">
+        <input id="autotxt1" itype="AutoComplete"   initSource="data.jsp" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" iwidth="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100">
+        </td>
+	      </tr>
+           <tr>
+		    <td class="ui-form-table-dt">智能提示框1：</td>
+		    <td class="ui-form-table-dd">
+        <input id="autotxt11" itype="AutoComplete"    multiple="true"  items="Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" iwidth="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100">
+        </td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">复选框：</td>
+		    <td class="ui-form-table-dd"><div itype="CheckBoxGroup"  name="check1" id="check1"  ></div></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">单选框：</td>
+		    <td class="ui-form-table-dd"><div itype="RadioGroup"  name="radio1" id="radio1"   >
+			<div value=1 text="男" checked=true></div>			
+			<div value=0 text="女"></div>
+			</div>
+			</td>
+	      </tr>
+          <tr>
+          <td class="ui-form-table-dt">下拉框：</td>
+          <td class="ui-form-table-dd">
+			<select itype="Select"  id="select1"    width="200px" firstOption="--请选择--" value="test1,test3"  onValueChange="handle1()">	<option value="test5" text="测试5"></option></select>
+			</div>
+		   </td>
+          </tr>
+           <tr>
+          <td class="ui-form-table-dt">下拉树：</td>
+          <td class="ui-form-table-dd">
+			<div itype="SelectTree"  id="selecttree1" >
+				<div initSource="data2.txt" rootValue="-请选择-" topParentid="0" openFloor=2></div>
+			</div>
+		  </td>
+          </tr>          
+           <tr>
+          <td class="ui-form-table-dt">日历控件：</td>
+          <td class="ui-form-table-dd"><input itype="DatePicker" id="data1"   trigger="click"></td>
+          </tr>          
+         </table>
+         <div style="width:800px; text-align:center">
+			<div itype="Button" text="提交" onclick="submit()" ></div>
+			<div itype="Button" text="清空" onclick="clear()" ></div>
+		</div>
+	</form>   
+    
+	</body>
+</html>

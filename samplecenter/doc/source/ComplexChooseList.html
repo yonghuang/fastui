@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * @class fastDev.Ui.ComplexChooseList
+ * @extends fastDev.Ui.ChooseList
+ * @author chengwei
+ */
+fastDev.define(&quot;fastDev.Ui.ComplexChooseList&quot;, {
+    alias: &quot;ComplexChooseList&quot;,
+    extend: &quot;fastDev.Ui.ChooseList&quot;,
+    _options: {
+        leftWidth: 188,
+        rightWidth: 188,
+        height: 228,
+        noResultsText: &quot;未找到匹配项&quot;,
+        leftTopHeight: 50,
+        rightTopHeight: 25,
+        topParentId: &quot;0&quot;,
+        onAfterInit: function () {
+            var global = this._global;
+            global.leftTitle.setText(&quot;通讯录(&quot; + (global.size || 0) + &quot;人)&quot;);
+            global.rightTitle.setText(&quot;接收人(&quot; + this.getSize() + &quot;人)&quot;);
+        },
+        onAfterSelect: function (item) {
+            var global = this._global,
+                widget;
+            global.leftTitle.setText(&quot;通讯录(&quot; + (--global.size) + &quot;人)&quot;);
+            global.rightTitle.setText(&quot;接收人(&quot; + this.getSize() + &quot;人)&quot;);
+            if (typeof (widget = this.getWidget()).delNode !== &quot;function&quot;) {
+                global.tree.delNode(item.id);
+                if (widget.getSize() === 0) {
+                    global.comboList.hide();
+                    this.setWidget(global.tree.show());
+                }
+            }
+            global.changed = true;
+        },
+        onAfterDeselect: function (item) {
+            var global = this._global;
+            global.leftTitle.setText(&quot;通讯录(&quot; + (++global.size) + &quot;人)&quot;);
+            global.rightTitle.setText(&quot;接收人(&quot; + this.getSize() + &quot;人)&quot;);
+            if (typeof this.getWidget().addNode !== &quot;function&quot;) {
+                global.tree.addNode(item);
+            }
+            global.changed = true;
+        }
+    },
+    ready: function (options, global) {
+        var that = this,
+            uuid = fastDev.getID();
+        global.uuid = uuid;
+        fastDev.apply(options, {
+            leftTopTemplate: options.leftTopTemplate || '&lt;span id=&quot;leftTitle-' + uuid + '&quot; class=&quot;ui-chooselist-title&quot;&gt;&lt;/span&gt;&lt;div id=&quot;search-' + uuid + '&quot; style=&quot;width:' + options.leftWidth + '&quot;&gt;&lt;/div&gt;',
+            rightTopTemplate: options.rightTopTemplate || '&lt;span id=&quot;rightTitle-' + uuid + '&quot; class=&quot;ui-chooselist-title&quot;&gt;&lt;/spans&gt;',
+            widget: !! options.widget.onGetSelectedItems ? options.widget : {
+                type: &quot;Tree&quot;,
+                textField: &quot;val&quot;,
+                valueField: &quot;id&quot;,
+                onGetSelectedItems: function () {
+                    return typeof this.getValues === &quot;function&quot; ? this.getValues(&quot;chkedLeafNodesArray&quot;) : this.getSelectedItems();
+                },
+                onGetAllItems: function () {
+                    return typeof this.getAllLeafItems === &quot;function&quot; ? this.getAllLeafItems() : this.getAllItems();
+                },
+                onRemoveItems: function (items) {
+                    if (typeof this.delNode === &quot;function&quot;) {
+                        var tree = this;
+                        fastDev.each(items, function (idx, item) {
+                            tree.hideNode(item.id);
+                        });
+                    } else {
+                        this.removeItems(items);
+                    }
+                },
+                onAddItems: function (items) {
+                    if (typeof this.addNode === &quot;function&quot;) {
+                        var tree = this;
+                        fastDev.each(items, function (idx, item) {
+                            tree.showNode(item.id);
+                        });
+                    } else {
+                        this.addItems(items);
+                    }
+                },
+                options: {
+                    topParentid: options.topParentId,
+                    showIco: true,
+                    openFloor: 2,
+                    treeType: &quot;multitree&quot;,
+                    onAfterLoadInit: function () {
+                        global.data = this.getAllLeafItems();
+                        global.size = global.data.length;
+                        global.suggestion.setItems(global.data);
+                        options.onAfterInit.call(that);
+                    }
+                }
+            }
+        });
+    },
+    construct: function (options, global) {
+        var that = this,
+            uuid = global.uuid;
+        fastDev.apply(global, {
+            leftTitle: this.find(&quot;[id='leftTitle-&quot; + uuid + &quot;']&quot;),
+            rightTitle: this.find(&quot;[id='rightTitle-&quot; + uuid + &quot;']&quot;),
+            suggestion: fastDev.create(&quot;AutoComplete&quot;, {
+                container: this.find(&quot;[id='search-&quot; + uuid + &quot;']&quot;),
+                width: &quot;100%&quot;,
+                showSearchIcon: true,
+                noResultsText: options.noResultsText,
+                fields: [{
+                    name: &quot;val&quot;,
+                    mapping: &quot;text&quot;
+                }],
+                onChange: function (value) {
+                    if (!fastDev.Util.StringUtil.trim(value)) {
+                        global.comboList.hide();
+                        that.setWidget(global.tree.show());
+                    }
+                },
+                onBeforeRetrieve: function () {
+                    if (global.changed) {
+                        this.setItems(global.tree.getAllLeafItems());
+                        global.changed = false;
+                    }
+                },
+                onAfterRetrieve: function (data, keyword) {
+                    if ( !! data &amp;&amp; !! data.length) {
+                        global.tree.hide();
+                        that.setWidget(global.comboList.clean());
+                        for (var i = 0; i &lt; data.length; i++) {
+                            data[i].text = data[i].val;
+                            data[i].value = data[i].id;
+                        }
+                        global.comboList.addItems(data).show();
+                        return false;
+                    } else {
+                        global.comboList.hide();
+                        that.setWidget(global.tree.show());
+                    }
+                }
+            }),
+            comboList: fastDev.create(&quot;ChooseList.ComboList&quot;, {
+                container: options.widget.options.container,
+                width: options.widget.options.width,
+                height: options.widget.options.height,
+                enabledDataProxy: false,
+                enabledInitProxy: false,
+                onDoubleClick: function (event, item) {
+                    that.select(item);
+                }
+            }).hide(),
+            tree: this.getWidget()
+        });
+    }
+});</pre>
+</body>
+</html>

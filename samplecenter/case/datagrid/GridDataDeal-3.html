@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>datagrid-数据处理集合场景</h4>
+			<ul>
+				<li>此场景涵盖datagrid数据处理类的以下功能点</li>
+				<li>1.行选择器</li>
+				<li>2.统计功能</li>
+				<li>3.列值控制器</li>
+				<li>4.取全表数据</li>
+				<li>5.取选中行数据</li>
+				
+			</ul>
+		</title>
+	
+		
+	
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		
+		<script type="text/javascript">
+		
+			function getValue() {
+				var dataList = fastDev.getInstance("grid1").getValue(),rs=[];
+				fastDev.each(dataList, function(i, data) {
+					var values = [];
+					fastDev.each(data, function(key, value) {
+						value && values.push(key+":"+value);
+					});
+					rs.push("{"+values.join(",")+"}")
+				});
+				fastDev.alert("["+rs.join(",")+"]");
+			};
+			
+				function getAllValue() {
+				var dataList = fastDev.getInstance("grid1").getAllValue(),rs=[];
+				fastDev.each(dataList, function(i, data) {
+					var values = [];
+					fastDev.each(data, function(key, value) {
+						value && values.push(key+":"+value);
+					});
+					rs.push("{"+values.join(",")+"}")
+				});
+				fastDev.alert("["+rs.join(",")+"]");
+			};
+			
+			function renderer() {
+				var data = fastDev.getInstance("grid1").getValue(this);
+				 if(data.chinese>90 && data.maths>90 && data.english>90 && data.physics>90 && data.chemistry>90)
+				 {
+				 	return "是";
+				 }
+				 else
+				 	return "否";
+			};
+		</script>
+		
+		<script type="text/javascript">
+			var summaryTpl = '<div style="width:65%">{name}</div>' + 
+										'<div style="width:35%">' + 
+											'<table>' + 
+												'<tr><td>{chinese}</td></tr>' +
+												'<tr><td>{maths}</td></tr>' +
+												'<tr><td>{english}</td></tr>' +
+												'<tr><td>{physics}</td></tr>' +
+												'<tr><td>{chemistry}</td></tr>' + 
+											'</table>' + 
+										'</div>';
+
+			function rendererName() {
+				fastDev(this).css("color", "red");
+			}
+
+			function rendererChinese() {
+				fastDev(this).css("color", "green");
+			}
+
+			function rendererMaths() {
+				fastDev(this).css("color", "green");
+			}
+
+			function rendererEnglish() {
+				fastDev(this).css("color", "green");
+			}
+
+			function rendererPhysics() {
+				fastDev(this).css("color", "green");
+			}
+
+			function rendererChemistry() {
+				fastDev(this).css("color", "green");
+			}
+		</script>
+	</head>
+	<body>
+		
+
+		<div style="margin: 10px">
+			<div class="ui-layout-text">带样式统计：</div>
+			<div itype="DataGrid" initSource="../../data/griddata1.json" showSeqColumn=true id="grid1" showCheckColumn=true saveInstance=true>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+				<div width="15%" name="name" text="姓名" summaryType="count" summaryText="学生总数：" summaryRenderer="rendererName()"></div>
+				<div width="15%" name="chinese" text="语文" summaryType="sum" summaryText="总分：" summaryRenderer="rendererChinese()"></div>
+				<div width="15%" name="maths" text="数学" summaryType="avg" summaryText="平均分：" summaryRenderer="rendererMaths()"></div>
+				<div width="15%" name="english" text="英文" summaryType="max" summaryText="最高分：" summaryRenderer="rendererEnglish()"></div>
+				<div width="15%" name="physics" text="物理" summaryType="min" summaryText="最低分：" summaryRenderer="rendererPhysics()"></div>
+				<div width="15%" name="chemistry" text="化学" summaryType="avg" summaryText="平均分：" summaryRenderer="rendererChemistry()"></div>
+				<div width="10%" name="all" text="各科都高于90"  renderer="renderer()" ></div>
+			</div>
+		</div>
+		
+			<div style="margin: 10px">
+			<input itype="Button" text="获取选中数据" onclick="getValue()">
+		</div>
+		<div style="margin: 10px">
+			<input itype="Button" text="获取全部数据" onclick="getAllValue()">
+		</div>
+		
+					
+
+	</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>panel</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-09 -->
+		<link href="../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+
+		<script>
+			$(function() {
+				var panel = $.create("Panel", {
+					container : "example",
+					headerCls : "ui-window-header-ico icon-save",
+					title : "Panel",
+					width : "800px",
+					height : "300px",
+					showCollapseBtn : true,
+					showMinBtn : true,
+					showMaxBtn : true,
+					showCloseBtn : true,
+					content : "<p>1</p><p>2</p><p>3</p><p>4</p><p>5</p>"
+				});
+				
+				fastDev("#show").bind("click", function() {
+					panel.open();
+				});
+				fastDev("#move").bind("click", function() {
+					panel.move({
+						top : "50px",
+						left: "50px"
+					});
+				});
+				fastDev("#resize").bind("click", function() {
+					panel.resize({
+						width:"200px",
+						height:"50px"
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="example" style="height:650px;border: 30px solid #123456">
+			
+		</div>
+		<div>
+			<input id="show" type="button" value="显示面板" />
+			<input id="move" type="button" value="移动面板" />
+			<input id="resize" type="button" value="重新设定面板" />
+		</div>
+	</body>
+
+</html>
+

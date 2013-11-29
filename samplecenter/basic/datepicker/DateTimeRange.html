@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					除静态范围限制以外，控件还可以通过设置表达式来实现更灵活，更复杂的，精确到秒的日期时间范围限制。
+				</li>
+				<li>
+					minDate和maxDate属性可指定初始日期时间限制范围。
+				</li>
+				<li>
+					timeBefore与timeAfter属性可轻松实现2个日期选择控件间的前后约束。
+				</li>
+				<li>
+					includes表达式可设置可选日期时间范围。
+				</li>
+				<li>
+					excludes表达式可设置禁选日期时间范围。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<!-- 农历信息扩展功能所需js文件 -->
+		<script src="../../../src/component/form/datepicker/DatePicker.lunar.js"></script>
+		<!-- 日期范围表达式扩展功能所需js文件  -->
+		<script src="../../../src/component/form/datepicker/DatePicker.expression.js"></script>
+	</head>
+	<body>
+		<div style="margin: 10px;">
+			<div class="ui-layout-text">
+				minDate与maxDate属性
+			</div>
+			<!-- 支持精确到秒的时间范围控制 -->
+			<input itype="DatePicker" minDate="2011-11-11 11:11:11" maxDate="2012-11-11 11:11:11" format="yyyy-MM-dd HH:mm:ss"/>
+			<br />
+			<div class="ui-layout-text">
+				前后时间限制
+			</div>
+			<table>
+				<tr>
+					<td>起始时间：</td>
+					<td>
+					<input itype="DatePicker" id="start" timeBefore="end" format="yyyy-MM-dd HH:mm:ss"/>
+					</td>
+					<td>&nbsp;&nbsp;&nbsp;</td>
+					<td>结束时间：</td>
+					<td>
+					<input itype="DatePicker" id="end" timeAfter="start" format="yyyy-MM-dd HH:mm:ss"/>
+					</td>
+				</tr>
+			</table>
+			<br />
+			<div class="ui-layout-text">
+				日期时间包含表达式
+			</div>
+			<!-- 使用Cron表达式限制日期范围时，若使用DatePicker.main.js，则还需DatePicker.expression.js -->
+			<!-- 下面Cron表达式的指定的日期时间范围为：2012年至2013年的1,5,7,9月的所有工作日的上午9点到下午17点，每隔10分钟的日期时间，秒钟始终为0 -->
+			<input itype="DatePicker" includes="0 10/10 9-17 * 1,5,7,9 MON-FRI 2012,2013" format="yyyy-MM-dd HH:mm:ss"/>
+			<br />
+			<div class="ui-layout-text">
+				日期时间排除表达式
+			</div>
+			<!-- 包含与排除表达式中都可以省略 "秒，分，时，年" 子表达式，省略的子表达式自动以 "*"代替  -->
+			<!-- 包含与排除表达式可同时声明，也可以同时声明多个表达式 （表达式数组）-->
+			<div itype="DatePicker">
+				<div name="excludes">
+					<!-- 下面的表达式组表示排除星期三，星期六和星期日（也可以用数字表示，星期日为1，星期一为2，星期三为4，依此类推）  -->
+					<div exclude="* * WED"></div>
+					<div exclude="* * SAT,SUN"></div>
+				</div>
+				<!-- 下面是声明多个包含表达式时的示例 -->
+				<div name="includes">
+					<div include="* * *"></div>
+					<div include="* * *"></div>
+				</div>
+			</div>
+			<br />
+			<p>
+				<a href="datepicker-range.html" target="_blank">表达式详细使用说明</a>
+			</p>
+		</div>
+	</body>
+</html>
+

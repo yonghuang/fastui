@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * @class fastDev.Ui.contextMenu
+ * @extends fastDev.Ui.Component
+ */
+fastDev.define( &quot;fastDev.Ui.contextMenu&quot;, {
+    extend : &quot;fastDev.Ui.Component&quot;,
+    alias : &quot;contextMenu&quot;,
+    _options : {
+        /*
+         * 合法的json数据源url
+         * @type {String}
+         */
+        treeInitSource : &quot;&quot;,
+        /*
+         * 数据源,如果存在则treeInitSource失效
+         * @type {Array}
+         */
+        items : null,
+        /*
+         *  初始化右框的值
+         *  @type {String}
+         *  @default null
+         */
+        InitRightData : &quot;&quot;,
+        /*
+         * 搜索框ID
+         * @type {String}
+         * @default contextmenu_search_boxid
+         */
+        searchBoxId : &quot;contextmenu_search_boxid&quot;,
+        /*
+         * 搜索按钮ID
+         * @type {String}
+         * @default contextmenu_search_buttonid
+         *
+         */
+        searchButtonId : &quot;contextmenu_search_buttonid&quot;,
+        /*
+         * 默认使用的语言
+         * @type {String}
+         * @default 通讯录(@@人)@@接收人(@@人)
+         */
+        initLanguageData : &quot;通讯录(@@人)@@接收人(@@人) &quot;,
+        /* 
+         *  左侧框ID
+         *  @type {String}
+         *  @default contextmenuleft_boxid
+         */
+        leftBoxId : &quot;contextmenu_left_boxid&quot;,
+        /*
+         * 右侧框ID
+         *  @type {String}
+         * @default contextmenu_right_boxid
+         */
+        rightBoxId : &quot;contextmenu_right_boxid&quot;,
+        /*
+         * 限制右侧个数
+         * @type {Number}
+         * @default null
+         */
+        rightLimitNum : null,
+        /*
+         * 左侧数据总和ID
+         * @type {Number}
+         * @default contextmenu_left_numid
+         */
+        leftNumId : &quot;contextmenu_left_numid&quot;,
+        /*
+         * 右侧数据总和ID
+         * @type {Number}
+         * @default contextmenu_right_numid
+         */
+        rightNumId : &quot;contextmenu_right_numid&quot;,
+        /*
+         * 是否需要多选按钮
+         * @type {Boolean} 为true时打开
+         * @default false
+         */
+        needControlAll : false,
+        /*
+         * 全部移动到左侧按钮ID
+         * @type {String}
+         * @default contextmenu_controlallleft_id
+         */
+        controlAllLeftId : &quot;contextmenu_controlallleft_id&quot;,
+        /*
+         * 全部移动到右侧按钮ID
+         * @type {String}
+         * @default contextmenu_controlallright_id
+         */
+        controlAllRightId : &quot;contextmenu_controlallright_id&quot;,
+        /*
+         * 隐藏ID保存数据
+         * @type {String}
+         * @default contextmenu_data_id
+         */
+        contextMenuDataId : &quot;contextmenu_data_id&quot;,
+        /*
+         * 隐藏ID保存数据
+         * @type {String}
+         * @default contextmenu_data_name
+         */
+        contextMenuDataName : &quot;contextmenu_data_name&quot;,
+        /*
+         * 默认树的根节点
+         * @type {String}
+         * @default 0
+         */
+        topParentid : &quot;0&quot;,
+        /*
+         * 提交表单ID
+         * @type {String}
+         * @default contextmenu_submit_id
+         */
+        submitId : &quot;contextmenu_submit_id&quot;
+        
+    },
+    _global : {
+        source : null,
+        controlA : null,
+        div5 : null,
+        ul2 : null,
+        span2 : null,
+        span5 : null,
+        input3 : null,
+        leftDom : null
+    },
+    /*
+     * 构建控件
+     * @param {Object} options 公共属性
+     * @param {Object} global 全局变量
+     * @protected
+     */
+    construct : function(options, global) {
+        var shell = talkweb.BaseControl.Div();
+        this.storage( shell[0] );
+        this.constructItem();
+    },
+    /*
+     * 构建view层
+     * @protected
+     */
+    constructItem : function() {
+        var that = this, cacheID = talkweb.ControlBus.getID(), options = this.getOptions(), 
+        div1 = talkweb.BaseControl.Div( {
+            className : &quot;contextmenu-body&quot;,
+            container : this
+        } ), div2 = talkweb.BaseControl.Div( {
+            className : &quot;contextmenu-left&quot;,
+            container : div1
+        } ), div3 = talkweb.BaseControl.Div( {
+            className : &quot;contextmenu-title&quot;,
+            container : div2
+        } ), div4 = talkweb.BaseControl.Div( {
+            className : &quot;contextmenu-searchbox&quot;,
+            container : div2
+        } ), div6 = talkweb.BaseControl.Div( {
+            className : &quot;contextmenu-center&quot;,
+            container : div1
+        } ), div7 = talkweb.BaseControl.Div( {
+            className : &quot;contextmenu-right&quot;,
+            container : div1
+        } ), div8 = talkweb.BaseControl.Div( {
+            className : &quot;contextmenu-title&quot;,
+            container : div7
+        } ), div9 = talkweb.BaseControl.Div( {
+            className : &quot;contextmenu-rightbox&quot;,
+            container : div7
+        } ), div5 = talkweb.BaseControl.Div( {
+            id : options.leftBoxId,
+            className : &quot;contextmenu-leftbox&quot;,
+            container : div2
+        } );
+        var contextmenuLang = options.initLanguageData.split( &quot;@@&quot; );
+        var span1 = talkweb.BaseControl.Span( {
+            container : div3,
+            value : contextmenuLang[0]
+        } ), span2 = talkweb.BaseControl.Span( {
+            id : options.leftNumId,
+            container : div3,
+            value : 0
+        } ), span3 = talkweb.BaseControl.Span( {
+            container : div3,
+            value : contextmenuLang[1]
+        } ), span4 = talkweb.BaseControl.Span( {
+            container : div8,
+            value : contextmenuLang[2]
+        } ), span5 = talkweb.BaseControl.Span( {
+            id : options.rightNumId,
+            container : div8,
+            value : &quot;0&quot;
+        } ), span6 = talkweb.BaseControl.Span( {
+            container : div8,
+            value : contextmenuLang[3]
+        } );
+        var controlA = talkweb.BaseControl.Anchor( {
+            container : div6,
+            href : &quot;#&quot;,
+            title : &quot;选中目标移动&quot;
+        } );
+        if ( options.needControlAll === true ) {
+            var controlA1 = talkweb.BaseControl.Anchor( {
+                container : div6,
+                href : &quot;#&quot;,
+                className : &quot;all&quot;,
+                title : &quot;全部目标右移&quot;
+            } ), controlA2 = talkweb.BaseControl.Anchor( {
+                container : div6,
+                href : &quot;#&quot;,
+                className : &quot;right&quot;,
+                title : &quot;全部目标左移&quot;
+            } );
+            controlA1.onClick( this.bindEventlistener( this, this.controlAll ) );
+            controlA2.onClick( this.bindEventlistener( this, this.controlRight ) );
+        }
+        var input1 = talkweb.BaseControl.Text( {
+            container : div4,
+            id : options.searchBoxId,
+            className : &quot;ntxt&quot;
+        } ), input2 = talkweb.BaseControl.Button( {
+            container : div4,
+            id : options.searchButtonId,
+            className : &quot;nbtn&quot;
+        } ), input3 = talkweb.BaseControl.Hidden( {
+            container : div1,
+            id : options.contextMenuDataId,
+            name : options.contextmenu_data_name
+        } );
+        var ul2 = talkweb.BaseControl.Ul( {
+            container : div9,
+            id : options.rightBoxId
+        } );
+        that.setGlobal( {
+            controlA : controlA,
+            div5 : div5,
+            ul2 : ul2,
+            span2 : span2,
+            span5 : span5,
+            input3 : input3
+        } );
+        
+        if(options.items !== null) {
+            this.setGlobal( {
+                source : options.items
+            } );
+            this.createTree();
+        }else{
+            
+           var ajax = talkweb.Tools.queueFn.getInstance( {
+                fnType : &quot;ajax&quot;,
+                url : options.treeInitSource,
+                parameters : &quot;cacheID=&quot; + cacheID,
+                callback : function(data) {
+                    var items = talkweb.DataBus.getCache( cacheID );
+                    if ( !items ) {
+                        items = eval( data );
+                    }
+                    
+                    that.setGlobal( {
+                        source : items
+                    } );
+                    that.createTree();
+                }
+            } );
+            talkweb.DataBus.execute( ajax ); 
+        }
+        
+
+    },
+    /*
+     * 创建树
+     * @private
+     */
+    createTree : function() {
+        var options = this.getOptions(), global = this.getGlobal();
+        var div5 = global.div5, ul2 = global.ul2, treeSource = global.source;
+        if ( treeSource ) {
+            //console.log(treeSource);
+            var usetree = talkweb.Components.Tree( {
+                container : div5,
+                items : treeSource,
+                autoLoadData : true,
+                topParentid : options.topParentid,
+                treeType : &quot;multitree&quot;,
+                showIco : true,
+                id : &quot;ctree&quot;,
+                saveInstance : true
+            } );
+            //console.log(&quot;test&quot;,treeSource);
+
+            //关键一步，取出全部的数据
+            var leftDom = [];
+            for ( i = 0; treeSource[i]; i++ ) {
+                if ( treeSource[i]['ismen'] === &quot;1&quot; ) {
+                    leftDom.push( treeSource[i] );
+                }
+            }
+            //console.log(&quot;yyy&quot;,leftDom);
+            //var leftDom = $(&quot;span.ui-tree-span-ico-leaf&quot;);
+            //把节点先保存到全局变量
+            this.setGlobal( {
+                leftDom : leftDom
+            } );
+            //取出树中所有的数据项，有的可能不是数据
+            var leftAllData = $( &quot;.ui-tree-span-ico-leaf&quot; ), leftStr = &quot;,&quot;;
+            //设置总数
+            var leftDomLen = leftDom.length;
+            //把所有的数据放到右侧框隐藏起来
+            var right_data = &quot;&quot;;
+            if ( typeof options.InitRightData === &quot;function&quot; ) {
+                right_data = options.InitRightData();
+            } else {
+                right_data = options.InitRightData;
+            }
+            //alert(right_data);
+            for ( var i = 0; i &lt; leftDomLen; i++ ) {
+                var rightLiId = leftDom[i][&quot;id&quot;];
+                var rclssName = &quot;contextMenu_hide&quot;;
+                if ( right_data ) {
+                    var rightData = &quot;,&quot; + right_data + &quot;,&quot;;
+                    if ( rightData.indexOf( &quot;,&quot; + rightLiId + &quot;,&quot; ) !== -1 ) {
+                        rclssName = &quot;contextMenu_show&quot;;
+                        document.getElementById( &quot;tckb_&quot; + rightLiId ).className = &quot;ui-tree-chk-readonly-selected&quot;;
+                    }
+                }
+                var liId = talkweb.BaseControl.Li( {
+                    container : ul2,
+                    id : &quot;rightli&quot; + rightLiId,
+                    className : rclssName
+                } );
+                var spanId = talkweb.BaseControl.Span( {
+                    container : liId,
+                    value : leftDom[i][&quot;val&quot;]
+                } );
+                var aId = talkweb.BaseControl.Anchor( {
+                    container : liId,
+                    href : &quot;#&quot; + rightLiId,
+                    title : &quot;清除&quot;
+                } );
+                //过滤树中不是数据的项
+                leftStr += leftDom[i][&quot;id&quot;] + &quot;,&quot;;
+            }
+            //过滤树中不是数据的项
+            for ( var i = 0, len = leftAllData.length; i &lt; len; i++ ) {
+                var currentId = leftAllData[i].previousSibling.id.replace( &quot;tckb_&quot;, &quot;&quot; );
+                if ( leftStr.indexOf( &quot;,&quot; + currentId + &quot;,&quot; ) === -1 ) {
+                    leftAllData[i].className = &quot;ui-tree-span-ico-open&quot;;
+                }
+            }
+            //设置移动事件
+            global.controlA.onClick( this.bindEventlistener( this, this.controlLi ) );
+            global.ul2.onClick( this.bindEventlistener( this, this.controlDel ) );
+            this.searchTree();
+            this.getValue();
+        }
+
+    },
+    /*
+     * 控制移动按钮
+     * @private
+     */
+    controlLi : function() {
+        var that = this, options = this.getOptions(), global = this.getGlobal(), leftDom = global.leftDom, nodeArr = $( &quot;.ui-tree-chk-selected&quot; ), cIds = &quot;,&quot;, rightlimit = options.rightLimitNum;
+        for ( var i = 0, len = nodeArr.length; i &lt; len; i++ ) {
+            cIds += nodeArr[i].id.replace( &quot;tckb_&quot;, &quot;&quot; ) + &quot;,&quot;;
+        }
+        if ( nodeArr.length &gt; 0 ) {
+            var len = leftDom.length;
+            for ( var i = 0; i &lt; len; i++ ) {
+                //限制右侧的个数
+                if ( rightlimit &amp;&amp; !isNaN( rightlimit ) ) {
+                    if ( this.checkRightLimit() === false ) {
+                        break;
+                    }
+                }
+                var nodeid = leftDom[i][&quot;id&quot;];
+                if ( cIds.indexOf( &quot;,&quot; + nodeid + &quot;,&quot; ) !== -1 ) {
+                    document.getElementById( &quot;rightli&quot; + nodeid ).className = &quot;contextMenu_show&quot;;
+                    document.getElementById( &quot;tckb_&quot; + nodeid ).className = &quot;ui-tree-chk-readonly-selected&quot;;
+                }
+
+            }
+        }
+        this.getValue();
+    },
+    /*
+     * 限制右侧的个数
+     * @private
+     */
+    checkRightLimit : function() {
+        var rightlimit = this.getOptions().rightLimitNum;
+        if ( !isNaN( rightlimit ) ) {
+            rightnum = $( &quot;li.contextMenu_show&quot; ).length;
+            if ( rightnum &gt;= rightlimit ) {
+                return false;
+            }
+        }
+    },
+    /*
+     * 全部左移
+     */
+    controlAll : function() {
+        var options = this.getOptions(), global = this.getGlobal(), div5 = global.div5, rightlimit = options.rightLimitNum;
+        $( &quot;#&quot; + options.leftBoxId ).html( &quot;&quot; );
+        $( &quot;#&quot; + options.rightBoxId ).html( &quot;&quot; );
+        this.createTree();
+        var rightDom = $( &quot;li.contextMenu_hide&quot; );
+        for ( var i = 0, rightLen = rightDom.length; i &lt; rightLen; i++ ) {
+            if ( rightlimit &amp;&amp; !isNaN( rightlimit ) ) {
+                if ( this.checkRightLimit() === false ) {
+                    break;
+                }
+            }
+            rightDom[i].className = &quot;contextMenu_show&quot;;
+        }
+        var leftDoms = $( &quot;span[id^='tckb_']&quot; );
+        for ( var i = 0, leftLen = leftDoms.length; i &lt; leftLen; i++ ) {
+            leftDoms[i].className = &quot;ui-tree-chk-readonly-selected&quot;;
+        }
+        this.getValue();
+    },
+    /*
+     * 全部右移
+     */
+    controlRight : function() {
+        var options = this.getOptions(), global = this.getGlobal(), div5 = global.div5;
+        $( &quot;#&quot; + options.leftBoxId ).html( &quot;&quot; );
+        $( &quot;#&quot; + options.rightBoxId ).html( &quot;&quot; );
+        this.createTree();
+        var rightDom = $( &quot;li.contextMenu_show&quot; );
+        for ( var i = 0, rightLen = rightDom.length; i &lt; rightLen; i++ ) {
+            rightDom[i].className = &quot;contextMenu_hide&quot;;
+        }
+        var leftDoms = $( &quot;span[id^='tckb_']&quot; );
+        for ( var i = 0, leftLen = leftDoms.length; i &lt; leftLen; i++ ) {
+            leftDoms[i].className = &quot;ui-tree-chk&quot;;
+        }
+        this.getValue();
+    },
+    /*
+     * 设置删除单项
+     * @private
+     */
+    controlDel : function(event) {
+        var that = this, options = this.getOptions();
+        //srcElement IE
+        var obj = event.srcElement || event.target;
+        var name = obj.name || obj.tagName.toLowerCase();
+        if ( name === &quot;a&quot; ) {
+            $( this[0] ).unbind( &quot;click&quot; );
+            $( this[0] ).click( function(e) {
+                var clickHref = $(e.target)[0].toString();
+                clickId = clickHref.substring( clickHref.indexOf( &quot;#&quot; ) + 1, clickHref.length );
+                if ( document.getElementById( &quot;rightli&quot; + clickId ) !== null ) {
+                    document.getElementById( &quot;rightli&quot; + clickId ).className = &quot;contextMenu_hide&quot;;
+                    //document.getElementById(&quot;tckb_&quot; + clickId).className =
+                    // &quot;ui-tree-chk-selected&quot;;
+                    document.getElementById( &quot;tckb_&quot; + clickId ).className = &quot;ui-tree-chk&quot;;
+                    that.checkTop( clickId );
+                }
+                void (0);
+                that.getValue();
+            } );
+        }
+
+    },
+    /*
+     * 检测上级菜单
+     * @private
+     */
+    checkTop : function(id) {
+        var ulId = document.getElementById( id ).parentNode;
+        if ( ulId.parentNode.id !== &quot;ctree&quot; ) {//不对根节点做处理
+            var classNums = this.getClassTags( ulId, &quot;span&quot;, &quot;ui-tree-chk-readonly-selected&quot; ).length;
+            if ( classNums == 0 ) {
+                topDom = ulId.previousSibling;
+                topDom &amp;&amp; (topDom.childNodes[1].className = &quot;ui-tree-chk&quot;);
+            }
+        }
+        //检查右侧如果为空的清况下左侧全部不选择
+        var rightDom = $( &quot;.contextMenu_show&quot; ).length;
+        if ( rightDom === 0 ) {
+            var leftDomStr = $( &quot;span[class^='ui-tree-chk']&quot; );
+            for ( var i = 0, l = leftDomStr.length; i &lt; l; i++ ) {
+                leftDomStr[i].className = &quot;ui-tree-chk&quot;;
+            }
+        }
+    },
+    /*
+     * 得到classname
+     * @private
+     */
+    getClassTags : function(oElm, strTagName, strClassName) {
+        var arrElements = (strTagName == &quot;*&quot; &amp;&amp; oElm.all) ? oElm.all : oElm.getElementsByTagName( strTagName );
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace( /\-/g, &quot;\\-&quot; );
+        var oRegExp = new RegExp(&quot;(^|\\s)&quot; + strClassName + &quot;(\\s|$)&quot;);
+        var oElement;
+        for ( var i = 0, l = arrElements.length; i &lt; l; i++ ) {
+            oElement = arrElements[i];
+            if ( oRegExp.test( oElement.className ) ) {
+                arrReturnElements.push( oElement );
+            }
+        }
+        return (arrReturnElements);
+    },
+    /*
+     * 搜素事件
+     * @private
+     */
+    searchTree : function() {
+        var options = this.getOptions(), that = this;
+        var searchButton = document.getElementById( options.searchButtonId );
+        var searchValueId = document.getElementById( options.searchBoxId );
+        //注册点击按钮事件
+        //console.log(searchButton);
+        searchButton &amp;&amp; this.registerEvent( searchButton, &quot;click&quot;, searchEvent );
+        //添加回车事件
+        searchValueId &amp;&amp; this.registerEvent( searchValueId, &quot;keydown&quot;, btnkeydown );
+        function btnkeydown(e) {
+            var currKey = 0, e = e || event;
+            currKey = e.keyCode || e.which || e.charCode;
+            if ( currKey == 13 ) {
+                searchEvent();
+            }
+        }
+
+        function searchEvent() {
+            var searchValue = searchValueId.value;
+            var resultArr = [];
+            var global = that.getGlobal(), treeDom = global.leftDom;
+            var treeID = document.getElementById( &quot;ctree&quot; );
+            if ( searchValue !== &quot;&quot; ) {
+                for ( var i = 0, len = treeDom.length; i &lt; len; i++ ) {
+                    var searchData = treeDom[i][&quot;val&quot;];
+                    var searchId = treeDom[i][&quot;id&quot;];
+                    if ( searchData.indexOf( searchValue ) !== -1 ) {
+                        resultArr.push( searchId );
+                    }
+                }
+                treeDom = null;
+                var resultLen = resultArr.length;
+                //如果存在搜索结果
+                if ( resultLen &gt; 0 ) {
+                    treeID.childNodes[0].style.display = &quot;none&quot;;
+                    var contextmenu_searchUlbox = document.createElement( &quot;ul&quot; );
+                    contextmenu_searchUlbox.id = &quot;contextmenu_searchUlbox&quot;;
+                    contextmenu_searchUlbox.className = &quot;ui-tree-ul-line-no&quot;;
+                    treeID.appendChild( contextmenu_searchUlbox );
+                    var searchBoxId = document.getElementById( &quot;contextmenu_searchUlbox&quot; );
+                    searchBoxId.innerHTML = &quot;&quot;;
+                    for ( var i = 0; i &lt; resultLen; i++ ) {
+                        var oparentNode = document.getElementById( resultArr[i] ).cloneNode( true );
+                        var copyLi = searchBoxId.appendChild( oparentNode );
+                        var currentNode = searchBoxId.childNodes[i].childNodes[0];
+                        currentNode.childNodes[0].style.display = &quot;none&quot;;
+                        currentNode.childNodes[1].className = &quot;ui-tree-chk-selected&quot;;
+                    }
+                } else {
+                    alert( searchValue + &quot;不存在，请您从新搜索！&quot; );
+                    document.getElementById( options.searchBoxId ).value = &quot;&quot;;
+                    document.getElementById( options.searchBoxId ).focus();
+                    treeID.childNodes[0].style.display = &quot;&quot;;
+                    document.getElementById( &quot;contextmenu_searchUlbox&quot; ) &amp;&amp; (document.getElementById( &quot;contextmenu_searchUlbox&quot; ).innerHTML = &quot;&quot;);
+                }
+            } else {
+                treeID.childNodes[0].style.display = &quot;&quot;;
+                document.getElementById( &quot;contextmenu_searchUlbox&quot; ) &amp;&amp; (document.getElementById( &quot;contextmenu_searchUlbox&quot; ).innerHTML = &quot;&quot;);
+            }
+        }
+
+    },
+    /*
+     *  统计数据，获取值
+     *  @return value
+     */
+    getValue : function() {
+        var options = this.getOptions(), global = this.getGlobal();
+        var leftDom = global.leftDom, span2 = global.span2, span5 = global.span5, input3 = global.input3;
+        var rightDom = $( &quot;li.contextMenu_show&quot; );
+        var rightLen = rightDom.length;
+        var leftLen = leftDom.length - rightLen;
+        span5.setText( rightLen );
+        span2.setText( leftLen );
+        var str = &quot;&quot;;
+        for ( var i = 0; i &lt; rightLen; i++ ) {
+            str += &quot;@&quot; + rightDom[i].id.slice( 7 ) + &quot;,&quot; + rightDom[i].firstChild.innerHTML;
+        }
+        str = str.slice( 1 );
+        input3.setValue( str );
+        return str;
+    }
+} );
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.define(&quot;fastDev.Data.Structure.Map&quot;, {
+	alias : &quot;S_Map&quot;,
+	prototype : function(data,model) {
+		model.objectify(data);
+		this.map = fastDev.isPlainObject(data) ? data : {};
+		this.keys = fastDev.create(&quot;S_Array&quot;);
+		this.size = 0;
+
+		for(var key in data) {
+			this.keys.push(key);
+			this.size++;
+		}
+	}
+});
+
+fastDev.apply(fastDev.Data.Structure.Map.prototype.prototype, {
+	put : function(key, value) {
+		if(!this.map[key]) {
+			this.size++;
+		}
+		this.map[key] = value;
+	},
+	get : function(key) {
+		return this.map[key];
+	},
+	remove : function(key) {
+		this.keys.remove(key);
+		this.map[key] = null;
+	},
+	each : function(fn, context) {
+		if(fastDev.isFunction(fn)) {
+			this.keys.each(function(index, key) {
+				fn.call(context || window, key, this.map[key]);
+			});
+		}
+	},
+	toArray : function() {
+		var array = [];
+
+		this.keys.each(function(index, key) {
+			array.push({
+				key : key,
+				value : this.map[key]
+			});
+		});
+		return array;
+	},
+	isEmpty : function() {
+		return this.keys.size === 0;
+	},
+	getSize : function() {
+		return this.keys.getSize();
+	},
+	toString : function(encode) {
+		fastDev.Util.JsonUtil.parseString(this.map, encode);
+	}
+});
+
+fastDev.Data.Structure.Map.constructor = function(setting) {
+	return new this.prototype(setting.data, setting.model);
+};
+</pre>
+</body>
+</html>

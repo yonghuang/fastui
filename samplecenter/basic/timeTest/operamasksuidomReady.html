@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="operamasks-ui-2.0/css/default/om-default.css"/>
+		<script src="operamasks-ui-2.0/js/jquery.min.js" type="text/javascript"></script>     
+       <script src="operamasks-ui-2.0/js/operamasks-ui.min.js" type="text/javascript"></script>	
+        <script>
+		
+		var time_to_page_start = new Date()*1;
+$(function(){	
+	
+
+	function domreadyTime(){
+	    window.pmc_start_render_time = new Date()*1 - time_to_page_start;
+		var h = document.createElement('h3');
+		h.innerHTML = 'Time To Dom Ready: ' + window.pmc_start_render_time + ' ms';
+		document.body.appendChild(h);
+    }
+    this.conf = {enableMozDOMReady:true};   
+    var isReady = false;   
+    function doReady(){   
+        if( isReady ) return;   
+        isReady = true;   
+        domreadyTime();   
+    }   
+    if( /MSIE/.test(navigator.userAgent) ){   
+      (function(){   
+       if ( isReady ) return;   
+       try {   
+          document.documentElement.doScroll("left");   
+       } catch( error ) {   
+          setTimeout( arguments.callee, 0 );   
+          return;   
+       }   
+       doReady();   
+     })();   
+    window.attachEvent('onload',doReady);   
+  }   
+  else if (/Chrome/.test(navigator.userAgent)){   
+    (function(){   
+      if( isReady ) return;   
+      if (/loaded|complete/.test(document.readyState))   
+         doReady();   
+      else  
+         setTimeout( arguments.callee, 0 );   
+     })();   
+    window.addEventListener('load',doReady,false);   
+  }   
+  else{   
+     if( /Firefox/.test(navigator.userAgent) || this.conf.enableMozDOMReady)   
+       document.addEventListener( "DOMContentLoaded", function(){   
+       document.removeEventListener( "DOMContentLoaded", arguments.callee, false );   
+       doReady();   
+     }, false );   
+     window.addEventListener('load',doReady,false);   
+   }   
+   
+   $("#tree1").omTree({ 
+            dataSource: 'data_110.txt',
+            simpleDataModel:true
+            });
+            
+})();
+
+		</script>
+	</head>
+	<body>
+    <div>
+   <ul id="tree1"></ul>
+   </div>
+	</body>
+</html>

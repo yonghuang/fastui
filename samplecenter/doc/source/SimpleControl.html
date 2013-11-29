@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+
+	fastDev.define(&quot;talkweb.BaseControl.SimpleControl&quot;, {
+		extend : &quot;fastDev.Core.Base&quot;,
+		_options : {
+			id : null,
+			name : null,
+			className : null,
+			value : null,
+			width : null,
+			height : null,
+			disabled : false,
+			readonly : false,
+			hide : false,
+			validateItems : {
+				requires : false,
+				maxLength : false,
+				minLength : false,
+				lengthEqual : false,
+				isNumber : false,
+				mixNumber : false,
+				maxNumber : false,
+				isEqual : false,
+				isEmail : false,
+				isCode : false,
+				isIdcard : false,
+				isMobile : false,
+				isTel : false,
+				isIp : false,
+				selfRegular : false
+			},
+			click : null,
+			dblclick : null,
+			keyup : null,
+			focus : null,
+			blur : null,
+			change : null,
+			mouseover : null,
+			mouseout : null,
+			mouseenter : null,
+			mouseleave : null
+		},
+		init : function() {
+			var options = this.getOptions();
+			this.setID(options.id);
+			this.setName(options.name);
+			this.setValue(options.value);
+			this.setClass(options.className);
+			this.setWidth(options.width);
+			this.setHeight(options.height);
+			if(options.hide === true) {
+				this.hide();
+			}
+			this.regEvent();
+			options.disabled === true &amp;&amp; this.disabled();
+			this.setReadOnly(options.readonly);
+			if(options.saveInstance === true) {
+				fastDev.Core.ControlBus.setInstance(this.getID(), this);
+			}
+			this.applyContainer();
+		},
+		getID : function() {
+			return this.attr(&quot;id&quot;);
+		},
+		setID : function(id) {
+			var options = this.getOptions();
+			if(options.saveInstance === true) {
+				id = id || talkweb.ControlBus.getID();
+			}
+			id &amp;&amp; this.attr(&quot;id&quot;, id);
+		},
+		disabled : function() {
+			this.attr(&quot;disabled&quot;, true);
+		},
+		unDisabled : function() {
+			this.enable();
+		},
+		enable : function() {
+			this.removeAttr(&quot;disabled&quot;);
+		},
+		setReadOnly : function(readOnly) {
+			readOnly === true ? this.attr(&quot;readOnly&quot;, readOnly) : this.removeAttr(&quot;readOnly&quot;);
+		},
+		setWidth : function(width) {
+			/^(\d+px)|(\d+\%)$/.test(width) &amp;&amp; this.setStyle({
+				width : width
+			});
+			return this;
+		},
+		getWidth : function() {
+			return this.getStyle(&quot;width&quot;);
+		},
+		setHeight : function(height) {
+			/^(\d+px)|(\d+\%)$/.test(height) &amp;&amp; this.setStyle({
+				height : height
+			});
+			return this;
+		},
+		getHeight : function() {
+			return this.getStyle(&quot;height&quot;);
+		},
+		getName : function() {
+			return this.attr(&quot;name&quot;);
+		},
+		setName : function(param) {
+			param &amp;&amp; this.attr(&quot;name&quot;, param);
+		},
+		setClass : function(className) {
+			if(!this[0]){
+				return;
+			}
+			className &amp;&amp; (className === &quot;none&quot; ? this[0].className = &quot;&quot; : this[0].className = className);
+			return this;
+		},
+		getClass : function() {
+			return this[0].className;
+		},
+		getStyle : function(name) {
+			return this.getCss(name);
+		},
+		setStyle : function(style) {
+			return this.setCss(style);
+		},
+		setValue : function(param) {
+			(param === &quot;&quot; || param === 0 || param) &amp;&amp; this.attr(&quot;value&quot;, param);
+		},
+		getValue : function() {
+			return this.attr(&quot;value&quot;);
+		},
+		setText : function(text) {
+			var textNode, global = this.getGlobal();
+			text === &quot;&amp;none;&quot; &amp;&amp; ( text = &quot;　&quot;);
+			global.textNode ? ((global.textNode.nodeValue = text) &amp;&amp; this[0].childNodes.length === 0 &amp;&amp; this.append(global.textNode)) : (( textNode = this.createText(text)) &amp;&amp; this.append(textNode) &amp;&amp; this.setGlobal({
+				textNode : textNode
+			}));
+		},
+		getText : function() {
+			var global = this.getGlobal();
+			return global.textNode ? global.textNode.nodeValue : undefined;
+		},
+		offset : function() {
+			var box;
+			try {
+				box = this[0].getBoundingClientRect();
+			} catch(e) {
+				box = {
+					top : this[0].offsetTop,
+					bottom : this[0].offsetBottom,
+					left : this[0].offsetLeft,
+					right : this[0].offsetRight
+				}
+			}
+			return {
+				top : box.top,
+				bottom : box.bottom,
+				left : box.left,
+				right : box.right
+			}
+		},
+		height : function() {
+			var offset = this.offset();
+			return offset.bottom - offset.top;
+		},
+		width : function() {
+			var offset = this.offset();
+			return offset.right - offset.left;
+		},
+		regEvent : function() {
+			var options = this.getOptions();
+			options.blur &amp;&amp; this.onBlur(options.blur);
+			options.keyup &amp;&amp; this.onKeyup(options.keyup);
+			options.focus &amp;&amp; this.onFocus(options.focus);
+			options.click &amp;&amp; this.onClick(options.click);
+			options.change &amp;&amp; this.onChange(options.change);
+			options.mouseout &amp;&amp; this.onMouseout(options.mouseout);
+			options.mouseover &amp;&amp; this.onMouseover(options.mouseover);
+			options.dblclick &amp;&amp; this.onDblClick(options.dblclick);
+			options.mouseenter &amp;&amp; this.onMouseenter(options.mouseenter);
+			options.mouseleave &amp;&amp; this.onMouseleave(options.mouseleave);
+		},
+		onKeyup : function(handle) {
+			$(this[0]).keyup(handle);
+			return this;
+		},
+		focus : function() {
+			$(this[0]).focus();
+			return this;
+		},
+		onFocus : function(handle) {
+			$(this[0]).focus(handle);
+			return this;
+		},
+		onBlur : function(handle) {
+			$(this[0]).blur(handle);
+			return this;
+		},
+		click : function() {
+			$(this[0]).click();
+			return this;
+		},
+		onClick : function(handle) {
+			$(this[0]).click(handle);
+			return this;
+		},
+		dblclick : function() {
+			$(this[0]).dblclick();
+			return this;
+		},
+		onDblClick : function(handle) {
+			$(this[0]).dblclick(handle);
+			return this;
+		},
+		change : function() {
+			$(this[0]).change();
+		},
+		onChange : function(handle) {
+			$(this[0]).change(handle);
+			return this;
+		},
+		onMousemove : function(handle) {
+			$(this[0]).mousemove(handle);
+			return this;
+		},
+		mouseover : function() {
+			$(this[0]).mouseover();
+			return this;
+		},
+		onMouseover : function(handle) {
+			$(this[0]).mouseover(handle);
+			return this;
+		},
+		onMouseout : function(handle) {
+			$(this[0]).mouseout(handle);
+			return this;
+		},
+		onMouseenter : function(handle) {
+			$(this[0]).mouseenter(handle);
+			return this;
+		},
+		onMouseleave : function(handle) {
+			$(this[0]).mouseleave(handle);
+			return this;
+		},
+		onMousedown : function(handle) {
+			$(this[0]).mousedown(handle);
+			return this;
+		},
+		onMouseup : function(handle) {
+			$(this[0]).mouseup(handle);
+			return this;
+		},
+		removeEvent : function(type, fn) {
+			if(type &amp;&amp; fn) {
+				$(this[0]).unbind(type, fn);
+			} else if(type) {
+				$(this[0]).unbind(type);
+			} else {
+				$(this[0]).unbind();
+			}
+		},
+		show : function() {
+			this.setStyle({
+				&quot;display&quot; : &quot;block&quot;
+			});
+			return this;
+		},
+		hide : function() {
+			this.setStyle({
+				&quot;display&quot; : &quot;none&quot;
+			});
+			return this;
+		},
+		isShow : function() {
+			return this.getStyle(&quot;display&quot;) !== &quot;none&quot;;
+		},
+		validate : function() {
+			var validateItem, validate = true, result = this.getValue() || &quot;&quot;, options = this.getOptions(), validateItems = options.validateItems, errorMsg = {};
+			for(var p in validateItems) {
+				validateItem = validateItems[p];
+				if(validateItem === false) {
+					continue;
+				}
+
+				if(p == &quot;requires&quot;) {
+					if(!result || !result.replace(/(^\s*)|(\s*$)/g, &quot;&quot;)) {
+						validate = false;
+						errorMsg.requires = &quot;不能为空&quot;;
+					}
+				} else {
+					if(validateItems.requires || (!validateItems.requires &amp;&amp; result)) {
+						switch(p) {
+							case &quot;maxLength&quot; :
+								if(result.replace(/[^\x00-\xff]/g, '..').length &gt; validateItem) {
+									validate = false;
+									errorMsg.maxLength = &quot;长度只能在#{minLength}以上&quot;;
+								}
+								break;
+							case &quot;minLength&quot;:
+								if(result.replace(/[^\x00-\xff]/g, '..').length &lt; validateItem) {
+									validate = false;
+									errorMsg.minLength = &quot;长度只能在#{maxLength}以内&quot;;
+								}
+								break;
+							case &quot;lengthEqual&quot;	:
+								if(result.length != validateItem) {
+									validate = false;
+									errorMsg.lengthEqual = &quot;长度只能是#{lengthEqual}&quot;;
+								}
+								break;
+							case &quot;isNumber&quot;:
+								var regNum = /^[-\+]?\d+\.?\d*$/;
+								var isNumber = regNum.test(result);
+								if(!isNumber) {
+									validate = false;
+									errorMsg.isNumber = &quot;必须是数字&quot;;
+								}
+								break;
+							case &quot;mixNumber&quot;:
+								var regNum = /^[-\+]?\d+\.?\d*$/;
+								var isNumber = regNum.test(result);
+								if(!isNumber) {
+									validate = false;
+									errorMsg.mixNumber = &quot;必须是数字&quot;;
+								} else {
+									if(result &lt; validateItem) {
+										validate = false;
+										errorMsg.mixNumber = &quot;数值必须大于#{mixNumber}&quot;;
+									}
+								}
+								break;
+							case &quot;maxNumber&quot;:
+								var regNum = /^[-\+]?\d+\.?\d*$/;
+								var isNumber = regNum.test(result);
+								if(!isNumber) {
+									validate = false;
+									errorMsg.maxNumber = &quot;必须是数字&quot;;
+								} else {
+									if(result &gt; validateItem) {
+										validate = false;
+										errorMsg.maxNumber = &quot;数值必须小于#{maxNumber}&quot;;
+									}
+								}
+								break;
+							case &quot;isEqual&quot;:
+								if(result != $(&quot;[name=&quot; + validateItem + &quot;]&quot;).attr(&quot;value&quot;)) {
+									validate = false;
+									errorMsg.isEqual = &quot;两次输入的值必须相等&quot;;
+								}
+								break;
+							case &quot;isEmail&quot;:
+								var regEmail = /^[a-zA-Z0-9_\\.]+@[a-zA-Z0-9-]+[\\.a-zA-Z]+$/;
+								// /^[a-z0-9-_]{1,30}@[a-z0-9-]{1,65}.[a-z]{2,3}(.[a-z]{2})?$/;
+								var isEmail = regEmail.test(result);
+								if(!isEmail) {
+									validate = false;
+									errorMsg.isEmail = &quot;必须是邮箱格式&quot;;
+								}
+								break;
+							case &quot;isCode&quot;:
+								var regcode = /^[0-9]{6}$/;
+								var isCode = regcode.test(result);
+								if(!isCode) {
+									validate = false;
+									errorMsg.isCode = &quot;必须是邮箱格式&quot;;
+								}
+								break;
+							case &quot;isIdcard&quot;:
+								var regidcard = /^\d{14}(\d{1}|\d{4}|(\d{3}[xX]))$/;
+								var isIdcard = regidcard.test(result);
+								if(!isIdcard) {
+									validate = false;
+									errorMsg.isIdcard = &quot;必须是身份证号码格式&quot;;
+								}
+								break;
+							case &quot;isTel&quot;:
+								var reTel = /^((\(0\d{2}\)[- ]?\d{8})|(0\d{2}[- ]?\d{8})|(\(0\d{3}\)[- ]?\d{7,8})|(0\d{3}[- ]?\d{7,8}))?$/;
+								var isTel = reTel.test(result);
+								if(!isTel) {
+									validate = false;
+									errorMsg.isTel = &quot;必须是电话号码格式&quot;;
+								}
+								break;
+							case &quot;isMobile&quot;:
+								var regmobile = /^((\(\d{2,3}\))|(\d{3}\-))?1[3,8,5]\d{9}$/;
+								var isMobile = regmobile.test(result);
+								if(!isMobile) {
+									validate = false;
+									errorMsg.isMobile = &quot;必须是手机号码格式&quot;;
+								}
+								break;
+							case &quot;isIp&quot;:
+								var regIp = /^(([0-9]|([0-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([0-9]|([0-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([0-9]|([0-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/;
+								var isIp = regIp.test(result);
+								if(!isIp) {
+									validate = false;
+									errorMsg.isIp = &quot;必须是IP格式&quot;;
+								}
+								break;
+							case &quot;selfRegular&quot;:
+								var regRegular = validateItem;
+								var isRegular = regRegular.test(result);
+								if(!isRegular) {
+									validate = false;
+									errorMsg.selfRegular = &quot;格式不正确&quot;;
+								}
+								break;
+						}
+					}
+				}
+			}
+			if(validate === false) {
+				return {
+					validate : false,
+					data : errorMsg
+				};
+			} else {
+				return {
+					validate : true,
+					data : result
+				};
+			}
+		},
+		reConstruct : function(obj, reClass) {
+			if(!obj){
+				this[0] = null;
+				
+			}else{
+				this.storage(obj.nodeType ? obj : obj[0]);
+			}
+			return this;
+		},
+		reConstruct_TextNode : function(obj) {
+			if(!obj){
+				return;
+			}
+			var childNodes = obj.childNodes;
+			if(childNodes) {
+				for(var i = 0; i &lt; childNodes.length; i += 1) {
+					var node = childNodes[i];
+					if(node.nodeType === 3) {
+						this.setGlobal({
+							textNode : node
+						});
+						break;
+					}
+				}
+			}
+		}
+	});
+
+})()</pre>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="../../../themes/default/css/ui-main.css"/>
+		<script src="../../../src/library/FastDev.js"></script>
+		<script src="../../../src/library/Query.js"></script>
+		<script src="../../../src/library/Dom.js"></script>
+		<script src="../../../src/library/Ajax.js"></script>
+		<script src="../../../src/library/Event.js"></script>
+		<script src="../../../src/library/Browser.js"></script>
+		<script src="../../../src/library/Queue.js"></script>
+		<script src="../../../src/library/Tools.js"></script>
+		<script src="../../../src/library/Library_Patch.js"></script>
+
+		<script src="../../../src/core/ClassManager.js"></script>
+		<script src="../../../src/core/EventManager.js"></script>
+		<script src="../../../src/core/Base.js"></script>
+		<script src="../../../src/core/Template.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+		<script src="../../../src/core/Core_Patch.js"></script>
+
+		<script src="../../../src/data/Proxy.js"></script>
+		<script src="../../../src/data/DataSet.js"></script>
+		<script src="../../../src/data/Record.js"></script>
+		<script src="../../../src/data/Field.js"></script>
+		<script src="../../../src/data/Reader.js"></script>
+		<script src="../../../src/data/Data_Patch.js"></script>
+		<script src="../../../src/core/DomObject.js"></script>
+		<script src="../../../src/core/ControlBus.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+
+		<script src="../../../src/component/Component.js"></script>
+
+		<script src="../../../src/component/form/Box.js"></script>
+		<script src="../../../src/component/form/DatePicker.js"></script>
+		<script src="../../../src/component/form/DatePicker_Patch.js"></script>
+
+		<script type="text/javascript">
+			fastDev(function() {
+				talkweb.Components.Datepicker({
+					container : "example",
+					displayFormat : "yyyy-mm-dd  hh24:mi:ss", //设置文本框中日期显示格式
+					width : "200px", //设置弹出日历面板宽度
+					switchClock : "on"//开关可选时钟子控件,"on":打开　默认为"off"关闭
+				});
+
+			});
+
+		</script>
+		<title>高级应用示例</title>
+	</head>
+	<body>
+		<div id="example">
+			
+		</div>
+		<br/>
+		<br/>
+		日历控件还支持时分秒的选取，有两种配置方式，我们先来看第一种，设置switchClock为"on"，则控件加载时钟子控件。
+	</body>
+</html>

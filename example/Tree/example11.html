@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>可多选的无复选框的树 </title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+    
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>     
+        <script src="../../src/component/list/Tree.js"></script> 
+     <script>
+			$(function() {
+				
+				$.create("Tree", {
+					container : "example",
+					id:"tree1",
+					topParentid:"0",
+					showIco:true,				
+					treeType:"radiotree",
+					mTreeShowRadio:false,
+					openFloor:1,
+					initSource :"example_35_init.jsp",
+					asyncDataSource:"example_35_ansy.jsp",
+				});
+				
+			});
+		
+	
+		
+	</script>
+</head>
+<body>
+同级单选的无单选框的树
+	<div id="example">
+    </div>
+</body>
+</html>
+

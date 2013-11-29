@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Attribute Filters</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script>
+			$(function() {
+				function clearCss() {
+					$("*").css("border", "none");
+				}
+
+
+				$("#btn1").bind("click", function() {
+					clearCss();
+					// 查找所有含有 id 属性的 div 元素
+					$("div[id]").css("border", "2px dotted blue");
+				});
+
+				$("#btn2").bind("click", function() {
+					clearCss();
+					// 查找所有 name 属性是 test1 的 input 元素
+					$("input[name='test1']").css("border", "2px dotted blue");
+				});
+
+				$("#btn3").bind("click", function() {
+					clearCss();
+					// 查找所有 name 属性不是 test1 的 input 元素
+					$("input[name!='test1']").css("border", "2px dotted blue");
+				});
+				$("#btn4").bind("click", function() {
+					clearCss();
+					// 查找所有 name 以 'test' 开始的 input 元素
+					$("input[name^='test']").css("border", "2px dotted blue");
+				});
+
+				$("#btn5").bind("click", function() {
+					clearCss();
+					// 查找所有 name 以 '1' 结束的 input 元素
+					$("input[name$='1']").css("border", "2px dotted blue");
+				});
+
+				$("#btn6").bind("click", function() {
+					clearCss();
+					// 查找所有 name 包含 'test1' 的 input 元素
+					$("input[name*='est']").css("border", "2px dotted blue");
+				});
+
+				$("#btn7").bind("click", function() {
+					clearCss();
+					// 查找所有含有 id 属性，并且它的 name 属性是以 1 结尾的
+					$("input[id][name$='1']").css("border", "2px dotted blue");
+				});
+			});
+		</script>
+	</head>
+	<body>
+		查找所有含有 id 属性的 div 元素:<a id="btn1" href="#">div[id]</a><br>
+		查找所有 name 属性是 test1 的 input 元素:<a id="btn2" href="#">input[name='test1']</a><br> 
+		查找所有 name 属性不是 test1 的 input 元素:<a id="btn3" href="#">input[name!='test1']</a><br>
+		查找所有 name 以 'test' 开始的 input 元素:<a id="btn4" href="#">input[name^='test']</a><br>
+		查找所有 name 以 '1' 结束的 input 元素:<a id="btn5" href="#">input[name$='test']</a><br>
+		查找所有 name 包含 'test1' 的 input 元素:<a id="btn6" href="#">input[name*='test']</a><br>
+		查找所有含有 id 属性，并且它的 name 属性是以 1 结尾的:<a id="btn7" href="#">input[id][name$='1']</a><br>
+		
+
+		<!-- HTML元素测试区 -->
+		<div>
+			<p>
+				Hello!
+			</p>
+		</div>
+		<div id="test2">id="test2"</div>
+		<input id="chk1" type="checkbox" name="test1" value="Hot Fuzz">name="test1"</input>
+		<input type="checkbox" name="test1" value="Cold Fusion">name="test1"</input>
+		<input type="checkbox" name="test2" value="Evil Plans">name="test2"</input>
+	</body>
+</html>
+

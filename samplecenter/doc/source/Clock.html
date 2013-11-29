@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+	/*
+	 * 时钟控件
+	 * @class fastDev.Ui.Clock
+	 * @extends fastDev.Ui.Component
+	 */
+	fastDev.define(&quot;fastDev.Ui.Clock&quot;, {
+		extend : &quot;fastDev.Ui.Component&quot;,
+		alias : &quot;Clock&quot;,
+		_global : {
+			upDiv : null,
+			hoursSpan : null,
+			minuteSpan : null,
+			table : null,
+			upImage : null,
+			secondSpan : null,
+			downImage : null,
+			switchHour : &quot;on&quot;,
+			switchMinute : &quot;off&quot;,
+			switchSecond : &quot;off&quot;
+		},
+		/*
+		 * 构造方法
+		 * @private
+		 */
+		construct : function() {
+			var date = new Date();
+			var options = this.getOptions();
+			var clockDiv = fastDev.create(&quot;talkweb.BaseControl.Div.Class&quot;, {
+				container : options.container
+			});
+			this.storage(clockDiv[0]);
+			var upDiv = fastDev.create(&quot;talkweb.BaseControl.Div.Class&quot;).hide();
+			var downDiv = fastDev.create(&quot;talkweb.BaseControl.Div.Class&quot;, {
+				className : &quot;datepicker-footer&quot;
+			});
+			this.append(upDiv).append(downDiv);
+			fastDev.create(&quot;talkweb.BaseControl.Span.Class&quot;, {
+				container : downDiv,
+				value : &quot;时间:&quot;
+			});
+			var hoursSpan = fastDev.create(&quot;talkweb.BaseControl.Text.Class&quot;, {
+				container : downDiv,
+				value : date.getHours() == &quot;0&quot; ? &quot;0&quot; : date.getHours(),
+				width : &quot;20px&quot;,
+				name : &quot;hours&quot;
+			}).onKeyup(this.bindEventlistener(this, this.limit));
+			var hoursWords = fastDev.create(&quot;talkweb.BaseControl.Span.Class&quot;, {
+				container : downDiv,
+				value : &quot;:&quot;
+			});
+			var minuteSpan = fastDev.create(&quot;talkweb.BaseControl.Text.Class&quot;, {
+				container : downDiv,
+				value : date.getMinutes() == &quot;0&quot; ? &quot;0&quot; : date.getMinutes(),
+				width : &quot;20px&quot;
+			}).onKeyup(this.bindEventlistener(this, this.limit));
+			var minuteWords = fastDev.create(&quot;talkweb.BaseControl.Span.Class&quot;, {
+				container : downDiv,
+				value : &quot;:&quot;
+			});
+			var secondSpan = fastDev.create(&quot;talkweb.BaseControl.Text.Class&quot;, {
+				container : downDiv,
+				value : date.getSeconds() == &quot;0&quot; ? &quot;0&quot; : date.getSeconds(),
+				width : &quot;20px&quot;
+			}).onKeyup(this.bindEventlistener(this, this.limit));
+			var upImage = fastDev.create(&quot;talkweb.BaseControl.Span.Class&quot;, {
+				container : downDiv,
+				saveInstance : true,
+				id : &quot;hoursUp&quot;,
+				//				value : &quot;上&quot;,
+				className : &quot;datepicker_arrowtop&quot;
+			});
+
+			var downImage = fastDev.create(&quot;talkweb.BaseControl.Span.Class&quot;, {
+				container : downDiv,
+				saveInstance : true,
+				id : &quot;hoursDown&quot;,
+				//				value : &quot;下&quot;,
+				className : &quot;datepicker_arrowdown&quot;
+			});
+
+			var table = fastDev.create(&quot;talkweb.BaseControl.Table.Class&quot;, {
+				container : upDiv,
+				rows : 2,
+				cols : 12
+			});
+			this.setGlobal({
+				upDiv : upDiv,
+				hoursSpan : hoursSpan,
+				minuteSpan : minuteSpan,
+				table : table,
+				upImage : upImage,
+				downImage : downImage,
+				secondSpan : secondSpan
+			});
+		},
+		/*
+		 * 截取时间值
+		 * @private
+		 */
+		limit : function(e) {
+			e.target.value = e.target.value.replace(/\D/g, '');
+		},
+		/*
+		 * 初始化控件
+		 * @private
+		 */
+		init : function() {
+			var global = this.getGlobal();
+			global.hoursSpan.onClick(this.bindEventlistener(this, this.clickHour));
+			global.minuteSpan.onClick(this.bindEventlistener(this, this.clickMinute));
+			global.secondSpan.onClick(this.bindEventlistener(this, this.clickSecond));
+			global.table.onClick(this.bindEventlistener(this, this.clickTable));
+			global.upImage.onClick(this.bindEventlistener(this, this.addNum));
+			global.downImage.onClick(this.bindEventlistener(this, this.reductionNum));
+		},
+		/*
+		 * 显示层
+		 * @private
+		 */
+		showDiv : function() {
+			var global = this.getGlobal();
+			var cssblock = {
+				'display' : 'block'
+			};
+			global.upDiv.setCss(cssblock);
+			global.upDiv.setClass(&quot;datepicker-times-select&quot;);
+		},
+		/*
+		 * 隐藏层
+		 * @private
+		 */
+		hideDiv : function() {
+			this.getGlobal().upDiv.hide();
+		},
+		/*
+		 * 构造 table
+		 * @private
+		 * @param {String} creat &quot;minute&quot;或&quot;second&quot;
+		 * @return {Array}
+		 */
+		creatTable : function(creat) {
+			var tableArr = new Array(2);
+			if (creat == &quot;minute&quot; || creat == &quot;second&quot;) {
+				for (var i = 0; i &lt; tableArr.length - 1; i += 1) {
+					tableArr[i] = new Array(12);
+					for (var j = 0, h = 0; j &lt; tableArr[i].length; j += 1, h = h + 5) {
+						tableArr[i][j] = h;
+					}
+				}
+			} else {
+				for (var i = 0, h = 0; i &lt; tableArr.length; i += 1) {
+					tableArr[i] = new Array(12);
+					for (var j = 0; j &lt; tableArr[i].length; j += 1, h += 1) {
+						tableArr[i][j] = h;
+					}
+				}
+			}
+			return tableArr;
+		},
+		/*
+		 * 点击小时数字触发事件
+		 * @private
+		 */
+		clickHour : function() {
+			this.showDiv();
+			this.getGlobal().table.cleanData();
+			this.getGlobal().table.setValue(this.creatTable(&quot;hour&quot;));
+			this.setGlobal({
+				switchHour : &quot;on&quot;,
+				switchMinute : &quot;off&quot;,
+				switchSecond : &quot;off&quot;
+			});
+		},
+		/*
+		 * 点击分钟数字触发事件
+		 * @private
+		 */
+		clickMinute : function() {
+			this.showDiv();
+			this.getGlobal().table.cleanData();
+			this.getGlobal().table.setValue(this.creatTable(&quot;minute&quot;));
+			this.setGlobal({
+				switchHour : &quot;off&quot;,
+				switchMinute : &quot;on&quot;,
+				switchSecond : &quot;off&quot;
+			});
+		},
+		/*
+		 * 点击秒钟数字触发事件
+		 * @private
+		 */
+		clickSecond : function() {
+			this.showDiv();
+			this.getGlobal().table.cleanData();
+			this.getGlobal().table.setValue(this.creatTable(&quot;second&quot;));
+			this.setGlobal({
+				switchHour : &quot;off&quot;,
+				switchMinute : &quot;off&quot;,
+				switchSecond : &quot;on&quot;
+			});
+		},
+		/*
+		 * 点击显示层获取数字事件
+		 * @private
+		 */
+		clickTable : function(event) {
+			if (event.target) {
+				var global = this.getGlobal();
+				switch(&quot;on&quot;) {
+					case global.switchHour:
+						global.hoursSpan.setValue(event.target.innerHTML);
+						break;
+					case global.switchMinute:
+						global.minuteSpan.setValue(event.target.innerHTML);
+						break;
+					case global.switchSecond:
+						global.secondSpan.setValue(event.target.innerHTML);
+						break;
+				}
+				this.hideDiv();
+			}
+		},
+		/*
+		 * 增加数字事件
+		 * @private
+		 */
+		addNum : function() {
+			var global = this.getGlobal(), obj, value, maxV = 59;
+			switch(&quot;on&quot;) {
+				case global.switchHour:
+					obj = global.hoursSpan, maxV = 23;
+					break;
+				case global.switchMinute:
+					obj = global.minuteSpan;
+					break;
+				case global.switchSecond:
+					obj = global.secondSpan;
+					break;
+			};
+			value = obj.getValue(), value = parseInt(value) + 1;
+			if (value == maxV + 1) {
+				value = 0;
+			}
+			obj.setValue(String(value));
+		},
+		/*
+		 * 减少数字事件
+		 * @private
+		 */
+		reductionNum : function() {
+			var global = this.getGlobal(), obj, value, maxV = 59;
+			minV = 0;
+			switch(&quot;on&quot;) {
+				case global.switchHour:
+					obj = global.hoursSpan, maxV = 23;
+					break;
+				case global.switchMinute:
+					obj = global.minuteSpan;
+					break;
+				case global.switchSecond:
+					obj = global.secondSpan;
+					break;
+			};
+			value = obj.getValue(),
+			//(/^\d+$/.test(value) &amp;&amp; value &gt;= 0 &amp;&amp; --value) || ( value = maxV);
+			value = parseInt(value) - 1;
+			if (value == minV - 1) {
+				value = maxV;
+			}
+			obj.setValue(String(value));
+		},
+		/*
+		 * @private
+		 */
+		Appendzero : function(obj) {
+			if (obj &lt; 10 &amp;&amp; obj.toString().length == 1) {
+				return &quot;0&quot; + &quot;&quot; + obj;
+			} else {
+				return obj;
+			}
+		},
+		/*
+		 * 设置控件的值
+		 * @param {String} mdate 要设置的时间值
+		 */
+		setValue : function(mdate) {
+			var global = this.getGlobal();
+			var mycars = new Array();
+			for ( i = 0; i &lt; mdate.length; i++) {
+				mycars[i] = mdate[i];
+			}
+			global.hoursSpan.setValue(mycars[3]);
+			global.minuteSpan.setValue(mycars[4]);
+			global.secondSpan.setValue(mycars[5]);
+		},
+		/*
+		 * 得到当前控件的显示值
+		 * @return {String} HH:mm:ss格式的时间值
+		 */
+		getValue : function() {
+			return this.Appendzero(this.getGlobal().hoursSpan.getValue() &gt; 23 ? 23 : this.getGlobal().hoursSpan.getValue()) + &quot;:&quot; + this.Appendzero(this.getGlobal().minuteSpan.getValue() &gt; 59 ? 59 : this.getGlobal().minuteSpan.getValue()) + &quot;:&quot; + this.Appendzero(this.getGlobal().secondSpan.getValue() &gt; 59 ? 59 : this.getGlobal().secondSpan.getValue());
+		}
+	});
+})(jQuery)
+</pre>
+</body>
+</html>

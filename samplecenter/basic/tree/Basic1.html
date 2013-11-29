@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>基本功能</h4>
+        <ul>       
+         <li>构建一颗树的最基本配置就是有数据源，动态数据源配置initSource属于一个地址，静态数据配置items一个json格式的数据</li>
+         <li>数据源的节点数据必须有id,pid,val三个属性</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+			btneditNode= function(){
+				debugger;
+				var tree=fastDev.getInstance("tree1");
+				
+			}
+		</script>
+	</head>
+	<body>
+    <div style="margin:10px;">		
+             <div class="ui-layout-text">默认</div>
+            <div itype="Tree" id="tree1"  saveInstance="true" ></div>
+            
+            <div itype="Button"  text="修改表单节点为表单控件" onclick="btneditNode()" ></div>   
+     </div>
+	</body>
+</html>

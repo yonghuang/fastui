@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>当前示例为DataGrid的列数据排序，排序分为客户端排序和服务端排序俩种</li>
+				<li><b>客户端排序：</b>也就是不与服务器交互，利用当前已送达至前台的数据进行排序显示，英文依照a-z、数字依照0-9、汉字依照拼音字符</li>
+				<li><b>服务端排序：</b>服务端排序时会请求服务端，同时把排序字段名称以及排序类型(升序、降序)参数发送给服务端，再刷新当前显示数据</li>
+                <li><b>服务端排序--多字段组合排序：</b>通过在onBeforeInit事件中通过addInitReqParam（）方法传递参数到后台来实现。</li>
+                <li><b>服务端排序--定制排序字段标题显示：</b>a.限制排序字段；b.能排序字段都加上排序图标使之能一眼看出</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <style type="text/css">
+            /* 下面样式通过样式的优先级来控制排序列头显示效果，可修改样式来定制其它更美观的显示效果。 */
+            .sortCls{
+            }
+            .sortCls .ui-datagrid-sorticon{
+                background:url(../../../themes/default/images/ico/bg.gif) no-repeat left center;
+                background-position-x: 50%;
+                display:inline-block;
+            }
+            .ui-datagrid-sort-desc .sortCls .ui-datagrid-sorticon{
+                background:url(../../../themes/default/images/ico/sort.gif) no-repeat left center;
+            }
+            .ui-datagrid-sort-asc .sortCls .ui-datagrid-sorticon{
+                background:url(../../../themes/default/images/ico/sort.gif) no-repeat -14px center;
+            }
+        </style>
+		<script>
+			function onDataLoad(){
+				// 此处为写示例使用，不对外公开，请勿轻易擅用
+				if(this._options.sortField){
+					fastDev.tips("排序字段:"+this._options.sortField+";排序方式:"+(this._options.sortby==="asc"?"升序":"降序"));
+				}
+			}
+            function onBeforeInit(){
+                // 传递排序的字段和排序方式到后台，进行多字段组合排序。
+                this.addInitReqParam({'sort1':'birthday','sorttype1':'desc','sort2':'datesemployed','sorttype2':'asc'});
+            }
+            function onAfterInit(){
+                // 请求调用后，可通过传空对象给setInitReqParam方法，清空参数，使点击列头排序、下一页、刷新等操作时不附加新增的参数
+                this.setInitReqParam({});
+            }
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">客户端排序</div>
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" sort="client" showSeqColumn=true width="98%">
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">服务端排序1（请配合后台使用，目前只打印排序依赖参数）</div>
+			<div itype="DataGrid"  initSource="../../data/griddata.jsp" sort="server" showSeqColumn=true onAfterLoadInit="onDataLoad()" width="98%">
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+        <div style="margin: 10px">
+            <div class="ui-layout-text">服务端排序2（多字段排序，定制排序标题显示,限制排序字段）</div>
+            <div itype="DataGrid"  initSource="../../data/griddata.jsp" sort="server" sortField="pay"  limitSortField="department,isuse" onBeforeInit="onBeforeInit()" onAfterInit="onAfterInit()" showSeqColumn=true onAfterLoadInit="onDataLoad()" width="98%">
+                <div width="10%" name="empno" text="员工工号" titleCls="sortCls"></div>
+                <div width="20%" name="name" text="姓名" titleCls="sortCls"></div>
+                <div width="12%" name="department" text="所属部门"></div>
+                <div width="8%" name="isuse" text="是否可用"></div>
+                <div width="15%" name="position" text="职位" titleCls="sortCls"></div>
+                <div width="10%" name="pay" text="薪资" titleCls="sortCls"></div>
+                <div width="10%" name="datesemployed" text="入职时间" titleCls="sortCls"></div>
+                <div width="15%" name="birthday" text="生日" defaultValue="1985-01-01" titleCls="sortCls"></div>
+                <div name="pageSizeList">
+                    <div value="5" text="5条"></div>
+                    <div value="10" text="10条"></div>
+                </div>
+            </div>
+        </div>
+	</body>
+</html>

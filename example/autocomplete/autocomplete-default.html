@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>AutoComplete</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/jquery-1.7.2.js"></script>
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+        <script src="../../src/core/ControlBus_Patch.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+		<script src="../../src/component/MessageBox.js"></script>
+		<script src="../../src/component/ProgressBar.js"></script>
+
+		<script src="../../src/component/form/Box.js"></script>
+		<script src="../../src/component/form/AutoComplete.js"></script>
+
+		<script type="text/javascript">
+			fastDev(function() {
+				fastDev.create("AutoComplete", {
+					container : "example1",
+					id:"AutoComplete1",
+					name:"AutoComplete1",
+					saveInstance:true, 
+					items : "Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin,Felix,Gavin,Greg,Harlan,Jack,Jeff,Kelly,King,Lance,Levi,Marcus,Newman,Norton,Ivan,Oscar,Peter,Quinn,Robin,Simon,Sam,Tiffany,Virgil,Will,Xavier,Zachary",
+					matchContains : false,
+					value : "abcde,efg"
+				});
+				debugger;
+				var AutoComplete1=fastDev.Core.ControlBus.getInstance("AutoComplete1");
+				AutoComplete1.setValue("test");
+				alert(AutoComplete1.getValue());
+
+				fastDev.create("AutoComplete", {
+					container : "example2",
+					items : ["Aaron", "Abel", "Baird", "Barnett", "Carr", "Christian", "David", "Derrick", "Eden", "Emmanuel", "Franklin", "Felix", "Gavin", "Greg", "Harlan", "Jack", "Jeff", "Kelly", "King", "Lance", "Levi", "Marcus", "Newman", "Norton", "Ivan", "Oscar", "Peter", "Quinn", "Robin", "Simon", "Sam", "Tiffany", "Virgil", "Will", "Xavier", "Zachary"],
+					highlightCls : "ui-highlight-custom",
+					maxItems : 5
+				});
+
+				fastDev.create("AutoComplete", {
+					container : "example3",
+					items : [{
+						text : "Aaron",
+						value : 1
+					}, {
+						text : "Baird",
+						value : 2
+					}],
+					hintText : "输入字符查询",
+					noResultsText : "未查询到相关结果"
+				});
+
+				fastDev.create("AutoComplete", {
+					container : "example4",
+					initSource : "data.jsp",
+					hintText : "输入字符查询",
+					searchingText : "正在查询中...",
+					noResultsText : "未查询到相关结果",
+					maxItems : 5
+				});
+
+				fastDev.create("AutoComplete", {
+					container : "example5",
+					initSource : "data.jsp",
+					hintText : "输入字符查询",
+					searchingText : "正在查询中...",
+					noResultsText : "未查询到相关结果",
+					width : 400,
+					minChars : 1,
+					scrollHeight : 500,
+					selectFirst : true,
+					autoFill : false,
+					keyDelay : 100
+				});
+				
+				
+				
+			});
+
+		</script>
+
+		<style type="text/css">
+			.ui-highlight-custom {
+				background-color: #81DB2E !important;
+				font-weight: bold !important;
+				font-style: oblique !important;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div>
+			<h2> 使用items属性配置静态数据源。 </h2>
+			<p style="color: orange;">
+				注意！若同时指定了items属性和initSource属性，则只处理items数据源。
+			</p>
+			静态数据源的按键延时默认为10毫秒。
+			<br />
+			items数据源支持以下格式静态数据：
+			<ol>
+				<li>
+					以逗号分隔的字符串
+				</li>
+				<li>
+					元素为字符串的数组
+				</li>
+				<li>
+					元素为普通对象的数组
+				</li>
+			</ol>
+			其中，对象形式的数据，可以指定二个属性：
+			<ol>
+				<li>
+					text - 显示至结果列表或标签上的文本值（如：男）
+				</li>
+				<li>
+					value - 文本展现值对应的有效数据值（如：1）
+				</li>
+			</ol>
+			若对象只指定一个属性，则认为另外一个属性与该属性同值。
+			<br />
+			<div id="example1" style="position:relative;left:10px;">
+				使用逗号分隔的静态数据源
+				<br />
+				matchContains属性可指定检索字符串是否包含关键字，为false时则只检索以关键字开头的结果。（此例为该值为false）
+				<br />
+			</div>
+			<br />
+			<div id="example2" style="position:relative;left:10px;">
+				使用字符串数组静态数据源
+				<br />
+				keywordHighlight属性指定是否高亮关键字，该值默认为true。另外通过highlightCls属性可配置高亮关键字的样式名。
+				<br />
+				maxItems属性可以指定显示给用户的提示结果项数，0表示不受限制。该配置属性是在客户端对记录数进行截取。
+			</div>
+			<br />
+			<div id="example3" style="position:relative;left:10px;">
+				使用带属性的对象数组静态数据源（与Select控件所需数据格式相同）
+				<br />
+				hintText属性可以指定一个提示用户输入的文本提示信息。
+				<br />
+				noResultsText属性指定没有结果时的提示文本信息。
+				<br />
+			</div>
+		</div>
+		<br />
+		<div>
+			<h2> 使用initSource属性来配置远程数据源。 </h2>
+			<div id="example4" style="position:relative;left:10px;">
+				使用远程数据源时，默认按键延时为400毫秒。
+				<br />
+				使用远程数据源时，客户端将不对数据做关键字过滤处理，此过滤检索操作理应是由服务器端完成的。
+				<br />
+				控件会缓存每次远程请求关键字所对应的检索结果，同样的关键字会从本地缓存中读取数据而不会重复发送检索请求，以便减轻服务器负担。
+				<br />
+				searchingText属性可指定正在检索时的提示文本信息。
+				<br />
+				connectTimeout属性可指定向服务器发送连接请求的超时时长，默认为10秒。
+				<br />
+				queryName属性可以指定发送请求的请求参数名，默认为"q"。
+				<br />
+				也可以使用extraParams属性来配置额外的请求参数，并通过setParam(obj)方法动态的变更查询参数。
+				<br />
+			</div>
+		</div>
+		<br />
+		<div>
+			<div id="example5" style="position:relative;left:10px;">
+				width属性指定输入框的宽度。
+				<br />
+				scrollHeight属性可以指定提示层出现滚动条时的最大高度，默认为180px。（此例为500px）
+				<br />
+				minChars属性可以指定触发检索的最小输入字符长度，默认为1。
+				<br />
+				selectFirst属性可以指定用户未明确选定某提示结果项而输入回车键时是否默认选取第一个提示结果项。默认为false。（此例为true）
+				<br />
+				autoFill属性可以指定用户在使用键盘方向键上下浏览提示结果时，是否自动将提示结果值设为输入框当前值。默认为true。（此例为false）
+				<br />
+				keyDelay属性可以重置按键延迟。（此例为100毫秒）
+			</div>
+		</div>
+	</body>
+</html>
+

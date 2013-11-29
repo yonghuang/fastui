@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					主动发出检查Session过期请求至后台相应服务并对返回结果进行处理(如当前页面有需要与后台交互的用户操作，则可使用另外一个示例中的自动检查)
+				</li>
+			</ul></title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function() {
+				fastDev.Core.ControlBus.checkSession("../../../data/timeout.json",function(msg){
+					fastDev.tips(msg);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="ui-layout-text">
+			
+		</div>
+		<form itype="Form" id="form1"  requestType="post" saveInstance="true">
+			<table width="800px" border="0" style="margin:10px;" class="ui-form-list">
+				<tr>
+					<td colspan="2">
+					<div class="ui-layout-text">
+						新增表单(模拟用户打开一个新增表单，该表单无后台交互，且需要在打开时进行Session过期检查)
+					</div></td>
+				</tr>
+				<tr>
+					<td>text:</td>
+					<td>
+					<input itype="TextBox" id="txt1" >
+					</td>
+				</tr>
+				<tr>
+					<td>password:</td>
+					<td>
+					<input itype="TextBox" id="pwd1" type="password" >
+					</td>
+				</tr>
+				<tr>
+					<td>textarea:</td>
+					<td>					<textarea itype="TextBox" id="area1" type="textarea" height="50px" width="400px"></textarea></td>
+				</tr>
+			</table>
+			<div style="width:400px; text-align:center">
+				<div itype="Button" text="新增" onclick="submit()" ></div>
+			</div>
+		</form>
+	</body>
+</html>
+

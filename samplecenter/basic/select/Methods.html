@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>控件使用基础事例</h4></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link href="../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+		<script src="../../../src/fastDev-import.js"></script>
+
+		<script type="text/javascript">
+			function select1_getValue() {
+				fastDev.tips(fastDev.getInstance("select1").getValue());
+			}
+
+			function select2_getValue() {
+				fastDev.tips(fastDev.getInstance("select2").getValue());
+			}
+
+			function select3_getValue() {
+				fastDev.tips(fastDev.getInstance("select3").getValue());
+			}
+			
+			function select1_setValue() {
+				fastDev.getInstance("select1").setValue("data1");
+			}
+
+			function select2_setValue() {
+				fastDev.getInstance("select2").setValue("data1");
+			}
+
+			function select3_setValue() {
+				fastDev.getInstance("select3").setValue("data1");
+			}
+
+			function select1_getText() {
+				fastDev.tips(fastDev.getInstance("select1").getText());
+			}
+
+			function select2_getText() {
+				fastDev.tips(fastDev.getInstance("select2").getText());
+			}
+
+			function select3_getText() {
+				fastDev.tips(fastDev.getInstance("select3").getText());
+			}
+			
+			function select1_enable() {
+				fastDev.getInstance("select1").enable();
+			}
+
+			function select2_enable() {
+				fastDev.getInstance("select2").enable();
+			}
+
+			function select3_enable() {
+				fastDev.getInstance("select3").enable();
+			}
+			
+			function select1_disable() {
+				fastDev.getInstance("select1").disable();
+			}
+
+			function select2_disable() {
+				fastDev.getInstance("select2").disable();
+			}
+
+			function select3_disable() {
+				fastDev.getInstance("select3").disable();
+			}
+			
+			function select1_disable() {
+				fastDev.getInstance("select1").disable();
+			}
+
+			function select2_disable() {
+				fastDev.getInstance("select2").disable();
+			}
+
+			function select3_disable() {
+				fastDev.getInstance("select3").disable();
+			}
+			
+			function select1_readonly() {
+				fastDev.getInstance("select1").setReadonly(true);
+			}
+
+			function select2_readonly() {
+				fastDev.getInstance("select2").setReadonly(true);
+			}
+
+			function select3_readonly() {
+				fastDev.getInstance("select3").setReadonly(true);
+			}
+			
+			function select1_cancelReadonly() {
+				fastDev.getInstance("select1").setReadonly(false);
+			}
+
+			function select2_cancelReadonly() {
+				fastDev.getInstance("select2").setReadonly(false);
+			}
+
+			function select3_cancelReadonly() {
+				fastDev.getInstance("select3").setReadonly(false);
+			}
+			
+			function select1_disableItems() {
+				fastDev.getInstance("select1").disableItems("remoteData2");
+			}
+
+			function select2_disableItems() {
+				fastDev.getInstance("select2").disableItems("remoteData2");
+			}
+
+			function select3_disableItems() {
+				fastDev.getInstance("select3").disableItems("remoteData2");
+			}
+			
+			function select1_enableItems() {
+				fastDev.getInstance("select1").enableItems("remoteData2");
+			}
+
+			function select2_enableItems() {
+				fastDev.getInstance("select2").enableItems("remoteData2");
+			}
+
+			function select3_enableItems() {
+				fastDev.getInstance("select3").enableItems("remoteData2");
+			}
+			
+			function select1_addItems() {
+				fastDev.getInstance("select1").addItems({value:"data2",text:"本地数据2"});
+			}
+
+			function select2_addItems() {
+				fastDev.getInstance("select2").addItems({value:"data2",text:"本地数据2"});
+			}
+
+			function select3_addItems() {
+				fastDev.getInstance("select3").addItems({value:"data2",text:"本地数据2"});
+			}
+			
+			function select1_removeItems() {
+				fastDev.getInstance("select1").removeItems("data2");
+			}
+
+			function select2_removeItems() {
+				fastDev.getInstance("select2").removeItems("data2");
+			}
+
+			function select3_removeItems() {
+				fastDev.getInstance("select3").removeItems("data2");
+			}
+			
+			function select1_getItems() {
+				var items = fastDev.getInstance("select1").getItems();
+				fastDev.each(items,function(index,item){
+					fastDev.tips("text:"+item.text+";value:"+item.value);
+				});
+			}
+
+			function select2_getItems() {
+				var items = fastDev.getInstance("select2").getItems();
+				fastDev.each(items,function(index,item){
+					fastDev.tips("text:"+item.text+";value:"+item.value);
+				});
+			}
+
+			function select3_getItems() {
+				var items = fastDev.getInstance("select3").getItems();
+				fastDev.each(items,function(index,item){
+					fastDev.tips("text:"+item.text+";value:"+item.value);
+				});
+			}
+			
+			function select1_getSelectedItem() {
+				var items = fastDev.getInstance("select1").getSelectedItem();
+				fastDev.each(items,function(index,item){
+					fastDev.tips("text:"+item.text+";value:"+item.value);
+				});
+			}
+
+			function select2_getSelectedItem() {
+				var items = fastDev.getInstance("select2").getSelectedItem();
+				fastDev.each(items,function(index,item){
+					fastDev.tips("text:"+item.text+";value:"+item.value);
+				});
+			}
+
+			function select3_getSelectedItem() {
+				var items = fastDev.getInstance("select3").getSelectedItem();
+				fastDev.each(items,function(index,item){
+					fastDev.tips("text:"+item.text+";value:"+item.value);
+				});
+			}
+			
+			function select1_moveUp() {
+				fastDev.getInstance("select1").moveUp();
+			}
+
+			function select2_moveUp() {
+				fastDev.getInstance("select2").moveUp();
+			}
+
+			function select3_moveUp() {
+				fastDev.getInstance("select3").moveUp();
+			}
+			
+			function select1_moveDown() {
+				fastDev.getInstance("select1").moveDown();
+			}
+
+			function select2_moveDown() {
+				fastDev.getInstance("select2").moveDown();
+			}
+
+			function select3_moveDown() {
+				fastDev.getInstance("select3").moveDown();
+			}
+			
+			function select1_reset(){
+				fastDev.getInstance("select1").reset();
+			}
+			function select2_reset(){
+				fastDev.getInstance("select2").reset();
+			}
+			function select3_reset(){
+				fastDev.getInstance("select3").reset();
+			}
+			
+			function select1_clean() {
+				fastDev.getInstance("select1").clean(true);
+			}
+
+			function select2_clean() {
+				fastDev.getInstance("select2").clean(true);
+			}
+
+			function select3_clean() {
+				fastDev.getInstance("select3").clean(true);
+			}
+			
+		</script>
+	</head>
+	<body>
+		<table style="margin: 10px">
+			<tr>
+				<td><div class="ui-layout-text">普通下拉框</div></td>
+				<td style="width: 50px"></td>
+				<td><div class="ui-layout-text">展开下拉框</div></td>
+				<td style="width: 50px"></td>
+				<td><div class="ui-layout-text">多选下拉框</div></td>
+			</tr>
+			<tr>
+				<td valign="top">
+				<select itype="Select" id="select1" saveInstance=true initSource="../../data/select.json" dataSource="../../data/selectvalue.json">
+					<option>-----请选择-----</option>
+					<option value="data1">本地数据1</option>
+				</select></td>
+				<td style="width: 50px"></td>
+				<td>
+				<select itype="Select" id="select2" saveInstance=true initSource="../../data/select.json" dataSource="../../data/selectvalue.json" size=4 >
+					<option value="data1">本地数据1</option>
+				</select></td>
+				<td style="width: 50px"></td>
+				<td>
+				<select itype="Select"  id="select3" saveInstance=true initSource="../../data/select.json" size=4 dataSource="../../data/selectvalue.json" multiple=true>
+					<option value="data1">本地数据1</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="获取值" onclick="select1_getValue()">
+				<input itype="Button" text="设置值" onclick="select1_setValue()">
+				<input itype="Button" text="获取文本" onclick="select1_getText()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="获取值" onclick="select2_getValue()">
+				<input itype="Button" text="设置值" onclick="select2_setValue()">
+				<input itype="Button" text="获取文本" onclick="select2_getText()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="获取值" onclick="select3_getValue()">
+				<input itype="Button" text="设置值" onclick="select3_setValue()">
+				<input itype="Button" text="获取文本" onclick="select3_getText()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="启用" onclick="select1_enable()">
+				<input itype="Button" text="禁用" onclick="select1_disable()">
+				<input itype="Button" text="只读" onclick="select1_readonly()">
+				<input itype="Button" text="取消只读" onclick="select1_cancelReadonly()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="启用" onclick="select2_enable()">
+				<input itype="Button" text="禁用" onclick="select2_disable()">
+				<input itype="Button" text="只读" onclick="select2_readonly()">
+				<input itype="Button" text="取消只读" onclick="select2_cancelReadonly()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="启用" onclick="select3_enable()">
+				<input itype="Button" text="禁用" onclick="select3_disable()">
+				<input itype="Button" text="只读" onclick="select3_readonly()">
+				<input itype="Button" text="取消只读" onclick="select3_cancelReadonly()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="禁用指定可选项" onclick="select1_disableItems()">
+				<input itype="Button" text="启用指定可选项" onclick="select1_enableItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="禁用指定可选项" onclick="select2_disableItems()">
+				<input itype="Button" text="启用指定可选项" onclick="select2_enableItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="禁用指定可选项" onclick="select3_disableItems()">
+				<input itype="Button" text="启用指定可选项" onclick="select3_enableItems()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="增加可选项" onclick="select1_addItems()">
+				<input itype="Button" text="删除可选项" onclick="select1_removeItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="增加可选项" onclick="select2_addItems()">
+				<input itype="Button" text="删除可选项" onclick="select2_removeItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="增加可选项" onclick="select3_addItems()">
+				<input itype="Button" text="删除可选项" onclick="select3_removeItems()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="获取所有选项配置" onclick="select1_getItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="获取所有选项配置" onclick="select2_getItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="获取所有选项配置" onclick="select3_getItems()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="获取当前选中项配置" onclick="select1_getSelectedItem()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="获取当前选中项配置" onclick="select2_getSelectedItem()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="获取当前选中项配置" onclick="select3_getSelectedItem()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="重置" onclick="select1_reset()">
+				<input itype="Button" text="清空" onclick="select1_clean()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="重置" onclick="select2_reset()">
+				<input itype="Button" text="清空" onclick="select2_clean()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="重置" onclick="select3_reset()">
+				<input itype="Button" text="清空" onclick="select3_clean()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="上移选中项" onclick="select1_moveUp()">
+				<input itype="Button" text="下移选中项" onclick="select1_moveDown()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="上移选中项" onclick="select2_moveUp()">
+				<input itype="Button" text="下移选中项" onclick="select2_moveDown()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="上移选中项" onclick="select3_moveUp()">
+				<input itype="Button" text="下移选中项" onclick="select3_moveDown()">
+				</td>
+			</tr>
+		</table>
+
+	</body>
+</html>

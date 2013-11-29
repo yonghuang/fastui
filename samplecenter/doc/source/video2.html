@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///import plugins/inserthtml.js
+///commands 视频
+///commandsName InsertVideo
+///commandsTitle  插入视频
+///commandsDialog  dialogs\video\video.html
+UE.plugins['video'] = function (){
+    var me =this,
+        div;
+
+    /*
+     * 创建插入视频字符窜
+     * @param url 视频地址
+     * @param width 视频宽度
+     * @param height 视频高度
+     * @param align 视频对齐
+     * @param toEmbed 是否以图片代替显示
+     * @param addParagraph  是否需要添加P 标签
+     */
+    function creatInsertStr(url,width,height,align,toEmbed,addParagraph){
+        return  !toEmbed ?
+                (addParagraph? ('&lt;p '+ (align !=&quot;none&quot; ? ( align == &quot;center&quot;? ' style=&quot;text-align:center;&quot; ':' style=&quot;float:&quot;'+ align ) : '') + '&gt;'): '') +
+                '&lt;img align=&quot;'+align+'&quot; width=&quot;'+ width +'&quot; height=&quot;' + height + '&quot; _url=&quot;'+url+'&quot; class=&quot;edui-faked-video&quot;' +
+                ' src=&quot;'+me.options.UEDITOR_HOME_URL+'themes/default/images/spacer.gif&quot; style=&quot;background:url('+me.options.UEDITOR_HOME_URL+'themes/default/images/videologo.gif) no-repeat center center; border:1px solid gray;&quot; /&gt;' +
+                (addParagraph?'&lt;/p&gt;':'')
+                :
+                '&lt;embed type=&quot;application/x-shockwave-flash&quot; class=&quot;edui-faked-video&quot; pluginspage=&quot;http://www.macromedia.com/go/getflashplayer&quot;' +
+                ' src=&quot;' + url + '&quot; width=&quot;' + width  + '&quot; height=&quot;' + height  + '&quot; align=&quot;' + align + '&quot;' +
+                ( align !=&quot;none&quot; ? ' style= &quot;'+ ( align == &quot;center&quot;? &quot;display:block;&quot;:&quot; float: &quot;+ align )  + '&quot;' :'' ) +
+                ' wmode=&quot;transparent&quot; play=&quot;true&quot; loop=&quot;false&quot; menu=&quot;false&quot; allowscriptaccess=&quot;never&quot; allowfullscreen=&quot;true&quot; &gt;';
+    }
+
+    function switchImgAndEmbed(img2embed){
+        var tmpdiv,
+            nodes =domUtils.getElementsByTagName(me.document, !img2embed ? &quot;embed&quot; : &quot;img&quot;);
+        for(var i=0,node;node = nodes[i++];){
+            if(node.className!=&quot;edui-faked-video&quot;)continue;
+            tmpdiv = me.document.createElement(&quot;div&quot;);
+            //先看float在看align,浮动有的是时候是在float上定义的
+            var align = node.style.cssFloat;
+            tmpdiv.innerHTML = creatInsertStr(img2embed ? node.getAttribute(&quot;_url&quot;):node.getAttribute(&quot;src&quot;),node.width,node.height,align || node.getAttribute(&quot;align&quot;),img2embed);
+            node.parentNode.replaceChild(tmpdiv.firstChild,node);
+        }
+    }
+    me.addListener(&quot;beforegetcontent&quot;,function(){
+        switchImgAndEmbed(true);
+    });
+    me.addListener('aftersetcontent',function(){
+        switchImgAndEmbed(false);
+    });
+    me.addListener('aftergetcontent',function(cmdName){
+        if(cmdName == 'aftergetcontent' &amp;&amp; me.queryCommandState('source'))
+            return;
+        switchImgAndEmbed(false);
+    });
+
+    me.commands[&quot;insertvideo&quot;] = {
+        execCommand: function (cmd, videoObjs){
+            videoObjs = utils.isArray(videoObjs)?videoObjs:[videoObjs];
+            var html = [];
+            for(var i=0,vi,len = videoObjs.length;i&lt;len;i++){
+                 vi = videoObjs[i];
+                 html.push(creatInsertStr( vi.url, vi.width || 420,  vi.height || 280, vi.align||&quot;none&quot;,false,true));
+            }
+            me.execCommand(&quot;inserthtml&quot;,html.join(&quot;&quot;));
+        },
+        queryCommandState : function(){
+            var img = me.selection.getRange().getClosedNode(),
+                flag = img &amp;&amp; (img.className == &quot;edui-faked-video&quot;);
+            return this.highlight ? -1 :(flag?1:0);
+        }
+    }
+};</pre>
+</body>
+</html>

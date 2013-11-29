@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Dialog</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+
+		<script type="text/javascript">
+			var dialog;
+			$(function() {
+				dialog = $.create("Dialog", {
+					headerCls : "ui-window-header-ico icon-save",
+					title : "对话框",
+					width : "620",
+					height : "380",
+					inside : false,
+					toolbar : {
+						items : ["测试", // same as {type: "text", text: "text somethings"}
+						"-", // same as {type: "spacer"}
+						{
+							plain : true,
+							text : "增加"
+						}, "|", // same as {type: "separator"}
+						{
+							plain : true,
+							text : "修改"
+						}, "|", {
+							plain : true,
+							text : "保存"
+						}, "|", {
+							plain : true,
+							text : "删除"
+						}, ">", // same as {type: "fill"}
+						{
+							itype : "button",
+							options : {
+								text : "搜索",
+								iconCls : "icon-delete"
+							}
+						}, "|", {
+							plain : true,
+							text : "打印",
+							iconCls : "icon-print"
+						}]
+					},
+					buttons : [{
+						text : "添加",
+						iconCls : "icon-add"
+					}, {
+						text : "删除",
+						iconCls : "icon-delete"
+					}],
+					// content : "弹窗内容",
+					src : "iframeA.html"
+				});
+			});
+		</script>
+
+	</head>
+	<body>
+		<input id="input" value="我是最顶层页面上的输入框！"/>
+	</body>
+</html>
+

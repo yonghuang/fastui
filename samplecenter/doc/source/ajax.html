@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Created by .
+ * User: taoqili
+ * Date: 11-8-18
+ * Time: 下午3:18
+ * To change this template use File | Settings | File Templates.
+ */
+/*
+ * ajax工具类
+ */
+UE.ajax = function() {
+	return {
+		/*
+		 * 向url发送ajax请求
+		 * @param url
+		 * @param ajaxOptions
+		 */
+		request:function(url, ajaxOptions) {
+            var ajaxRequest = creatAjaxRequest(),
+                //是否超时
+                timeIsOut = false,
+                //默认参数
+                defaultAjaxOptions = {
+                    method:&quot;POST&quot;,
+                    timeout:5000,
+                    async:true,
+                    data:{},//需要传递对象的话只能覆盖
+                    onsuccess:function() {
+                    },
+                    onerror:function() {
+                    }
+                };
+
+			if (typeof url === &quot;object&quot;) {
+				ajaxOptions = url;
+				url = ajaxOptions.url;
+			}
+			if (!ajaxRequest || !url) return;
+			var ajaxOpts = ajaxOptions ? utils.extend(defaultAjaxOptions,ajaxOptions) : defaultAjaxOptions;
+
+			var submitStr = json2str(ajaxOpts);  // { name:&quot;Jim&quot;,city:&quot;Beijing&quot; } --&gt; &quot;name=Jim&amp;city=Beijing&quot;
+			//如果用户直接通过data参数传递json对象过来，则也要将此json对象转化为字符串
+			if (!utils.isEmptyObject(ajaxOpts.data)){
+                submitStr += (submitStr? &quot;&amp;&quot;:&quot;&quot;) + json2str(ajaxOpts.data);
+			}
+            //超时检测
+            var timerID = setTimeout(function() {
+                if (ajaxRequest.readyState != 4) {
+                    timeIsOut = true;
+                    ajaxRequest.abort();
+                    clearTimeout(timerID);
+                }
+            }, ajaxOpts.timeout);
+
+			var method = ajaxOpts.method.toUpperCase();
+            var str = url + (url.indexOf(&quot;?&quot;)==-1?&quot;?&quot;:&quot;&amp;&quot;) + (method==&quot;POST&quot;?&quot;&quot;:submitStr) + &quot;&amp;noCache=&quot; + +new Date;
+			ajaxRequest.open(method, str, ajaxOpts.async);
+			ajaxRequest.onreadystatechange = function() {
+				if (ajaxRequest.readyState == 4) {
+					if (!timeIsOut &amp;&amp; ajaxRequest.status == 200) {
+						ajaxOpts.onsuccess(ajaxRequest);
+					} else {
+						ajaxOpts.onerror(ajaxRequest);
+					}
+				}
+			};
+			if (method == &quot;POST&quot;) {
+				ajaxRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				ajaxRequest.send(submitStr);
+			} else {
+				ajaxRequest.send(null);
+			}
+		}
+	};
+
+	/*
+	 * 将json参数转化成适合ajax提交的参数列表
+	 * @param json
+	 */
+	function json2str(json) {
+		var strArr = [];
+		for (var i in json) {
+			//忽略默认的几个参数
+			if(i==&quot;method&quot; || i==&quot;timeout&quot; || i==&quot;async&quot;) continue;
+			//传递过来的对象和函数不在提交之列
+			if (!((typeof json[i]).toLowerCase() == &quot;function&quot; || (typeof json[i]).toLowerCase() == &quot;object&quot;)) {
+				strArr.push( encodeURIComponent(i) + &quot;=&quot;+encodeURIComponent(json[i]) );
+			}
+		}
+		return strArr.join(&quot;&amp;&quot;);
+
+	}
+
+	/*
+	 * 创建一个ajaxRequest对象
+	 */
+	function creatAjaxRequest() {
+		var xmlHttp = null;
+		if (window.XMLHttpRequest) {
+			xmlHttp = new XMLHttpRequest();
+		} else {
+			try {
+				xmlHttp = new ActiveXObject(&quot;Msxml2.XMLHTTP&quot;);
+			} catch (e) {
+				try {
+					xmlHttp = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+				} catch (e) {
+				}
+			}
+		}
+		return xmlHttp;
+	}
+}();
+</pre>
+</body>
+</html>

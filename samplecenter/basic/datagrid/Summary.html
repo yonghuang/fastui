@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>当前示例为DataGrid列数据统计</li>
+				<li>主要用到了列配置中的summaryType、summaryText、summaryRenderer以及DataGrid配置中的summaryTpl</li>
+				<li>summaryType：用于定义内置的统计方法，分为count(数量)、sum(求和)、avg(平均值)、max(最大值)、min(最小值)五种</li>
+				<li>summaryText：用以定义统计结果之前的描述文本</li>
+				<li>summaryRenderer：用于定义统计结果所处单元格的渲染器，使用类同于列渲染器(默认统计模板方可使用)</li>
+				<li>summaryTpl：用于定义统计显示模板，不定义模板时，DataGrid会自动生成一个统计行用于存放统计结果，定义模板时则按照用户定义模板显示，使用自定义模板是，当前列的统计结果存放于数据变量{列名}中</li>
+				<li>第一个示例为基础统计配置、第二个示例使用到了统计列渲染器，第三个示例使用到了自定义统计模板</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			var summaryTpl = '<div style="width:65%">{name}</div>' + 
+										'<div style="width:35%">' + 
+											'<table>' + 
+												'<tr><td>{chinese}</td></tr>' +
+												'<tr><td>{maths}</td></tr>' +
+												'<tr><td>{english}</td></tr>' +
+												'<tr><td>{physics}</td></tr>' +
+												'<tr><td>{chemistry}</td></tr>' + 
+											'</table>' + 
+										'</div>';
+
+			function rendererName() {
+				fastDev(this).css("color", "red");
+			}
+
+			function rendererChinese() {
+				fastDev(this).css("color", "green");
+			}
+
+			function rendererMaths() {
+				fastDev(this).css("color", "green");
+			}
+
+			function rendererEnglish() {
+				fastDev(this).css("color", "green");
+			}
+
+			function rendererPhysics() {
+				fastDev(this).css("color", "green");
+			}
+
+			function rendererChemistry() {
+				fastDev(this).css("color", "green");
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">普通统计</div>
+			<div itype="DataGrid" initSource="../../data/griddata1.json" showSeqColumn=true pagePosition="none" width="98%">
+				<div width="25%" name="name" text="姓名" summaryType="count" summaryText="学生总数：" ></div>
+				<div width="15%" name="chinese" text="语文" summaryType="sum" summaryText="总分：" ></div>
+				<div width="15%" name="maths" text="数学" summaryType="avg" summaryText="平均分：" ></div>
+				<div width="15%" name="english" text="英文" summaryType="max" summaryText="最高分："></div>
+				<div width="15%" name="physics" text="物理" summaryType="min" summaryText="最低分：" ></div>
+				<div width="15%" name="chemistry" text="化学" summaryType="avg" summaryText="平均分：" ></div>
+			</div>
+		</div>
+
+		<div style="margin: 10px">
+			<div class="ui-layout-text">带样式统计</div>
+			<div itype="DataGrid" initSource="../../data/griddata1.json" showSeqColumn=true pagePosition="none" width="98%">
+				<div width="25%" name="name" text="姓名" summaryType="count" summaryText="学生总数：" summaryRenderer="rendererName()"></div>
+				<div width="15%" name="chinese" text="语文" summaryType="sum" summaryText="总分：" summaryRenderer="rendererChinese()"></div>
+				<div width="15%" name="maths" text="数学" summaryType="avg" summaryText="平均分：" summaryRenderer="rendererMaths()"></div>
+				<div width="15%" name="english" text="英文" summaryType="max" summaryText="最高分：" summaryRenderer="rendererEnglish()"></div>
+				<div width="15%" name="physics" text="物理" summaryType="min" summaryText="最低分：" summaryRenderer="rendererPhysics()"></div>
+				<div width="15%" name="chemistry" text="化学" summaryType="avg" summaryText="平均分：" summaryRenderer="rendererChemistry()"></div>
+			</div>
+		</div>
+
+		<div style="margin: 10px">
+			<div class="ui-layout-text">带样式统计</div>
+			<div itype="DataGrid" initSource="../../data/griddata1.json" showSeqColumn=true pagePosition="none" summaryTpl="#{summaryTpl}" width="98%">
+				<div width="25%" name="name" text="姓名" summaryType="count" summaryText="学生总数：" ></div>
+				<div width="15%" name="chinese" text="语文" summaryType="sum" summaryText="总分：" ></div>
+				<div width="15%" name="maths" text="数学" summaryType="avg" summaryText="平均分：" ></div>
+				<div width="15%" name="english" text="英文" summaryType="max" summaryText="最高分："></div>
+				<div width="15%" name="physics" text="物理" summaryType="min" summaryText="最低分：" ></div>
+				<div width="15%" name="chemistry" text="化学" summaryType="avg" summaryText="平均分：" ></div>
+			</div>
+		</div>
+
+	</body>
+</html>

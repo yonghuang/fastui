@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+		<ul>
+        <li>普通按钮的基本展示形势、功能方法、事件</li>
+        <li>按钮的形势有纯文字按钮、纯图片按钮，链接按钮，图片加文字按钮，图片加文字上下结果按钮，以及自定义样式的按钮，如最下的分页按钮。</li>
+        <li>按钮有禁用、启用方法和点击事件。</li>
+        <li>注意：自定义样式按钮加一个cls样式的，同时还需定义一个鼠标悬停的样式名，此样式名为你的cls样式名加-over。如ui-button-page悬停的样式是ui-button-page-over。</li>
+        </ul>
+        </title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <style>#example,#example1,#example2,#kong{padding-top:3px}</style>
+		<script src="../../../src/fastDev-import.js"></script>		
+        <script>
+        function btnclick1() {
+				fastDev.tips("你点击图片加号按钮");
+			}
+
+			function btnclick() {
+				fastDev.tips("你点击了按钮");
+				var btn=fastDev.getInstance("btnevent");
+				btn.setText("点击事件了");
+			}
+			var disableEdit=function(){
+					var btn=fastDev.getInstance("btnevent");
+					btn.disable();
+				}
+				var enableEdit=function(){
+					var btn=fastDev.getInstance("btnevent");
+					btn.enable();
+				}
+			var enableEdit2=function(){
+					var btn=fastDev.getInstance("btnevent2");
+					btn.enable();
+				}
+        </script>
+	</head>
+	<body>
+		<div  style="margin: 10px">   
+        
+        <div>
+       		<div class="ui-layout-text">纯图片按钮</div><!--纯图片按钮 tips 悬停提示文本-->
+            <div itype="Button" iconCls="icon-delete" tips="删除"></div>  
+            </div><div  style="margin: 3px">     
+            <div class="ui-layout-text">纯文本</div><!--纯文本按钮-->
+			<div itype="Button" text="无图按钮"></div>
+            </div><div  style="margin: 3px">     
+			<div class="ui-layout-text">图片+文字按钮</div>
+            <div itype="Button" text="添加" iconCls="icon-add"></div>
+            <div itype="Button" text="添加11" display="false"></div>
+			<div itype="Button" text="删除" iconCls="icon-delete"></div>
+			<div itype="Button" text="修改" iconCls="icon-edit"></div>
+			<div itype="Button" text="查询" iconCls="icon-search"></div>
+			<div itype="Button" text="打印" iconCls="icon-print"></div>
+		</div>
+		<div style="margin: 3px">
+			<div class="ui-layout-text">链接按钮</div>
+			<div itype="Button" text="去百度搜索下" href="http://www.baidu.com" target="_blank"></div>
+            <div class="ui-layout-text">事件与方法演示</div>
+			<div itype="Button" text="点击事件" id="btnevent" saveInstance="true" onclick="btnclick()" ></div>
+			<div itype="Button" text="点击事件2" disabled="true" id="btnevent2" saveInstance="true" onclick="btnclick()" ></div>
+            <div itype="Button" text="禁用点击事件" onclick="disableEdit()" ></div>
+            <div itype="Button" text="启用点击事件" onclick="enableEdit()" ></div>
+            <div itype="Button" text="启用点击事件2" onclick="enableEdit2()" ></div>
+		</div>
+		<div style="margin: 3px">
+			<div class="ui-layout-text">上下结构的按钮</div>
+			<div itype="Button" text="添加" iconCls="icon-add" iconPosition="top"></div>
+			<div itype="Button" text="修改" iconCls="icon-edit" iconPosition="top"></div>
+		</div>
+
+        <div class="ui-layout-text" style="margin-left: 10px">背景透明按钮</div>
+        <div class="ui-toolbar ui-toolbar-bg" style="margin: 3px">
+		<div>
+        	<!--纯图片按钮本身无背景-->
+			<div itype="Button" iconCls="icon-add" onclick="btnclick1()"></div>
+			<div itype="Button" iconCls="icon-delete"></div>
+            <!--plain是否透明设置为true-->
+			<div itype="Button" text="无图按钮" plain="true"></div>
+			<div itype="Button" text="添加" iconCls="icon-add" plain="true"></div>
+			<div itype="Button" text="删除" iconCls="icon-delete" plain="true"></div>
+			<div itype="Button" text="修改" iconCls="icon-edit" plain="true"></div>
+			<div itype="Button" text="查询" iconCls="icon-search" plain="true"></div>
+			<div itype="Button" text="打印" iconCls="icon-print" plain="true"></div>
+            <!--图片样式可以定义iconCls 图标样式 或直接用iconStyle指定图片地址及相关样式-->
+			<div itype="Button" text="保存" plain=true iconStyle="background:url('../../../themes/default/images/ico/menu-save.gif') no-repeat scroll 3px 50% transparent" ></div>
+		</div>
+			</div>
+
+            <div class="ui-layout-text" style="margin-left: 10px">自定义样式按钮</div>
+		<div class="ui-toolbar ui-toolbar-bg ui-pagebar ui-pagebar-bg" style="margin: 3px">
+			<div class="ui-left">   
+            <!--注意自定义样式按钮除了需要给按钮加一个cls的样式，同时还需要定义一个鼠标悬停时的样式名，名为cls样式名加-over。如ui-button-page悬停时的样式是ui-button-page-over。-->         
+				<div itype="Button" iconCls="icon-pagefirst" cls="ui-button-page" tips="去首页"></div>
+				<div itype="Button" iconCls="icon-pageprev" cls="ui-button-page"></div>
+				<div itype="Button" iconCls="icon-pagenext" cls="ui-button-page"></div>
+				<div itype="Button" iconCls="icon-pagelast" cls="ui-button-page"></div>
+				<div itype="Button" iconCls="icon-refresh" cls="ui-aaa ui-button-page"></div>
+               
+			</div> 
+		</div>
+		</div>  
+		
+	</body>
+</html>

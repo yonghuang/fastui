@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>右侧工具栏自定义</h4>
+        <ul>        
+        <li>主要是配置tools 属性，值请参照实例</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+		 var btnclick1=function(){
+					alert("你点击了add按钮");
+				}
+		var btnclick2=function(){
+					alert("你点击了search按钮");
+				}
+        var tooldata=[{
+						iconCls:"icon-search",
+						onclick:btnclick2
+						},{
+						iconCls:"icon-add",
+						onclick:btnclick1
+						}];
+        </script>		
+	</head>
+	<body>		
+    	<div style="margin:10px;">
+    		<div class="ui-layout-text">右侧工具栏</div>
+		<div itype="Tabs" initSource="../../data/tabs_data.txt" tools="#{tooldata}" id="aaa" width="500px" height="350px"></div>
+        </div>
+	</body>
+</html>

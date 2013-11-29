@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link href="../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/list/datagrid/DataGrid.js"></script>
+		<script src="../../src/component/list/datagrid/Pagination.js"></script>
+		<script src="../../src/component/list/datagrid/Column.js"></script>
+		<script src="../../src/component/list/datagrid/Thead.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/form/Box.js"></script>
+		<script src="../../src/component/form/TextBox.js"></script>
+		<script src="../../src/component/form/Select.js"></script>
+		<script src="../../src/component/form/DatePicker.js"></script>
+
+		<script language="javascript">
+			$(function() {
+				var data = ["测试", // same as {type: "text", text: "text somethings"}
+				"-", // same as {type: "spacer"}
+				{
+					plain : true,
+					text : "增加"
+				}, "|", // same as {type: "separator"}
+				{
+					plain : true,
+					text : "修改"
+				}, "|", {
+					plain : true,
+					text : "保存"
+				}, "|", {
+					plain : true,
+					text : "删除"
+				}, ">", // same as {type: "fill"}
+				{
+					text : "搜索",
+					iconCls : "icon-delete"
+				}, "|", {
+					plain : true,
+					text : "打印",
+					iconCls : "icon-print"
+				}];
+				var toolbar = fastDev.create("fastDev.Ui.Toolbar", {
+					width : "900px",
+					container : "example",
+					items : data
+				});
+				toolbar.addItem({
+					text : "增加1"
+				}, "left");
+				toolbar.addItem({
+					text : "增加2"
+				}, "right");
+
+				//toolbar.disable("testdiv2");
+				//toolbar.enable("testdiv2");
+			});
+
+		</script>
+		<title>toolbar</title>
+	</head>
+	<body>
+		<div id="example"></div>
+	</body>
+</html>

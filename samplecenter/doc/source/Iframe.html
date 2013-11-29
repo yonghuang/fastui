@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+	talkweb.BaseControl.Iframe = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Iframe.Class&quot;,settings);
+	};
+	
+	fastDev.define(&quot;talkweb.BaseControl.Iframe.Class&quot;,{
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			show : true,
+			src : null,
+			border : true,
+			scrolling : &quot;auto&quot;
+		},
+		construct : function(options) {
+			var iframe=this.create(&quot;iframe&quot;);
+			this.setGlobal({iframe:iframe});
+			this.storage(iframe);
+		},
+		init : function(options) {
+			options.border === true ? this.showBorder() : this.hideBorder();
+			options.show === true ? this.showIframe() : this.hideIframe();
+			this.setSrc(options.src); options.border === true ? this.showBorder() : this.hideBorder();
+			this.setScrolling(options.scrolling);
+		},
+		showIframe : function (){
+			this.getGlobal().iframe.style.display = &quot;block&quot;;
+		},
+		hideIframe : function (){
+			this.getGlobal().iframe.style.display = &quot;none&quot;;
+		},
+		setSrc : function(src) {
+			src &amp;&amp; this.attr(&quot;src&quot;, src);
+		},
+		getSrc : function() {
+			return this.attr(&quot;src&quot;);
+		},
+		showBorder : function() {
+			this.attr(&quot;frameborder&quot;,&quot;1&quot;);
+		},
+		hideBorder : function() {
+			this.attr(&quot;frameborder&quot;,&quot;0&quot;); 
+		},
+		setScrolling : function(scrolling){
+			/yes|no|auto/.test(scrolling) &amp;&amp; this.attr(&quot;scrolling&quot;,scrolling);
+		},
+		getScrolling :function(){
+			return this.attr(&quot;scrolling&quot;);
+		}
+	});
+})()</pre>
+</body>
+</html>

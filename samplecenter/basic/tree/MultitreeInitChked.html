@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>复选框树数据源初始化勾选</h4>
+        <ul>        
+        <li>数据属性chk默认为false：未选中，为true：选中，为part半选中状态。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+        var data=[{pid:"0",id:"1",val:"基础控件"},{pid:"0",id:"2",val:"复合控件",chk:"part"},{pid:"1",id:"5",val:"基础控件父类"},{pid:"2",id:"201",val:"树"},{pid:"2",id:"202",val:"表单",chk:"true"},{pid:"2",id:"203",val:"单选框组",chk:"true"},{pid:"2",id:"204",val:"复选框组"},{pid:"2",id:"205",val:"选项卡",chk:"false"},{pid:"2",id:"226",val:"上传组件"}];
+        </script>
+
+	</head>
+	<body>
+		<div style="margin:10px;"><div class="ui-layout-text">复选框树数据源初始化勾选</div>
+			<div itype="Tree"  items="#{data}" treeType="multitree" showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true"></div>
+	</div>
+
+	</body>
+</html>

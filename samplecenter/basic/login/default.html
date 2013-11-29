@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script src="../../../src/fastDev-import.js"></script>   
+<script>
+var dialog;
+function afterLoadData(){
+	dialog=fastDev.create('Window', {
+		src : "login.html",
+		title : "登录",
+		width :300,
+		height:200,
+		allowResize : false,
+		showMaxBtn : false,
+		buttons : [{
+			text : '登录',
+			iconCls : 'icon-save',
+			onclick : function(e,win,cwin, fd) {
+				var form=fd.getInstance("form1");
+				if(form.isValid()){
+				form.submit();	
+				win.close();
+				}
+			}
+		},{
+			text : '取消',
+			iconCls : 'icon-reset',
+			onclick : function(e,win,cwin, fd) {
+				var form=fd.getInstance("form1");
+				form.cleanData();
+			}
+		}]		
+		});
+}
+</script>
+</head>
+
+<body>
+ <form itype="Form" action="../../data/form_example_submit.jsp" id="form1" initSource="../../data/form_example_1_init.jsp" dataSource="../../data/form_example_1_load.jsp" requestType="post" saveInstance="true"  onAfterLoadData="afterLoadData()">
+		<table width="800px" border="0" style="margin:10px;" class="ui-form-list">
+        <tr>
+        <td><div class="ui-layout-text">基本功能</div></td> <td></td>
+        </tr>        
+		  <tr>
+		    <td>text:</td>
+		    <td><input itype="TextBox" id="txt1" ></td>
+	      </tr>
+		  <tr>
+		    <td>password:</td>
+		    <td><input itype="TextBox" id="pwd1" type="password" ></td>
+	      </tr>
+		  <tr>
+		    <td>textarea:</td>
+		    <td><textarea itype="TextBox" id="area1" type="textarea" height="200px" width="400px"></textarea></td>
+	      </tr>		
+         </table>
+         <div style="width:400px; text-align:center">
+			<div itype="Button" id="btnaa" text="提交" onclick="submit()" ></div>
+		</div>
+	</form>   
+</body>
+</html>

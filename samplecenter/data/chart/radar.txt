@@ -1,0 +1,50 @@
+
+{
+  "elements": [
+    {
+      "type": "area",
+      "width": 1,
+      "dot-style": {
+        "type": "hollow-dot",
+        "colour": "#45909F",
+        "dot-size": 5
+      },
+      "colour": "#45909F",
+      "fill": "#45909F",
+      "fill-alpha": 0.4,
+      "loop": true,
+      "values": [
+        3,
+        4,
+        5,
+        4,
+        3,
+        3,
+        2.5
+      ]
+    }
+  ],
+  "title": {
+    "text": "Radar Chart"
+  },
+  "radar_axis": {
+    "max": 5,
+    "colour": "#EFD1EF",
+    "grid-colour": "#EFD1EF",
+    "labels": {
+      "labels": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "colour": "#9F819F"
+    }
+  },
+  "tooltip": {
+    "mouse": 1
+  },
+  "bg_colour": "#DFFFEC"
+}

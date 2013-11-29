@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Tree</title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link href="../../themes/base/css/main.css" rel="stylesheet" type="text/css" />
+		<script src="../../src/library/jquery-1.5.1.min.js"></script>
+	<script src="../../src/library/FastDev.js"></script>
+	<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/core/ClassManager.js"></script>
+	<script src="../../src/core/Base.js"></script>
+	<script src="../../src/core/Base_Patch.js"></script>
+	<script src="../../src/core/ControlBus.js"></script>
+	<script src="../../src/core/ControlBus_Patch.js"></script>
+	<script src="../../src/core/DataBus.js"></script>
+	<script src="../../src/core/DataBus_Patch.js"></script>
+	  <script src="../../src/library/Tools.js"></script>
+	<script src="../../src/component/basecontrol/SimpleControl.js"></script>
+		<script src="../../src/component/basecontrol/Input.js"></script>
+		<script src="../../src/component/basecontrol/Anchor.js"></script>
+		<script src="../../src/component/basecontrol/Body.js"></script>
+		<script src="../../src/component/basecontrol/Button.js"></script>
+		<script src="../../src/component/basecontrol/CheckBox.js"></script>
+		<script src="../../src/component/basecontrol/Div.js"></script>
+		<script src="../../src/component/basecontrol/Dl.js"></script>
+		<script src="../../src/component/basecontrol/File.js"></script>
+		<script src="../../src/component/basecontrol/Form.js"></script>
+		<script src="../../src/component/basecontrol/Hidden.js"></script>
+		<script src="../../src/component/basecontrol/Iframe.js"></script>
+		<script src="../../src/component/basecontrol/Image.js"></script>
+		<script src="../../src/component/basecontrol/Label.js"></script>
+		<script src="../../src/component/basecontrol/Password.js"></script>
+		<script src="../../src/component/basecontrol/Pre.js"></script>
+		<script src="../../src/component/basecontrol/Radio.js"></script>
+		<script src="../../src/component/basecontrol/Span.js"></script>
+		<script src="../../src/component/basecontrol/Table.js"></script>
+		<script src="../../src/component/basecontrol/Text.js"></script>
+		<script src="../../src/component/basecontrol/TextArea.js"></script>
+		<script src="../../src/component/basecontrol/Ul.js"></script>
+        
+		<script src="../../src/library/Patch.js"></script>
+	<script src="../../src/component/Component.js"></script>
+	<script src="../../src/component/Component_Patch.js"></script>
+	<script src="../../src/component/form/RadioGroup.js"></script>
+	<script src="../../src/component/form/RadioGroup_Patch.js"></script>
+       <script src="../../src/component/Form.js"></script>
+	<script src="../../src/component/Form_Patch.js"></script>
+    <script src="../../src/component/list/Tree.js"></script>
+	<script src="../../src/component/list/Tree_Patch.js"></script>
+	<script>
+		$(function(){
+			
+			$("#chexiao").click(function(){
+				var tree=talkweb.ControlBus.getInstance("tree1");	
+				tree.hideReghtMenu();//隐藏右键菜单
+				alert("chexiao");				
+			});
+	     });
+        var data='[{pid :"0",id:"1",val:"文本1"},{pid:"0",id: "2",val:"文本2"},{pid:"1",id:"11",val:"文本11"},{pid:"11",id:"111",val:"文本111"},{pid:"11",id:"112",val:"文本112"},{pid:"11",id:"113",val:"文本113"},{pid:"11",id:"114",val:"文本114"},{pid:"11",id:"115",val:"文本115"},{pid:"115",id:"1514",val:"文本1514"},{pid:"115",id:"1415",val:"文本1415"}]';
+
+			talkweb.Bus.ready({
+				items : [
+				{
+					classPath : "Components.Tree",
+					options : {
+						container : "example",								
+						items : data,							
+						showIco:true,	
+						treeType : "multitree", 
+						id:"tree1",
+						saveInstance  : true,
+						rightMenu:"rightMenudiv",
+						//rightMenuNotAtNode:"rightMenudiv1",
+						openFloor:3,
+						autoLoadData:true
+					}
+				}
+				]
+			})
+	</script>
+</head>
+<body>
+	 <div class="right_mouse_menu shadow" id="rightMenudiv" style="display:none" >
+  <a href="#"  >
+  <div class="right_mouse_menu_item">
+  	<div class="right_mouse_menu_text" id="chexiao">撤销</div>
+    <div class="right_mouse_menu_icon right_mouse_icon_undo"></div>
+  </div>
+  </a>
+  <a href="#" >
+  <div class="right_mouse_menu_item">
+  	<div class="right_mouse_menu_text" onclick="alert('前进');">前进</div>
+    <div class="right_mouse_menu_icon right_mouse_icon_go"></div>
+  </div>
+  </a>
+  <div class="right_mouse_menu_line"></div>
+  <a href="#">
+  <div class="right_mouse_menu_item">
+  	<div class="right_mouse_menu_text">剪切</div>
+    <div class="right_mouse_menu_icon right_mouse_icon_cut"></div>
+  </div>
+  </a>
+  <a href="#">
+  <div class="right_mouse_menu_item">
+  	<div class="right_mouse_menu_text">复制</div>
+    <div class="right_mouse_menu_icon icon_copy"></div>
+  </div>
+  </a>
+  <a href="#">
+  <div class="right_mouse_menu_item">
+  	<div class="right_mouse_menu_text">粘贴</div>
+    <div class="right_mouse_menu_icon icon_paste"></div>   
+  </div>
+  </a>
+  <div class="right_mouse_menu_line"></div>
+  <a href="#">
+  <div class="right_mouse_menu_item">	
+  	<div class="right_mouse_menu_text">工具</div>
+    <div class="right_mouse_icon_rightarrow"></div>
+  </div>
+  </a>
+  <a href="#">
+  <div class="right_mouse_menu_item">    
+  	<div class="right_mouse_menu_text">翻译成中文(简体)</div>
+    <div class="right_mouse_menu_icon"></div>    
+  </div>
+  </a>
+</div>
+    	 <div class="right_mouse_menu shadow" id="rightMenudiv1" style="display:none" >
+  <a href="#"  >
+  <div class="right_mouse_menu_item">
+  	<div class="right_mouse_menu_text" id="chexiao">撤销</div>
+    <div class="right_mouse_menu_icon right_mouse_icon_undo"></div>
+  </div>
+  </a>
+  <a href="#" >
+  <div class="right_mouse_menu_item">
+  	<div class="right_mouse_menu_text" onclick="alert('前进');">前进</div>
+    <div class="right_mouse_menu_icon right_mouse_icon_go"></div>
+  </div>
+  </a>
+  <div class="right_mouse_menu_line"></div>
+  <a href="#">
+  <div class="right_mouse_menu_item">
+  	<div class="right_mouse_menu_text">剪切</div>
+    <div class="right_mouse_menu_icon right_mouse_icon_cut"></div>
+  </div>
+  </a>
+</div>
+		<div id="example" ></div>        
+</body>
+</html>
+

@@ -1,0 +1,48 @@
+    @charset "utf-8";
+	
+    /*
+     * 选项列表外层div样式
+     * */
+    .autocomplete_div {
+        border: 1px solid #b9b9b9;
+        background: #F9F9F9;
+        width: 50%;
+    }
+    /*
+     * 选项列表样式
+     * */
+    .autocomplete_ul {
+        color: #333;
+        margin: 0 3px 0 1px;
+    }
+    /*
+     * 可选项获得焦点样式
+     * */
+    .autocomplete_onfocue {
+        background: #FBF5D1;
+        border: 1px solid #FFBD69;
+        color: #333;
+        display: block;
+        line-height: 20px;
+        width: 100%;
+    }
+     /*
+     * 可选项失去焦点样式
+     * */
+    .autocomplete_unfocue {
+        background: #F9F9F9;
+        display: block;
+        line-height: 20px;
+    }
+    /*
+     * 输入框样式
+     * */
+    .autocomplete_searchText {
+        border-color: #c0c0c0 #ededed #ededed #c0c0c0;
+		border-style: solid;
+		border-width: 1px;
+        color: #333;
+        height: 18px;
+        line-height: 18px;
+        width: 80%;
+    }

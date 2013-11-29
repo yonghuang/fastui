@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="../../../themes/default/css/fastui-default.1.5.0.4.css"/>	
+		<script src="../../../history/fastui-1.5.0.5.js"></script>
+        <script src="../../../example/common.js"></script>
+        
+        <script>
+		 var time_to_page_start = new Date()*1;
+(function(){
+	function pageLoad(){
+	    window.pmc_start_render_time = new Date()*1 - time_to_page_start;
+		var h2 = document.createElement('h3');
+		h2.innerHTML = 'Time To Page Load: ' + window.pmc_start_render_time + ' ms';
+		document.body.appendChild(h2);
+	}
+//判断浏览器是否能够识别window.addEventListener，假如可以，则执行以下代码
+	if(typeof window.addEventListener!="undefined"){  
+		window.addEventListener('load',function(){
+			window.removeEventListener('load', arguments.callee, false);
+			pageLoad();
+		},false);
+	}
+//某些浏览器无法识别window.addEventListener，只能识别document.addEventListener，因此要增加这一步判断
+	else if(typeof document.addEventListener!="undefined"){     
+		document.addEventListener("onload",function(){
+			document.removeEventListener('onload', arguments.callee, false);
+			pageLoad();
+		},false);
+	}
+	//前面两种都无法识别，则判定是否可以识别window.attachEvent  (IE)
+	else if(typeof window.attachEvent!="undefined"){
+		window.attachEvent("onload",function(){
+			pageLoad();
+		});
+	}
+	//前三种都无法识别，则用这最后一种：老式链式事件处理方式
+	else{
+		var oldfn = window.onload;
+		if(typeof window.onload!="function"){
+			window.onload = function(){
+				pageLoad();
+			}
+		}
+		else{
+			window.onload = function(){
+				oldfn();
+				pageLoad();
+			}
+		}
+})();
+
+	//http://www.iteye.com/topic/1121953
+		</script>
+	</head>
+	<body>
+   <div><div itype="DataGrid" initSource="griddata.json" pagePosition="none" showSeqColumn=true height="200px">
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+					<div value="50" text="50条"></div>
+					<div value="100" text="100条"></div>
+				</div>
+			</div></div>
+	</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h3>异步</h3>
+        <ul>        
+        <li>请先仔细看example_init.jsp与example_ansy.jsp数据源的配置。</li>
+        <li>异步树需要同时满足第一次加载的数据源节点数据里包含asyn:true并且配置了asyncDataSource两个要求才能实现异步。</li>
+        <li>如果不知道本次数据量的大小，想动态绝对是否异步请求数据源，也有办法解决。</li>
+        <li>initSource指向的页面写一个获取树节点数据总量的方法，加一个判断来调用不同数据源：</li>
+        <li>如果数据总量很多，需要用异步，则调用返回的数据节点里有asyn:true的方法，如果数据量不大，则调用返回的数据节点里没有asyn:true的方法。仅asyncDataSource配置不会影响到是否异步。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+		//添加一个节点
+		var  btnaddNode = function(){
+			var tree=fastDev.getInstance("tree2");
+			var item={id:"21s19",pid:"4",val:"其他控件1"};
+			try{
+				tree.addNode(item);
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		var  btnaddNode2 = function(){
+			var tree=fastDev.getInstance("tree2");
+			var item={id:"2119",pid:"1",val:"其他控件2"};
+			try{
+				tree.addNode(item);
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		var  btnaddNode3 = function(){
+			var tree=fastDev.getInstance("tree2");
+			var item={id:"21193",pid:"0",val:"其他控件3"};
+			try{
+				tree.addNode(item);
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		var  btnaddNode4 = function(){
+			var tree=fastDev.getInstance("tree2");
+			var item={id:"2119423",pid:"42",val:"其他控件4"};
+			try{
+				tree.addNode(item);
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		var btnisleaf=function(){
+			var tree=fastDev.getInstance("tree2");
+			alert(tree.isBranch("1"));
+		}
+		</script>		
+	</head>
+	<body>
+		<div style="margin:10px;"><div class="ui-layout-text">异步</div>
+			<div itype="Tree"  initSource="../../data/tree_example_init.jsp" asyncDataSource="../../data/tree_example_ansy.jsp" showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true"></div>
+	</div><div>
+	<div itype="Button"  text="添加其他控件节点" onclick="btnaddNode()" ></div>
+	<div itype="Button"  text="添加其他控件节点2" onclick="btnaddNode2()" ></div>
+	<div itype="Button"  text="添加其他控件节点3" onclick="btnaddNode3()" ></div>
+	<div itype="Button"  text="添加其他控件节点4" onclick="btnaddNode4()" ></div>
+	<div itype="Button"  text="是否叶子节点" onclick="btnisleaf()" ></div>
+	</div>
+	</body>
+</html>

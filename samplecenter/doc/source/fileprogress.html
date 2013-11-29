@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+	A simple class for displaying file information and progress
+	Note: This is a demonstration only and not part of SWFUpload.
+	Note: Some have had problems adapting this class in IE7. It may not be suitable for your application.
+*/
+
+// Constructor
+// file is a SWFUpload file object
+// targetID is the HTML element id attribute that the FileProgress HTML structure will be added to.
+// Instantiating a new FileProgress object with an existing file will reuse/update the existing DOM elements
+function FileProgress(file, targetID) {
+	this.fileProgressID = file.id;
+
+	this.opacity = 100;
+	this.height = 0;
+	
+
+	this.fileProgressWrapper = document.getElementById(this.fileProgressID);
+	if (!this.fileProgressWrapper) {
+		this.fileProgressWrapper = document.createElement(&quot;div&quot;);
+		this.fileProgressWrapper.className = &quot;progressWrapper&quot;;
+		this.fileProgressWrapper.id = this.fileProgressID;
+
+		this.fileProgressElement = document.createElement(&quot;div&quot;);
+		this.fileProgressElement.className = &quot;progressContainer&quot;;
+
+		var progressCancel = document.createElement(&quot;a&quot;);
+		progressCancel.className = &quot;progressCancel&quot;;
+		progressCancel.href = &quot;#&quot;;
+		progressCancel.style.visibility = &quot;hidden&quot;;
+		progressCancel.appendChild(document.createTextNode(&quot; &quot;));
+
+        //by ue
+        progressCancel.onclick = function(){
+            alert(1);
+        }
+
+		var progressText = document.createElement(&quot;div&quot;);
+		progressText.className = &quot;progressName&quot;;
+		progressText.appendChild(document.createTextNode(file.name));
+
+		var progressBar = document.createElement(&quot;div&quot;);
+		progressBar.className = &quot;progressBarInProgress&quot;;
+
+		var progressStatus = document.createElement(&quot;div&quot;);
+		progressStatus.className = &quot;progressBarStatus&quot;;
+		progressStatus.innerHTML = &quot;&amp;nbsp;&quot;;
+
+		this.fileProgressElement.appendChild(progressCancel);
+		this.fileProgressElement.appendChild(progressText);
+		this.fileProgressElement.appendChild(progressStatus);
+		this.fileProgressElement.appendChild(progressBar);
+
+		this.fileProgressWrapper.appendChild(this.fileProgressElement);
+
+		document.getElementById(targetID).appendChild(this.fileProgressWrapper);
+	} else {
+		this.fileProgressElement = this.fileProgressWrapper.firstChild;
+		this.reset();
+	}
+
+	this.height = this.fileProgressWrapper.offsetHeight;
+	this.setTimer(null);
+
+
+}
+
+FileProgress.prototype.setTimer = function (timer) {
+	this.fileProgressElement[&quot;FP_TIMER&quot;] = timer;
+};
+FileProgress.prototype.getTimer = function (timer) {
+	return this.fileProgressElement[&quot;FP_TIMER&quot;] || null;
+};
+
+FileProgress.prototype.reset = function () {
+	this.fileProgressElement.className = &quot;progressContainer&quot;;
+
+	this.fileProgressElement.childNodes[2].innerHTML = &quot;&amp;nbsp;&quot;;
+	this.fileProgressElement.childNodes[2].className = &quot;progressBarStatus&quot;;
+	
+	this.fileProgressElement.childNodes[3].className = &quot;progressBarInProgress&quot;;
+	this.fileProgressElement.childNodes[3].style.width = &quot;0%&quot;;
+	
+	this.appear();	
+};
+
+FileProgress.prototype.setProgress = function (percentage) {
+	this.fileProgressElement.className = &quot;progressContainer green&quot;;
+	this.fileProgressElement.childNodes[3].className = &quot;progressBarInProgress&quot;;
+	this.fileProgressElement.childNodes[3].style.width = percentage + &quot;%&quot;;
+
+	this.appear();	
+};
+FileProgress.prototype.setComplete = function () {
+	this.fileProgressElement.className = &quot;progressContainer blue&quot;;
+	this.fileProgressElement.childNodes[3].className = &quot;progressBarComplete&quot;;
+	this.fileProgressElement.childNodes[3].style.width = &quot;&quot;;
+
+	var oSelf = this;
+	this.setTimer(setTimeout(function () {
+		//oSelf.disappear();  //隐藏已完成列表
+	}, 10000));
+};
+FileProgress.prototype.setError = function () {
+	this.fileProgressElement.className = &quot;progressContainer red&quot;;
+	this.fileProgressElement.childNodes[3].className = &quot;progressBarError&quot;;
+	this.fileProgressElement.childNodes[3].style.width = &quot;&quot;;
+    //edir by ue
+	var oSelf = this;
+	this.setTimer(setTimeout(function () {
+		//oSelf.disappear();
+	}, 3000));
+};
+FileProgress.prototype.setCancelled = function () {
+	this.fileProgressElement.className = &quot;progressContainer&quot;;
+	this.fileProgressElement.childNodes[3].className = &quot;progressBarError&quot;;
+	this.fileProgressElement.childNodes[3].style.width = &quot;&quot;;
+
+	var oSelf = this;
+	this.setTimer(setTimeout(function () {
+		oSelf.disappear();
+	}, 1000));
+};
+FileProgress.prototype.setStatus = function (status) {
+	this.fileProgressElement.childNodes[2].innerHTML = status;
+};
+
+// Show/Hide the cancel button
+FileProgress.prototype.toggleCancel = function (show, swfUploadInstance,message) {
+    //edit by ue
+    var cancelBtn = this.fileProgressElement.childNodes[0];
+	cancelBtn.style.visibility = show ? &quot;visible&quot; : &quot;hidden&quot;;
+    cancelBtn.title = message?message:&quot;取消上传&quot;;
+	if (swfUploadInstance) {
+        //edit by ue
+        var me = this;
+		var fileID = me.fileProgressID,
+            e = me.fileProgressElement;
+        e.children[0].onclick = function () {
+            me.disappear();
+			swfUploadInstance.cancelUpload(fileID);
+			return false;
+		};
+	}
+};
+
+FileProgress.prototype.appear = function () {
+	if (this.getTimer() !== null) {
+		clearTimeout(this.getTimer());
+		this.setTimer(null);
+	}
+	
+	if (this.fileProgressWrapper.filters) {
+		try {
+			this.fileProgressWrapper.filters.item(&quot;DXImageTransform.Microsoft.Alpha&quot;).opacity = 100;
+		} catch (e) {
+			// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+			this.fileProgressWrapper.style.filter = &quot;progid:DXImageTransform.Microsoft.Alpha(opacity=100)&quot;;
+		}
+	} else {
+		this.fileProgressWrapper.style.opacity = 1;
+	}
+		
+	this.fileProgressWrapper.style.height = &quot;&quot;;
+	
+	this.height = this.fileProgressWrapper.offsetHeight;
+	this.opacity = 100;
+	this.fileProgressWrapper.style.display = &quot;&quot;;
+	
+};
+
+// Fades out and clips away the FileProgress box.
+FileProgress.prototype.disappear = function () {
+
+	var reduceOpacityBy = 15;
+	var reduceHeightBy = 4;
+	var rate = 30;	// 15 fps
+
+	if (this.opacity &gt; 0) {
+		this.opacity -= reduceOpacityBy;
+		if (this.opacity &lt; 0) {
+			this.opacity = 0;
+		}
+
+		if (this.fileProgressWrapper.filters) {
+			try {
+				this.fileProgressWrapper.filters.item(&quot;DXImageTransform.Microsoft.Alpha&quot;).opacity = this.opacity;
+			} catch (e) {
+				// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+				this.fileProgressWrapper.style.filter = &quot;progid:DXImageTransform.Microsoft.Alpha(opacity=&quot; + this.opacity + &quot;)&quot;;
+			}
+		} else {
+			this.fileProgressWrapper.style.opacity = this.opacity / 100;
+		}
+	}
+
+	if (this.height &gt; 0) {
+		this.height -= reduceHeightBy;
+		if (this.height &lt; 0) {
+			this.height = 0;
+		}
+
+		this.fileProgressWrapper.style.height = this.height + &quot;px&quot;;
+	}
+
+	if (this.height &gt; 0 || this.opacity &gt; 0) {
+		var oSelf = this;
+		this.setTimer(setTimeout(function () {
+			oSelf.disappear();
+		}, rate));
+	} else {
+		this.fileProgressWrapper.style.display = &quot;none&quot;;
+		this.setTimer(null);
+	}
+};</pre>
+</body>
+</html>

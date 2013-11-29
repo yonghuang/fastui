@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.apply(fastDev.Ui.DataGrid, {
+<span id='global-method-processRowDetail'>	/**
+</span>	 * 处理行内信息展开/收缩
+	 * @param {String} className 当前行内信息图标样式
+	 * @param {fastDev.Core.DomObject} dom 行内信息图标对象
+	 * @param {fastDev.Core.DomObject} parent 行内信息图标所在行对象
+	 * @param {JsonObject} options DataGrid配置信息
+	 * @param {JsonObject} rowData 当前行数据
+	 * @private
+	 */
+	processRowDetail : function(className, dom, parent, options, rowData) {
+		var rowDetailStr = options.rowDetail, detailRow = parent.next();
+		// 如果是展开状态则收缩，否则展开
+		if(/ui-datagrid-node-close/.test(className)) {
+			this.expandRowDetail(detailRow, rowDetailStr, rowData, parent.width());
+		} else {
+			this.collapseRowDetail(detailRow);
+		}
+		// 切换图标样式
+		dom.toggleClass(&quot;ui-datagrid-node-close,ui-datagrid-node-open&quot;);
+	},
+<span id='global-method-expandRowDetail'>	/**
+</span>	 * 展开行内信息
+	 * @param {fastDev.Core.DomObject} detailRow 行内信息所在行对象
+	 * @param {String} rowDetailInfo 行内信息定义
+	 * @param {JsonObject} rowData 当前行数据
+	 * @param {Number} width 行内信息所在行宽度
+	 * @private
+	 */
+	expandRowDetail : function(detailRow, rowDetailInfo, rowData, width) {
+		detailRow.show();
+		// 判断当前行内信息是否被初始化过，如果初始化过则直接显示，否则初始化行内信息
+		if(detailRow.attr(&quot;init&quot;) !== &quot;true&quot;) {
+			// 处理数据占位符
+			rowDetailInfo = this.processRowDetailInfo(rowDetailInfo, rowData);
+			// 左右边距20
+			detailRow.find(&quot;div&quot;).append(fastDev.Dom.createByHTML(rowDetailInfo));
+			// 设置初始化状态
+			detailRow.attr(&quot;init&quot;, true);
+			// 调用HTML模式代码编译，保证用户行内信息定义中的控件HTML代码正常执行
+			fastDev.Core.ControlBus.compile(null, detailRow.elems[0]);
+		}
+	},
+<span id='global-method-collapseRowDetail'>	/**
+</span>	 * 收缩行内信息
+	 * @param {fastDev.Core.DomObject} detailRow 行内信息所在行对象
+	 * @private
+	 */
+	collapseRowDetail : function(rowDetail) {
+		// 隐藏行内信息行
+		rowDetail.hide();
+	},
+<span id='global-method-processRowDetailInfo'>	/**
+</span>	 * 处理行内信息定义中的数据占位符
+	 * @param {String} rowDetailInfo 行内信息定义
+	 * @param {JsonObject} rowData 当前行数据
+	 * @private
+	 */
+	processRowDetailInfo : function(rowDetailInfo, rowData) {
+		fastDev.each(rowData, function(key, value) {
+			rowDetailInfo = rowDetailInfo.replace(RegExp(&quot;{&quot; + key + &quot;}&quot;), value);
+		});
+		return rowDetailInfo;
+	}
+}); </pre>
+</body>
+</html>

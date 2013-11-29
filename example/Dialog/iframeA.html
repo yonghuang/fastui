@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>iframeA</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+
+		<script type="text/javascript">
+			var win, win2, conf = {
+				headerCls : "ui-window-header-ico icon-save",
+				title : "iframeA页面弹窗",
+				modal : true,
+				inside : false, // inside为false且modal为true时为跨级模式
+				width : "700px",
+				height : "600px",
+				showCollapseBtn : true,
+				showMinBtn : true,
+				showMaxBtn : true,
+				showCloseBtn : true,
+				content : "<iframe src='iframeB.html' width='100%' height='300px'></iframe>"
+			}, conf2 = {
+				headerCls : "ui-window-header-ico icon-save",
+				title : "iframeA页面弹窗",
+				modal : true,
+				inside : true, // inside为true时为内联模式
+				width : "300px",
+				height : "200px",
+				showCollapseBtn : true,
+				showMinBtn : true,
+				showMaxBtn : true,
+				showCloseBtn : true,
+				maxHeight : "500px",
+				maxWidth : "480px",
+				minHeight : "30px",
+				minWidth : "10px",
+				resizeDirection : "all",
+				resizeRatio : "1.618"
+			};
+			function createWindow() {
+				// 创建一个跨级（跨iframe）的弹窗
+				win = fastDev.create("Window", getConfiguration(conf));
+				// 通过实例的setData(name, value)方法保存数据
+				// 也可以通过fastDev.Ui.Window.setData(name, value)函数来存取数据
+				win.setData("input", $("#inputA"));
+			};
+
+			function createWindow2() {
+				// 创建一个内联弹窗
+				win2 = fastDev.create("Window", getConfiguration(conf2));
+			};
+			function showWindow() {
+				win && win.show();
+			};
+			function showWindow2() {
+				win2 && win2.show();
+			};
+
+			function getParentData() {
+				var parent = fastDev.Ui.Window.getData("parent");
+				alert(parent.document.getElementById("input").value);
+			};
+			function getConfiguration(confg) {
+				var s = [], c = {}, append;
+				(function() {
+					for (var i in confg) {
+						confg.hasOwnProperty(i) && i !== "content" && s.push("<li>" + i + " : " + confg[i] + "</li>");
+					}
+				})();
+				fastDev.apply(c, confg);
+				append = "<p>我是" + (c.inside ? "内联" : "跨级") + "弹窗！我的配置如下：<br/><code>" + s.join("") + "</code></p>";
+				c.content = !confg.content ? append : (confg.content + append);
+				return c;
+			};
+
+		</script>
+	</head>
+	<body>
+		<h4>iframeA</h4>
+		<input id="inputA"/>
+		<p>
+			在上方输入值并点击下方创建弹窗按钮，将值传递到iframeB页面。
+		</p>
+		<button class="button" onclick="createWindow()">
+			创建跨级弹窗
+		</button>
+		<button class="button" onclick="showWindow()">
+			显示跨级弹窗
+		</button>
+		<p>
+			下面的按钮创建一个非跨级的弹窗
+		</p>
+		<button class="button" onclick="createWindow2()">
+			创建内联弹窗
+		</button>
+		<button class="button" onclick="showWindow2()">
+			显示内联弹窗
+		</button>
+		<button class="button" onclick="getParentData()">
+			获取父页面输入框的值
+		</button>
+		<br />
+		<p>
+			<ol>
+				<li>
+					跨级弹窗，通过弹窗实例的data(name, value)方法能够获取到原父页面上存储的数据。
+				</li>
+				<li>
+					也可以直接通过fastDev.Ui.Window.data(name, value)获取原父页面上存储的数据。
+				</li>
+				<li>
+					data(name, value)函数，传递一个参数时为取值，传递二个参数时为存值。
+				</li>
+				<li>
+					默认可以通过"parent"名称取到原父页面的window对象。
+				</li>
+			</ol>
+		</p>
+	</body>
+</html>
+

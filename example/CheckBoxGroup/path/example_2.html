@@ -1,0 +1,62 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		  <link rel="stylesheet" type="text/css" href="../../../themes/default/css/ui-main.css">
+        <script src="../../../src/library/jquery-1.5.1.min.js"></script>
+        
+		<script src="../../../src/library/FastDev.js"></script>
+		<script src="../../../src/library/Ajax.js"></script>
+		<script src="../../../src/library/Tools.js"></script>
+		<script src="../../../src/library/Dom.js"></script>
+		<script src="../../../src/library/Query.js"></script>
+		<script src="../../../src/library/Event.js"></script>
+		<script src="../../../src/library/Browser.js"></script>
+		<script src="../../../src/library/Queue.js"></script>
+        <script src="../../../src/library/Library_Patch.js"></script>
+        
+		<script src="../../../src/core/ClassManager.js"></script>
+		<script src="../../../src/core/EventManager.js"></script>
+		<script src="../../../src/core/Base.js"></script>
+		<script src="../../../src/core/ControlBus.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+		<script src="../../../src/core/DomObject.js"></script>
+		<script src="../../../src/core/Template.js"></script>
+		<script src="../../../src/data/Proxy.js"></script>
+		<script src="../../../src/data/DataSet.js"></script>
+        	
+		<script src="../../../src/data/Record.js"></script>
+		<script src="../../../src/data/Field.js"></script>
+		<script src="../../../src/data/Reader.js"></script>
+		<script src="../../../src/data/Data_Patch.js"></script>
+        
+        <script src="../../../src/component/Component.js"></script>
+		<script src="../../../src/component/layout/Panel.js"></script>
+        
+
+        <script src="../../../src/core/Core_Patch.js"></script>
+
+		
+        <script src="../../../src/component/form/CheckBoxGroup.js"></script>
+        <script src="../../../src/component/form/CheckBoxGroup_Patch.js"></script>
+		<script type="text/javascript">
+		/*
+		 * 	initSource 用于设置控件的初始值来源
+		 *  dataSource 用于设置控件的选中值来源
+		 */
+			talkweb.Bus.ready({
+				items : [{
+					classPath : "Components.CheckBoxGroup",
+					options : {
+						container : "example",
+						initSource : "example_2_init.jsp",
+						dataSource : "example_2_load.jsp"
+					}
+				}]
+			})
+		</script>
+		<title>通过读取自身数据源来配置选项</title>		
+	</head>
+	<body><div id="example"></div>
+	</body>
+	</html>

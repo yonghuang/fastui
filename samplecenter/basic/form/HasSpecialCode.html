@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>特殊字符提交</h4>
+        <ul>
+        <li>新版本的特殊字符提交无需特殊配置，和普通的表单完全一样了。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+	  <script>			
+			var submit=function(){	
+				var form=fastDev.getInstance("form1");				
+				form.submit();		
+			}
+			var submitSuccess=function(data){				
+				fastDev.tips("成功将数据"+fastDev.Util.JsonUtil.parseString(data.msg)+"提交到后台");	
+			}	
+			var clear=function(){
+				var form=fastDev.getInstance("form1");
+				form.cleanData();
+			}
+			//var afterLoadData=function(){
+			//	var area2=fastDev.getInstance("area2");
+			//	area2.setValue("aa&ff#dd^vd'gg!da");
+			//}
+		</script>
+	</head>
+	<body style="width:820px;"><div style="margin:10px;"><div class="ui-layout-text">特殊字符提交</div>
+		 <form itype="Form" action="../../data/form_example_submit.jsp" id="form1" initSource="../../data/form_example_1_init.jsp" requestType="post" saveInstance="true" onSubmitSuccess="submitSuccess()">
+		<table width="800px" border="0" cellspacing="0" cellpadding="0" class="ui-form-table">
+		  <tr>
+		    <td class="ui-form-table-dt">text:</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt1" value="ad&bgfas" ></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">password:</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="pwd1" value="dadf"  type="password" ></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt" style="height:57px;">textarea:</td>
+		    <td class="ui-form-table-dd"><textarea itype="TextBox" id="area2" value="agfas"  type="textarea" height="50px" width="400px"></textarea></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">智能提示框：</td>
+		    <td class="ui-form-table-dd">
+        <input id="autotxt1" itype="AutoComplete" value="afas"  initSource="../../data/form_data.jsp" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" iwidth="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100">
+        </td>
+	      </tr>
+           <tr>
+		    <td class="ui-form-table-dt">智能提示框1：</td>
+		    <td class="ui-form-table-dd">
+        <input id="autotxt11" itype="AutoComplete"    multiple="true"  items="Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" iwidth="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100">
+        </td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">复选框：</td>
+		    <td class="ui-form-table-dd"><div itype="CheckBoxGroup"  name="check1" id="check1"  ></div></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">单选框：</td>
+		    <td class="ui-form-table-dd"><div itype="RadioGroup"  name="radio1" id="radio1"   >
+			<div value=1 text="男" checked=true></div>			
+			<div value=0 text="女"></div>
+			</div>
+			</td>
+	      </tr>
+          <tr>
+          <td class="ui-form-table-dt">下拉框：</td>
+          <td class="ui-form-table-dd">
+			<select itype="Select"  id="select1"    width="200px"  value="test1"  onValueChange="handle1()">	<option  text="-请选择-"></option><option value="test5" text="测试5"></option>
+			</select>
+		   </td>
+          </tr>
+           <tr>
+          <td class="ui-form-table-dt">下拉树：</td>
+          <td class="ui-form-table-dd">
+			<div itype="SelectTree"  initSource="../../data/form_data2.txt" rootValue="-请选择-" topParentid="0" openFloor=2 id="selecttree1" >			
+			</div>
+		  </td>
+          </tr>          
+           <tr>
+          <td class="ui-form-table-dt">日历控件：</td>
+          <td class="ui-form-table-dd"><input itype="DatePicker" id="data1"   trigger="click"></td>
+          </tr>          
+         </table>
+         <div style="width:800px; text-align:center">
+			<div itype="Button" text="提交" onclick="submit()" id="btnsubmit"></div>
+			<div itype="Button" text="清空" onclick="clear()" ></div>
+		</div>
+	</form>   
+    </div>
+	</body>
+</html>

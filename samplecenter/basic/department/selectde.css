@@ -1,0 +1,104 @@
+﻿@charset "utf-8";
+/* CSS Document */
+.left {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	width: 220px;
+	height: 320px;
+	margin:5px 5px 0 5px;
+}
+.right {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	width:360px;
+	height:320px;
+	border:1px solid #999;
+	margin-top: 6px;
+}
+/*右侧顶端工具栏*/
+.tool {
+	width:100%;
+	height:40px;
+	border-bottom:solid 1px #999;
+
+}
+/*右侧下部分*/
+.right-content {
+	width:100%;
+	height:275px;
+	position:relative;
+	
+}
+/*下部分右边*/
+.content-right {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+ 	width:100%;
+	height:100%;
+}
+/*下部分右边的工具栏*/
+.content-right-tool {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	height:25px;
+	width:100%;
+	border-bottom:solid 1px #999;
+	line-height: 25px;
+	text-align: left;
+	background-color: #ebf2fb;
+}
+/*下部分右边已选择部门的区域*/
+.content-right-selected {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	height:255px;
+	width:100%;
+	overflow: auto;
+}
+/*已选部门样式*/
+.content-right-selected-pos {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	float:left;
+	margin-top: 10px;
+	margin-left: 10px;
+	
+}
+.content-right-selected-user {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	display:table-cell;
+	vertical-align:middle;
+	border:1px solid #a3bfff;
+	width:auto; 
+	height:35px;
+	line-height:16px;
+	padding:6px 5px 6px 5px;
+	background:#e6f2ff;
+	text-align: center;
+	cursor:pointer;
+}
+.content-right-selected-user-span {
+	display:inline-block;
+	vertical-align:middle;
+}
+/*功能按钮*/
+.removeAll {
+	float:right;
+	right:15px;
+	top:8px;
+}

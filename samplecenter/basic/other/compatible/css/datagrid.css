@@ -1,0 +1,534 @@
+﻿    @charset "utf-8";
+	
+	/*
+     * 表格样式
+     * */
+    table {
+        border-collapse: collapse;
+    }
+    .DataGrid {
+        color: #075586;
+        font-size: 12px;
+        margin: 0;
+        table-layout: fixed;
+        width: 100%;
+    }
+    /*
+     * 表格单元格  第一行title标题样式
+     * */
+    .DataGrid th {
+        background: url(../images/datagrid_thbg.gif) #e5f4fc repeat-x;
+        border: 1px solid #bfd8e0;
+        color: #075586;
+        font-weight: normal;
+        height: 24px;
+        line-height: 24px;
+        padding: 1px 0 0;
+        text-align: left;
+        /*text-indent:.3em;*/
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: keep-all;
+        text-overflow: ellipsis;
+        /*word-wrap: break-word;
+        word-break: break-all;*/
+    }
+    .DataGrid th:hover {
+        background: url(../images/datagrid_thbg1.gif) #e3f3f9 repeat-x;
+    }
+
+	 /*
+     * 表格单元格 td样式
+     * */
+    .DataGrid td {
+        border: 1px solid #bfd8e0;
+        color: #075586;
+        cursor: pointer;
+        line-height: 21px;
+        margin: 0;
+        padding:0;
+        /*padding: 0 3px;*/
+        height: 22px;
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: keep-all;
+        text-overflow: ellipsis;
+        text-indent: 6px;
+    }
+    .DataGrid th.hide{display:none}
+    .DataGrid th.show{display:''}
+    .DataGrid td.hide{display:none}
+    .DataGrid td.show{display:''}
+	.noindent {
+        text-indent: 0 !important;
+    }
+    /*
+     * onmouseover
+     * */
+    .up {
+        background: #E6F4FA;
+    }
+    .t1 {
+        background: #F9FCFD;
+    }
+    .t2 {
+        background: #fff;
+    }
+	/*
+     * 表格单元格 button和链接字样式
+     * */
+    .DataGrid .button {
+        background: none;
+        border: 0;
+        padding: 0 5px;
+        margin:0 5px;
+        height:auto;
+        display: inline;
+        color: #075586;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    .DataGrid .button:hover {
+        color: #f00;
+    }
+    .DataGrid a:link, .DataGrid a:visited {
+        background: none;
+        border: 0;
+        height: 28px;
+        line-height: 120%;
+        padding: 0;
+        display: inline;
+        color: #075586;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    .DataGrid a:hover, .DataGrid a:active {
+        color: #f00;
+        text-decoration: none;
+    }
+    /*
+     * icon
+     * */
+    a.datagridicon1, a.datagridicon2 {
+        padding: 0 8px;
+        text-decoration: none;
+        color: #fff;
+    }
+    a.datagridicon1, a.datagridicon1:hover, a.datagridicon1:visited, a.datagridicon1:active, a.datagridicon2, a.datagridicon2:hover, a.datagridicon2:visited, a.datagridicon2:active {
+        text-decoration: none;
+        color: #fff;
+        padding: 0;
+        width:100%;
+        display:block;
+    }
+    a.datagridicon1 {
+        background: url(../images/datagridImg.gif) no-repeat -5px -166px;
+        border: none;
+    }
+    a.datagridicon2 {
+        background: url(../images/datagridImg.gif) no-repeat -55px -166px;
+        border: none;
+    }
+    /*
+     * 表格分页样式
+     * */
+    .pagelist {
+        font-size: 12px;
+        color: #075586;
+        height: 25px;
+        line-height: 25px;
+        text-align: right;
+        margin: 0;
+        padding: 1px 0 0;
+        display: block;
+        font-family: Arial, Helvetica, sans-serif, "宋体";
+        background: url(../images/datagrid_thbg.gif) #e5f4fc repeat-x;
+        border: 1px solid #bfd8e0;
+        border-top: none;
+    }
+    .pagelist span {
+        margin: 0 4px;
+    }
+    /*
+     * 表格分页 a 样式
+     * */
+    .pagelist span a {
+        font-size: 12px;
+        cursor: pointer;
+        color: #075586;
+        text-decoration: none;
+        background: none;
+        border: 1px solid #b1d3ed;
+        height: 20px;
+        line-height: 20px;
+        padding: 2px 6px 1px;
+    }
+    .pagelist span a:hover, .pagelist span a:visited, .pagelist span a:active, .pagelist .button:link, .pagelist .button:hover, .pagelist .button:visited, .pagelist .button:active {
+        cursor: pointer;
+        color: #fff;
+        text-decoration: none;
+        background: #3cb9ea;
+        border: 1px solid #3cb9ea;
+    }
+    /*
+     * 表格分页 a 不可点击样式
+     * */
+    .pagelist span.linkgray a:link, .pagelist span.linkgray a:hover, .pagelist span.linkgray a:visited, .pagelist span.linkgray a:active {
+        cursor: default;
+        color: #a9a9a9;
+        text-decoration: none;
+        background: #e8e8e8;
+        border: 1px solid #ccc;
+    }
+    .pagelist span.grayactive a {
+        color: #a9a9a9;
+        background: #e8e8e8;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .pagelist span.blueactive a {
+        color: #fff;
+        background: #3cb9ea;
+        border: 1px solid #3cb9ea;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    /*
+     * 表格分页 button 样式
+     * */
+    .pagelist .button {
+        background: none;
+        border: 1px solid #b1d3ed;
+        height: 20px;
+        line-height: 20px;
+        padding: 1px 8px;
+        display: inline;
+        cursor: pointer;
+        color: #075586;
+        font-size: 12px;
+        float: none;
+    }
+    
+    .resize{
+        /*background-color: #0F0F0F;*/
+        position: absolute;
+        top:0;
+        width: 1px;
+        z-index: 5;
+        
+    }
+	
+	/*
+	 *Ext风格的datagrid
+	 * */
+	.datagriddiv {
+		border: 1px solid #a6c7d2;
+		overflow: hidden;
+	}
+	.datagriddiv table {
+		color: #333;
+	    font: 12px/22px Arial, "宋体";
+		padding:0;
+		margin:0;
+		table-layout: fixed;
+		width: 100%;
+	}
+	/*
+	 *datagrid th
+	 * */
+	.datagriddiv table th {
+	    background: #f2f6f8 url(../images/datagrid.gif) repeat-x 0 -310px;
+		border: 1px solid #d7e2e6;
+		border-top: 0;
+		color: #558499;
+		font-weight: normal;
+		height: 22px;
+		text-align: left;
+        word-wrap: break-word;
+        word-break: break-all;
+	}
+	.datagriddiv table th:hover {
+	    background: #ddf3fc url(../images/datagrid.gif) repeat-x 0 -380px;
+		border: 1px solid #9dd0e8;
+		border-top: 0;
+	}
+	
+	/*
+     * datagrid拖动th 样式
+     * */
+	 .drag {
+	     cursor: col-resize;
+		 display: inline-block;
+		 height: 100%;
+		 vertical-align: middle;
+		 width: 6px;
+	 }
+	 /*
+     * datagrid th onmouseover 右边出现小图标
+     * */
+	 .icon-show {
+	     background: url(../images/datagrid.gif) no-repeat -3px -203px;
+		 background-position: -3px -205px \9;
+		 border-left: 1px solid #cce5f0;
+	     cursor: pointer;
+		 display: inline-block;
+		 float: right;
+		 height: 100%;
+		 vertical-align: middle;
+		 width: 11px;
+	 }
+	 .icon-hidden {
+		 display: none;
+	 }
+	 /*
+	 *datagrid td
+	 * */
+	.datagriddiv table td {
+	    background: #fff;
+		border: 1px solid #e7f1f5;
+		height: 21px;
+		padding:0 6px;
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: keep-all;
+        text-overflow: ellipsis;
+    }
+	/*
+     * 单元格字与边框的间距
+     * */
+	.noindent {
+	    padding: 0;
+	    text-align: left !important;
+	}
+	.indent {
+	    padding: 0 6px;
+	}
+	/*
+     * onmouseover
+     * */
+    .datagriddiv table td.onmouseover {
+        background: #e6f3f9;
+		border: 1px solid #cee0e6
+    }
+    .datagriddiv table td.td1 {
+        background: #fafcfd;
+    }
+	/*
+     * datagrid链接字样式
+     * */
+    .datagriddiv a:link, .datagriddiv a:visited {
+        color: #333;
+        cursor: pointer;
+    }
+    .datagriddiv a:hover, .datagriddiv a:active {
+        color: #f00;
+        text-decoration: none;
+    }
+	/*
+     * datagrid 翻页样式
+     * */
+	.pagelistdiv {
+		background: url(../images/datagrid.gif) repeat-x 0 -260px;
+		color: #2d363f;
+		/*
+		font: normal 12px/24px Arial, Helvetica, sans-serif, "宋体";
+		line-height: 26px \9;
+		_line-height: 23px;
+		height: 26px;
+		padding: 0 8px;
+		_height:23px;
+		_padding-top: 2px;
+		*/
+		height:26px;
+		line-height:26px;
+		font-size:12px;
+		padding: 0 8px;
+		overflow:hidden
+	 }
+	 /*
+     * datagrid 翻页放在table上　下
+     * */
+	.pagelistdiv-bordertop {
+		border: 1px solid #a6c7d2;
+		border-bottom:none;
+	}
+	 .pagelistdiv-borderbottom {
+		border: 1px solid #a6c7d2;
+		border-top:none;
+	 }
+	 .pagelistdiv-borderbottom .floatleft{
+	 	float:left;
+		margin-top:0;
+		*margin-top:3px;
+	 }
+	.pagelistdiv span {
+		display: inline-block;
+		vertical-align: middle;
+		margin: 0 2px;
+		margin: 0 2px 1px \0;
+		*margin: 0 4px 4px;
+	}
+	/*
+     * datagrid 翻页小图标样式
+     * */
+	.pagelist-prev, .pagelist-first, .pagelist-next, .pagelist-last, 
+	.pagelist-prev-gray, .pagelist-first-gray, .pagelist-next-gray, .pagelist-last-gray, 
+	.pagelist-line {
+		background: url(../images/datagrid.gif) no-repeat;
+		border: none;
+		cursor: pointer;
+		height: 16px;
+		width: 16px;
+	}
+	.pagelist-prev {
+		background-position: 0 -80px;
+	}
+	.pagelist-first {
+		background-position: 0 -120px;
+	}
+	.pagelist-next {
+		background-position: 0 0;
+	}
+	.pagelist-last {
+		background-position: 0 -40px;
+	}
+	.pagelist-prev-gray {
+		background-position: 0 -100px;
+	}
+	.pagelist-first-gray {
+		background-position: 0 -140px;
+	}
+	.pagelist-next-gray {
+	    background-position: 0 -20px;
+	}
+	.pagelist-last-gray {
+	    background-position: 0 -60px;
+	}
+	.pagelist-line {
+		background-position: right -236px;
+		cursor: auto;
+		height: 16px;
+		text-align: center;
+		width: 24px;
+	}
+	.pagelist-input {
+		background: #fff url(../images/datagrid.gif) repeat-x 0 -464px;
+		border: 1px solid #c0cfd3;
+		color: #2d363f;
+		font: 12px/18px Arial, Helvetica, sans-serif, "宋体";
+		height: 18px;
+		vertical-align: middle;
+		margin: 0 3px;
+	}
+	/*
+     * datagrid 翻页　按钮样式
+     * */
+	span.btn-add, span.btn-deletes, span.btn-save, span.btn-cancel, span.btn-refresh, span.btn-moveup, span.btn-movedown, span.btn-arrowdown {
+	    background: url(../images/datagrid_btnicon.gif) no-repeat;
+		border: 0;
+		color: #2d363f;
+		cursor: pointer;
+		/*
+		height: 16px;
+		padding-left: 18px;
+		*padding-left:12px;
+		margin: 4px 8px 0 0;
+		margin: 5px 8px 0 0 \9;
+		vertical-align: middle;
+		font-family:"宋体";
+		*/
+		width: 50px;
+		height: 26px;
+		line-height:26px;
+		text-align: left;
+		text-indent: 18px;
+		overflow:hidden
+	}
+	span.btn-add {
+	    background-position: 0px 2px;
+	}
+	span.btn-deletes {
+	    background-position: 0px -25px;
+	}
+	span.btn-save {
+	    background-position: 0 -46px;
+	}
+	span.btn-cancel {
+	    background-position: 0 -108px;
+	}
+	span.btn-refresh {
+	    background-position: 0 -137px;
+	}
+	span.btn-moveup {
+	    background-position: 0 -168px;
+	}
+	span.btn-movedown {
+	    background-position: 0 -198px;
+	}
+	.btn-arrowdown {
+	    background-position: right -75px;
+		padding-right: 18px;
+		padding-left: 0;
+	}
+	/*
+     * datagrid 下拉框　样式
+     * */
+	.pagelistdiv-messagebox-show {
+	    background: #fff;
+		border: 1px solid #ccc;
+		padding: 0;
+		margin: 0;
+		height: 120px;
+		line-height: 160%;
+		position: absolute;
+		width: 160px;
+		z-index: 999;
+	}
+	.pagelistdiv-messagebox-hidden {
+		 display: none;
+	 }
+		
+/*新增datagrid按钮样式*/
+.ui-datagrid-title {
+	height: 25px;
+	line-height:25px;
+	width:100%;
+	text-indent:.5em;
+	border-bottom:1px solid #99BCE8;
+	color:#075587;
+	background: none;
+	background: #D9E5FD;
+	-pie-background: linear-gradient(top, #F2F6FF,#E4EDFE 50%,#D9E5FD 51%,#E1E9FC);
+	background: -webkit-linear-gradient(top, #F2F6FF,#E4EDFE 50%,#D9E5FD 51%,#E1E9FC);
+	background: -moz-linear-gradient(top, #F2F6FF,#E4EDFE 50%,#D9E5FD 51%,#E1E9FC);
+	background: -o-linear-gradient(top, #F2F6FF,#E4EDFE 50%,#D9E5FD 51%,#E1E9FC);
+	background: -ms-linear-gradient(top, #F2F6FF,#E4EDFE 50%,#D9E5FD 51%,#E1E9FC);
+	behavior:url(../pie.htc);
+}
+.ui-datagrid-toolbar-title {
+	height: auto;
+	padding:2px 0 2px 3px;
+	width:auto;
+	border-top:1px solid #F0F5FA;
+	border-bottom:1px solid #AACCF6;
+	background-image: none;
+	background-color: #D9E5F3;
+	background:-webkit-gradient(linear, 0 0, 0 bottom, from(#DEE9F5), to(#D3E1F1)) !important;
+    background:-moz-linear-gradient(#DEE9F5, #D3E1F1) !important;
+    -pie-background:linear-gradient(#DEE9F5, #D3E1F1)!important;
+	behavior:url(../pie.htc);
+}
+.ui-datagrid-toolbar-title .ui-datagrid-toolbar-line {
+	margin: 2px 4px 0 -3px;
+	height: 18px;
+	width: auto;
+	position:absolute;
+	border-left: 1px solid #98C8FF;
+	border-right: 1px solid white;
+}
+.DataGrid input[type="checkbox"],.DataGrid input[type="radio"] {
+	margin:0;
+	margin-left:5px;	
+	*margin-left:2px;
+}	

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<title>
+			<ul>
+				<li>本示例展现了新增、删除、禁用、启用子项的功能调用</li>
+			</ul>
+		</title>
+		<script>
+			function addLeftBtn(){
+				fastDev.getInstance("toolbar").addItem({
+					text:"左侧按钮"
+				},"left");
+			}
+			
+			function addRightBtn(){
+				fastDev.getInstance("toolbar").addItem({
+					text:"右侧按钮"
+				});
+			}
+			
+			function removeItem(){
+				fastDev.getInstance("toolbar").removeItem("saveBtn");
+			}
+			
+			function enable(){
+				fastDev.getInstance("toolbar").enable("addBtn");
+			}
+			
+			function disable(){
+				fastDev.getInstance("toolbar").disable("addBtn");
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">工具栏事件及方法</div>
+			<div itype="Toolbar" width="800px" id="toolbar" saveInstance=true>
+				<div itype="text" text="工具栏文本"></div>
+				<div itype="spacer"></div>
+				<div plain=true text="增加" iconCls="icon-add" id="addBtn"></div>
+				<div itype="separator"></div>
+				<div plain=true text="修改" iconCls="icon-edit" id="updateBtn"></div>
+				<div itype="separator"></div>
+				<div plain=true text="保存" iconCls="icon-save" id="saveBtn"></div>
+				<div itype="separator"></div>
+				<div plain=true text="删除" iconCls="icon-delete" id="deleteBtn"></div>
+				<div itype="end"></div>
+				<div iconCls="icon-search" text="搜索" id="searchBtn"></div>
+				<div itype="separator"></div>
+				<div iconCls="icon-print" text="打印" id="printBtn"></div>
+			</div>
+			<br>
+			<input itype="Button" text="增加左侧按钮" onclick="addLeftBtn()"></input>
+			<input itype="Button" text="增加右侧按钮" onclick="addRightBtn()"></input>
+			<input itype="Button" text="删除保存按钮" onclick="removeItem()"></input>
+			<input itype="Button" text="禁用增加按钮" onclick="disable()"></input>
+			<input itype="Button" text="启用增加按钮" onclick="enable()"></input>
+		</div>
+	</body>
+</html>

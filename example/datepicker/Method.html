@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>功能方法集</title>
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+		<script src="../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function getValue() {
+				// 通过getValue方法获取控件已选日期值字符串
+				fastDev.tips(fastDev.getInstance("datepicker").getValue());
+			}
+
+			function getDate() {
+				// 通过getDate方法获取已选日期值的日期对象
+				// 注意，若未选取日期值，则通过getDate()方法获取到的日期对象为null
+				fastDev.tips(fastDev.getInstance("datepicker").getDate() + "");
+			}
+
+			function setValue() {
+				// 通过setValue方法设置日期值，参数可为日期字符串或者日期对象
+				fastDev.tips("已设置日期值为：" + fastDev.getInstance("datepicker").setValue(new Date()).getValue());
+			}
+
+			function setMinDate() {
+				// 通过setMinDate方法设置最小可选日期值，参数可为日期字符串或者日期对象
+				var today = new Date(), tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+				fastDev.tips("已设置最小可选日期为：" + fastDev.getInstance("datepicker").setMinDate(tomorrow).getOptions().minDate);
+			}
+
+			function setMaxDate() {
+				// 通过setMaxDate方法设置最大可选日期值，参数可为日期字符串或者日期对象
+				fastDev.tips("已设置最大可选日期为：" + fastDev.getInstance("datepicker").setMaxDate("2014-12-25").getOptions().maxDate);
+			}
+
+			function setExpressions() {
+				// 通过setExpressions方法设置日期范围表达式，可同时设置多个表达式，多个表达式请使用数组，单个表达式可使用数组或者字符串
+				// 更多表达式的用法，请参考表达式详细说明文档或者查找Cron表达式相关资料
+				// 用于包含可选日期的表达式组
+				var includes = "1/2 1/2 1/2 2012-2014";
+				// 用于排除可选日期的表达式组
+				var excludes = ["* * SUN 2012-2013", "* * MON 2014"];
+				fastDev.getInstance("datepicker").setExpressions(includes, excludes);
+				fastDev.tips("表达式设置成功");
+			}
+
+			function removeExpressions() {
+				// 通过setExpressions方法移除日期范围表达式
+				// 第一个参数为true则移除includes表达式，第二个参数为true则移除excludes表达式
+				fastDev.getInstance("datepicker").removeExpressions(true, true);
+				fastDev.tips("表达式移除成功");
+			}
+
+			function setReadonly(readonly) {
+				// 通过setReadonly方法设置控件只读或可写
+				fastDev.getInstance("datepicker").setReadonly(readonly);
+				fastDev.tips("设置" + ( readonly ? "只读" : "可写") + "成功");
+			}
+
+			function enable() {
+				// 通过enable方法可以启用控件
+				fastDev.getInstance("datepicker").enable();
+			}
+
+			function disable() {
+				// 通过disable方法可以禁用控件
+				fastDev.getInstance("datepicker").disable();
+			}
+
+			function setRead() {
+				setReadonly(true);
+			}
+
+			function setWrite() {
+				setReadonly(false);
+			}
+
+		</script>
+	</head>
+	<body>
+		<div style="margin: 30px">
+			<div>
+				<input itype="DatePicker" id="datepicker" value="2012-1-1" trigger="click" saveInstance="true"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取日期值" onBtnClick="getValue()"/>
+				<input itype="Button" text="获取日期对象" onBtnClick="getDate()"/>
+				<input itype="Button" text="设置日期值" onBtnClick="setValue()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="设置最小可选日期" onBtnClick="setMinDate()"/>
+				<input itype="Button" text="设置最大可选日期" onBtnClick="setMaxDate()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="设置日期范围表达式" onBtnClick="setExpressions()"/>
+				<input itype="Button" text="移除日期范围表达式" onBtnClick="removeExpressions()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="设置只读" onBtnClick="setRead()"/>
+				<input itype="Button" text="设置可写" onBtnClick="setWrite()"/>
+				<input itype="Button" text="禁用控件" onBtnClick="disable()"/>
+				<input itype="Button" text="启用控件" onBtnClick="enable()"/>
+			</div>
+		</div>
+	</body>
+</html>
+

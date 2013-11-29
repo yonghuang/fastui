@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">//此控件1.5版本没有了
+fastDev.define(&quot;fastDev.Ui.FieldSet&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;FieldSet&quot;,
+	_options : {	
+				/*! @name items,
+                 *  @explain 数据源
+                 *  @description 合法的json数据源
+                 *  @default ------
+                 !*/
+				items : null,			
+				data : &quot;&quot;,
+				/*! @name title,
+                 *  @explain 主题
+                 *  @description String型
+                 *  @default ------
+                 !*/
+				title : null,				
+				controlMap : null,
+				/*! @name hide,
+                 *  @explain 隐藏
+                 *  @description Boolean型
+                 *  @default false
+                 !*/
+				hide : false,
+				/*! @name height,
+                 *  @explain 总高度
+                 *  @description 合法的高度字符串
+                 *  @default 100%
+                 !*/
+				height : &quot;100%&quot;,
+				/*! @name width,
+                 *  @explain 总宽度
+                 *  @description 合法的宽度字符串
+                 *  @default 100%
+                 !*/
+				width : &quot;100%&quot;,
+				/*! @name itemWidth,
+                 *  @explain 项宽度百分比
+                 *  @description 百分比字符串
+                 *  @default 33%
+                 !*/
+				itemWidth : &quot;33%&quot;,
+				/*! @name defaultShow,
+                 *  @explain 默认展开
+                 *  @description Boolean型
+                 *  @default false
+                 !*/
+				defaultShow : false,
+				/*! @name formWidth,
+                 *  @explain 表单宽度
+                 *  @description 合法的宽度字符串
+                 *  @default 0px
+                 !*/
+				formWidth : &quot;0px&quot;,
+				/*! @name dtWidth,
+                 *  @explain dt的宽度
+                 *  @description 合法的宽度字符串
+                 *  @default 100px
+                 !*/
+				dtWidth : &quot;100px&quot;,
+				/*! @name validate,
+                 *  @explain 验证
+                 *  @description Boolean型
+                 *  @default true
+                 !*/
+				validate : true							
+		},
+		 /*# 
+         *  @name setID,
+         *  @explain 设置id　
+         *  @type String型
+         *  @return ------
+         #*/
+		setID : function(id) {
+			if(!id) {
+				id = talkweb.ControlBus.getID();
+			}
+			this.attr(&quot;id&quot;, id);
+		},
+		/*
+		 * Description:构建控件
+		 * Param:none
+		 * Return:控件对象
+		 */
+		construct : function(options, global) {
+			var path, item, control, titlespan, contentdiv,  items = options.items, controlMap = {}, div = talkweb.BaseControl.Div({
+				className : &quot;fieldset&quot;
+			});
+			if(options.hide) {
+				div.setStyle({
+					&quot;display&quot; : &quot;none&quot;
+				});
+			}
+			this.storage(div[0]);
+			var spanclass = &quot;fieldset-title-collect&quot;;
+			var divclass = &quot;fieldset-content-collect&quot;;
+			if(options.defaultShow) {
+				spanclass = &quot;fieldset-title-expand&quot;;
+				divclass = &quot;fieldset-content-expand&quot;;
+			}
+			if(options.title) {
+				titlespan = talkweb.BaseControl.Span({
+					className : spanclass,
+					value : options.title,
+					container : this
+				});
+				titlespan.onClick(this.bindEventlistener(this, this.expandCollect));
+				titlespan.setStyle({
+					&quot;width&quot; : options.width
+				});
+			}
+			contentdiv = talkweb.BaseControl.Div({
+				className : divclass,
+				container : this
+			});
+			contentdiv.setStyle({
+				&quot;height&quot; : options.height,
+				&quot;width&quot; : options.width
+			});
+			var shell = talkweb.BaseControl.Div({
+				container : contentdiv,
+				className : &quot;fieldsetForm&quot;
+			});
+			talkweb.BaseControl.Div({
+				container : shell,
+				className : &quot;clearfix&quot;
+			});
+			talkweb.Components.Form.Class.buildControlAndLaout.call(this, items, controlMap, shell);
+			talkweb.BaseControl.Div({
+				container : shell,
+				className : &quot;clearfix&quot;
+			});
+			this.setOptions({
+				controlMap : controlMap
+			});
+		},
+		addControl : function(controlMap) {
+			var name, options = this.getOptions(), items = options.items;
+			for(var i = 0; i &lt; items.length; i += 1) {
+				name = items[i].options.name;
+				controlMap[name] = options.controlMap[name];
+			}
+		},
+		addItems : function(items) {
+			var c_items = this.getOptions().items;
+			return items.concat(c_items);
+		},
+		 /*# 
+         *  @name expandCollect,
+         *  @explain 展开或关闭　
+         *  @type ------
+         *  @return ------
+         #*/
+		expandCollect : function(e) {
+			var span = $(this[0]).find(&quot;[class^='fieldset-title-']&quot;);
+			if($(span).attr(&quot;class&quot;) === &quot;fieldset-title-expand&quot;) {
+				$(span).attr(&quot;class&quot;, &quot;fieldset-title-collect&quot;);
+				$(span).parent(&quot;div&quot;).children(&quot;.fieldset-content-expand&quot;).attr(&quot;class&quot;, &quot;fieldset-content-collect&quot;);
+			} else {
+				$(span).attr(&quot;class&quot;, &quot;fieldset-title-expand&quot;);
+				$(span).parent(&quot;div&quot;).children(&quot;.fieldset-content-collect&quot;).attr(&quot;class&quot;, &quot;fieldset-content-expand&quot;);
+			}
+		},
+		/*
+		 * Description:根据数据集构建控件
+		 * Param:items:数据集
+		 * Return:none
+		 */
+		constructItems : function(items) {
+			var options = this.getOptions(), controlMap = options.controlMap;
+			for(var p in items) {
+				var data = items[p].data;
+				controlMap[p] &amp;&amp; controlMap[p].constructItems(data);
+			}
+		},
+		getValue : function() {
+			return &quot;&quot;;
+		},
+		validate : function(event) {
+			return talkweb.Components.Form.Class.validate.call(this, event);
+		},
+		saveErrorMsg : function(name, result) {
+			talkweb.Components.Form.Class.saveErrorMsg.call(this, name, result);
+		},
+		getErrorConfig : function(name, msg, type) {
+			var options = this.getOptions();
+			return talkweb.Components.Form.Class.getErrorConfig.call(options.form, name, msg, type);
+		},
+		bindErrorEvent : function(control) {
+			talkweb.Components.Form.Class.bindErrorEvent.call(this, control);
+		},
+		displayError : function(event) {
+			talkweb.Components.Form.Class.displayError.call(this, event);
+		},
+		removeError : function(name) {
+			talkweb.Components.Form.Class.removeError.call(this, name);
+		},
+		removeErrorMsg : function(name) {
+			talkweb.Components.Form.Class.removeErrorMsg.call(this, name);
+		},
+		initError : function(name) {
+			var options = this.getOptions();
+			this.setOptions({
+				displayError : options.form.getOptions().displayError
+			});
+			talkweb.Components.Form.Class.initError.call(this, name);
+		},
+		displayError : function(event) {
+			var options = this.getOptions();
+			if(options.displayError) {
+				var errorMsg = options.form.parseError(options.form.getOptions(), options.errorMsg);
+				
+			} 
+			options.displayError ? options.form.getOptions().displayError(errorMsg) : options.form.displayError.call(this,event);
+		}
+});
+</pre>
+</body>
+</html>

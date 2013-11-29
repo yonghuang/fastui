@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					控件方法与事件示例。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<!-- 农历信息扩展功能所需js文件 -->
+		<script src="../../../src/component/form/datepicker/DatePicker.lunar.js"></script>
+		<!-- 日期范围表达式扩展功能所需js文件  -->
+		<script src="../../../src/component/form/datepicker/DatePicker.expression.js"></script>
+		<script type="text/javascript">
+			// 日期选择事件回调
+			function onPick(date, value) {
+				// date参数为日期对象(Date)，value参数为格式化后的日期字符串
+				// 控件初始日期值为非有效日期值或者点击清空按钮清空输入框值时，date参数值为null，value参数值为空字符串
+				fastDev.tips("onPick(" + value + ")");
+			}
+
+			function getValue() {
+				// 通过getValue方法获取控件已选日期值字符串
+				fastDev.tips(fastDev.getInstance("datepicker").getValue());
+			}
+
+			function getDate() {
+				// 通过getDate方法获取已选日期值的日期对象
+				// 注意，若未选取日期值，则通过getDate()方法获取到的日期对象为null
+				fastDev.tips(fastDev.getInstance("datepicker").getDate() + "");
+			}
+
+			function setValue() {
+				// 通过setValue方法设置日期值，参数可为日期字符串或者日期对象
+				fastDev.tips("已设置日期值为：" + fastDev.getInstance("datepicker").setValue(new Date()).getValue());
+			}
+
+			function setMinDate() {
+				// 通过setMinDate方法设置最小可选日期值，参数可为日期字符串或者日期对象
+				var date = new Date(2011, 1, 1);
+				fastDev.tips("已设置最小可选日期为：" + fastDev.getInstance("datepicker").setMinDate(date).getOptions().minDate);
+			}
+
+			function setMaxDate() {
+				// 通过setMaxDate方法设置最大可选日期值，参数可为日期字符串或者日期对象
+				fastDev.tips("已设置最大可选日期为：" + fastDev.getInstance("datepicker").setMaxDate("2014-12-25").getOptions().maxDate);
+			}
+
+			function setExpressions() {
+				// 通过setExpressions方法设置日期范围表达式，可同时设置多个表达式，多个表达式请使用数组，单个表达式可使用数组或者字符串
+				// 更多表达式的用法，请参考表达式详细说明文档或者查找Cron表达式相关资料
+				// 用于包含可选日期的表达式组
+				var includes = "1/2 1/2 1/2 2012-2014";
+				// 用于排除可选日期的表达式组
+				var excludes = ["* * SUN 2012-2013", "* * MON 2014"];
+				fastDev.getInstance("datepicker").setExpressions(includes, excludes);
+				fastDev.tips("表达式设置成功");
+			}
+
+			function removeExpressions() {
+				// 通过setExpressions方法移除日期范围表达式
+				// 第一个参数为true则移除includes表达式，第二个参数为true则移除excludes表达式
+				fastDev.getInstance("datepicker").removeExpressions(true, true);
+				fastDev.tips("表达式移除成功");
+			}
+
+			function setReadOnly(readonly) {
+				// 通过setReadOnly方法设置控件只读或可写
+				fastDev.getInstance("datepicker").setReadOnly(readonly);
+				fastDev.tips("设置" + ( readonly ? "只读" : "可写") + "成功");
+			}
+
+			function enable() {
+				// 通过enable方法可以启用控件
+				fastDev.getInstance("datepicker").enable();
+			}
+
+			function disable() {
+				// 通过disable方法可以禁用控件
+				fastDev.getInstance("datepicker").disable();
+			}
+
+			function setRead() {
+				setReadOnly(true);
+			}
+
+			function setWrite() {
+				setReadOnly(false);
+			}
+
+			function show() {
+				fastDev.getInstance("datepicker").show();
+			}
+
+			function hide() {
+				fastDev.getInstance("datepicker").hide();
+			}
+
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				方法与事件
+			</div>
+			<input itype="DatePicker" id="datepicker" value="2012-1-1" onPick="onPick()" saveInstance="true"/>
+			<br />
+			<div>
+				<input itype="Button" text="获取日期值" onclick="getValue()"/>
+				<input itype="Button" text="获取日期对象" onclick="getDate()"/>
+				<input itype="Button" text="设置日期值" onclick="setValue()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="设置最小可选日期" onclick="setMinDate()"/>
+				<input itype="Button" text="设置最大可选日期" onclick="setMaxDate()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="设置日期范围表达式" onclick="setExpressions()"/>
+				<input itype="Button" text="移除日期范围表达式" onclick="removeExpressions()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="显示" onclick="show()"/>
+				<input itype="Button" text="隐藏" onclick="hide()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="设置只读" onclick="setRead()"/>
+				<input itype="Button" text="设置可写" onclick="setWrite()"/>
+				<input itype="Button" text="禁用控件" onclick="disable()"/>
+				<input itype="Button" text="启用控件" onclick="enable()"/>
+			</div>
+		</div>
+	</body>
+</html>
+

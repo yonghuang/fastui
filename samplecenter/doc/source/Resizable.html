@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Interaction-Resizable'>/**
+</span> * &lt;p&gt;调节大小组件。&lt;/p&gt;
+ * 以下三个样式类名可供用户自定义使用：
+ * &lt;p&gt;ui-resizable-element  被调节大小的元素
+ * &lt;p&gt;ui-resizable-helper  调节大小辅助层
+ * &lt;p&gt;ui-resizable-resizing 正在调节中
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ * @class fastDev.Interaction.Resizable
+ * @extends fastDev.Core.Base
+ * @author chengwei
+ */
+fastDev.define(&quot;fastDev.Interaction.Resizable&quot;, {
+    alias: &quot;Resizable&quot;,
+    extend: &quot;fastDev.Core.Base&quot;,
+    _options: {
+<span id='fastDev-Interaction-Resizable-property-element'>        /**
+</span>         * 可调整大小的元素对象或元素选择器
+         * @type {Element|String|DomObject}
+         */
+        element: null,
+<span id='fastDev-Interaction-Resizable-property-handles'>        /**
+</span>         * 可捕获调整大小事件的方位，可为以下枚举量：
+         * n(北)、ne(东北)、e(东)、se(东南)、s(南)、sw(西南)、w(西)、nw(西北)、all(全部)
+         * 字符串类型值时用逗号分隔
+         * @type {String|Array}
+         */
+        handles: &quot;s,e,se&quot;,
+<span id='fastDev-Interaction-Resizable-property-maxWidth'>        /**
+</span>         * 最大可调宽度限制，可使用单位px、em、%
+         * 百分比相对于父元素，em受body的font-size字体尺寸样式影响
+         * @type {String|Number}
+         */
+        maxWidth: Infinity,
+<span id='fastDev-Interaction-Resizable-property-maxHeight'>        /**
+</span>         * 最大可调高度限制，可使用单位px、em、%
+         * 百分比相对于父元素，em受body的font-size字体尺寸样式影响
+         * @type {String|Number}
+         */
+        maxHeight: Infinity,
+<span id='fastDev-Interaction-Resizable-property-minWidth'>        /**
+</span>         * 最小可调宽度限制，可使用单位px、em、%
+         * 百分比相对于父元素，em受body的font-size字体尺寸样式影响
+         * @type {String|Number}
+         */
+        minWidth: &quot;1px&quot;,
+<span id='fastDev-Interaction-Resizable-property-minHeight'>        /**
+</span>         * 最小可调高度限制，可使用单位px、em、%
+         * 百分比相对于父元素，em受body的font-size字体尺寸样式影响
+         * @type {String|Number}
+         */
+        minHeight: &quot;1px&quot;,
+<span id='fastDev-Interaction-Resizable-property-ratio'>        /**
+</span>         * 宽高比例限制（宽/高）
+         * @type {Number}
+         */
+        ratio: null,
+<span id='fastDev-Interaction-Resizable-property-axis'>        /**
+</span>         * 可调坐标轴线，为以下枚举值：
+         * &lt;p&gt;'x,y'、'x'、'y'或['x','y']、['x']、['y']
+         * &lt;p&gt;x为只可调节宽度，y为只可调节高度
+         * @type {String|Array}
+         */
+        axis: &quot;x,y&quot;,
+<span id='fastDev-Interaction-Resizable-property-container'>        /**
+</span>         * 用于重设可调大小元素所在的父容器
+         * 百分比值的计算将依赖于父容器的宽高
+         * @type {String|DomObject}
+         */
+        container: &quot;&quot;,
+<span id='fastDev-Interaction-Resizable-property-ghost'>        /**
+</span>         * 是否使用辅助层
+         * 使用辅助层则在调整大小完成后才做实际变更
+         * @type {Boolean}
+         */
+        ghost: true,
+<span id='fastDev-Interaction-Resizable-property-border'>        /**
+</span>         * 辅助层的边框样式
+         * @type {String}
+         */
+        border: &quot;2px dotted #00F&quot;,
+<span id='fastDev-Interaction-Resizable-property-opacity'>        /**
+</span>         * 辅助层的透明度
+         * @type {Number}
+         */
+        opacity: 0.4,
+<span id='fastDev-Interaction-Resizable-property-backgroundColor'>        /**
+</span>         * 辅助层的背景色
+         * @type {String}
+         */
+        backgroundColor: &quot;#6699FF&quot;,
+<span id='fastDev-Interaction-Resizable-property-helperCls'>        /**
+</span>         * 辅助层样式名
+         * 用于通过样式文件配置
+         * @type {String}
+         */
+        helperCls: &quot;&quot;,
+<span id='fastDev-Interaction-Resizable-property-zIndex'>        /**
+</span>         * 索引重置
+         * @type {Number}
+         */
+        zIndex: 2013,
+<span id='fastDev-Interaction-Resizable-property-showTips'>        /**
+</span>         * 是否显示尺寸提示标签
+         * @type {Boolean}
+         */
+        showTips: false,
+<span id='fastDev-Interaction-Resizable-event-oncreate'>        /**
+</span>         * 初始完成时的回调函数
+         * @type {Function}
+         * @event
+         */
+        oncreate: fastDev.noop,
+<span id='fastDev-Interaction-Resizable-event-onstart'>        /**
+</span>         * 触发调整大小事件时的回调函数
+         * &lt;p&gt;this指向当前被调整大小的元素（DomObject对象）
+         * &lt;p&gt;参数为event对象
+         * 返回false值则不会继续处理
+         * @type {Function}
+         * @event
+         */
+        onstart: fastDev.noop,
+<span id='fastDev-Interaction-Resizable-event-onresize'>        /**
+</span>         * 调整大小进行时的回调函数
+         * &lt;p&gt;this指向当前被调整大小的元素（DomObject对象）
+         * &lt;p&gt;参数为event对象、X轴偏移量、Y轴偏移量
+         * 返回false值则不会继续处理
+         * @type {Function}
+         * @event
+         */
+        onresize: fastDev.noop,
+<span id='fastDev-Interaction-Resizable-event-onstop'>        /**
+</span>         * 调整事件结束时的回调函数
+         * &lt;p&gt;this指向当前被调整大小的元素（DomObject对象）
+         * &lt;p&gt;参数为event对象、内容宽度、内容高度、offset对象（包含left、top）
+         * 返回false值则不会更改元素尺寸样式（由回调函数自行处理尺寸样式）
+         * @type {Function}
+         * @event
+         */
+        onstop: fastDev.noop
+    },
+<span id='fastDev-Interaction-Resizable-property-tpl'>    /**
+</span>     * handler模版
+     * @private
+     */
+    tpl: {
+        n: '&lt;span class=&quot;ui-resizable-handle ui-resizable-handle-n&quot; style=&quot;cursor: n-resize; height: 10px; width: 100%; top: -5px; left: 0; position: absolute;&quot;&gt;&lt;/span&gt;',
+        s: '&lt;span class=&quot;ui-resizable-handle ui-resizable-handle-s&quot; style=&quot;cursor: s-resize; height: 10px; width: 100%; bottom: -5px; left: 0; position: absolute;&quot;&gt;&lt;/span&gt;',
+        e: '&lt;span class=&quot;ui-resizable-handle ui-resizable-handle-e&quot; style=&quot;cursor: e-resize; width: 10px; right: -5px; top: 0; height: 100%; position: absolute;&quot;&gt;&lt;/span&gt;',
+        w: '&lt;span class=&quot;ui-resizable-handle ui-resizable-handle-w&quot; style=&quot;cursor: w-resize; width: 10px; left: -5px; top: 0; height: 100%; position: absolute;&quot;&gt;&lt;/span&gt;',
+        se: '&lt;span class=&quot;ui-resizable ui-resizable-handle ui-resizable-handle-se&quot; style=&quot;cursor: se-resize;  right: 1px; bottom: 1px; position: absolute; overflow: hidden;&quot;&gt;&lt;/span&gt;',
+        sw: '&lt;span class=&quot;ui-resizable-handle ui-resizable-handle-sw &quot; style=&quot;cursor: sw-resize; width: 14px; height: 14px; left: -5px; bottom: -5px; position: absolute;&quot;&gt;&lt;/span&gt;',
+        nw: '&lt;span class=&quot;ui-resizable-handle ui-resizable-handle-nw&quot; style=&quot;cursor: nw-resize; width: 14px; height: 14px; left: -5px; top: -5px; position: absolute;&quot;&gt;&lt;/span&gt;',
+        ne: '&lt;span class=&quot;ui-resizable-handle ui-resizable-handle-ne&quot; style=&quot;cursor: ne-resize; width: 14px; height: 14px; right: -5px; top: -5px; position: absolute;&quot;&gt;&lt;/span&gt;'
+    },
+<span id='fastDev-Interaction-Resizable-method-ready'>    /**
+</span>     * 准备参数
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    ready: function (options, global) {
+        var handles = options.handles,
+            handle;
+        options.handles = [];
+        handles = /all/i.test(fastDev.Util.StringUtil.trim(handles)) ? [&quot;n&quot;, &quot;ne&quot;, &quot;e&quot;, &quot;se&quot;, &quot;s&quot;, &quot;sw&quot;, &quot;w&quot;, &quot;nw&quot;] : handles ? handles.toString().split(&quot;,&quot;) : [];
+        for (var i = 0; i &lt; handles.length; i++) {
+            if (/n[ew]|n|s[ew]|s|w|e/i.test(handle = fastDev.Util.StringUtil.trim(handles[i]))) {
+                options.handles.push(handle);
+            }
+        }
+        options.handles = options.handles.length ? options.handles : [&quot;e&quot;, &quot;s&quot;, &quot;se&quot;];
+        fastDev.apply(options, {
+            zIndex: parseInt(options.zIndex, 10) || 2013,
+            ratio: Math.abs(parseFloat(options.ratio) || 0),
+            element: fastDev(fastDev.isComponent(options.element) ? options.element.elems[0] : options.element).addClass(&quot;ui-resizable-element&quot;),
+            container: fastDev(fastDev.isComponent(options.container) ? options.container.elems[0] : options.container),
+            axis: options.axis ? /\s*(x|y)?\s*\,?\s*(x|y)?\s*$/i.exec(options.axis.toString()) ? [RegExp.$1, RegExp.$2 === RegExp.$1 ? &quot;&quot; : RegExp.$2].join(&quot;&quot;) : null : null
+        });
+    },
+<span id='fastDev-Interaction-Resizable-method-init'>    /**
+</span>     * 初始控件
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    init: function (options, global) {
+        fastDev.apply(global, {
+            uuid: fastDev.getID(),
+            win: fastDev(window),
+            doc: fastDev(document),
+            resizeHandler: []
+        });
+        for (var wrapper, position, elem, helper, body = document.body, i = 0; elem = options.element.elems[i++];) {
+            wrapper = this.getHandlerWrapper(elem = fastDev(elem));
+            position = elem.css(&quot;position&quot;);
+            if (/canvas|textarea|input|select|button|img/i.test(elem.elems[0].nodeName)) {
+                wrapper.css({
+                    position: position === &quot;static&quot; ? &quot;relative&quot; : position,
+                    top: position === &quot;static&quot; ? 0 : elem.css(&quot;top&quot;),
+                    left: position === &quot;static&quot; ? 0 : elem.css(&quot;left&quot;),
+                    zIndex: elem.css(&quot;zIndex&quot;),
+                    display: elem.css(&quot;display&quot;),
+                    width: elem.outerWidth(true),
+                    height: elem.outerHeight(true)
+                }).replace(elem.css({
+                    position: &quot;relative&quot;,
+                    left: 0,
+                    top: 0
+                })).append(elem);
+            } else {
+                wrapper.children(&quot;span&quot;).appendTo(elem);
+                wrapper.remove();
+                if (position === &quot;static&quot;) {
+                    elem.css({
+                        position: &quot;relative&quot;,
+                        left: 0,
+                        top: 0
+                    });
+                }
+                wrapper = null;
+            }
+            elem.elems[0][&quot;resizeWrapper&quot; + global.uuid] = wrapper || elem;
+        }
+        if (global.resizeHandler.length) {
+            var doc = document,
+                elems = [];
+            global.mask = fastDev(elem = doc.createElement(&quot;div&quot;)).css({
+                top: 0,
+                left: 0,
+                width: 1,
+                height: 1,
+                opacity: 0.01,
+                display: &quot;none&quot;,
+                position: &quot;absolute&quot;,
+                zIndex: options.zIndex + 99999997
+            });
+            elems.push(elem);
+            helper = global.helper = fastDev(elem = doc.createElement(&quot;div&quot;)).css({
+                display: &quot;none&quot;,
+                position: &quot;absolute&quot;,
+                border: options.border,
+                zIndex: options.zIndex + 99999998,
+                backgroundColor: options.backgroundColor,
+                opacity: options.ghost ? parseFloat(options.opacity) || 0.4 : 0.001
+            }).setClass(options.helperCls || &quot;ui-resizable-helper&quot;);
+            global.helperBorder = {
+                horizontal: helper.outerWidth() - helper.innerWidth(),
+                vertical: helper.outerHeight() - helper.innerHeight()
+            };
+            elems.push(elem);
+            global.tips = options.showTips ? fastDev(elem = doc.createElement(&quot;div&quot;)).css({
+                opacity: 0.4,
+                display: &quot;none&quot;,
+                border: &quot;1px solid&quot;,
+                position: &quot;absolute&quot;,
+                backgroundColor: &quot;#FFFFCC&quot;,
+                zIndex: options.zIndex + 99999999
+            }) : fastDev();
+            elems.push(elem);
+            fastDev(elems).appendTo(body);
+        }
+        (options.oncreate || fastDev.noop).call(this);
+    },
+<span id='fastDev-Interaction-Resizable-method-getHandlerWrapper'>    /**
+</span>     * 获取handler
+     * @param {DomObject} elem 可调节大小的实际元素
+     * @private
+     */
+    getHandlerWrapper: function (elem) {
+        for (var that = this, options = this._options, global = this._global, wrapper = fastDev(&quot;&lt;div class='ui-resizable-wrapper' style='zoom:1'/&gt;&quot;), handle, i = 0; handle = options.handles[i]; i++) {
+            wrapper.append(handle = fastDev(this.tpl[handle]).css(&quot;zIndex&quot;, options.zIndex + (/n[we]|s[we]/.test(handle) ? 20 : 10)).bind(&quot;mousedown&quot;, this.getResizeHandle(elem)));
+            global.resizeHandler.push(handle);
+        }
+        return wrapper;
+    },
+<span id='fastDev-Interaction-Resizable-method-getResizeHandle'>    /**
+</span>     * 获取resize处理函数
+     * @param {DomObject} elem 可调节大小的实际元素
+     * @private
+     */
+    getResizeHandle: function (elem) {
+        var that = this;
+        return function (event) {
+            return event.button === ((fastDev.Browser.isIE6 || fastDev.Browser.isIE7 || fastDev.Browser.isIE8) ? 1 : 0) ? that.startResize(event, elem) : undefined;
+        };
+    },
+<span id='fastDev-Interaction-Resizable-method-startResize'>    /**
+</span>     * 开始调节大小事件处理
+     * @param {Event} event
+     * @param {DomObject} target 可调节大小的实际元素
+     * @private
+     */
+    startResize: function (event, target) {
+        var that = this,
+            options = this._options,
+            global = this._global,
+            settings, wrapper, handler, offset, parent, width, height, cursor;
+        if (!options.disabled &amp;&amp; (options.onstart || fastDev.noop).call(target, event) !== false) {
+            fastDev.apply(target.elems[0][&quot;resizeSettings&quot; + global.uuid] = settings = {}, {
+                handler: handler = fastDev(event.target),
+                handlerName: handler.getClass().match(/ui-resizable-handle-(n[ew]|n|s[ew]|s|w|e)/)[1],
+                wrapper: wrapper = target.elems[0][&quot;resizeWrapper&quot; + global.uuid],
+                parent: parent = options.container.isEmpty() ? wrapper.parent() : options.container,
+                startLeft: (offset = wrapper.offset()).left,
+                startHeight: height = wrapper.outerHeight(true),
+                startWidth: width = wrapper.outerWidth(true),
+                limit: this.limit(wrapper, parent),
+                position: wrapper.css(&quot;position&quot;),
+                zIndex: target.css(&quot;zIndex&quot;),
+                sClientX: event.clientX,
+                sClientY: event.clientY,
+                startTop: offset.top
+            });
+            if (settings.position === &quot;fixed&quot;) {
+                settings.fixedPosition = {
+                    left: wrapper.elems[0].offsetLeft,
+                    top: wrapper.elems[0].offsetTop
+                };
+                wrapper.css(&quot;position&quot;, &quot;absolute&quot;).offset(offset);
+            }
+            wrapper.css(&quot;zIndex&quot;, options.zIndex + 99999996).addClass(&quot;ui-resizable-resizing&quot;);
+            global.mask.css(&quot;cursor&quot;, cursor = handler.css(&quot;cursor&quot;));
+            global.helper.css({
+                cursor: cursor,
+                display: &quot;block&quot;,
+                width: Math.max(width - global.helperBorder.horizontal, 2),
+                height: Math.max(height - global.helperBorder.vertical, 2)
+            }).offset(offset);
+            if (options.showTips) {
+                global.tips.css({
+                    display: &quot;block&quot;,
+                    left: event.clientX + 10,
+                    top: event.clientY + 10
+                }).setText(Math.ceil(width) + &quot; × &quot; + Math.ceil(height));
+            }
+            global.doc.bind(&quot;mousemove&quot;, global.resizingHandle = function (event) {
+                return that.doResizing(event, target);
+            }).bind(&quot;mouseup&quot;, global.stopHandle = function (event) {
+                return that.stopResize(event, target);
+            }).bind(&quot;dblclick&quot;, global.stopHandle).bind(&quot;selectstart&quot;, fastDev.Event.stopBubble);
+            if (!fastDev.Browser.isIE6 &amp;&amp; (&quot;onlosecapture&quot; in document.documentElement)) {
+                settings.handler.bind(&quot;losecapture&quot;, global.stopHandle);
+            } else {
+                global.win.bind(&quot;blur&quot;, global.stopHandle);
+            }
+            if (&quot;setCapture&quot; in document.documentElement) {
+                event.target.setCapture();
+            }
+        }
+        return false;
+    },
+<span id='fastDev-Interaction-Resizable-method-doResizing'>    /**
+</span>     * 调节大小过程事件处理
+     * @param {Event} event
+     * @param {DomObject} target 可调节大小的实际元素
+     * @private
+     */
+    doResizing: function (event, target) {
+        var options = this._options,
+            global = this._global,
+            settings = target.elems[0][&quot;resizeSettings&quot; + global.uuid],
+            offsetX, offsetY;
+        this.clsSelect();
+        if ((options.onresize || fastDev.noop).call(target, event, offsetX = event.clientX - settings.sClientX, offsetY = event.clientY - settings.sClientY) !== false) {
+            var p = settings.handlerName,
+                axis = options.axis,
+                limit = settings.limit,
+                startWidth = settings.startWidth,
+                startHeight = settings.startHeight,
+                startLeft = settings.startLeft,
+                startTop = settings.startTop,
+                width = startWidth,
+                height = startHeight,
+                left = startLeft,
+                top = startTop,
+                offset;
+            if (p === &quot;e&quot; || axis === &quot;x&quot;) {
+                width = startWidth + offsetX;
+                if (options.ratio) {
+                    height = width / options.ratio;
+                }
+            } else if (p === &quot;s&quot; || axis === &quot;y&quot;) {
+                height = startHeight + offsetY;
+                if (options.ratio) {
+                    width = height * options.ratio;
+                }
+            } else if (p === &quot;se&quot;) {
+                width = startWidth + offsetX;
+                if (options.ratio) {
+                    height = width / options.ratio;
+                } else {
+                    height = startHeight + offsetY;
+                }
+            } else if (/nw|sw|w/.test(p)) {
+                left = startLeft + offsetX;
+                width = startWidth - offsetX;
+                if (options.ratio) {
+                    offsetY = offsetX / options.ratio;
+                    height = width / options.ratio;
+                }
+                if (p === &quot;nw&quot;) {
+                    top = startTop + offsetY;
+                    height = startHeight - offsetY;
+                } else if (!options.ratio &amp;&amp; p === &quot;sw&quot;) {
+                    height = startHeight + offsetY;
+                }
+            } else { //ne、n
+                top = startTop + offsetY;
+                height = startHeight - offsetY;
+                if (options.ratio) {
+                    width = height * options.ratio;
+                } else if (p === &quot;ne&quot;) {
+                    width = startWidth + offsetX;
+                }
+            }
+            width = Math.max(limit.minWidth, Math.min(limit.maxWidth, width));
+            height = Math.max(limit.minHeight, Math.min(limit.maxHeight, height));
+            left = left === startLeft ? left : Math.max(width === limit.maxWidth ? startLeft - (width - startWidth) : 0, Math.min(startLeft + startWidth - limit.minWidth, left));
+            top = top === startTop ? top : Math.max(height === limit.maxHeight ? startTop - (height - startHeight) : 0, Math.min(startTop + startHeight - limit.minHeight, top));
+            global.helper.css({
+                width: Math.max(width - global.helperBorder.horizontal, 2),
+                height: Math.max(height - global.helperBorder.vertical, 2)
+            }).offset(offset = {
+                left: left,
+                top: top
+            });
+            global.mask.css({
+                display: &quot;block&quot;,
+                width: global.win.width() + global.doc.scrollLeft(),
+                height: global.win.height() + global.doc.scrollTop()
+            });
+            if (options.showTips) {
+                global.tips.css({
+                    left: event.clientX + 10,
+                    top: event.clientY + 10
+                }).setText(Math.ceil(width) + &quot; × &quot; + Math.ceil(height));
+            }
+            if (!options.ghost) {
+                this.resize(target, width, height, Math.max(width - (target.outerWidth(true) - target.width()), 1), Math.max(height - (target.outerHeight(true) - target.height()), 1));
+            }
+        }
+        return false;
+    },
+<span id='fastDev-Interaction-Resizable-method-stopResize'>    /**
+</span>     * 调节大小终止件处理
+     * @param {Event} event
+     * @param {DomObject} target 可调节大小的实际元素
+     * @private
+     */
+    stopResize: function (event, target) {
+        var options = this._options,
+            global = this._global,
+            settings = target.elems[0][&quot;resizeSettings&quot; + global.uuid],
+            wrapper = target.elems[0][&quot;resizeWrapper&quot; + global.uuid],
+            helper = global.helper,
+            offset = helper.offset(),
+            position, outerWidth, outerHeight, width, height;
+        global.doc.unbind(&quot;mousemove&quot;, global.resizingHandle).unbind(&quot;mouseup&quot;, global.stopHandle).unbind(&quot;dblclick&quot;, global.stopHandle).unbind(&quot;selectstart&quot;, fastDev.Event.stopBubble);
+        if (!fastDev.Browser.isIE6 &amp;&amp; (&quot;onlosecapture&quot; in document.documentElement)) {
+            settings.handler.unbind(&quot;losecapture&quot;, global.stopHandle);
+        } else {
+            global.win.unbind(&quot;blur&quot;, global.stopHandle);
+        }
+        if (&quot;setCapture&quot; in document.documentElement) {
+            settings.handler.elems[0].releaseCapture();
+        }
+        global.mask.css(&quot;display&quot;, &quot;none&quot;);
+        global.helper.css(&quot;display&quot;, &quot;none&quot;);
+        global.tips.css(&quot;display&quot;, &quot;none&quot;);
+        if (position = settings.fixedPosition) {
+            target.css({
+                position: &quot;fixed&quot;,
+                left: position.left,
+                top: position.top
+            });
+            offset.left -= global.doc.scrollLeft();
+            offset.top -= global.doc.scrollTop();
+        } else if (settings.position === &quot;relative&quot;) {
+            var fx = fastDev.Util.StringUtil.stripUnits,
+                parent = settings.parent,
+                left = fx(target.css(&quot;left&quot;), parent.width()) || 0,
+                top = fx(target.css(&quot;top&quot;), parent.height()) || 0;
+            offset.left += (left - settings.startLeft);
+            offset.top += (top - settings.startTop);
+        }
+        wrapper.css(&quot;zIndex&quot;, settings.zIndex).removeClass(&quot;ui-resizable-resizing&quot;);
+        if ((options.onstop || fastDev.noop).call(target, event, width = Math.max((outerWidth = helper.outerWidth(true)) - (target.outerWidth(true) - target.width()), 1), height = Math.max((outerHeight = helper.outerHeight(true)) - (target.outerHeight(true) - target.height()), 1), offset) !== false) {
+            this.resize(target, outerWidth, outerHeight, width, height);
+        }
+        return false;
+    },
+<span id='fastDev-Interaction-Resizable-method-resize'>    /**
+</span>     * 变更元素的尺寸样式
+     * @param {DomObject} target 可调节大小的实际元素
+     * @param {Number} outerWidth 绝对宽度
+     * @param {Number} outerHeight 绝对高度
+     * @param {Number} width 内容宽度
+     * @param {Number} height 内容高度
+     * @private
+     */
+    resize: function (target, outerWidth, outerHeight, width, height) {
+        var wrapper = target.elems[0][&quot;resizeWrapper&quot; + this._global.uuid];
+        if (wrapper.elems[0] !== target.elems[0]) {
+            wrapper.css({
+                width: outerWidth,
+                height: outerHeight
+            });
+        }
+        target.css({
+            width: width,
+            height: height
+        });
+    },
+<span id='fastDev-Interaction-Resizable-method-limit'>    /**
+</span>     * 宽高限制计算
+     * @param {DomObject} elem
+     * @param {DomObject} parent 宽高百分比值计算的相对元素
+     * @private
+     */
+    limit: function (elem, parent) {
+        var options = this._options,
+            global = this._global,
+            ratio = options.ratio,
+            pWidth = parent.width(),
+            pHeight = parent.height(),
+            fx = fastDev.Util.StringUtil.stripUnits,
+            pMinWidth, pMinHeight, pMaxWidth, pMaxHeight, val, b = {
+                minWidth: fx(options.minWidth, pWidth) || 1,
+                maxWidth: fx(options.maxWidth, pWidth) || Infinity,
+                minHeight: fx(options.minHeight, pHeight) || 1,
+                maxHeight: fx(options.maxHeight, pHeight) || Infinity
+            };
+        if (ratio) {
+            pMinWidth = b.minHeight * ratio;
+            pMinHeight = b.minWidth / ratio;
+            pMaxWidth = b.maxHeight * ratio;
+            pMaxHeight = b.maxWidth / ratio;
+            if (pMinWidth &gt; b.minWidth) b.minWidth = pMinWidth;
+            if (pMinHeight &gt; b.minHeight) b.minHeight = pMinHeight;
+            if (pMaxWidth &lt; b.maxWidth) b.maxWidth = pMaxWidth;
+            if (pMaxHeight &lt; b.maxHeight) b.maxHeight = pMaxHeight;
+        }
+        return b;
+    },
+<span id='fastDev-Interaction-Resizable-property-clsSelect'>    /**
+</span>     * 清理文本选取
+     * @private
+     */
+    clsSelect: &quot;getSelection&quot; in window ? function () {
+        try {
+            window.getSelection().removeAllRanges();
+        } catch (e) {}
+    } : function () {
+        try {
+            document.selection.empty();
+        } catch (e) {}
+    },
+<span id='fastDev-Interaction-Resizable-method-enable'>    /**
+</span>     * 开启调节大小功能
+     * @return {fastDev.Interaction.Resizable} 当前调节大小组件实例
+     */
+    enable: function () {
+        var options = this._options;
+        options.disabled = !! options.destroyed;
+        for (var global = this._global, handler, i = 0; handler = global.resizeHandler[i++];) {
+            handler.css(&quot;visibility&quot;, &quot;visible&quot;);
+        }
+        return this;
+    },
+<span id='fastDev-Interaction-Resizable-method-disable'>    /**
+</span>     * 开启调节大小功能
+     * @return {fastDev.Interaction.Resizable} 当前调节大小组件实例
+     */
+    disable: function () {
+        this._options.disabled = true;
+        for (var global = this._global, handler, i = 0; handler = global.resizeHandler[i++];) {
+            handler.css(&quot;visibility&quot;, &quot;hidden&quot;);
+        }
+        return this;
+    },
+<span id='fastDev-Interaction-Resizable-method-destroy'>    /**
+</span>     * 开启调节大小功能
+     * @return {fastDev.Interaction.Resizable} 当前调节大小组件实例
+     */
+    destroy: function () {
+        var options = this._options,
+            global = this._global,
+            handler;
+        options.destroyed = options.disabled = true;
+        options.element.removeClass(&quot;ui-resizable-element&quot;);
+        global.mask.remove();
+        global.helper.remove();
+        global.tips.remove();
+        while (handler = global.resizeHandler.shift()) {
+            handler.remove();
+        }
+        return this;
+    }
+});</pre>
+</body>
+</html>

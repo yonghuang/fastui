@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+	
+	talkweb.BaseControl.Table = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Table.Class&quot;,settings);
+	};
+
+	fastDev.define(&quot;talkweb.BaseControl.Table.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			rows : 0,
+			cols : 0,
+			value : null,
+			tdMode : &quot;talkweb.BaseControl.Td.Class&quot;,
+			thMode : &quot;talkweb.BaseControl.Th.Class&quot;,
+			theadMode : &quot;talkweb.BaseControl.Thead.Class&quot;,
+			className : &quot;table&quot;,
+			thList : null,
+			thead : null,
+			tbody : null
+		},
+		construct : function(options) {
+			var table = this.create(&quot;table&quot;);
+			this.storage(table);
+		},
+		init : function(options) {
+			var newOptions = {};
+			// init thead
+			if(options.thList) {
+				newOptions.thead = this.createThead(options.thList);
+			}
+			// init tbody
+			newOptions.tbody = this.createTbody(options);
+			// init tfoot
+			this.setOptions(newOptions);
+			this.setValue(options.value);
+		},
+		setValue : function(value) {
+			var options = this.getOptions(), cols, i = 0, j, tr, trClass, v, td;
+			if(!options.tbody){
+				return;
+			}
+			if( value instanceof Array) {
+				while(value[0]) {
+					cols = value.shift(), tr = this.getRow(i), trClass = i % 2 == 0 ? &quot;none&quot; : &quot;t1&quot;, j = 0;
+					(tr &amp;&amp; tr.setClass(trClass)) || ( tr = talkweb.BaseControl.Tr({
+						container : options.tbody,
+						className : trClass
+					}));
+					if( cols instanceof Array) {
+						while(cols[0] === &quot;&quot; || cols[0] === 0 || cols[0]) {
+							v = cols.shift(), td = tr.getCell(j);
+							if(td) {
+								fastDev.create(options.tdMode).reConstruct(td).setValue(v);
+							} else {
+								fastDev.create(options.tdMode,{
+									container : tr,
+									value : v
+								});
+							}
+							j += 1;
+						}
+					}
+					i += 1;
+				}
+			}
+		},
+		getRow : function(index) {
+			var tr = this.find(&quot;tbody&gt;tr:eq(&quot;+index+&quot;)&quot;);
+			return talkweb.BaseControl.Tr().reConstruct(tr);
+		},
+		setTitle : function(thList) {
+		    //console.log(options.thead);
+			var options = this.getOptions();
+			var thead = (options.thead &amp;&amp; options.thead.setValue(thList)) || this.createThead(thList);
+			//console.log(thead);
+			this.setOptions({
+				thead : thead
+			});
+		},
+		createTbody : function(options) {
+			var tbody = talkweb.BaseControl.Tbody({
+				saveInstance : true,
+				container : this
+			});
+			for(var i = 0; i &lt; options.rows; i += 1) {
+				var trClass = i % 2 == 0 ? &quot;&quot; : &quot;t1&quot;;
+				var tr = talkweb.BaseControl.Tr({
+					container : tbody,
+					className : trClass
+				});
+				for(var j = 0; j &lt; options.cols; j += 1) {
+					fastDev.create(options.tdMode,{
+						container : tr
+					});
+				}
+			}
+			return tbody;
+		},
+		createThead : function(thList) {
+			var options = this.getOptions();
+			//console.log(options.theadMode);
+			//console.log(options.thMode);
+			return fastDev.create(options.theadMode,{
+			//return fastDev.create(&quot;talkweb.BaseControl.Thead.Class&quot;,{
+				container : this,
+				value : thList,
+				thMode : options.thMode
+			});
+		},
+		cleanData : function() {
+			var i = 0, tr = this.getRow(i);
+			while(tr &amp;&amp; tr[0]) {
+				var j = 0;
+				var td = tr.getCell(j);
+				while(td) {
+					td.innerHTML = &quot;&quot;;
+					td = tr.getCell(j += 1);
+				}
+				tr = this.getRow(i += 1);
+			}
+		},
+		setCellStyle : function(data) {
+			for(var i in data ) {
+				var trId = data[i];
+				for(var j in trId ) {
+					var tr = this.getRow(j);
+					for(var k in trId[j] ) {
+						td = tr.getCell(k);
+						td &amp;&amp; (td.className = trId[j][k]);
+					}
+				}
+			}
+		},
+		setColStyle : function(data) {
+			//console.log(&quot;data&quot;,data);
+			var i = 0, tr = this.getRow(i);
+			while(tr &amp;&amp; tr[0]) {
+				var j = 0;
+				var td = tr.getCell(j);
+				while(td) {
+					data[j] &amp;&amp; (td.className = data[j]);
+					td = tr.getCell(j += 1);
+				}
+				tr = this.getRow(i += 1);
+			}
+		},
+		setTheadStyle : function(data) {
+			var tr = this.getOptions().thead.getRow();
+			for(var i in data ) {
+				tr.getTh(i).className = data[i];
+			}
+		},
+		hideColumn : function(index) {
+			var options = this.getOptions(), tr, td, th, i = 0;
+			tr = options.thead.getRow();
+			tr[0] &amp;&amp; ( th = tr.getTh(index));
+			th &amp;&amp; ( th = talkweb.BaseControl.Th({}, false).reConstruct(th));
+			//th.hide();
+			th &amp;&amp; th[0] &amp;&amp; (th[0].className = &quot;hide&quot;);
+			tr = this.getRow(i);
+			while(tr[0]) {
+				tr = this.getRow(i);
+				if(tr[0]) {
+					td = tr.getCell(index);
+					td &amp;&amp; ( td = options.tdMode({}, false).reConstruct(td));
+					//td.hide();
+					td &amp;&amp; (td[0].className = &quot;hide&quot;);
+					//td.style.display = &quot;none&quot;;
+					i++;
+				}
+			}
+			return this;
+		},
+		showColumn : function(index) {
+			var options = this.getOptions(), tr, td, th, i = 0;
+			tr = options.thead.getRow();
+			tr[0] &amp;&amp; ( th = tr.getTh(index));
+			th &amp;&amp; ( th = talkweb.BaseControl.Th({}, false).reConstruct(th));
+			th[0].className = &quot;show&quot;;
+			tr = this.getRow(i);
+			while(tr[0]) {
+				tr = this.getRow(i);
+				if(tr[0]) {
+					td = tr.getCell(index);
+					td &amp;&amp; ( td = options.tdMode({}, false).reConstruct(td));
+					td[0].className = &quot;show&quot;;
+					i++;
+				}
+			}
+			return this;
+		}
+	});
+	
+	talkweb.BaseControl.Thead = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Thead.Class&quot;,settings);
+	};
+
+	fastDev.define(&quot;talkweb.BaseControl.Thead.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			thMode : null,
+			items : null
+		},
+		construct : function() {
+			var thead = this.create(&quot;thead&quot;);
+			this.storage(thead);
+		},
+		setID : function(id) {
+			id &amp;&amp; talkweb.BaseControl.Thead.Class.superClass.setID.call(this, id);
+		},
+		init : function(options) {
+			options.items &amp;&amp; this.setValue(options.items);
+		},
+		setValue : function(value) {
+			var options = this.getOptions();
+			this.reset();
+			var tr = talkweb.BaseControl.Tr({
+				container : this
+			});
+			//console.log(&quot;value&quot;,value);
+			for(var i = 0; i &lt; value.length; i += 1) {
+				fastDev.create(options.thMode,{
+					container : tr,
+					value : value[i]
+				});
+			}
+		},
+		reset : function() {
+			var childList = this[0].getElementsByTagName(&quot;*&quot;);
+			for(var i = 0; i &lt; childList.length; i += 1) {
+				this[0].removeChild(childList[i]);
+			}
+		},
+		getRow : function() {
+			var tr = this.find(&quot;tr&quot;)[0];
+			return fastDev.create(&quot;talkweb.BaseControl.Tr.Class&quot;).reConstruct(tr);
+		}
+	});
+	
+	talkweb.BaseControl.Tbody = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Tbody.Class&quot;,settings);
+	};
+
+	fastDev.define(&quot;talkweb.BaseControl.Tbody.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		construct : function() {
+			var tbody = this.create(&quot;tbody&quot;);
+			this.storage(tbody);
+		}
+	});
+
+	talkweb.BaseControl.Tfoot = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Tfoot.Class&quot;,settings);
+	};
+
+	fastDev.define(&quot;talkweb.BaseControl.Tfoot.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		construct : function() {
+			var tfoot = this.create(&quot;tfoot&quot;);
+			this.storage(tfoot);
+		}
+	});
+	
+	talkweb.BaseControl.Tr = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Tr.Class&quot;,settings);
+	};
+
+	fastDev.define(&quot;talkweb.BaseControl.Tr.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		construct : function() {
+			var tr = this.create(&quot;tr&quot;);
+			this.storage(tr);
+		},
+		getCell : function(index) {
+			var td = this.find(&quot;td:eq(&quot;+index+&quot;)&quot;);
+			return td?td[0]:null;
+		},
+		getTh : function(index) {
+			var th = this.find(&quot;th&quot;)[index];
+			return th;
+		}
+	});
+
+	talkweb.BaseControl.Td = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Td.Class&quot;,settings);
+	};
+
+	fastDev.define(&quot;talkweb.BaseControl.Td.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			rowSpan : 0,
+			colSpan : 0,
+			value : &quot;&quot;
+		},
+		_global : {
+			textNode : null
+		},
+		construct : function(param) {
+			var td = this.create(&quot;td&quot;);
+			this.storage(td);
+		},
+		reConstruct : function(obj, reClass) {
+			this.reConstruct_TextNode.call(this, obj);
+			return talkweb.BaseControl.Td.Class.superClass.reConstruct.call(this, obj);
+		},
+		init : function(options) {
+			this.setRowSpan(options.rowSpan);
+			this.setColSpan(options.colSpan);
+		},
+		setRowSpan : function(rowSpan) {
+			rowSpan &amp;&amp; this.attr(&quot;rowspan&quot;, rowSpan);
+		},
+		setColSpan : function(colSpan) {
+			colSpan &amp;&amp; this.attr(&quot;colSpan&quot;, colSpan);
+		},
+		setValue : function(value) {
+			this.setText(value);
+			this.setTitle &amp;&amp; this.setTitle(value);
+		},
+		getValue : function() {
+			return this.getText();
+		},
+		setTitle : function(text) {
+			this.attr(&quot;title&quot;, text);
+		},
+		setClassName : function(text) {
+			this.attr(&quot;class&quot;, text);
+		}
+	});
+
+	talkweb.BaseControl.Th = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Th.Class&quot;,settings);
+	};
+
+	fastDev.define(&quot;talkweb.BaseControl.Th.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			value : null
+		},
+		_global : {
+			textNode : null
+		},
+		construct : function(param) {
+			var th = this.create(&quot;th&quot;);
+			this.storage(th);
+		},
+		setValue : function(value) {
+			this.setText(value);
+		},
+		getValue : function() {
+			this.getText();
+		},
+		reConstruct : function(obj) {
+			this.reConstruct_TextNode.call(this, obj);
+			return talkweb.BaseControl.Th.Class.superClass.reConstruct.call(this, obj);
+		}
+	})
+
+})()</pre>
+</body>
+</html>

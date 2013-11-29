@@ -1,0 +1,34 @@
+[
+    {
+        "title": "百度",
+        "url": "dd.html",
+        "iconCls": "icon-add"
+    },
+    {
+        "title": "网易邮箱",
+        "url": "cc.html",
+    },
+    {
+        "title": "复选框",
+        "url": "aa.html",
+        "showCloseBtn": false
+    },
+    {
+        "title": "单选框",
+        "url": "bb.html"
+    },
+    {
+        "title": "腾讯邮箱",
+        "url": "dd.html",
+        "iconCls": "icon-add"
+    },
+    {
+        "title": "百度新闻",
+        "url": "dd.html",
+    },
+    {
+        "title": "网易邮箱2",
+        "url": "aa.html",
+        "showCloseBtn": false
+    }
+]

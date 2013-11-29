@@ -1,0 +1,113 @@
+.ui-button {
+	padding:0; 
+	color:#333; 
+	cursor:pointer;
+	line-height:20px;   
+    text-decoration:none;
+    text-align: center;
+    display:inline-block;
+    zoom:1;    
+    cursor:pointer;
+    -khtml-user-select: none;
+    -moz-user-select:none;
+    vertical-align:middle;
+}
+.ui-button:hover{
+	box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+	-webkit-box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+	-moz-box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+	behavior:url(../pie.htc);
+}
+.ui-button-bg{
+	border:1px solid #94BAEB;
+	background: #D8E8FD; 
+	-pie-background: linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	background: -webkit-linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	background: -moz-linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	background: -o-linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	background: -ms-linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	behavior:url(../pie.htc);
+}
+.ui-button-radius {
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	behavior:url(../pie.htc);
+}
+.ui-button-plain {
+	background:transparent;
+	border: none;
+	padding: 1px;
+}
+body a:hover.ui-button {    
+    padding:0;   
+    color:#333;   
+    text-decoration:none;
+	border:1px solid #7FA1CC;
+	/*background: #D8E8FD; 
+	-pie-background: linear-gradient(top, #C1DBFE,#B0CEF6 50%,#9AC6FA 51%,#9AC0EE);
+	background: -webkit-linear-gradient(top, #C1DBFE,#B0CEF6 50%,#9AC6FA 51%,#9AC0EE);
+	background: -moz-linear-gradient(top, #C1DBFE,#B0CEF6 50%,#9AC6FA 51%,#9AC0EE);
+	background: -o-linear-gradient(top, #C1DBFE,#B0CEF6 50%,#9AC6FA 51%,#9AC0EE);
+	background: -ms-linear-gradient(top, #C1DBFE,#B0CEF6 50%,#9AC6FA 51%,#9AC0EE);
+	behavior:url(../pie.htc);*/
+}
+body a:hover.ui-button-plain {    
+    padding:0;      
+    text-decoration:none;
+	border:1px solid #7CA8E1;
+	background: #D8E8FD; 
+	-pie-background: linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	background: -webkit-linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	background: -moz-linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	background: -o-linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	background: -ms-linear-gradient(top, #E0EDFF,#D5E7FD 50%,#C1DBFA 51%,#CDE2FC);
+	behavior:url(../pie.htc);
+}
+.ui-button-text {    
+    line-height:16px;
+    vertical-align:middle;
+    display:inline-block;
+    padding:1px 5px 3px 5px;
+    padding:3px 5px 1px 5px\9;
+	white-space:nowrap; 
+}
+.ui-button .ui-button-icon { 
+	padding-left: 22px;
+	background-position: 3px 50%;
+	background-repeat: no-repeat;
+}
+/*.ui-button .ui-button-icon { 
+	height:16px;
+	width:16px;
+	background-repeat:no-repeat;
+	position:relative;
+	float:left;
+}
+.icon-edit {
+	background:url(../images/ico/ico.png); 
+	background-position:-17px 1px;
+	background-position:-17px 0\9;
+}
+*/
+.icon-search {
+	background:url(../images/ico/search.gif); 
+}
+.icon-add {
+	background:url(../images/ico/add.gif);
+	position:absolute
+	absol
+}
+.icon-edit {
+	background:url(../images/ico/edit.gif);
+}
+.icon-delete {
+	background:url(../images/ico/delete.gif);
+}
+.icon-print {
+	background:url(../images/ico/print.gif);
+}
+.icon-arrow {
+background:url(../images/ico/arrow.gif) right center no-repeat;
+padding-right:12px;
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Checkbox 数据源选中数据和value选中数据合并，单击事件接口</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-09 -->
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+        <script src="../../src/component/form/CheckBoxGroup.js"></script>
+      
+
+		<script>
+			$(function() {
+				//无图按钮
+				$.create("CheckBoxGroup", {
+					container : "example",
+					name:"check1",		
+					value:["2","4"],	
+					onValueChanged:function(item){
+						alert("值改变事件,value="+item.value+",text="+item.text+",checked="+item.checked);
+					},
+					items: [ {
+						value : "1",
+						checked:true,
+						text : "旅游"
+					}, {
+						value : "2",
+						text : "唱歌"
+					},{
+						value : "3",
+						text : "跳舞"
+					}, {
+						value : "4",
+						text : "音乐"
+					},{
+						value : "5",
+						text : "电影"
+					}, {
+						value : "6",
+						text : "电视"
+					}]
+				});
+			
+			});
+		</script>
+	</head>
+	<body>
+	<div id="example" ></div>
+	</body>
+
+</html>
+

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.namespace(&quot;fastDev.Util&quot;);
+
+<span id='fastDev-Util-StringUtil'>/**
+</span> * 符串类型数据处理工具类
+ * @class fastDev.Util.StringUtil
+ * @author 袁刚
+ * @singleton
+ */
+fastDev.Util.StringUtil = {
+<span id='fastDev-Util-StringUtil-method-unhtml'>	/**
+</span>	 * 将str中的html符号转义
+	 * @param {String} str 需要转义的字符串
+	 * @return {String}
+	 */
+	unhtml : function(str) {
+		return str ? str.replace(/[&amp;&lt;&quot;&gt;]/g, function(m) {
+			return {
+			'&lt;': '&amp;lt;',
+			'&amp;': '&amp;amp',
+			'&quot;': '&amp;quot;',
+			'&gt;': '&amp;gt;'
+			}[m];
+		}) : '';
+	},
+<span id='fastDev-Util-StringUtil-method-trim'>	/**
+</span>	 * 删除字符串首尾空格
+	 * @param {String} str 字符串
+	 * @return {String}
+	 */
+	trim : function(str) {
+		return (str &amp;&amp; str.replace) ? str.replace(/(^\s*)|(\s*$)/g, &quot;&quot;) : str;
+	},
+<span id='fastDev-Util-StringUtil-method-ltrim'>	/**
+</span>	 * 删除字符串左边空格
+	 * @param {String} str 字符串
+	 * @return {String}
+	 */
+	ltrim : function(str) {
+		return (str &amp;&amp; str.replace) ? str.replace(/(^\s*)/g, '') : str;
+	},
+<span id='fastDev-Util-StringUtil-method-rtrim'>	/**
+</span>	 * 删除字符串右边空格
+	 * @param {String} str 字符串
+	 * @return {String}
+	 */
+	rtrim : function(str) {
+		return (str &amp;&amp; str.replace) ? str.replace(/(\s*$)/g, '') : str;
+	},
+<span id='fastDev-Util-StringUtil-method-trimHtml'>	/**
+</span>	 * 去除HTML标签
+	 * @param {String} str 待处理字符串
+	 * @return {String}
+	 */
+	trimHtml : function(str) {
+		return (str &amp;&amp; str.replace) ? str.replace(/&lt;(\S*?)[^&gt;]*&gt;.*?|&lt; .*? \/&gt;/g, &quot;&quot;) : str;
+	},
+<span id='fastDev-Util-StringUtil-method-getChLength'>	/**
+</span>	 * 获取含中文字符串长度
+	 * @param {String} str 字符串
+	 * @return {Number}
+	 */
+	getChLength : function(str) {
+		return (str &amp;&amp; str.replace) ? str.replace(/[^\x00-\xff]/g, '..').length : 0;
+	},
+<span id='fastDev-Util-StringUtil-method-strParseDate'>	/**
+</span>	 * 将以&quot;-&quot;分隔的日期格式字符串转换为日期对象
+	 * @param {String} str 待处理字符串
+	 * @return {Date}
+	 */
+	strParseDate : function(strdate) {
+		return new Date(Date.parse(strdate.replace(/-/g, &quot;/&quot;)));
+	},
+<span id='fastDev-Util-StringUtil-method-escapeReg'>	/**
+</span>	 * 将目标字符串中可能会影响正则表达式构造的字符串进行转义。
+	 * @param {string} source 待转换字符串
+	 * @return {string}
+	 * 给以下字符前加上“\”进行转义：.*+?^=!:${}()|[]/\
+	 */
+	escapeReg : function(source) {
+		return String(source).replace(new RegExp(&quot;([.*+?^=!:\\${}()|[\\]\/\\\\])&quot;, &quot;g&quot;), '\\$1');
+	},
+<span id='fastDev-Util-StringUtil-method-encodeHTML'>	/**
+</span>	 * 对目标字符串进行html编码
+	 * @param {string} source 目标字符串
+	 * @return {string}
+	 * 编码字符有5个：&amp;&lt;&gt;&quot;'
+	 */
+	encodeHTML : function(source) {
+		return String(source).replace(/&amp;/g, '&amp;amp;').replace(/&lt;/g, '&amp;lt;').replace(/&gt;/g, '&amp;gt;').replace(/&quot;/g, &quot;&amp;quot;&quot;).replace(/'/g, &quot;&amp;#39;&quot;);
+	},
+
+<span id='fastDev-Util-StringUtil-method-decodeHTML'>	/**
+</span>	 * 对目标字符串进行html解码
+	 * @param {string} source 目标字符串
+	 * @return {string}
+	 */
+	decodeHTML : function(str) {
+		str = String(str).replace(/&amp;quot;/g, '&quot;').replace(/&amp;lt;/g, '&lt;').replace(/&amp;gt;/g, '&gt;').replace(/&amp;amp;/g, &quot;&amp;&quot;);
+		//处理转义的中文和实体字符
+		return str.replace(/&amp;#([\d]+);/g, function(_0, _1) {
+			return String.fromCharCode(parseInt(_1, 10));
+		});
+	},
+<span id='fastDev-Util-StringUtil-method-capitalize'>	/**
+</span>	 * 字符串第一个字符大写
+	 * @param {String} str 待转换字符串
+	 * @return {String}
+	 */
+	capitalize : function(all, letter) {
+		if(letter) {
+			return (letter + &quot;&quot;).toUpperCase();
+		} else {
+			return all.replace(/./, function(str) {
+				return str.toUpperCase();
+			});
+		}
+	},
+<span id='fastDev-Util-StringUtil-method-stripUnits'>	/**
+</span>	 * 将一个带px、%、em的单位值转换为整型数值
+	 * em单位以当前文档的字体样式（font-size）属性值转换
+	 * 默认情况下，1em 等于 16px
+	 * @param {String|Number} val 需要截除单位的值
+	 * @param {Number} max 百分比数值转换时的被乘数
+	 * @return {Number}
+	 */
+	stripUnits : function(val, max) {
+		if(!!val || val === 0) {
+			if( typeof val === 'number') {
+				return parseFloat(val);
+			}
+			var num = /^(-?\d+\.?\d+|-?\d)(px|%|em)?$/.exec(val.toLowerCase().replace(/(^\s*)|(\s*$)/g, ''));
+			if(!!num) {
+				if(num[2] === '%') {
+					return (max === 0 ? 0 : max || 100) * num[1] / 100;
+				} else if(num[2] === 'em') {
+					return num[1] * fastDev.Util.StringUtil.stripUnits(fastDev(document.body).css('font-size') || 16, 16);
+				}
+				return parseFloat(num[1]);
+			}
+		}
+		return NaN;
+	}
+};
+
+<span id='fastDev-Util-NumberUtil'>/**
+</span> * 数字类型数据处理工具类
+ * @class fastDev.Util.NumberUtil
+ * @author 袁刚
+ * @singleton
+ */
+fastDev.Util.NumberUtil = {
+<span id='fastDev-Util-NumberUtil-method-comma'>	/**
+</span>	 * 为目标数字添加逗号分隔
+	 * @param {number} source 需要处理的数字
+	 * @param {number} length (Optional) 两次逗号之间的数字位数，默认为3位
+	 * @return {string}
+	 */
+	comma : function(source, length) {
+		if(!length || length &lt; 1) {
+			length = 3;
+		}
+
+		source = String(source).split(&quot;.&quot;);
+		source[0] = source[0].replace(new RegExp('(\\d)(?=(\\d{' + length + '})+$)', 'ig'), &quot;$1,&quot;);
+		return source.join(&quot;.&quot;);
+	},
+
+<span id='fastDev-Util-NumberUtil-method-pad'>	/**
+</span>	 * 对目标数字进行0补齐处理
+	 * @param {number} source 需要处理的数字
+	 * @param {number} length 需要输出的长度
+	 * @return {string}
+	 */
+	pad : function(source, length) {
+		var pre = &quot;&quot;, negative = (source &lt; 0), string = String(Math.abs(source));
+
+		if(string.length &lt; length) {
+			pre = (new Array(length - string.length + 1)).join('0');
+		}
+
+		return ( negative ? &quot;-&quot; : &quot;&quot;) + pre + string;
+	},
+<span id='fastDev-Util-NumberUtil-method-randomInt'>	/**
+</span>	 * 生成随机整数
+	 * @param {Number} min 随机整数的最小值
+	 * @param {Number} max 随机整数的最大值
+	 * @return {Number}
+	 */
+	randomInt : function(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	},
+<span id='fastDev-Util-NumberUtil-method-format'>	/**
+</span>	 * 数字格式化
+	 * @param {Number} value 待格式化数字
+	 * @param {String} format 目标格式(0,0.00)
+	 * @return {String}
+	 */
+	format : function(value, format) {
+		if(!fastDev.isString(format)) {
+			return value;
+		}
+
+		if(!/^\d+\.?\d+$/.test(value)) {
+			return value;
+		}
+
+		value = parseFloat(value);
+
+		var hasComma = -1 &lt; format.indexOf(','), psplit = format.split('.');
+
+		if(psplit.length &gt; 1) {
+			value = value.toFixed(psplit[1].length);
+		} else {
+			value = value.toFixed(0);
+		}
+
+		var fnum = value.toString();
+
+		if(hasComma) {
+			psplit = fnum.split('.');
+
+			var cnum = psplit[0], parr = [], j = cnum.length, m = Math.floor(j / 3), n = cnum.length % 3 || 3;
+
+			for(var i = 0; i &lt; j; i += n) {
+				if(i != 0) {
+					n = 3;
+				}
+				parr[parr.length] = cnum.substr(i, n);
+				m -= 1;
+			}
+
+			fnum = parr.join(',');
+
+			if(psplit[1]) {
+				fnum += '.' + psplit[1];
+			}
+		}
+
+		return fnum;
+	}
+};
+
+<span id='fastDev-Util-DateUtil'>/**
+</span> * 日期对象处理工具类
+ * @class fastDev.Util.DateUtil
+ * @author 袁刚
+ * @singleton
+ */
+
+fastDev.Util.DateUtil = {
+<span id='fastDev-Util-DateUtil-method-format'>	/**
+</span>	 * 对目标日期对象进行格式化
+	 * @param {Date} date 日期对象
+	 * @param {string} pattern 日期格式化规则
+	 * @return {String}
+	 * &lt;p&gt;格式表达式，变量含义:&lt;/p&gt;
+	 * &lt;p&gt;-yyyy: 带 0 补齐的四位年表示&lt;/p&gt;
+	 * &lt;p&gt;-yy: 带 0 补齐的两位年表示&lt;/p&gt;
+	 * &lt;p&gt;-MM: 带 0 补齐的两位月表示&lt;/p&gt;
+	 * &lt;p&gt;-M: 不带 0 补齐的月表示&lt;/p&gt;
+	 * &lt;p&gt;-dd: 带 0 补齐的两位日表示&lt;/p&gt;
+	 * &lt;p&gt;-d: 不带 0 补齐的日表示&lt;/p&gt;
+	 * &lt;p&gt;-hh: 带 0 补齐的两位 12 进制时表示&lt;/p&gt;
+	 * &lt;p&gt;-h: 不带 0 补齐的 12 进制时表示&lt;/p&gt;
+	 * &lt;p&gt;-HH: 带 0 补齐的两位 24 进制时表示&lt;/p&gt;
+	 * &lt;p&gt;-H: 不带 0 补齐的 24 进制时表示&lt;/p&gt;
+	 * &lt;p&gt;-mm: 带 0 补齐两位分表示&lt;/p&gt;
+	 * &lt;p&gt;-m: 不带 0 补齐分表示&lt;/p&gt;
+	 * &lt;p&gt;-ss: 带 0 补齐两位秒表示&lt;/p&gt;
+	 * &lt;p&gt;-s: 不带 0 补齐秒表示&lt;/p&gt;
+	 */
+	format : function(date, pattern) {
+		if(!fastDev.isString(pattern)) {
+			return date.toString();
+		}
+
+		if(fastDev.isString(date)) {
+			var obj = new Date(date);
+			if(isNaN(obj)) {
+				var m;
+				if( m = /(\d+)[^\d](\d+)[^\d](\d+)/.exec(date)) {
+					date = new Date(m[1] + &quot;/&quot; + m[2] + &quot;/&quot; + m[3]);
+				}
+			} else {
+				date = obj;
+			}
+		}
+		if(!fastDev.isDate(date)) {
+			return &quot;&quot;;
+		}
+		function replacer(patternPart, result) {
+			pattern = pattern.replace(patternPart, result);
+		}
+
+		var pad = fastDev.Util.NumberUtil.pad, year = date.getFullYear(), month = date.getMonth() + 1, date2 = date.getDate(), hours = date.getHours(), minutes = date.getMinutes(), seconds = date.getSeconds();
+
+		replacer(/yyyy/g, pad(year, 4));
+		replacer(/yy/g, pad(parseInt(year.toString().slice(2), 10), 2));
+		replacer(/MM/g, pad(month, 2));
+		replacer(/M/g, month);
+		replacer(/dd/g, pad(date2, 2));
+		replacer(/d/g, date2);
+
+		replacer(/HH/g, pad(hours, 2));
+		replacer(/H/g, hours);
+		replacer(/hh/g, pad(hours % 12, 2));
+		replacer(/h/g, hours % 12);
+		replacer(/mm/g, pad(minutes, 2));
+		replacer(/m/g, minutes);
+		replacer(/ss/g, pad(seconds, 2));
+		replacer(/s/g, seconds);
+
+		return pattern;
+
+	},
+<span id='fastDev-Util-DateUtil-method-parse'>	/**
+</span>	 * 将目标字符串转换成日期对象
+	 * @param {string} source 目标字符串
+	 * @return {Date} 转换后的日期对象
+	 * &lt;p&gt;可转换日期格式:&lt;/p&gt;
+	 * &lt;p&gt;-2010/5/10&lt;/p&gt;
+	 * &lt;p&gt;-July,2010,3,23:&lt;/p&gt;
+	 * &lt;p&gt;-Tuesday November 9 1996 7:30 PM&lt;/p&gt;
+	 * &lt;p&gt;-2010-01-01 12:23:39&lt;/p&gt;
+	 */
+	parse : function(source) {
+		var reg = new RegExp(&quot;^\\d+(\\-|\\/)\\d+(\\-|\\/)\\d+\\$&quot;);
+		if('string' === typeof source) {
+			if(reg.test(source) || isNaN(Date.parse(source))) {
+				var d = source.split(/ |T/), d1 = d.length &gt; 1 ? d[1].split(/[^\d]/) : [0, 0, 0], d0 = d[0].split(/[^\d]/);
+				return new Date(d0[0] - 0, d0[1] - 1, d0[2] - 0, d1[0] - 0, d1[1] - 0, d1[2] - 0);
+			} else {
+				return new Date(source);
+			}
+		}
+
+		return new Date();
+	}
+};
+
+<span id='fastDev-Util-UrlUtil'>/**
+</span> * URL格式数据处理工具类
+ * @class fastDev.Util.UrlUtil
+ * @author 袁刚
+ * @singleton
+ */
+fastDev.Util.UrlUtil = {
+<span id='fastDev-Util-UrlUtil-method-getQueryValue'>	/**
+</span>	 * 根据参数名从目标URL中获取参数值
+	 * @param {string} url url地址
+	 * @param {string} key 要获取的参数名
+	 * @return {String|null}
+	 */
+	getQueryValue : function(url, key) {
+		var reg = new RegExp(&quot;(^|&amp;|\\?|#)&quot; + fastDev.Util.StringUtil.escapeReg(key) + &quot;=([^&amp;#]*)(&amp;|\\$|#)&quot;, &quot;&quot;);
+		var match = url.match(reg);
+		if(match) {
+			return match[2];
+		}
+		return null;
+	},
+<span id='fastDev-Util-UrlUtil-method-jsonToQuery'>	/**
+</span>	 * 将json对象解析成地址栏参数格式字符串,特殊字符将被被编码
+	 * @param {Object} json 需要解析的json对象
+	 * @param {Function} replacer_opt (Optional) 对值进行特殊处理的函数(默认采用{@link #escapeSymbol}进行处理)
+	 * @return {string} - 解析结果字符串，其中值将被URI编码，{a:'&amp;1 '} ==&gt; &quot;a=%261%20&quot;。
+	 */
+	jsonToQuery : function(json, replacer_opt) {
+		var result = [], itemLen, replacer = replacer_opt ||
+		function(value) {
+			return fastDev.Util.UrlUtil.escapeSymbol(value);
+		};
+
+		fastDev.each(json, function(key, item) {
+			if(fastDev.isArray(item)) {
+				itemLen = item.length;
+				while(itemLen--) {
+					result.push(key + '=' + replacer(item[itemLen], key));
+				}
+			} else {
+				result.push(key + '=' + replacer(item, key));
+			}
+		});
+
+		return result.join('&amp;');
+	},
+<span id='fastDev-Util-UrlUtil-method-queryToJson'>	/**
+</span>	 * 解析目标URL中的参数成json对象
+	 * @param {string} url 地址字符串
+	 * @return {JsonObject}
+	 */
+	queryToJson : function(url) {
+		var query = url.substr(url.lastIndexOf('?') + 1), params = query.split('&amp;'), len = params.length, result = {}, i = 0, key, value, item, param;
+
+		for(; i &lt; len; i++) {
+			if(!params[i]) {
+				continue;
+			}
+			param = params[i].split('=');
+			key = param[0];
+			value = param[1];
+
+			item = result[key];
+			if('undefined' === typeof item) {
+				result[key] = value;
+			} else if(fastDev.ArrayUtil.isArray(item)) {
+				item.push(value);
+			} else {// 这里只可能是string了
+				result[key] = [item, value];
+			}
+		}
+
+		return result;
+	},
+<span id='fastDev-Util-UrlUtil-method-escapeSymbol'>	/**
+</span>	 * 对字符串进行%#&amp;+=以及和\s匹配的所有字符进行url转义
+	 * @param {string} source 需要转义的字符串.
+	 * @return {string}
+	 */
+	escapeSymbol : function(source) {
+
+		return String(source).replace(/[#%&amp;+=\/\\\ \　\f\r\n\t]/g, function(all) {
+			return '%' + (0x100 + all.charCodeAt()).toString(16).substring(1).toUpperCase();
+		});
+	}
+};
+
+<span id='fastDev-Util-JsonUtil'>/**
+</span> * json工具类
+ * @class fastDev.Util.JsonUtil
+ * @author 袁刚
+ * @singleton
+ */
+fastDev.Util.JsonUtil = {
+<span id='fastDev-Util-JsonUtil-method-parseJson'>	/**
+</span>	 * 将Json格式字符串转换为Json对象
+	 * @param {String} str Json格式字符串
+	 * @return {JsonObject}
+	 */
+	parseJson : function(str) {
+		if(!str) {
+			return null;
+		}
+		if( typeof str === &quot;string&quot;) {
+			str = fastDev.Util.StringUtil.trim(str.replace(/\s|\n|\r/g, &quot;&quot;));
+		} else {
+			return str;
+		}
+		try {
+			if(window.JSON &amp;&amp; window.JSON.parse) {
+				return window.JSON.parse(str);
+			}
+		} catch(e) {
+		}
+
+		if(/^\[.*\]$|^\{.*\}$/.test(str)) {
+			return fastDev.Util.ObjectUtil.parseObject(str);
+			//return (new Function(&quot;return &quot; + str))();
+		} else {
+			throw &quot;数据格式错误[&quot; + str + &quot;]&quot;;
+		}
+	},
+<span id='fastDev-Util-JsonUtil-method-parseString'>	/**
+</span>	 * 将JsonObject对象转换为Json格式字符串
+	 * @param {JsonObject} object Json对象
+	 * @return {String}
+	 */
+	parseString : function(obj,encode) {
+		if(fastDev.isString(obj)){
+			return encodeURIComponent(obj);
+		}
+		
+		if(fastDev.isArray(obj)){
+			var data = [];
+			for(var i=0,dataItem;dataItem=obj[i];i++){
+				data.push(this.parseString(dataItem));
+			}
+			return &quot;[&quot;+data.join(&quot;&quot;)+&quot;]&quot;;
+		}
+		
+		if(fastDev.isPlainObject(obj)){
+			var data = [];
+			for(var p in obj) {
+				data.push('&quot;' + p + '&quot;:' + this.parseString(obj[p]));
+			}
+			return &quot;{&quot; + data.join(&quot;,&quot;) + &quot;}&quot;;
+		}
+		
+		return encodeURIComponent(obj + &quot;&quot;);
+	},
+<span id='fastDev-Util-JsonUtil-method-getJsonByData'>	/**
+</span>	 * 将数据集查询结果转换为Json对象
+	 * @param {Array[fastDev.Data.Record]} data
+	 * @return [Array{JsonObject}]
+	 * @private
+	 */
+	getJsonByData : function(data) {
+		if( typeof data === 'object') {
+			data = [].slice(0).concat(data);
+		}
+		var json = {}, len = data.length, jsons = [], item, li, str = &quot;&quot;, slen;
+		for(var i = 0; i &lt; len; i++) {
+			li = data[i];
+			item = li._options.data;
+			str += &quot;{&quot;;
+			for(var p in item) {
+				str += p + &quot;:\&quot;&quot; + li.get(p) + &quot;\&quot;,&quot;;
+			}
+			slen = str.length - 1;
+			if(str.substr(slen) === &quot;,&quot;) {
+				str = str.substr(0, slen);
+			}
+			str += &quot;}&quot;;
+			json = (new Function(&quot;return &quot; + str))();
+			jsons = jsons.slice(0).concat(json);
+			str = &quot;&quot;;
+		}
+		return len === 1 ? json : jsons;
+	}
+};
+
+<span id='fastDev-Util-ObjectUtil'>/**
+</span> * 对象处理工具类
+ * @class fastDev.Util.ObjectUtil
+ * @author 袁刚
+ * @singleton
+ */
+fastDev.Util.ObjectUtil = {
+<span id='fastDev-Util-ObjectUtil-method-parseObject'>	/**
+</span>	 * 将字符串转换为对象
+	 * @param {String} str
+	 * @return {Object}
+	 */
+	parseObject : function(str) {
+		//debugger;
+		return new Function(&quot;return (&quot;+str+&quot;)&quot;)();
+	}
+};
+</pre>
+</body>
+</html>

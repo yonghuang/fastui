@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>qa_manager</title>
+		<meta name="author" content="admin" />
+		<link href="../themes/default/css/ui-main.css" rel="stylesheet" type="text/css">
+		</link>
+
+	</head>
+	<body>
+		<div style="margin-left: 20px;margin-right: 20px;margin-top: 5px" id="content">
+			<h3>Bug修复清单</h3>
+			<div itype="DataGrid" id="buggrid" saveInstance=true pagePosition="none" onAfterInit="loadBugData()" showSeqColumn=true height="300px">
+				<div name="rowDetail">
+					<div>
+						故障原因：{cause}
+					</div>
+					<div>
+						解决方案：{solution}
+					</div>
+					<div>
+						提交时间：{datetime}
+					</div>
+				</div>
+				<div name="top-toolbar">
+					<div plain=true name="bug" text="新增" iconCls="icon-add" onclick="add()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="导出" iconCls="icon-export" onclick="exportBuggrid()"></div>
+				</div>
+				<div width="10%" name="bugno" text="问题编号"></div>
+				<div width="5%" name="version" text="问题版本"></div>
+				<div width="31%" name="bugsynopsis" text="故障概况"></div>
+				<div width="12%" name="browser" text="浏览器"></div>
+				<div width="10%" name="test" text="测试用例"></div>
+				<div width="8%" name="coder" text="作者"></div>
+				<div width="8%" name="personLiable" text="责任人"></div>
+				<div width="8%" name="fixedVersion" text="修复版本"></div>
+				<div width="0" name="solution" text="解决方案" hidden=true></div>
+				<div width="0" name="datetime" text="提交时间" hidden="true"></div>
+				<div width="0%" name="cause" text="故障原因" hidden="true"></div>
+			</div>
+			<br>
+			<h3>功能增强清单</h3>
+			<div itype="DataGrid" id="impgrid" saveInstance=true pagePosition="none" onAfterInit="loadImpData()" showSeqColumn=true height="300px">
+				<div name="rowDetail">
+					<div>
+						需求内容：{content}
+						<br>
+						设计思路：{design}
+						<br />
+						提交时间：{datetime}
+					</div>
+				</div>
+				<div name="top-toolbar">
+					<div plain=true name="imp" text="新增" name="" iconCls="icon-add" onclick="add()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="导出" iconCls="icon-export" onclick="exportImpgrid()"></div>
+				</div>
+				<div width="10%" name="impno" text="需求编号"></div>
+				<div width="10%" name="project" text="项目组"></div>
+				<div width="31%" name="impsynopsis" text="需求概况"></div>
+				<div width="12%" name="type" text="类型"></div>
+				<div width="12%" name="test" text="测试用例"></div>
+				<div width="5%" name="coder" text="作者"></div>
+				<div width="5%" name="personLiable" text="责任人"></div>
+				<div width="10%" name="fixedVersion" text="修复版本"></div>
+				<div width="0" name="content" text="需求内容" hidden=true></div>
+				<div width="0" name="design" text="设计思路" hidden=true></div>
+				<div width="0" name="datetime" text="提交时间" hidden="true"></div>
+			</div>
+		</div>
+
+		<div id="formcontent" style="display:none">
+			<div style="width:526px;overflow: hidden;">
+				<div id="container" style="width: 1100px;position: relative;">
+					<div style="display: inline-block;">
+						<form itype="Form"  id="bugform" requestType="post" saveInstance="true" action="services.jsp" onAfterInit="initBugForm()" submitJson=false>
+							<table class="ui-form-list">
+								<tr>
+									<td>问题编号</td>
+									<td><input itype="TextBox" width="95%" id="bugno"/></td>
+									<td colspan="2">此编号对应redeme文件中的记录编号</td>
+								</tr>
+								<tr>
+									<td style="width:60px">问题版本:</td>
+									<td style="width:200px">
+									<input itype="TextBox" width="95%" id="version" value="1.5.1.7" disabled="true"/>
+									</td>
+									<td style="width:60px">解决版本:</td>
+									<td style="width:200px">
+									<input itype="TextBox" width="95%" id="fixedVersion" value="1.5.1.8" disabled="true"/>
+									</td>
+								</tr>
+								<tr>
+									<td>测试用例:</td>
+									<td>
+									<input itype="TextBox" width="95%" id="test"/>
+									</td>
+									<td>问题环境:</td>
+									<td>
+									<div itype="AutoComplete" multiple="true" hintItems="true" width="95%"  noResultsText="没有相关结果" id="browser">
+										<div text="MS IE 6" value="ie6"></div>
+										<div text="MS IE 7" value="ie7"></div>
+										<div text="MS IE 8" value="ie8"></div>
+										<div text="MS IE 9" value="ie9"></div>
+										<div text="MS IE 10" value="ie10"></div>
+										<div text="FireFox" value="firefox"></div>
+										<div text="Chrome" value="chrome"></div>
+										<div text="全部" value="全部"></div>
+									</div></td>
+								</tr>
+								<tr>
+									<td>修复人:</td>
+									<td>
+									<select itype="Select" width="95%" id="coder">
+										<option>---请选择---</option>
+										<option value="袁刚">袁刚</option>
+										<option value="姜玲">姜玲</option>
+									</select></td>
+									<td>责任人:</td>
+									<td>
+									<select itype="Select" width="95%" id="personLiable">
+										<option>---请选择---</option>
+										<option value="袁刚">袁刚</option>
+										<option value="姜玲">姜玲</option>
+									</select></td>
+								</tr>
+								<tr>
+									<td>故障概况:</td>
+									<td colspan="3">									<textarea itype="TextBox" id="bugsynopsis" type="textarea" height="50px" width="98%"></textarea></td>
+								</tr>
+								<tr>
+									<td>故障原因:</td>
+									<td colspan="3">									<textarea itype="TextBox" id="cause" type="textarea" height="50px" width="98%"></textarea></td>
+								</tr>
+								<tr>
+									<td>解决方案:</td>
+									<td colspan="3">									<textarea itype="TextBox" id="solution" type="textarea" height="50px" width="98%"></textarea></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+					<div style="display: inline-block;margin-left: 20px">
+						<form itype="Form"  id="impform" requestType="post" saveInstance="true" action="services.jsp" onAfterInit="initImpForm()" submitJson=false>
+							<table class="ui-form-list">
+								<tr>
+									<td>需求编号</td>
+									<td><input itype="TextBox" width="95%" id="impno"/></td>
+									<td colspan="2">此编号对应redeme文件中的记录编号</td>
+								</tr>
+								<tr>
+									<td style="width:60px">项目名称:</td>
+									<td style="width:200px">
+									<select itype="Select" width="95%" id="project">
+										<option value="内部需求">内部需求</option>
+										<option value="工作流">工作流</option>
+										<option value="大数据">大数据</option>
+										<option value="移动需求平台">移动需求平台</option>
+										<option value="交通业务">交通业务</option>
+										<option value="长烟过程">长烟过程</option>
+										<option value="高新区OA">高新区OA</option>
+										<option value="审计署">审计署</option>
+									</select>
+									</td>
+									<td style="width:60px">需求类型:</td>
+									<td style="width:200px">
+									<select itype="Select" width="95%" id="type">
+										<option value="新增">新增</option>
+										<option value="改进">改进</option>
+									</select></td>
+								</tr>
+								<tr>
+									<td>解决版本:</td>
+									<td>
+									<input itype="TextBox" width="95%" id="i_fixedVersion" value="1.5.1.8" disabled="true"/>
+									</td>
+									<td>测试用例:</td>
+									<td>
+									<input itype="TextBox" width="95%" id="i_test"/>
+									</td>
+								</tr>
+								<tr>
+									<td>开发人:</td>
+									<td>
+									<select itype="Select" width="95%" id="i_coder">
+										<option>---请选择---</option>
+										<option value="袁刚">袁刚</option>
+										<option value="姜玲">姜玲</option>
+									</select></td>
+									<td>责任人:</td>
+									<td>
+									<select itype="Select" width="95%" id="i_personLiable">
+										<option>---请选择---</option>
+										<option value="袁刚">袁刚</option>
+										<option value="姜玲">姜玲</option>
+									</select></td>
+								</tr>
+								<tr>
+									<td>需求概况:</td>
+									<td colspan="3">									<textarea itype="TextBox" id="impsynopsis" type="textarea" height="50px" width="98%"></textarea></td>
+								</tr>
+								<tr>
+									<td>需求内容:</td>
+									<td colspan="3">									<textarea itype="TextBox" id="content" type="textarea" height="50px" width="98%"></textarea></td>
+								</tr>
+								<tr>
+									<td>设计方案:</td>
+									<td colspan="3">									<textarea itype="TextBox" id="design" type="textarea" height="50px" width="98%"></textarea></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="fastui-qa.js"></script>
+		<script>
+			var oper = "bug", content, dialog;
+			function loadBugData() {
+				$.get("qa-bug.json", {
+					success : function(data) {
+						var grid = fastDev.getInstance("buggrid");
+						grid.dataset.fill(data, false, true, true);
+					}
+				});
+			}
+
+			function loadImpData() {
+				$.get("qa-improvements.json", {
+					success : function(data) {
+						var grid = fastDev.getInstance("impgrid");
+						grid.dataset.fill(data, false, true, true);
+					}
+				});
+			}
+
+			function change() {
+				if(oper !== "bug") {
+					fastDev.getInstance("change").setText("切换为Bug修复");
+					fastDev("#container").animate({
+						left : "-542px"
+					});
+					oper = "bug";
+					dialog.setTitle("<span style='color:green'>功能增强</span>");
+				} else {
+					fastDev.getInstance("change").setText("切换为功能增强");
+					fastDev("#container").animate({
+						left : "0px"
+					});
+					oper = "";
+					dialog.setTitle("<span style='color:red'>BUG修复</span>");
+				}
+
+			}
+
+			function add() {
+				var button = this;
+				oper = this._options.name;
+				if(dialog) {
+					dialog.show(true, {
+						start : function() {
+							this._options.animateTarget = button;
+						}
+					});
+					return;
+				}
+				dialog = fastDev.create("Dialog", {
+					content:fastDev("#formcontent").show(),
+					animateTarget : this,
+					// 声明按钮控件（多个按钮声明可以使用数组传参）
+					width : 545,
+					height : 334,
+					buttons : [{
+						text : "提交",
+						onclick : submit
+					}, {
+						text : "功能增强",
+						onclick : change,
+						id : "change",
+						saveInstance : true
+					}, {
+						text : "关闭",
+						onclick : function(event, win) {
+							win.hide();
+						},
+						align : "left"
+					}],
+					showCollapseBtn : false,
+					showMinBtn : true,
+					showMaxBtn : false,
+					showCloseBtn : false,
+					showSizeTips : true,
+					onAfterMinimize : function() {
+						fastDev.getInstance("bugform").resetData();
+						fastDev.getInstance("impform").resetData();
+						initBugForm();
+						initImpForm();
+					},
+					onAnimateStop: change
+				});
+			//astDev.Core.ControlBus.compile("itype", fastDev(".ui-window-body").elems[0]);
+			}
+
+			function submit() {
+				var formid = oper === "bug" ? "impform" : "bugform";
+				var form = fastDev.getInstance(formid);
+				form.setOptions({
+					"otherSubmitData" : [{
+						"name" : "formtype",
+						"value" : formid
+					}],
+					onSubmitSuccess : function(r) {
+						if (fastDev.Util.StringUtil.trim(r) === "Done!") {
+							fastDev.alert("提交成功。<br/>请手动提交本地记录文件至SVN服务器。", "提交结果", "ok", function() {
+								this.close(false, false);
+								window.location.reload();
+							});
+						} else {
+							fastDev.alert("提交失败。", "提交结果", "error");
+						}
+					}
+				});
+				fastDev.confirm("请先将本地记录文件更新至最新版本。</br>点击确定后继续。", "确认提交", function(r) {
+					if (r) {
+						form.submit();
+						dialog.hide();
+					}
+				});
+				
+			}
+			
+			function exportBuggrid(){
+				fastDev.getInstance("buggrid").exportData("http://fastui.talkweb.com.cn:8888/twdpe-webcomponent/component/export_exportGrid.action","xls");
+			}
+			
+			function exportImpgrid(){
+				fastDev.getInstance("impgrid").exportData("http://fastui.talkweb.com.cn:8888/twdpe-webcomponent/component/export_exportGrid.action","xls");
+			}
+			
+			function initBugForm(){
+				fastDev.getInstance("bugno").setValue(fastDev.getID());
+			}
+			
+			function initImpForm(){
+				fastDev.getInstance("impno").setValue(fastDev.getID());
+			}
+
+			fastDev(function() {
+				fastDev.Core.ControlBus.compile("itype", document.getElementById("content"));
+			})
+		</script>
+	</body>
+</html>
+

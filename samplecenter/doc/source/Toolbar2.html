@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Toolbar'>/**
+</span> * @class fastDev.Ui.Toolbar
+ * @author liuRuiTao
+ * @extends fastDev.Ui.Component
+ * 工具栏控件，支持定义文本、按钮、输入框、下拉框等控件&lt;p&gt;
+ * 作者：袁刚
+ * 
+ *		&lt;div itype=&quot;Toolbar&quot;&gt;
+ *			&lt;div itype=&quot;text&quot; text=&quot;工具栏文本&quot;&gt;&lt;/div&gt;
+ *			&lt;div itype=&quot;spacer&quot;&gt;&lt;/div&gt;
+ *			&lt;div plain=true text=&quot;增加&quot; iconCls=&quot;icon-add&quot;&gt;&lt;/div&gt;
+ *			&lt;div itype=&quot;separator&quot;&gt;&lt;/div&gt;
+ *			&lt;div plain=true text=&quot;修改&quot; iconCls=&quot;icon-edit&quot;&gt;&lt;/div&gt;
+ *			&lt;div itype=&quot;separator&quot;&gt;&lt;/div&gt;
+ *			&lt;div plain=true text=&quot;保存&quot; iconCls=&quot;icon-save&quot;&gt;&lt;/div&gt;
+ *			&lt;div itype=&quot;separator&quot;&gt;&lt;/div&gt;
+ *			&lt;div plain=true text=&quot;删除&quot; iconCls=&quot;icon-delete&quot;&gt;&lt;/div&gt;
+ *			&lt;div itype=&quot;end&quot;&gt;&lt;/div&gt;
+ *			&lt;div iconCls=&quot;icon-search&quot; text=&quot;搜索&quot;&gt;&lt;/div&gt;
+ *			&lt;div itype=&quot;separator&quot;&gt;&lt;/div&gt;
+ *			&lt;div iconCls=&quot;icon-print&quot; text=&quot;打印&quot;&gt;&lt;/div&gt;
+ *		&lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.Toolbar&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;Toolbar&quot;,
+	_options : {
+		enableDataSet  : false,
+		enableInitProxy : false,
+		enableDataProxy : false,
+<span id='fastDev-Ui-Toolbar-property-items'>		/**
+</span>		 * 内容项
+		 * @property {Array[JsonObject]/String} items 子项配置数组
+		 * @property {String} [items.itype=&quot;button&quot;] 子项的类型
+		 *  &quot;text&quot; : 文本
+		 *  &quot;button&quot; : 按钮
+		 *  &quot;textbox&quot; : 文本框
+		 *  &quot;select&quot; : 下拉框
+		 *  &quot;spacer(-)&quot; : 空格分隔符
+		 *  &quot;separator(|)&quot; : 竖线分隔符
+		 *  &quot;end(&gt;)&quot; ： 左侧布局结束符
+		 * @since 1.4
+		 */
+		items : null
+	},
+	_global : {
+		width : &quot;100%&quot;
+	},
+	// 工具栏子项构造器
+	_itemCtor : {
+		&quot;text&quot; : function(item) {
+			return fastDev('&lt;span class=&quot;ui-button-text&quot;&gt;' + item.text + '&lt;/span&gt;').appendTo(item.container);
+		},
+		&quot;button&quot; : function(item) {
+			return fastDev.create(&quot;Button&quot;, item);
+		},
+		&quot;textbox&quot; : function(item) {
+			return fastDev.create(&quot;TextBox&quot;, item);
+		},
+		&quot;select&quot; : function(item) {
+			return fastDev.create(&quot;Select&quot;, item);
+		},
+		&quot;spacer&quot; : function(item) {
+			return fastDev(&quot;&lt;span class='ui-space'&gt;&lt;/span&gt;&quot;).appendTo(item.container);
+		},
+		&quot;separator&quot; : function(item) {
+			return fastDev(&quot;&lt;span class='ui-toolbar-line'&gt;&lt;/span&gt;&quot;).appendTo(item.container);
+		}
+	},
+	staticTemplate : function(params) {
+		return [
+			'&lt;div class=&quot;ui-toolbar ui-toolbar-bg ' + params.cls + '&quot; style=&quot;width: ' + params.width + '&quot;&gt;', 
+				'&lt;div class=&quot;ui-left&quot;&gt;&lt;/div&gt;', 
+				'&lt;div class=&quot;ui-right&quot;&gt;&lt;/div&gt;', 
+			'&lt;/div&gt;'
+		].join('');
+	},
+	tplParam : [&quot;width&quot;, &quot;cls&quot;],
+	ready : function() {
+		this._itemMap = {};
+	},
+	construct : function(options, global) {
+		// 默认子项容器为左侧
+		global.shell = this.find(&quot;.ui-left&quot;);
+	},
+<span id='fastDev-Ui-Toolbar-method-init'>	/**
+</span>	 * 初始化控件
+	 * @param {Array} options公共属性
+	 * @param {Array} global全局变量
+	 * @since 1.4
+	 * @private
+	 */
+	init : function(options, global) {
+		// 构造子项
+		this.constructItems(options.items);
+	},
+<span id='fastDev-Ui-Toolbar-method-constructItems'>	/**
+</span>	 * 构建控件项
+	 * @param {Array} items项数据
+	 * @since 1.4
+	 * @private
+	 */
+	constructItems : function(items) {
+		// 子项配置校验
+		if(!fastDev.isArray(items)) {
+			return;
+		}
+
+		var container = this._global.shell;
+
+		for(var i = 0, item; item = items[i]; i++) {
+			this.addItem(item, container);
+		}
+	},
+<span id='fastDev-Ui-Toolbar-method-parseItem'>	/**
+</span>	 * 处理items为标准模式
+	 * @private
+	 */
+	parseItem : function(item) {
+		// 子项默认类型为按钮
+		if(!fastDev.isString(item)) {
+			item.itype = item.itype || &quot;button&quot;;
+			return;
+		}
+		
+		// js定义时子项的简写解析
+		switch(item) {
+			case &quot;-&quot;:
+				return {
+					itype : &quot;spacer&quot;
+				};
+			case &quot;|&quot;:
+				return {
+					itype : &quot;separator&quot;
+				};
+			case &quot;&gt;&quot;:
+				return {
+					itype : &quot;end&quot;
+				};
+			default :
+				return {
+					itype : &quot;text&quot;,
+					text : item
+				};
+		}
+	},
+<span id='fastDev-Ui-Toolbar-method-constructItem'>	/**
+</span>	 * 解析单个标签
+	 * @private
+	 */
+	constructItem : function(item, container) {
+		// 子项类型
+		var type = item.itype,
+		// 子项构造器
+		ctor = this._itemCtor[type], 
+		// 子项ID
+		id = item.id;
+		// 如果找不到构造器则切换容器至右侧，如果值合法的情况下只有end标识会找不到构造器
+		if(ctor) {
+			item.container = container;
+			item = ctor(item);
+			if(fastDev.isValid(id)) {
+				this._itemMap[id] = item;
+			}
+		} else {
+			this._global.shell = container = this.find(&quot;.ui-right&quot;);
+		}
+	},
+<span id='fastDev-Ui-Toolbar-method-addItem'>	/**
+</span>	 * 添加一个Item
+	 * @since 1.4
+	 * @param {Object} options item控件属性
+	 * @param {String} pos 控件位置left或者right 默认为right
+	 */
+	addItem : function(options, container) {
+		// 子项容器校验
+		if(fastDev.isString(container)) {
+			container = this.find(&quot;.ui-&quot; + container);
+		} else {
+			container = this._global.shell;
+		}
+
+		if(container.isEmpty()) {
+			return;
+		}
+		
+		// 解析子项
+		options = this.parseItem(options) || options;
+		// 创建子项
+		this.constructItem(options, container);
+		return this;
+	},
+<span id='fastDev-Ui-Toolbar-method-removeItem'>	/**
+</span>	 * 删除工具栏子项 
+	 * @param {String} id 子项ID
+	 */
+	removeItem : function(id){
+		if(this._itemMap[id]) {
+			this._itemMap[id].destroy();
+			this._itemMap[id] = null;
+			delete this._itemMap[id];
+		}
+	},
+<span id='fastDev-Ui-Toolbar-method-enable'>	/**
+</span>	 * 启用工具栏子项
+	 * @param {String} id 子项ID
+	 */
+	enable : function(id) {
+		if(this._itemMap[id]) {
+			this._itemMap[id].enable();
+		}
+	},
+<span id='fastDev-Ui-Toolbar-method-disable'>	/**
+</span>	 * 禁用工具栏子项
+	 * @param {String} id 子项ID
+	 */
+	disable : function(id) {
+		if(this._itemMap[id]) {
+			this._itemMap[id].disable();
+		}
+	},
+<span id='fastDev-Ui-Toolbar-method-getItem'>	/**
+</span>	 * 获取子项对象 
+	 * @param {String} id 子项ID
+	 */
+	getItem : function(id){
+		return this._itemMap[id];
+	}
+});
+</pre>
+</body>
+</html>

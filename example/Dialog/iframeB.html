@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>iframeB</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+
+		<script type="text/javascript">
+			var parent, win, input, p = 10, dialog, dialog2, conf = {
+				headerCls : "ui-window-header-ico icon-save",
+				title : "iframeB页面对话框",
+				modal : true,
+				inside : false, // inside为false时为跨级模式
+				width : "400px",
+				height : "450px",
+				showCollapseBtn : true,
+				showMinBtn : true,
+				showMaxBtn : true,
+				showCloseBtn : true,
+				src : "iframeC.html"
+			}, conf2 = {
+				headerCls : "ui-window-header-ico icon-save",
+				title : "iframeB页面对话框",
+				modal : true,
+				inside : true, // inside为true时为内联模式
+				width : "200px",
+				height : "200px",
+				showCollapseBtn : true,
+				showMinBtn : true,
+				showMaxBtn : true,
+				showCloseBtn : true,
+				minHeight : "30px",
+				minWidth : "10px",
+				resizeDirection : "all"
+			};
+			$(function() {
+				// 通过fastDev.Ui.Window.getData，默认可以通过parent键名取到原父窗口对象
+				parent = fastDev.Ui.Window.getData("parent");
+				win = parent.win;
+				input = win.getData("input")// 也可以通过实例的data方法取值
+				$("#inputB").prop("value", input.prop("value"));
+			});
+			function closeWindow() {
+				input.prop("value", $("#inputB").prop("value"));
+				win.close();
+			}
+
+			function moveWindow() {
+				win.move({
+					left : p += 10,
+					top : p
+				});
+			}
+
+			function hideWindow() {
+				win.hide();
+			}
+
+			function showDialog() {
+				dialog.open();
+			}
+
+			function createDialog() {
+				// 创建一个跨级对话框
+				dialog = fastDev.create("Dialog", parent.getConfiguration(conf));
+			}
+
+			function createDialog2() {
+				// 创建一个内联对话框
+				dialog2 = fastDev.create("Dialog", parent.getConfiguration(conf2));
+			}
+
+			function getParentData() {
+				var parent = fastDev.Ui.Window.data("parent");
+				alert(parent.document.getElementById("inputA").value);
+			}
+		</script>
+	</head>
+	<body>
+		<h4>iframeB</h4>
+		<input id="inputB"/>
+		<p>
+			点击下方关闭弹窗按钮关闭弹窗并回传输入框的值到原父页面（iframeA）
+		</p>
+		<button class="button" onclick="closeWindow()">
+			关闭弹窗
+		</button>
+		<button class="button" onclick="moveWindow()">
+			移动弹窗
+		</button>
+		<button class="button" onclick="hideWindow()">
+			隐藏弹窗
+		</button>
+		<p>
+			在上方输入值并点击下方创建跨级对话框按钮，将值传递到iframeC页面。
+		</p>
+		<button class="button" onclick="createDialog()">
+			创建跨级对话框
+		</button>
+		<button class="button" onclick="showDialog()">
+			显示跨级对话框
+		</button>
+		<button class="button" onclick="createDialog2()">
+			创建内联对话框
+		</button>
+		<button class="button" onclick="getParentData()">
+			获取父页面输入框的值
+		</button>
+	</body>
+</html>
+

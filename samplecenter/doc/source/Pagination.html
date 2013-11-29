@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.apply(fastDev.Ui.DataGrid, {
+<span id='fastDev-Ui-DataGrid-method-buildPageBarConfig'>	/**
+</span>	 * 生成分页栏配置信息
+	 * @member fastDev.Ui.DataGrid
+	 * @private
+	 */
+	buildPageBarConfig : function(options) {
+		// 跳转至首页按钮事件
+		var pageFirst = fastDev.setFnInScope(this, this.pageFirst),
+		// 跳转至上一页按钮事件
+		pagePrev = fastDev.setFnInScope(this, this.pagePrev),
+		// 跳转至下一页按钮事件
+		pageNext = fastDev.setFnInScope(this, this.pageNext),
+		// 跳转至最后一个按钮事件
+		pageLast = fastDev.setFnInScope(this, this.pageLast),
+		// 改变每页显示行数事件
+		onChange = fastDev.setFnInScope(this, this.changePageSize),
+		// 刷新数据按钮事件
+		refreshData = fastDev.setFnInScope(this, this.refreshData),
+		// 每页显示行数选择框默认值
+		pageSizeList = options.pageSizeList || [{
+			value : &quot;5&quot;,
+			text : &quot;5条&quot;
+		}, {
+			value : &quot;10&quot;,
+			text : &quot;10条&quot;
+		}, {
+			value : &quot;20&quot;,
+			text : &quot;20条&quot;
+		}, {
+			value : &quot;50&quot;,
+			text : &quot;50条&quot;
+		}],
+		// 分页工具栏配置
+		pageBarItems = [{
+			cls : &quot;ui-button-page&quot;,
+			iconCls : &quot;icon-pagefirst&quot;,
+			id : &quot;pagefirst&quot;,
+			onclick : pageFirst
+		}, {
+			cls : &quot;ui-button-page&quot;,
+			iconCls : &quot;icon-pageprev&quot;,
+			id : &quot;pageprev&quot;,
+			onclick : pagePrev
+		}, &quot;|&quot;, &quot;第&quot;, {
+			itype : &quot;textbox&quot;,
+			width : &quot;20px&quot;,
+			id : &quot;page&quot;
+		}, {
+			text : &quot;页,共1页&quot;,
+			itype : &quot;text&quot;,
+			id : &quot;total&quot;
+		}, '|', {
+			cls : &quot;ui-button-page&quot;,
+			iconCls : &quot;icon-pagenext&quot;,
+			id : &quot;pagenext&quot;,
+			onclick : pageNext
+		}, {
+			cls : &quot;ui-button-page&quot;,
+			iconCls : &quot;icon-pagelast&quot;,
+			id : &quot;pagelast&quot;,
+			onclick : pageLast
+		}, &quot;|&quot;, {
+			cls : &quot;ui-button-page&quot;,
+			iconCls : &quot;icon-refresh&quot;,
+			id : &quot;refresh&quot;,
+			onclick : refreshData
+		}, &quot;&gt;&quot;, {
+			itype : &quot;select&quot;,
+			width : &quot;50px&quot;,
+			id : &quot;pageSize&quot;,
+			onchange : onChange,
+			items : pageSizeList,
+			enableInitProxy : false,
+			enableDataProxy : false
+		}, &quot;|&quot;, {
+			text : &quot;共1条&quot;,
+			itype : &quot;text&quot;,
+			id : 'records'
+		}],
+		// 如果用户在分页工具栏上配置了自定义按钮，则读取用户配置追加至分页工具栏配置
+		pageItems = options.pageItems;
+		if(fastDev.isArray(pageItems)) {
+			pageItems.splice(0, 0, &quot;|&quot;);
+			for(var i = 0, len = pageItems.length; i &lt; len; i++) {
+				pageBarItems.splice(11 + i, 0, pageItems[i]);
+			}
+		}
+		// 返回分页栏配置信息
+		return {
+			cls : &quot;ui-pagebar ui-pagebar-bg&quot;,
+			items : pageBarItems
+		};
+	},
+<span id='fastDev-Ui-DataGrid-method-initPageBar'>	/**
+</span>	 * 初始化分页栏数据
+	 * @param {JsonObject} info 分页信息
+	 * @member fastDev.Ui.DataGrid
+	 * @private
+	 */
+	initPageBar : function(data) {
+		var info = fastDev.Data.Reader.readDataSegment(data, &quot;info&quot;) || {};
+		fastDev.each(&quot;pageBar clonePageBar&quot;.split(&quot; &quot;), function(index, item) {
+			var pageBar = this._global[item], page = info.page || 1, total = info.total || 1;
+			if(!fastDev.isValid(pageBar)) {
+				return false;
+			}
+
+			if(page === 1) {
+				pageBar.getItem(&quot;pagefirst&quot;).disable();
+				pageBar.getItem(&quot;pageprev&quot;).disable();
+			}
+
+			if(page === total) {
+				pageBar.getItem(&quot;pagenext&quot;).disable();
+				pageBar.getItem(&quot;pagelast&quot;).disable();
+			}
+
+			pageBar.getItem(&quot;page&quot;).setValue(page);
+			pageBar.getItem(&quot;total&quot;).setText(&quot;页,共&quot; + total + &quot;页&quot;);
+			pageBar.getItem(&quot;pageSize&quot;).setValue(info.pageSize || this._options.pageSize);
+			pageBar.getItem(&quot;records&quot;).setText(&quot;共&quot; + (info.records || 0) + &quot;条&quot;);
+		}, this);
+	},
+<span id='fastDev-Ui-DataGrid-method-pageFirst'>	/**
+</span>	 * 跳转至首页
+	 * @member fastDev.Ui.DataGrid
+	 */
+	pageFirst : function() {
+		this.jumpPage(&quot;first&quot;);
+	},
+<span id='fastDev-Ui-DataGrid-method-pagePrev'>	/**
+</span>	 * 跳转至上一页
+	 * @member fastDev.Ui.DataGrid
+	 */
+	pagePrev : function() {
+		this.jumpPage(&quot;prev&quot;);
+	},
+<span id='fastDev-Ui-DataGrid-method-pageNext'>	/**
+</span>	 * 跳转至下一页
+	 * @member fastDev.Ui.DataGrid
+	 */
+	pageNext : function() {
+		this.jumpPage(&quot;next&quot;);
+	},
+<span id='fastDev-Ui-DataGrid-method-pageLast'>	/**
+</span>	 * 跳转至最后一个
+	 * @member fastDev.Ui.DataGrid
+	 */
+	pageLast : function() {
+		this.jumpPage();
+	},
+<span id='fastDev-Ui-DataGrid-method-jumpPage'>	/**
+</span>	 * 跳转至指定页
+	 * @param {Number} 目标页
+	 * @member fastDev.Ui.DataGrid
+	 */
+	jumpPage : function(target) {
+
+		var pageBar = this._global.pageBar,
+		// 当前页
+		page = pageBar?pageBar.getItem(&quot;page&quot;).getValue(page) * 1 : 1,
+		// 每页显示行数
+		pageSize = this._options.pageSize,
+		// 数据总页数
+		total = pageBar ? /[^\d]*(\d*)[^\d]*/.exec(pageBar.getItem(&quot;total&quot;).getText())[1] : 1;
+		// 根据跳转目标计算目标页数
+		switch(target) {
+			case &quot;first&quot;:
+				page = 1;
+				break;
+			case &quot;prev&quot;:
+				page -= 1;
+				break;
+			case &quot;next&quot;:
+				page += 1;
+				break;
+			case &quot;refresh&quot;:
+				break;
+			default :
+				page = target || total;
+		}
+
+		// 跳转页数无效时返回
+		if(page &lt; 0 || page &gt; total) {
+			return;
+		}
+		// 设置分页栏跳转按钮状态
+		fastDev.each(&quot;pageBar clonePageBar&quot;.split(&quot; &quot;), function(index, item) {
+			pageBar = this._global[item];
+			if(!fastDev.isValid(pageBar)) {
+				return false;
+			}
+			// 获取4个跳转按钮，在页数改变时同时改变它们的状态
+			var firstBtn = pageBar.getItem(&quot;pagefirst&quot;), prevBtn = pageBar.getItem(&quot;pageprev&quot;), nextBtn = pageBar.getItem(&quot;pagenext&quot;), lastBtn = pageBar.getItem(&quot;pagelast&quot;);
+
+			if(page === 1) {
+				firstBtn.disable();
+				prevBtn.disable();
+			} else {
+				firstBtn.enable();
+				prevBtn.enable();
+			}
+
+			if(page === total) {
+				nextBtn.disable();
+				lastBtn.disable();
+			} else {
+				nextBtn.enable();
+				lastBtn.enable();
+			}
+		}, this);
+		// 设置后台分页依赖参数至代理中
+		this.initProxy.addParam({
+			page : page,
+			pageSize : pageSize
+		});
+
+		// 调用刷新方法
+		this.initRefresh();
+	},
+<span id='fastDev-Ui-DataGrid-method-changePageSize'>	/**
+</span>	 * 更改每页显示数据条数
+	 * @member fastDev.Ui.DataGrid
+	 * @private
+	 */
+	changePageSize : function(value) {
+		this._options.pageSize = value;
+		this.jumpPage(1);
+	},
+<span id='fastDev-Ui-DataGrid-method-refreshData'>	/**
+</span>	 * 刷新数据方法
+	 * 参数为布尔类型时定义当前显示是否回到第一页
+	 * 参数为Json对象类型时，设置当前刷新操作请求参数并强制回到第一页显示
+	 * @member fastDev.Ui.DataGrid
+	 * @param {Boolean/Jsonobject} reset 刷新参数
+	 */
+	refreshData : function(reset) {
+		var target = &quot;refresh&quot;, setParam;
+
+		if(reset === true || ( setParam = fastDev.isPlainObject(reset))) {
+			target = 1;
+			if(setParam === true) {
+				this.initProxy.setParam(reset);
+			}
+		}
+		this.jumpPage(target);
+	}
+});
+</pre>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///import uicore
+(function (){
+    var utils = baidu.editor.utils,
+        UIBase = baidu.editor.ui.UIBase;
+    
+    var AutoTypeSetPicker = baidu.editor.ui.AutoTypeSetPicker = function (options){
+        this.initOptions(options);
+        this.initAutoTypeSetPicker();
+    };
+    AutoTypeSetPicker.prototype = {
+        initAutoTypeSetPicker: function (){
+            this.initUIBase();
+        },
+        getHtmlTpl: function (){
+            var options = this.editor.options,
+                opt = options.autotypeset;
+            for(var i = 0,lineStr = [],li,lis = options.listMap.lineheight;li=lis[i++];){
+                lineStr.push('&lt;option value=&quot;'+li+'&quot; '+(opt[&quot;lineHeight&quot;] == li ? 'checked' : '')+'&gt;'+li+'&lt;/option&gt;');
+            }
+
+            return '&lt;div id=&quot;##&quot; class=&quot;edui-autotypesetpicker %%&quot;&gt;' +
+                 '&lt;div class=&quot;edui-autotypesetpicker-body&quot;&gt;' +
+                    '&lt;table &gt;' +
+                        '&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;mergeEmptyline&quot; '+ (opt[&quot;mergeEmptyline&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;合并空行&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;removeEmptyline&quot; '+ (opt[&quot;removeEmptyline&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;删除空行&lt;/td&gt;&lt;/tr&gt;'+
+                        '&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;removeClass&quot; '+ (opt[&quot;removeClass&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;清除样式&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;indent&quot; '+ (opt[&quot;indent&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;首行缩进2字&lt;/td&gt;&lt;/tr&gt;'+
+                        '&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;textAlign&quot; '+ (opt[&quot;textAlign&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;对齐方式：&lt;/td&gt;&lt;td colspan=&quot;2&quot; id=&quot;textAlignValue&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;textAlignValue&quot; value=&quot;left&quot; '+((opt[&quot;textAlign&quot;]&amp;&amp;opt[&quot;textAlign&quot;]==&quot;left&quot;) ? &quot;checked&quot; : &quot;&quot;)+'&gt;左对齐&lt;input type=&quot;radio&quot; name=&quot;textAlignValue&quot; value=&quot;center&quot; '+((opt[&quot;textAlign&quot;]&amp;&amp;opt[&quot;textAlign&quot;]==&quot;center&quot;) ? &quot;checked&quot; : &quot;&quot;)+'&gt;居中对齐&lt;input type=&quot;radio&quot; name=&quot;textAlignValue&quot; value=&quot;right&quot; '+((opt[&quot;textAlign&quot;]&amp;&amp;opt[&quot;textAlign&quot;]==&quot;right&quot;) ? &quot;checked&quot; : &quot;&quot;)+'&gt;右对齐 &lt;/tr&gt;'+
+
+
+
+
+                        '&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;imageBlockLine&quot; '+ (opt[&quot;imageBlockLine&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;图片浮动&lt;/td&gt;' +
+                            '&lt;td colspan=&quot;2&quot; id=&quot;imageBlockLineValue&quot;&gt;' +
+                                '&lt;input type=&quot;radio&quot; name=&quot;imageBlockLineValue&quot; value=&quot;none&quot; '+((opt[&quot;imageBlockLine&quot;]&amp;&amp;opt[&quot;imageBlockLine&quot;]==&quot;none&quot;) ? &quot;checked&quot; : &quot;&quot;)+'&gt;默认' +
+                                '&lt;input type=&quot;radio&quot; name=&quot;imageBlockLineValue&quot; value=&quot;left&quot; '+((opt[&quot;imageBlockLine&quot;]&amp;&amp;opt[&quot;imageBlockLine&quot;]==&quot;left&quot;) ? &quot;checked&quot; : &quot;&quot;)+'&gt;左浮动' +
+                                '&lt;input type=&quot;radio&quot; name=&quot;imageBlockLineValue&quot; value=&quot;center&quot; '+((opt[&quot;imageBlockLine&quot;]&amp;&amp;opt[&quot;imageBlockLine&quot;]==&quot;center&quot;) ? &quot;checked&quot; : &quot;&quot;)+'&gt;独占行居中' +
+                                '&lt;input type=&quot;radio&quot; name=&quot;imageBlockLineValue&quot; value=&quot;right&quot; '+((opt[&quot;imageBlockLine&quot;]&amp;&amp;opt[&quot;imageBlockLine&quot;]==&quot;right&quot;) ? &quot;checked&quot; : &quot;&quot;)+'&gt;右浮动&lt;/tr&gt;'+
+
+                        '&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;clearFontSize&quot; '+ (opt[&quot;clearFontSize&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;清除字号&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;clearFontFamily&quot; '+ (opt[&quot;clearFontFamily&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;清除字体&lt;/td&gt;&lt;/tr&gt;'+
+                        '&lt;tr&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;removeEmptyNode&quot; '+ (opt[&quot;removeEmptyNode&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;去掉冗余的html代码&lt;/td&gt;&lt;/tr&gt;'+
+                        '&lt;tr&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;pasteFilter&quot; '+ (opt[&quot;pasteFilter&quot;] ? &quot;checked&quot; : &quot;&quot; )+'&gt;粘贴过滤 (对每次粘贴的内容应用以上过滤规则)&lt;/td&gt;&lt;/tr&gt;'+
+                        '&lt;tr&gt;&lt;td colspan=&quot;4&quot; align=&quot;right&quot;&gt;&lt;button &gt;执行&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;'+
+                    '&lt;/table&gt;'+
+                 '&lt;/div&gt;' +
+                '&lt;/div&gt;';
+
+
+        },
+        _UIBase_render: UIBase.prototype.render
+    };
+    utils.inherits(AutoTypeSetPicker, UIBase);
+})();
+</pre>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///commandsName  snapscreen
+///commandsTitle  截屏
+/*
+ * 截屏插件
+ */
+UE.commands['snapscreen'] = {
+    execCommand: function(){
+        var me = this,
+            editorOptions = me.options;
+        
+        if(!browser.ie){
+                alert(editorOptions.messages.snapScreenNotIETip);
+                return;
+        }
+
+        var onSuccess = function(rs){
+            try{
+                rs = eval(&quot;(&quot;+ rs +&quot;)&quot;);
+            }catch(e){
+                alert('截屏上传有误\n\n请检查editor_config.js中关于截屏的配置项\n\nsnapscreenHost 变量值 应该为屏幕截图的server端文件所在的网站地址或者ip');
+                return;
+            }
+
+            if(rs.state != 'SUCCESS'){
+                alert(rs.state);
+                return;
+            }
+            me.execCommand('insertimage', {
+                src: (editorOptions.snapscreenImgIsUseImagePath ? editorOptions.imagePath : '') + rs.url,
+                floatStyle: editorOptions.snapscreenImgAlign,
+                data_ue_src:(editorOptions.snapscreenImgIsUseImagePath ? editorOptions.imagePath : '') + rs.url
+            });
+        };
+        var onStartUpload = function(){
+            //开始截图上传
+        };
+        var onError = function(){
+            alert(editorOptions.messages.snapScreenMsg);
+        };
+        try{
+            var nativeObj = new ActiveXObject('Snapsie.CoSnapsie');
+            nativeObj.saveSnapshot(editorOptions.snapscreenHost, editorOptions.snapscreenServerFile, editorOptions.snapscreenServerPort, onStartUpload,onSuccess,onError);
+        }catch(e){
+            me.snapscreenInstall.open();
+        }
+    },
+    queryCommandState: function(){
+        return this.highlight ? -1 :0;
+    }
+};
+</pre>
+</body>
+</html>

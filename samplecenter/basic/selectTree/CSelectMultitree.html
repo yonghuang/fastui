@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>下拉多选树</h4>
+        <ul>        
+        <li>下拉多选树的弹出树拉到最下方有确定按钮，选中复选框点击按钮即可把选中值全部按,分隔放到文本框中</li>
+        <li>同时演示了下拉树的宽度与zindex设置</li>
+        <li>如果下拉多选树还想实现其他效果，相关配置请参考树</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>	
+		 <script>
+            //得到值
+		    function btngetValue() {
+			  var tree=fastDev.getInstance("tree2");
+				fastDev.tips("下拉树的选中值是："+tree.getValue());
+			}
+			//得到文本
+			function btngetText () {
+			  var tree=fastDev.getInstance("tree2");
+				fastDev.tips("下拉树的选中值是："+tree.getText());
+			}
+			//设置值
+			function btnsetValue() {
+			  var tree=fastDev.getInstance("tree2");
+				tree.setValue("202,204");
+			}
+			//清空值
+			function btnclean(){
+				var tree=fastDev.getInstance("tree2");
+				tree.clean();
+			}
+			//值改变事件
+		   function valueChange(id,val) {
+				fastDev.tips("你选中的id是"+id+",val是"+val);
+			}
+		
+			function btnsetReadonly(){
+				var tree=fastDev.getInstance("tree2");
+				tree.setReadonly(true);
+			}
+			
+			function btnsetReadonly2(){
+				var tree=fastDev.getInstance("tree2");
+				tree.setReadonly(false);
+			}
+			function btninitRefresh(){
+				var tree=fastDev.getInstance("tree2");
+				tree.initRefresh({url:"data110.txt"});
+			}
+        </script>
+	</head>
+	<body><div style="margin:10px;">
+    <div><div class="ui-layout-text">默认全部值</div>
+		<div itype="SelectTree" id="tree2"  sTreeClickAfterShow="false" saveInstance="true"  width="210px" initSource="../../data/selectTree_data.txt" treeType="multitree" topParentid="0" openFloor=2>				
+		</div>
+		
+        </div>  <div style="margin:10px 0;">
+           <div itype="Button"  text="得到下拉树的选中值" id="btnevent" saveInstance="true" onclick="btngetValue()" ></div> 
+           <div itype="Button"  text="得到下拉树的选中值文本" id="btnevent" saveInstance="true" onclick="btngetText()" ></div>
+           <div itype="Button"  text="设置下拉树的选中值" id="btnevent" saveInstance="true" onclick="btnsetValue()" ></div>
+           <div itype="Button"  text="设置下拉树的只读" id="btnevent" saveInstance="true" onclick="btnsetReadonly()" ></div>
+           <div itype="Button"  text="设置下拉树的取消只读" id="btnevent" saveInstance="true" onclick="btnsetReadonly2()" ></div>           
+           <div itype="Button"  text="清空" id="btnevent" saveInstance="true" onclick="btnclean()" ></div>
+           <div itype="Button"  text="换数据源刷新" id="btnevent" saveInstance="true" onclick="btninitRefresh()" ></div>
+           </div></div>
+       <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+	</body>
+</html>

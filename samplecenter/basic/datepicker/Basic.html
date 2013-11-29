@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<title>
+			<ul>
+				<li>
+					日期选择控件提供日期时间选择功能，且能对日期时间范围作出动态限制。
+				</li>
+				<li>
+					trigger属性指定触发控件的事件类型（如：click等），值为button时仅点击图标时触发。
+				</li>
+				<li>
+					firstDayOfWeek定义将星期几显示至第一列。
+				</li>
+				<li>
+					点击日历面板头部的月份和年份值后，弹出相应快速选取菜单，且可直接在输入框内输入年月值，错误的输入或不可选的值会被自动纠正。
+				</li>
+				<li>
+					年份快速选取菜单、日历面板及时间选择器区域，均可使用鼠标滚轮滚动实现快速翻页或取值。
+				</li>
+				<li>
+					inside属性为false值时，可开启跨iframe展现。
+				</li>
+				<li>
+					鼠标悬浮至日历面板的日期上，将显示当天对应的农历日期及佳节，常规节假等信息（可通过showLunarTips属性关闭该功能）。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<!-- 农历信息扩展功能所需js文件 -->
+		<script src="../../../src/component/form/datepicker/DatePicker.lunar.js"></script>
+		<!-- 日期范围表达式扩展功能所需js文件  -->
+		<script src="../../../src/component/form/datepicker/DatePicker.expression.js"></script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<!-- 当format格式化属性不带时间格式时，控件默认不加载时间选择器  -->
+			<div class="ui-layout-text">
+				默认配置
+			</div>
+			<input itype="DatePicker"/>
+			<br />
+			<div class="ui-layout-text">
+				仅点击图标触发
+			</div>
+			<input itype="DatePicker" trigger="button"/>
+			<br />
+			<div class="ui-layout-text">
+				定义控件宽度
+			</div>
+			<!-- 可带百分比或px或em单位 -->
+			<input itype="DatePicker" iwidth="20%" showLunarTips="true"/>
+			<br />
+			<div class="ui-layout-text">
+				定义星期的第一天
+			</div>
+			<!-- 星期日为0，星期一为1，以此类推 -->
+			<!-- value属性值为now时，将自动取输入框值为当前系统日期时间值 -->
+			<!-- animateSpeed属性可以指定翻页动画速度，默认为200毫秒，指定为0时将不使用动画效果翻页 -->
+			<input itype="DatePicker" firstDayOfWeek="1" animateSpeed="0" value="now" />
+			<br />
+			<div class="ui-layout-text">
+				只读
+			</div>
+			<!-- inside属性为false值时，日历面板讲跨iframe展现（当前页面可视区域非常窄小时可开启此属性） -->
+			<input itype="DatePicker" readonly="true" inside="false" value="2012-8-25" />
+			<br />
+			<div class="ui-layout-text">
+				禁用
+			</div>
+			<input itype="DatePicker" disabled="true"/>
+		</div>
+	</body>
+</html>
+

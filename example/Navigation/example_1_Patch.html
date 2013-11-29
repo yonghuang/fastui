@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Navigation</title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link href="../../themes/base/css/main.css" rel="stylesheet" type="text/css" />
+	<script src="../../src/library/jquery-1.5.1.min.js"></script>
+	<script src="../../src/library/FastDev.js"></script>
+
+		<script src="../../src/library/Ajax.js"></script>
+	<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/Base_Patch.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/ControlBus_Patch.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DataBus_Patch.js"></script>
+	  <script src="../../src/library/Tools.js"></script>
+	<script src="../../src/component/basecontrol/SimpleControl.js"></script>
+	<script src="../../src/component/basecontrol/Anchor.js"></script>
+	<script src="../../src/component/basecontrol/Input.js"></script>
+	<script src="../../src/component/basecontrol/Text.js"></script>
+    <script src="../../src/component/basecontrol/CheckBox.js"></script>
+    <script src="../../src/component/basecontrol/Radio.js"></script>
+    <script src="../../src/component/basecontrol/Label.js"></script>
+	<script src="../../src/component/basecontrol/Div.js"></script>
+    <script src="../../src/component/basecontrol/Span.js"></script>
+      <script src="../../src/component/basecontrol/Button.js"></script>
+	<script src="../../src/component/basecontrol/Ul.js"></script>
+	<script src="../../src/component/basecontrol/Body.js"></script>
+	
+	<script src="../../src/library/Patch.js"></script>
+		
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/Component_Patch.js"></script>
+	<script src="../../src/component/form/RadioGroup.js"></script>
+	<script src="../../src/component/form/RadioGroup_Patch.js"></script>
+     <script src="../../src/component/layout/Accordion.js"></script>
+	<script src="../../src/component/layout/Accordion_Patch.js"></script>
+	<script src="../../src/component/Navigation.js"></script>
+	<script src="../../src/component/Navigation_Patch.js"></script>
+	<script>
+	fastDev.ready(function(){
+			
+var data='[{id:"11","group":"-1","text":"1级菜单可收缩"},{id:"12","group":"-1","text":"12级菜单"},{id:"13","group":"","text":"13级菜单"},{id:"21","group":"11","text":"21级菜单"},{id:"22","group":"11","text":"22级菜单"},{id:"23","group":"11","text":"23级菜单"},{id:"311","group":"21","text":"311级菜单","url":"http://www.baidu.com","target":"_blank"},{id:"312","group":"21","text":"312级菜单","url":"http://www.baidu.com"},{id:"316","group":"21","text":"316级菜单","url":"http://www.baidu.com"},{id:"321","group":"22","text":"321级菜单","url":"http://www.baidu.com"},{id:"322","group":"22","text":"322级菜单","target":"_blank","url":"http://www.baidu.com"},{id:"323","group":"22","text":"323级菜单","url":"http://www.baidu.com"},{id:"331","group":"23","text":"331级菜单","url":"http://www.baidu.com"},{id:"332","group":"23","text":"332级菜单","url":"http://www.baidu.com"},{id:"333","group":"23","text":"333级菜单","url":"http://www.baidu.com"},{id:"24","group":"12","text":"24级菜单"},{id:"25","group":"12","text":"25级菜单"},{id:"26","group":"12","text":"26级菜单",url:"http://www.aa.com"},{id:"336","group":"24","text":"336级菜单","url":"http://www.baidu.com"},{id:"337","group":"25","text":"337级菜单","url":"http://www.baidu.com"},{id:"339","group":"13","text":"339级菜单","url":"http://www.baidu.com","target":"_blank"}]';
+	 fastDev.create("fastDev.Ui.Navigation", {
+		container : "example",
+		items : data,		
+		topGroup:"-1",
+		groupCollapse:true
+	});
+		
+		});
+		
+		
+		
+	</script>
+</head>
+<body>
+	<div id="example"></div>
+
+</body>
+</html>
+

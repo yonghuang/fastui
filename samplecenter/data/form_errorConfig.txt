@@ -1,0 +1,26 @@
+﻿{
+    "defaultInfo": {
+        "Required": "不能为空的哦",
+        "IsEmail": "邮件地址不合法",
+        "IsCode": "邮编不合法",
+        "IsIdCard": "不是有效的身份证",
+        "IsMobile": "必须是手机号码",
+        "IsIp": "非法IP地址",
+        "IsNumber": "不是数字",
+        "isEqual": "与上一个控件的值不匹配",
+        "SelfRegular": "格式不正确",
+        "IsTel": "必须是电话号码格式",
+        "MinLength:5": "长度只能在5以上的",
+        "MinLength": "长度只能在#{MinLength}以上",
+        "MaxLength": "长度只能在#{MaxLength}以内",
+        "LenEqual": "长度只能是#{LenEqual}",
+        "MaxNumber":"数值必须小于#{MaxNumber}",
+        "MinNumber":"数值必须大于#{MinNumber}"
+    },
+    "txt1": {
+        "required": "不填东西怎么行呀"
+    },
+    "pwd1": {
+        "required": "密码不能为空"
+    }
+}

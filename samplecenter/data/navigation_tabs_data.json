@@ -1,0 +1,30 @@
+[{
+    "id": "1",
+    "pid": "-1",
+    "text": "1级菜单"
+}, {
+    "id": "11",
+    "pid": "1",
+    "text": "11级菜单"
+}, {
+    "id": "111",
+    "pid": "11",
+    "title": "我加",
+    "tabUrl": "../../../example/Tabs/cc.html",
+    "showCloseBtnFlag": "1",
+    "text": "新增tabs标签(可关闭)"
+}, {
+    "id": "112",
+    "pid": "11",
+    "title": "加一个",
+    "tabUrl": "../../../example/Tabs/dd.html",
+    "showCloseBtnFlag": "", 
+    "text": "新增tabs标签(不可关闭)"
+}, {
+    "id": "113",
+    "pid": "11",
+    "title": "再一个",
+    "tabUrl": "../../../example/datagrid/htmlModel.html",
+    "showCloseBtnFlag": "", 
+    "text": "新增tabs标签(datagrid)"
+}]

@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>dagagrid-外观显示控制-集合场景</h4>
+			<ul>
+				<li>此场景涵盖datagrid外观显示控制的以下功能点</li>
+				<li>1.基础应用展示</li>
+				<li>2.每列条数自定义</li>
+				<li>3.隐藏显示列</li>
+				<li>4.设定列头字体，颜色 </li>
+				<li>5.行样式控制器</li>
+				<li>6.列样式控制器</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link href="../../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+			.cls1 {
+				background-color: red;
+			}
+			.cls3 {
+				background-color: blue;
+			}
+			.cls5 {
+				background-color: green;
+			}
+			.cls7 {
+				background-color: yellow;
+			}
+		</style>
+		<script src="../../../src/fastDev-import.js"></script>
+		
+		
+		<script type="text/javascript">
+			function renderer1(value){
+				return '<div>'+value+'</div>'
+			}
+			function renderer2(value){
+				if(value){
+					fastDev(this).css("background-color","#f00");
+				}
+			}
+			function renderer3(value){
+				if(value){
+					fastDev(this).css("background-color","#f99");
+				}
+			}
+			
+			function renderer4(value){
+				if(value){
+					fastDev(this).css("background-color","#f77");
+				}
+			}
+			function renderer5(value){
+				if(value){
+					fastDev(this).css("background-color","#f77");
+				}
+			}
+			
+			function showColumn() {
+				var value = fastDev.getInstance("columnName").getValue();
+				fastDev.getInstance("grid1").showColumn(value);
+			}
+
+			function hideColumn() { debugger;
+				var value = fastDev.getInstance("columnName").getValue();
+				fastDev.getInstance("grid1").hideColumn(value);
+			}
+			
+			function renderer(value) {
+				var data = fastDev.getInstance("grid1").getValue(this);
+				if(data.isuse === "true") {
+					if(parseInt(value, 10) > 5000) {
+						fastDev(this).parents("tr").children("td").css("background-color", "green");
+					} else {
+						fastDev(this).parents("tr").children("td").css("background-color", "red");
+					}
+				}
+			}
+
+
+		</script>
+	</head>
+	<body>
+		<div id="example" style="margin: 10px">
+			
+			<div itype="DataGrid" container="example" initSource="../../data/griddata.jsp" 
+			showSeqColumn=true saveInstance=true id="grid1">
+			
+			<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+				<div width="10%" name="empno" text="员工工号" itype="template" tpl="<tpl if(/2$/.test({empno}))><span>来自模板</span></tpl>{empno}"></div>
+				<div width="20%" name="name" text="姓名"   titleStyle="background-color:yellow;"></div>
+				<div width="12%" name="department" text="所属部门" renderer="renderer2()" titleCls="cls3"></div>
+				<div width="8%" name="isuse" text="是否可用" renderer="renderer3()"  titleStyle="background-color:green"></div>
+				<div width="15%" name="position" text="职位"  titleCls="cls5">
+					<div name="controlCfg">
+						<div text="前端工程师" value="position1"></div>
+						<div text="后台工程师" value="position2"></div>
+						<div text="技术经理" value="position3"></div>
+						<div text="项目经理" value="position4"></div>
+					</div>
+				</div>
+				<div width="10%" name="pay" text="薪资"  titleStyle="background-color:blue;"  renderer="renderer()"></div>
+				<div width="10%" name="datesemployed" text="入职时间" titleCls="cls7"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01" renderer="renderer5()"  titleStyle="background-color:red;"></div>
+			</div>
+			
+			<table style="margin: 10px 0">
+			<tr>
+				<td id="select">
+					<select itype="Select"  id="columnName" saveInstance=true multiple=true>
+					<option value="empno" text="员工工号"></option>
+					<option value="name" text="姓名"></option>
+					<option value="department" text="所属部门"></option>
+					<option value="isuse" text="是否可用"></option>
+					<option value="position" text="职位"></option>
+					<option value="pay" text="薪资"></option>
+					<option value="datesemployed" text="入职时间"></option>
+					<option value="birthday" text="生日"></option>
+				</select>
+					</td>
+				<td id="btns">
+				<input itype="Button" container="btns" text="显示" onclick="showColumn()">
+				<input itype="Button" container="btns" text="隐藏" onclick="hideColumn()">
+				</td>
+			</tr>
+		</table>
+		</div>
+	</body>
+</html>

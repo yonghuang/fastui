@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.Animate = {
+<span id='global-property-timers'>	/**
+</span>	 * 待执行动画对象数据
+	 * @private
+	 */
+	timers : [],
+<span id='global-property-off'>	/**
+</span>	 * 是否禁用页面动画
+	 */
+	off : false,
+<span id='global-method-activate'>	/**
+</span>	 * 激活定时器
+	 * @private
+	 */
+	activate : function() {
+		if(!this.timerID) {
+			this.timerID = setInterval(fastDev.Animate.tick, 13);
+		}
+	},
+<span id='global-method-tick'>	/**
+</span>	 * 执行动画单位时间内的一帧
+	 * @private
+	 */
+	tick : function() {
+		var timers = fastDev.Animate.timers, animation, len = timers.length, index = 0;
+		for(; animation = timers[index]; index++) {
+			if(fastDev.Animate.parseAnimation(animation)) {
+				if(fastDev.isFunction(animation.complete)){
+					animation.complete();
+				}
+				timers.splice(index--, 1);
+			}
+		}
+		
+		if(timers.length === 0) {
+			clearInterval(fastDev.Animate.timerID);
+			fastDev.Animate.timerID = null;
+		}
+	},
+	parseAnimation : function(animation) {
+		var index = 0, tween, fxqueue = animation.fxqueue, tweens;
+		// 队列首个元素为区域分隔符则代表当前分隔符于下个分隔符之前的动画元素进行执行区域
+		if(fxqueue[0] === &quot;spliter&quot;) {
+			fxqueue.shift();
+		}
+		
+		for(; fx = fxqueue[index]; index++) {
+			if(fx === &quot;spliter&quot;) {
+				// 到达执行区域末尾则放弃后续动画元素
+				break;
+			} else if(fastDev.isFunction(fx)) {
+				// 如果是队列中的下一次动画调用则清空本区域动画元素，生成下一次动画所需元素
+				fxqueue.splice(index--, 1,&quot;parse&quot;);
+				fx();
+				return true;
+			}
+			
+			tweens = fx.tweens;
+			// 运行当前动画元素的基本属性组
+			for(var i = 0; tween = tweens[i]; i++) {
+				if(this.runTween.call(animation, fx, tween)) {
+					// 如果当前属性已达到动画完成要求，则删除当前属性
+					tweens.splice(i, 1);
+				}
+			}
+			// 如果所有属性都已达到动画要求则删除当前动画
+			if(tweens.length === 0) {
+				fxqueue.splice(index--, 1);
+			}
+		}
+		// 如果当前动画运行完成则从定时器队列中删除此动画
+		return fxqueue.length === 0;
+	},
+	runTween : function(fx, tween,nowTime) {
+		var finish, 
+		// 当前时间
+		nowTime = +new Date,
+		// 动画属性的起始值 
+		start = tween.start, 
+		// 动画属性基于当前时间的偏移量
+		newValue = this.easing(nowTime - fx.startTime, Math.abs(start-tween.end), this.duration);
+		// 计算属性的最终值
+		if(start &gt; tween.end) {
+			newValue = start - newValue;
+			finish = newValue &lt;= tween.end;
+		} else {
+			newValue = start + newValue;
+			finish = newValue &gt;= tween.end;
+		}
+		
+		// 如果动画运行完成或者超时，则直接设置属性的目标值，否则正常执行动画
+		if(nowTime - fx.startTime &gt; this.duration || finish) {
+			fastDev.Dom.css(fx.elem, tween.name, +tween.end);
+			return true;
+		} else {
+			fastDev.Dom.css(fx.elem, tween.name, newValue+(tween.unit ||0));
+			return false;
+		}
+	},
+<span id='global-method-buildAnimation'>	/**
+</span>	 * 构建动画元素
+	 * @private
+	 */
+	buildAnimation : function(elem, prop, config, parse) {
+		// 构建动画元素并添加至待执行队列
+		config.fxqueue[parse?&quot;unshift&quot;:&quot;push&quot;]({
+			elem : elem,
+			tweens : fastDev.Animate.createTweens(elem, prop),
+			startTime : +new Date
+		});
+	},
+<span id='global-method-correctParam'>	/**
+</span>	 * 调整动画运行参数
+	 * @param {Number} speed 动画时长
+	 * @param {Function} easing 动画算法
+	 * @param {Function} callback 回调函数
+	 */
+	correctParam : function(speed, easing, callback) {
+		var easingCls, easingObj = fastDev.Animate.easing, speeds = fastDev.Animate.speeds;
+		return {
+			// 从最后一个参数逆推检测设置的动画完成时的回调
+			complete : callback || !callback &amp;&amp; easing || fastDev.isFunction(speed) &amp;&amp; speed,
+			// 动画持续时间
+			duration : fastDev.Animate.off ? 0 : typeof speed === &quot;number&quot; ? speed : speed in speeds ? speeds[speed] : speeds._default,
+			// 当前动画算法
+			easing : fastDev.isString(easing) ? (( easing = easing.split(&quot;-&quot;)) &amp;&amp; (( easingCls = easingObj[easing[0]]) &amp;&amp; (easingCls[easing[1]] || easingCls.easeIn)) || easingObj.linear) : easingObj.linear
+		};
+	},
+<span id='global-method-createTweens'>	/**
+</span>	 * 创建动画构成的基本属性组
+	 * @param {Element} elem 动画影响元素
+	 * @param {JsonObject} props 动画改变属性
+	 */
+	createTweens : function(elem, props) {
+		var tweens = [];
+		fastDev.each(props, function(key, value) {
+			tweens.push(this.createTween(elem, key, value));
+		}, this);
+		return tweens;
+	},
+<span id='global-method-createTween'>	/**
+</span>	 * 创建动画的基本属性
+	 * @param {Element} elem 动画影响元素
+	 * @param {String} key 属性键
+	 * @param {String} value 属性值
+	 */
+	createTween : function(elem, key, value) {
+		// 获取当前样式值
+		var currValue = fastDev.Dom.css(elem, key),
+		// 获取数字值以及单位
+		m = /(\d*(?:.\d+)?)(.*)/.exec(currValue),
+		m1 =  /(\d*(?:.\d+)?)(.*)/.exec(value);
+		return {
+			name : key,
+			start : +m[1] || 0,
+			end : +m1[1],
+			unit : m1[2]
+		};
+	},
+<span id='global-property-speeds'>	/**
+</span>	 * 内置动画速度
+	 * @private 
+	 */
+	speeds : {
+		_default : 400,
+		fast : 200,
+		slow : 600
+	},
+<span id='global-property-easing'>	/**
+</span>	 * 内置动画算法
+	 * @private 
+	 */
+	easing : {
+		linear : function(t, c, d) {
+			return c * t / d;
+		},
+		quad : {
+			easeIn : function(t,  c, d) {
+				return c * (t /= d) * t ;
+			},
+			easeOut : function(t,  c, d) {
+				return -c * (t /= d) * (t - 2) ;
+			},
+			easeInOut : function(t,  c, d) {
+				if((t /= d / 2) &lt; 1)
+					return c / 2 * t * t ;
+				return -c / 2 * ((--t) * (t - 2) - 1) ;
+			}
+		},
+		cubic : {
+			easeIn : function(t,  c, d) {
+				return c * (t /= d) * t * t ;
+			},
+			easeOut : function(t,  c, d) {
+				return c * (( t = t / d - 1) * t * t + 1) ;
+			},
+			easeInOut : function(t,  c, d) {
+				if((t /= d / 2) &lt; 1)
+					return c / 2 * t * t * t ;
+				return c / 2 * ((t -= 2) * t * t + 2) ;
+			}
+		},
+		quart : {
+			easeIn : function(t,  c, d) {
+				return c * (t /= d) * t * t * t ;
+			},
+			easeOut : function(t,  c, d) {
+				return -c * (( t = t / d - 1) * t * t * t - 1) ;
+			},
+			easeInOut : function(t,  c, d) {
+				if((t /= d / 2) &lt; 1)
+					return c / 2 * t * t * t * t ;
+				return -c / 2 * ((t -= 2) * t * t * t - 2) ;
+			}
+		},
+		quint : {
+			easeIn : function(t,  c, d) {
+				return c * (t /= d) * t * t * t * t ;
+			},
+			easeOut : function(t,  c, d) {
+				return c * (( t = t / d - 1) * t * t * t * t + 1) ;
+			},
+			easeInOut : function(t,  c, d) {
+				if((t /= d / 2) &lt; 1)
+					return c / 2 * t * t * t * t * t ;
+				return c / 2 * ((t -= 2) * t * t * t * t + 2) ;
+			}
+		},
+		sine : {
+			easeIn : function(t,  c, d) {
+				return -c * Math.cos(t / d * (Math.PI / 2)) + c ;
+			},
+			easeOut : function(t,  c, d) {
+				return c * Math.sin(t / d * (Math.PI / 2)) ;
+			},
+			easeInOut : function(t,  c, d) {
+				return -c / 2 * (Math.cos(Math.PI * t / d) - 1) ;
+			}
+		},
+		expo : {
+			easeIn : function(t,  c, d) {
+				return (t == 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) ;
+			},
+			easeOut : function(t,  c, d) {
+				return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) ;
+			},
+			easeInOut : function(t,  c, d) {
+				if(t == 0)
+					return b;
+				if(t == d)
+					return b + c;
+				if((t /= d / 2) &lt; 1)
+					return c / 2 * Math.pow(2, 10 * (t - 1)) ;
+				return c / 2 * (-Math.pow(2, -10 * --t) + 2) ;
+			}
+		},
+		circ : {
+			easeIn : function(t,  c, d) {
+				return -c * (Math.sqrt(1 - (t /= d) * t) - 1) ;
+			},
+			easeOut : function(t,  c, d) {
+				return c * Math.sqrt(1 - ( t = t / d - 1) * t) ;
+			},
+			easeInOut : function(t,  c, d) {
+				if((t /= d / 2) &lt; 1)
+					return -c / 2 * (Math.sqrt(1 - t * t) - 1) ;
+				return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) ;
+			}
+		},
+		elastic : {
+			easeIn : function(t,  c, d, a, p) {
+				if(t == 0)
+					return b;
+				if((t /= d) == 1)
+					return b + c;
+				if(!p)
+					p = d * .3;
+				if(!a || a &lt; Math.abs(c)) {
+					a = c;
+					var s = p / 4;
+				} else
+					var s = p / (2 * Math.PI) * Math.asin(c / a);
+				return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) ;
+			},
+			easeOut : function(t,  c, d, a, p) {
+				if(t == 0)
+					return b;
+				if((t /= d) == 1)
+					return b + c;
+				if(!p)
+					p = d * .3;
+				if(!a || a &lt; Math.abs(c)) {
+					a = c;
+					var s = p / 4;
+				} else
+					var s = p / (2 * Math.PI) * Math.asin(c / a);
+				return (a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
+			},
+			easeInOut : function(t,  c, d, a, p) {
+				if(t == 0)
+					return b;
+				if((t /= d / 2) == 2)
+					return b + c;
+				if(!p)
+					p = d * (.3 * 1.5);
+				if(!a || a &lt; Math.abs(c)) {
+					a = c;
+					var s = p / 4;
+				} else
+					var s = p / (2 * Math.PI) * Math.asin(c / a);
+				if(t &lt; 1)
+					return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) ;
+				return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c ;
+			}
+		},
+		back : {
+			easeIn : function(t,  c, d, s) {
+				if(s == undefined)
+					s = 1.70158;
+				return c * (t /= d) * t * ((s + 1) * t - s) ;
+			},
+			easeOut : function(t,  c, d, s) {
+				if(s == undefined)
+					s = 1.70158;
+				return c * (( t = t / d - 1) * t * ((s + 1) * t + s) + 1) ;
+			},
+			easeInOut : function(t,  c, d, s) {
+				if(s == undefined)
+					s = 1.70158;
+				if((t /= d / 2) &lt; 1)
+					return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) ;
+				return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) ;
+			}
+		},
+		bounce : {
+			easeIn : function(t,  c, d) {
+				return c - fastDev.Animate.easing.bounce.easeOut(d - t, c, d) ;
+			},
+			easeOut : function(t,  c, d) {
+				if((t /= d) &lt; (1 / 2.75)) {
+					return c * (7.5625 * t * t) ;
+				} else if(t &lt; (2 / 2.75)) {
+					return c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) ;
+				} else if(t &lt; (2.5 / 2.75)) {
+					return c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) ;
+				} else {
+					return c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) ;
+				}
+			},
+			easeInOut : function(t,  c, d) {
+				if(t &lt; d / 2)
+					return fastDev.Animate.easing.bounce.easeIn(t * 2, c, d) * .5 ;
+				else
+					return fastDev.Animate.easing.bounce.easeOut(t * 2 - d, c, d) * .5 + c * .5 ;
+			}
+		}
+	}
+}
+</pre>
+</body>
+</html>

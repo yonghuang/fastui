@@ -1,0 +1,33 @@
+
+{
+  "elements": [
+    {
+      "type": "pie",
+      "alpha": 0.6,
+      "start-angle": 35,
+      "animate": [
+        {
+          "type": "fade"
+        }
+      ],
+      "tip": "#val# of #total#<br>#percent# of 100%",
+      "colours": [
+        "#1C9E05",
+        "#FF368D"
+      ],
+      "values": [
+        2,
+        3,
+        4,
+        {
+          "value": 6.5,
+          "label": "hello (6.5)"
+        }
+      ]
+    }
+  ],
+  "title": {
+    "text": "Pork Pie, Mmmmm"
+  },
+  "x_axis": null
+}

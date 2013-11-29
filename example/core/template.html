@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>template</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-06 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/Template_old.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+
+		<script>
+			$.ready(function() {
+				var data = [];
+				
+				for(var i=0;i<1000;i++){
+					data.push({
+						name : "test"+i,
+						age : 20,
+						phone : "1234567"
+					})
+				}
+				var htmlList = [
+				'<tpl dynamic id=testTpl>', 
+					'<table>', 
+						'<tpl each>', 
+							'<tr>',
+								'<td>{row_id}:{name}</td>', 
+								'<td>{age}</td>', 
+								'<td>{phone}</td>', 
+							'</tr>', 
+						'</tpl>', 
+					'</table>', 
+				'</tpl>'
+				];
+			
+				var template = fastDev.create("Template", {
+					htmlList : htmlList
+				});
+				
+				template.buildStaticTpl();
+				var elem = template.createDom();
+				$("#example").append(elem);
+				// 本地静态数据设置
+				var time = new Date().getTime();
+				var dataset = fastDev.create("DataSet", {
+					fields : ["name", "age", "phone"],
+					autoLoad : true,
+					data : data
+				});
+				
+				var tplList = template.getDynamicTpl().tplList;
+				//template.buildHTML(tplList,null,data)
+				//document.getElementById("example").innerHTML = template._html.join("");
+				
+				var domInfo = template.initDynamic(data);
+				target = $("[name='"+domInfo.name+"']");
+				target.append(domInfo.fragment);
+				alert(new Date().getTime()-time);
+			
+				
+				
+				
+				// 远程Ajax请求数据设置
+				/*var dataset = fastDev.create("DataSet", {
+					fields : ["name", "age", "phone"],
+					autoLoad : true,
+					proxy : {
+						url : "data.json",
+						onAfterLoad : function() {
+							var domInfo = template.initDynamic(dataset.select());
+							target = $("[name='"+domInfo.name+"']");
+							target.append(domInfo.fragment);
+						}
+					}
+				});*/
+				
+				// 本地和远程混合
+				/*var dataset = fastDev.create("DataSet", {
+					fields : ["name", "age", "phone"],
+					autoLoad : true,
+					data : data,
+					proxy : {
+						url : "data.json",
+						onAfterLoad : function() {
+							var domInfo = template.initDynamic(dataset.select());
+							target = $("[name='"+domInfo.name+"']");
+							target.append(domInfo.fragment);
+						}
+					}
+				});
+				
+				*/
+			});
+
+		</script>
+	</head>
+	<body>
+		<div id="example"></div>
+		<input type="button" value="reloadDataSet" id="btn1"/>
+		<input type="button" value="appendDataSet" id="btn2"/>
+	</body>
+</html>
+

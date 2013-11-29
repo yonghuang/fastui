@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Core-ExceptionManager'>/**
+</span> * @class fastDev.Core.ExceptionManager
+ * @singleton
+ * 异常管理器，负责记录和显示当前控件库的异常与警告信息
+ */
+fastDev.Core.ExceptionManager = {
+<span id='fastDev-Core-ExceptionManager-property-model'>	/**
+</span>	 * 异常模式
+	 * 分为三种级别高(high)、中(medium)、低(low)
+	 * high : 提示开发者异常和警告
+	 * medium : 提示开发者异常信息
+	 * low : 不提示任何信息
+	 */
+	model : &quot;high&quot;,
+<span id='fastDev-Core-ExceptionManager-property-errorinfo'>	/**
+</span>	 * 异常信息存储对象
+	 * @private
+	 */
+	errorinfo : [],
+<span id='fastDev-Core-ExceptionManager-property-warninfo'>	/**
+</span>	 * 日志信息存储对象
+	 * @private
+	 */
+	warninfo : [],
+<span id='fastDev-Core-ExceptionManager-method-createMessage'>	/**
+</span>	 * 创建异常/警告信息
+	 * @private
+	 */
+	createMessage : function(objname, name, msg) {
+		return &quot;&lt;b&gt;&quot; + objname + &quot; 对象 &quot; + name + &quot; 方法执行异常&lt;/b&gt;：&lt;br&gt;&quot; + msg.replace(/\$msg/g, &quot;&lt;br&gt;&quot;);
+	},
+<span id='fastDev-Core-ExceptionManager-method-addError'>	/**
+</span>	 * 记录错误信息
+	 * 此方法在任何控件库的异常级别下都不会提示用户，只会保存信息，需要手工调用fastDev.showInfo方法或依赖下一次fastDev.error才会打印出来
+	 * @param {String} objname 异常所在对象
+	 * @param {String} name 异常所在方法
+	 * @param {String} error 异常信息
+	 */
+	addError : function(objname, name, error) {
+		var em = fastDev.Core.ExceptionManager;
+		error = em.createMessage(objname, name, error);
+		em.errorinfo.push(error);
+	},
+<span id='fastDev-Core-ExceptionManager-method-display'>	/**
+</span>	 * 显示当前控件库异常级别下能显示的信息
+	 */
+	display : function() {
+		var em = fastDev.Core.ExceptionManager;
+		// 如果没有异常信息则不处理
+		if(!em.errorinfo.length) {
+			return;
+		}
+
+		var warn = &quot;&quot;, error = &quot;异常信息：&lt;br&gt;&lt;br&gt;&quot; + em.errorinfo.join(&quot;&lt;br&gt;&lt;br&gt;&quot;);
+		if(em.model = &quot;high&quot;) {
+			warn = &quot;警告信息：&lt;br&gt;&lt;br&gt;&quot; + em.warninfo.join(&quot;&lt;br&gt;&lt;br&gt;&quot;);
+		}
+		// 弹出异常信息提示框
+		fastDev.alert(error + warn, &quot;错误&quot;, &quot;tip&quot;);
+		// 清除异常信息
+		em.errorinfo = [];
+		em.warninfo = [];
+	},
+<span id='fastDev-method-error'>	/**
+</span>	 * 错误信息提示
+	 * 在控件库的异常级别设定不为&quot;low&quot;时此方法会及时打印错误信息
+	 * 在控件库的异常级别设定为&quot;low&quot;时会记录错误信息，可手工调用fastDev.showInfo方法查看
+	 * @param {String} objname 异常所在对象
+	 * @param {String} name 异常所在方法
+	 * @param {String} error 异常信息
+	 * @member fastDev
+	 */
+	error : function(objname, name, error) {
+		var em = fastDev.Core.ExceptionManager;
+		if(em.model === &quot;low&quot;) {
+			em.addError(objname, name, error);
+			return;
+		}
+		error = em.createMessage(objname, name, error);
+		fastDev.alert(error, &quot;程序运行异常&quot;, &quot;error&quot;);
+	},
+<span id='fastDev-Core-ExceptionManager-method-warn'>	/**
+</span>	 * 记录警告信息
+	 *  在控件库的异常级别设定为&quot;high&quot;时此方法记录的警告信息才会被处理
+	 * @param {String} objname 警告所在对象
+	 * @param {String} name 警告所在方法
+	 * @param {String} warn 警告信息
+	 */
+	warn : function(objname, name, warn) {
+		var em = fastDev.Core.ExceptionManager;
+		warn = em.createMessage(objname, name, warn);
+		em.warninfo.push(warn);
+	}
+};
+
+fastDev.apply({
+<span id='fastDev-method-error'>	/**
+</span>	 * 错误信息提示
+	 * 在控件库的异常级别设定不为&quot;low&quot;时此方法会及时打印错误信息
+	 * 在控件库的异常级别设定为&quot;low&quot;时会记录错误信息，可手工调用fastDev.showInfo方法查看
+	 * @param {String} objname 异常所在对象
+	 * @param {String} name 异常所在方法
+	 * @param {String} error 异常信息
+	 * @member fastDev
+	 */
+	error : fastDev.Core.ExceptionManager.error,
+<span id='fastDev-Core-ExceptionManager-method-addError'>	/**
+</span>	 * 记录错误信息
+	 * 此方法在任何控件库的异常级别下都不会提示用户，只会保存信息，需要手工调用fastDev.showInfo方法或依赖下一次fastDev.error才会打印出来
+	 * @param {String} objname 异常所在对象
+	 * @param {String} name 异常所在方法
+	 * @param {String} error 异常信息
+	 */
+	addError : fastDev.Core.ExceptionManager.addError,
+<span id='fastDev-Core-ExceptionManager-method-warn'>	/**
+</span>	 * 记录警告信息
+	 *  在控件库的异常级别设定为&quot;high&quot;时此方法记录的警告信息才会被处理
+	 * @param {String} objname 警告所在对象
+	 * @param {String} name 警告所在方法
+	 * @param {String} warn 警告信息
+	 */
+	warn : fastDev.Core.ExceptionManager.warn,
+<span id='fastDev-Core-ExceptionManager-property-showInfo'>	/**
+</span>	 * 显示当前控件库异常级别下能显示的信息
+	 */
+	showInfo : fastDev.Core.ExceptionManager.display
+});
+</pre>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Form</title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link href="../../themes/base/css/main.css" rel="stylesheet" type="text/css" />
+	<script src="../../src/library/jquery-1.5.1.min.js"></script>
+	<script src="../../src/library/FastDev.js"></script>
+
+		<script src="../../src/library/Ajax.js"></script>
+	<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/Base_Patch.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/ControlBus_Patch.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DataBus_Patch.js"></script>
+	  <script src="../../src/library/Tools.js"></script>
+	<script src="../../src/component/basecontrol/SimpleControl.js"></script>
+		<script src="../../src/component/basecontrol/Input.js"></script>
+		<script src="../../src/component/basecontrol/Anchor.js"></script>
+		<script src="../../src/component/basecontrol/Body.js"></script>
+		<script src="../../src/component/basecontrol/Button.js"></script>
+		<script src="../../src/component/basecontrol/CheckBox.js"></script>
+		<script src="../../src/component/basecontrol/Div.js"></script>
+		<script src="../../src/component/basecontrol/Dl.js"></script>
+		<script src="../../src/component/basecontrol/File.js"></script>
+		<script src="../../src/component/basecontrol/Form.js"></script>
+		<script src="../../src/component/basecontrol/Hidden.js"></script>
+		<script src="../../src/component/basecontrol/Iframe.js"></script>
+		<script src="../../src/component/basecontrol/Image.js"></script>
+		<script src="../../src/component/basecontrol/Label.js"></script>
+		<script src="../../src/component/basecontrol/Password.js"></script>
+		<script src="../../src/component/basecontrol/Pre.js"></script>
+		<script src="../../src/component/basecontrol/Radio.js"></script>
+		<script src="../../src/component/basecontrol/Span.js"></script>
+		<script src="../../src/component/basecontrol/Table.js"></script>
+		<script src="../../src/component/basecontrol/Text.js"></script>
+		<script src="../../src/component/basecontrol/TextArea.js"></script>
+		<script src="../../src/component/basecontrol/Ul.js"></script>
+	
+	<script src="../../src/library/Patch.js"></script>
+		
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/Component_Patch.js"></script>
+        	<script src="../../src/component/form/CheckBoxGroup.js"></script>
+	<script src="../../src/component/form/CheckBoxGroup_Patch.js"></script>
+	<script src="../../src/component/form/RadioGroup.js"></script>
+	<script src="../../src/component/form/RadioGroup_Patch.js"></script>
+
+       <script src="../../src/component/form/Form.js"></script>
+	<script src="../../src/component/form/Form_Patch.js"></script>
+
+	<script>
+
+	talkweb.Bus.ready({
+		items : [{
+			classPath : "Components.Form",
+			options : {
+						container : "example",	
+						notesWidth : "60px",
+						initSource : "example_1_init.jsp",
+						dataSource : "example_1_load.jsp",
+						name : "testForm",
+						submitCallback : function(data) {
+							alert("此数据为后台返回:"+talkweb.Tools.toJsonString(data.msg));
+						},
+						action : "example_submit.jsp",
+						id : "testForm",
+						errorFile : "errorConfig.json",
+						items : [{
+							classPath : "BaseControl.Hidden",
+							className : "no_line",
+							options : {
+								name : "testHidden"
+							}
+						}, {
+                    classPath : "BaseControl.Text",
+                    width : "100%",
+                    ddClassName : "testClass",
+                    options : {
+                        id : "text1",
+                        name : "text1",
+                        notes : "输入框1:",
+                      //  width : "90%",
+                        saveInstance : true,
+                        validateItems : {
+                            requires : true,
+                            minLength : 2
+                        }
+                    }
+                }, {
+                    classPath : "BaseControl.Password",
+                    width : "100%",
+                    options : {
+                        id : "text2",
+                        name : "text2",
+                        saveInstance : true,
+                        notes : "密码框2:",
+                        //width : "90%",
+                        validateItems : {
+                            requires : true,
+                            maxLength : 10
+                        }
+                    }
+                }, {
+                    classPath : "Components.RadioGroup",
+                    options : {
+                        name : "radio1",
+                        notes : "单选框1:"
+                    }
+                }, {
+                    classPath : "Components.CheckBoxGroup",
+                    options : {
+                        name : "checkbox",
+                        notes : "复选框:"
+                    }
+                }, {
+                    classPath : "BaseControl.TextArea",
+                    width : "100%",
+                    options : {
+                        notes : "文本域:",
+                        name : "textarea"//,
+                      //  height : "200px"
+                    }
+                }]
+					}
+				}]
+			});
+			
+	
+		
+	</script>
+</head>
+<body>
+	<div id="example"></div>
+</body>
+</html>
+

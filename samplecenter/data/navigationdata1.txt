@@ -1,0 +1,134 @@
+[
+    {
+        "id": "a1",
+        "pid": "-1",
+        "text": "1级菜单"
+    },
+    {
+        "id": "a2",
+        "pid": "-1",
+        "text": "2级菜单"
+    },
+    {
+        "id": "a3",
+        "pid": "-1",
+        "text": "3级菜单"
+    },
+    {
+        "id": "a11",
+        "pid": "a1",
+        "text": "11级菜单"
+    },
+    {
+        "id": "a12",
+        "pid": "a1",
+        "text": "12级菜单"
+    },
+    {
+        "id": "a21",
+        "pid": "a2",
+        "text": "21级菜单"
+    },
+    {
+        "id": "a22",
+        "pid": "a2",
+        "text": "22级菜单"
+    },
+    {
+        "id": "a31",
+        "pid": "a3",
+        "text": "31级菜单"
+    },
+    {
+        "id": "a111",
+        "pid": "a11",
+        "text": "111级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a112",
+        "pid": "a11",
+        "text": "112级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a121",
+        "pid": "a12",
+        "text": "121级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a122",
+        "pid": "a12",
+        "text": "122级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a211",
+        "pid": "a21",
+        "text": "211级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a212",
+        "pid": "a21",
+        "text": "212级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a221",
+        "pid": "a22",
+        "text": "221级菜单"
+    },
+    {
+        "id": "a2211",
+        "pid": "a221",
+        "text": "2211级菜单"
+    },
+    {
+        "id": "a22111",
+        "pid": "a2211",
+        "text": "22111级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a22112",
+        "pid": "a2211",
+        "text": "22112级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a221112",
+        "pid": "a22111",
+        "text": "221112级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a311",
+        "pid": "a31",
+        "text": "311级菜单"
+    },
+    {
+        "id": "a3111",
+        "pid": "a311",
+        "text": "3111级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    },
+    {
+        "id": "a3112",
+        "pid": "a311",
+        "text": "3112级菜单",
+        "url": "http://www.baidu.com",
+        "target": "_blank"
+    }
+]

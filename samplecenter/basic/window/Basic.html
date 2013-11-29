@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					Window控件属弹出窗体类控件，除基本的弹窗功能外，还支持标题图标、折叠、展开、最大最小化、尺寸调节、跨iframe显示等功能。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 默认弹窗
+			function showDefaultWindow() {
+				// 弹窗默认以当前窗口可视区域横向居中，纵向黄金分割比值定位
+				fastDev.create("Window");
+			}
+
+			// 窗体内容
+			function showContentWindow() {
+				var content = "曲曲折折的荷塘上面，弥望的是田田的叶子。叶子出水很高，像亭亭的舞女的裙。层层的叶子中间，零星地点缀着些白花，有袅娜地开着的，有羞涩地打着朵儿的；正如一粒粒的明珠，又如碧天里的星星，又如刚出浴的美人。微风过处，送来缕缕清香，仿佛远处高楼上渺茫的歌声似的。这时候叶子与花也有一丝的颤动，像闪电般，霎时传过荷塘的那边去了。叶子本是肩并肩密密地挨着，这便宛然有了一道凝碧的波痕。";
+				content += "叶子底下是脉脉的流水，遮住了，不能见一些颜色；而叶子却更见风致了。";
+				content += "月光如流水一般，静静地泻在这一片叶子和花上。薄薄的青雾浮起在荷塘里。叶子和花仿佛在牛乳中洗过一样；又像笼着轻纱的梦。虽然是满月，天上却有一层淡淡的云，所以不能朗照；但我以为这恰是到了好处——酣眠固不可少，小睡也别有风味的。月光是隔了树照过来的，高处丛生的灌木，落下参差斑驳的黑影，峭楞楞如鬼一般；弯弯的杨柳的稀疏的倩影却又像是画在荷叶上。塘中的月色并不均匀；但光与影有着和谐的旋律，如梵婀玲上奏着的名曲。";
+				fastDev.create("Window", {
+					// 字符串中可以使用HTML标签
+					// 无需显式为文本内容指定窗体的宽高值，弹窗默认将根据当前内容以及可视窗口区域的大小自适应弹窗的尺寸
+					content : "<span style='margin:20px;color:green;'>" + content + "</span>",
+					title : "《荷塘月色》"
+				});
+			}
+
+			// 内嵌子页
+			function showSrcWindow() {
+				fastDev.create("Window", {
+					src : "http://www.talkweb.com.cn"
+					// 加载内部子页面且未指定宽高值时，弹窗将默认取可视区域宽度值的70%，再根据黄金分割比计算宽高有效值后，自适应窗口大小
+				});
+			}
+
+			// 带窗体标题
+			function showTitleWindow() {
+				fastDev.create("Window", {
+					title : "弹出窗口"
+				});
+			}
+
+			// 带标题图标
+			function showTitleIconWindow() {
+				fastDev.create("Window", {
+					title : "温馨提示",
+					// iconCls指定标题栏图标样式名
+					iconCls : "icon-save",
+					// icon指定内容图标名
+					icon : "tip",
+					content : "您的提交已经保存成功！"
+				});
+			}
+
+			// 定义窗体宽高
+			function showSizeWindow() {
+				// 宽高支持数字，百分比（相对于当前窗口），px、em等单位
+				fastDev.create("Window", {
+					width : "50%",
+					height : "200px"
+				});
+			}
+
+			// 定义窗体坐标
+			function showPositionWindow() {
+				// 坐标支持数字，百分比（相对于当前可视窗口），px等单位，默认当前可视区域黄金分割比例居中
+				fastDev.create("Window", {
+					left : 600,
+					top : "20%"
+				});
+			}
+
+			// 不包含头部标题栏
+			function showNoHeaderWindow() {
+				// 由于不含头部标题，此处示例应用了定时关闭
+				fastDev.create("Window", {
+					showHeader : false,
+					content : "3秒后自动关闭"
+				}).closeTimeout(3);
+			}
+
+			// 不显示折叠按钮
+			function showNoCollapseWindow() {
+				fastDev.create("Window", {
+					showCollapseBtn : false
+				});
+			}
+
+			// 不显示最小化按钮
+			function showNoMinWindow() {
+				fastDev.create("Window", {
+					showMinBtn : false
+				});
+			}
+
+			// 不显示最大化按钮
+			function showNoMaxWindow() {
+				fastDev.create("Window", {
+					showMaxBtn : false
+				});
+			}
+
+			// 不显示关闭按钮
+			function showNoCloseWindow() {
+				fastDev.create("Window", {
+					showCloseBtn : false,
+					title : "3秒后自动关闭"
+				}).closeTimeout(3);
+			}
+
+			// 底部按钮
+			function showButtonsWindow() {
+				fastDev.create("Window", {
+					buttons : [{
+						text : "保存",
+						iconCls : "icon-save",
+						onclick : function() {
+							fastDev.tips("你点击了保存按钮");
+						}
+					}, {
+						text : "关闭",
+						iconCls : "icon-close",
+						onclick : function(event, that) {
+							// 按钮点击事件回调的左右域为当前按钮控件，回调的第二个参数为当前弹窗实例
+							that.close();
+						}
+					}]
+				});
+			}
+
+			// 非模态窗体
+			function showNoMaskWindow() {
+				fastDev.create("Window", {
+					modal : false
+				});
+			}
+
+			// 跨级弹窗
+			function showCrossWindow() {
+				fastDev.create("Window", {
+					inside : false
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				默认配置
+			</div>
+			<div>
+				<input itype="Button" text="默认弹窗" onclick="showDefaultWindow()"/>
+			</div>
+			<div class="ui-layout-text">
+				窗体内容
+			</div>
+			<div>
+				<input itype="Button" text="窗体内容" onclick="showContentWindow()"/>
+				<input itype="Button" text="内嵌子页" onclick="showSrcWindow()"/>
+			</div>
+			<div class="ui-layout-text">
+				标题图标
+			</div>
+			<div>
+				<input itype="Button" text="窗体标题" onclick="showTitleWindow()"/>
+				<input itype="Button" text="标题图标" onclick="showTitleIconWindow()"/>
+			</div>
+			<div class="ui-layout-text">
+				宽高坐标
+			</div>
+			<div>
+				<input itype="Button" text="定义窗体宽高" onclick="showSizeWindow()"/>
+				<input itype="Button" text="定义窗体坐标" onclick="showPositionWindow()"/>
+			</div>
+			<div class="ui-layout-text">
+				标题工具栏
+			</div>
+			<div>
+				<input itype="Button" text="不包含头部标题栏" onclick="showNoHeaderWindow()"/>
+				<input itype="Button" text="不显示折叠按钮" onclick="showNoCollapseWindow()"/>
+				<input itype="Button" text="不显示最小化按钮" onclick="showNoMinWindow()"/>
+				<input itype="Button" text="不显示最大化按钮" onclick="showNoMaxWindow()"/>
+				<input itype="Button" text="不显示关闭按钮" onclick="showNoCloseWindow()"/>
+			</div>
+			<div class="ui-layout-text">
+				底部按钮
+			</div>
+			<div>
+				<input itype="Button" text="底部按钮" onclick="showButtonsWindow()"/>
+			</div>
+			<div class="ui-layout-text">
+				模态跨级
+			</div>
+			<div>
+				<input itype="Button" text="非模态窗体" onclick="showNoMaskWindow()"/>
+				<input itype="Button" text="跨级弹窗" onclick="showCrossWindow()"/>
+			</div>
+		</div>
+	</body>
+</html>
+

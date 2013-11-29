@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					控件方法与事件示例。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<style type="text/css">
+			div.box {
+				margin-top: 10px;
+				width: 200px;
+				height: 50px;
+/*				background-color: #19637A;*/
+			}
+		</style>
+		<script type="text/javascript">
+			var loading, progress, valueInput, totalInput, textInput;
+			fastDev(function() {
+				loading = fastDev.create("ProgressBar", {
+					container : "loading",
+					//allowAutoClose属性应用于图标模式时，表示当进度值达到满值时是否自动关闭加载图标
+					allowAutoClose : false,
+					onValueChange : onValueChange
+				});
+				progress = fastDev.create("ProgressBar", {
+					container : "progress",
+					// model为progress时，显示为进度条样式
+					model : "progress",
+					onValueChange : onValueChange
+				});
+				valueInput = fastDev("#value");
+				textInput = fastDev("#text");
+				totalInput = fastDev("#total");
+			});
+
+			// 设置当前进度值
+			function setValue() {
+				// setValue用来更新当前进度值，如果未定义onValueChange回调事件，则控件默认使用百分比做为进度提示文本信息
+				var value = valueInput.prop("value");
+				loading.setValue(value);
+				progress.setValue(value);
+			}
+
+			// 设置总进度值
+			function setTotalValue() {
+				var total = totalInput.prop("value");
+				loading.setTotalValue(total);
+				progress.setTotalValue(total);
+			}
+
+			// 设置文本值
+			function setText() {
+				// 也可以直接通过setText方法来定义进度提示文本信息
+				var text = textInput.prop("value");
+				loading.setText(text);
+				progress.setText(text);
+			}
+
+			// 获取当前进度值
+			function getValue() {
+				fastDev.tips("当前进度值为：" + progress.getValue());
+			}
+
+			// 获取总进度值
+			function getTotalValue() {
+				fastDev.tips("总进度值为：" + progress.getTotalValue());
+			}
+
+			// 获取当前进度百分比
+			function getPercentage() {
+				fastDev.tips("当前进度百分比为：" + progress.getPercentage());
+			}
+
+			// 进度值改变事件回调
+			function onValueChange(value, total) {
+				// 默认的该回调将以百分比文本提示信息显示至进度条上
+				// 在该回调事件内，可自定义文本提示信息
+				loading.setText(value + "/" + total);
+				progress.setText(value + " of " + total);
+				fastDev.tips("当前值：" + value + ", 总值：" + total);
+			}
+
+			// 显示进度条
+			function show() {
+				loading.show();
+				progress.show();
+			}
+
+			// 隐藏进度条
+			function hide() {
+				loading.hide();
+				progress.hide();
+			}
+
+			// 关闭进度条
+			function close() {
+				loading.close();
+				progress.close();
+			}
+			
+			//动态
+			function run(){
+				var val = parseInt(fastDev("#val").prop("value"));
+				var toval = parseInt(fastDev("#toval").prop("value"));
+				var speed = fastDev("#speed").prop("value");
+				start(val,toval,speed);
+			}
+			function start(val,toval,speed){
+				var pro = fastDev.getInstance("dynamic");
+				pro.setTotalValue(toval);
+				pro.setValue(val);
+				if(val==toval){
+					return;
+				}
+				setTimeout("start("+ (val+1) + ","+ toval +"," + speed + ")",speed);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<table>
+				<tr>
+					<td><div class="box" id="loading"></div></td>
+					<td width="30px"></td>
+					<td><div id="progress"></div></td>
+				</tr>
+			</table>
+			<br />
+			<div class="ui-layout-text">
+				进度值：
+			</div>
+			<input id="value"/>
+			<input itype="Button" text="设置当前进度值" onclick="setValue()"/>
+			<br />
+			<div class="ui-layout-text">
+				总进度：
+			</div>
+			<input id="total"/>
+			<input itype="Button" text="设置总进度值" onclick="setTotalValue()"/>
+			<br />
+			<div class="ui-layout-text">
+				文本值：
+			</div>
+			<input id="text"/>
+			<input itype="Button" text="设置文本值" onclick="setText()"/>
+			<br />
+			<br />
+			<div>
+				<input itype="Button" text="获取当前进度值" onclick="getValue()"/>
+				<input itype="Button" text="获取总进度值" onclick="getTotalValue()"/>
+				<input itype="Button" text="获取当前进度百分比" onclick="getPercentage()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="显示进度条" onclick="show()"/>
+				<input itype="Button" text="隐藏进度条" onclick="hide()"/>
+				<input itype="Button" text="关闭进度条" onclick="close()"/>
+			</div>
+			
+			<div class="ui-layout-text">
+				动态：
+			</div>
+			<div itype="ProgressBar" model="progress" id="dynamic" saveInstance="true"></div>
+			<br />
+			<div class="ui-layout-text">
+				初始进度值：
+			</div>
+			<input itype="TextBox" id="val" saveInstance="true" />
+			<div class="ui-layout-text">
+				总进度值：
+			</div>
+			<input itype="TextBox" id="toval" saveInstance="true" />
+			<div class="ui-layout-text">
+				速度(毫秒)：
+			</div>
+			<input itype="TextBox" id="speed" saveInstance="true" />
+			<input itype="Button" text="开始" onclick="run()" />
+			<br />
+		</div>
+	</body>
+</html>

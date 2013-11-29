@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>单选框树方法集</h4>
+        <ul>        
+        <li>包括各种各样得到选中值，设置值，清空值的方法</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+		//清空某个节点的单选框或复选框选中状态
+		 var btnunCheckedById=function(){
+			 var tree=fastDev.getInstance("tree2");		
+			 if(tree.isChecked("202")){	 
+        	 	tree.unCheckedById("202");			 
+			 }else{
+				  fastDev.tips("请先选中表单的单选框");
+			 }
+		}
+		//得到单选框全部选中的选中值
+        var btngetChkedIds_allradioValue=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(tree.getRadioedIds("allradioValue")); 
+		 }
+		 //得到单选框全选和半选状态的选中值
+		  var btngetChkedIds_partradioValue=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(tree.getRadioedIds("partradioValue")); 
+		 }
+		 //得到单选框叶节点的选中值
+		  var btngetChkedIds_onlyLeafValue=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(tree.getRadioedIds("onlyLeafValue")); 
+		 }		
+		 //设置选中值
+		 var btnsetValueSome=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 tree.setValue(["4","301"]);
+		}
+		//清空全部选中值
+        var btnclearRadio=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 tree.clearRadio();
+		}
+		//某个节点是否选中
+        var btnisChecked=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 var id=tree.getCurrentId();//得到当前节点id
+			 if(id===""){
+				 fastDev.tips("请先选择一个节点");
+			 }else{
+			 	fastDev.tips(""+tree.isChecked(id));//是否选中
+			 }
+		 }
+		 //得到单选框叶节点的选中数据集
+		  var btngetValues_radioedLeafNodes=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(""+tree.getValues("radioedLeafNodes"));
+		}
+		//得到单选框全选状态的选中数据集
+        var btngetValues_radioedNodes=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(""+tree.getValues("radioedNodes")); 
+		}
+		//得到单选框全选和半选状态的选中数据集
+        var btngetValues_radioedPNodes=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(""+tree.getValues("radioedPNodes")); 
+		 }	
+		 //	得到单选框全选状态的选中节点的文本和id集合
+		  var btngetValues_radioedNodesIdVal=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 var Nodes=tree.getValues("radioedNodesIdVal"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//val值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到单选框全选和半选状态的节点id和文本的集合
+		  var btngetValues_radioedPNodesIdVal=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  var Nodes=tree.getValues("radioedPNodesIdVal"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//val值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到单选框叶子节点的选中状态的节点id和文本的集合
+		  var btngetValues_radioedLeafNodesIdVal=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  var Nodes=tree.getValues("radioedLeafNodesIdVal"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//val值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到单选框全选状态的选中节点数组
+		  var btngetValues_radioedNodesArray=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 var Nodes=tree.getValues("radioedNodesArray"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//其他值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到单选框全选和半选状态的节点数字
+		  var btngetValues_radioedPNodesArray=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  var Nodes=tree.getValues("radioedPNodesArray"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//其他值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到单选框叶节点的选中数据数组
+		  var btngetValues_radioedLeafNodesArray=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  var Nodes=tree.getValues("radioedLeafNodesArray"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//其他值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+        </script>
+	</head>
+	<body><div style="margin:10px;"><div class="ui-layout-text">单选框树方法集</div>
+		<div >
+			<div itype="Tree"  initSource="../../data/tree_data1.txt" treeType="radiotree" showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true"></div>
+	</div>
+    <div>
+			<div itype="Button"  text="去掉表单节点的选中状态" onclick="btnunCheckedById()" ></div>
+            <div itype="Button"  text="勾选多节点选人控件，业务模板" onclick="btnsetValueSome()" ></div>
+            <div itype="Button"  text="清空复选框" onclick="btnclearRadio()" ></div>           
+            <div itype="Button"  text="当前节点是否选中" onclick="btnisChecked()" ></div>
+            
+            <div itype="Button"  text="选中的节点id(字符串)" onclick="btngetChkedIds_allradioValue()" ></div>
+            <div itype="Button"  text="选中/半选的节点id(字符串)" onclick="btngetChkedIds_partradioValue()" ></div>
+            <div itype="Button"  text="选中的叶节点id(字符串)" onclick="btngetChkedIds_onlyLeafValue()" ></div>
+            <div itype="Button"  text="获取选中的叶节点id" onclick="btngetValues_radioedLeafNodes()" ></div>          
+            <div itype="Button"  text="获取选中的所有节点id" onclick="btngetValues_radioedNodes()" ></div>
+            <div itype="Button"  text="获取选中和半选中的所有节点id" onclick="btngetValues_radioedPNodes()" ></div>
+            
+            <div itype="Button"  text="当前选中的所有节点Id,Val" onclick="btngetValues_radioedNodesIdVal()" ></div>
+            <div itype="Button"  text="当前选中和半选中的所有节点Id,Val" onclick="btngetValues_radioedPNodesIdVal()" ></div>
+            <div itype="Button"  text="当前选中的所有叶节点Id,Val" onclick="btngetValues_radioedLeafNodesIdVal()" ></div>
+            <div itype="Button"  text="当前选中的所有节点node" onclick="btngetValues_radioedNodesArray()" ></div>
+            <div itype="Button"  text="当前选中和半选中的所有节点node" onclick="btngetValues_radioedPNodesArray()" ></div>
+            <div itype="Button"  text="当前选中的所有叶节点node" onclick="btngetValues_radioedLeafNodesArray()" ></div>
+    </div></div>
+	</body>
+</html>

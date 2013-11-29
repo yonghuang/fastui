@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>panel</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-09 -->
+		<link href="../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/Navigation_New.js"></script>
+
+		<script>
+			$(function() {
+				$.create("Navigation", {
+					container : "example",
+					items : [{pid:0,id:1,text:"item1"},{pid:0,id:2,text:"item2"},{pid:1,id:3,text:"item11"},{pid:1,id:4,text:"item12"},{pid:2,id:5,text:"item21"}]
+				});
+				
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div id="example" style="height:650px;">
+		</div>	
+	</body>
+</html>
+

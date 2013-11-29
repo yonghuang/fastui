@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>textbox</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-21 -->
+		<link href="../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+		<script src="../../src/fastDev-import.js"></script>
+		<script src="../common.js"></script>
+		<script>
+			$(function() {
+				fastDev.Core.ControlBus.compile();
+			});
+		</script>
+	</head>
+	<body>
+		<div id="example">
+			password:<input itype="TextBox" container="example" emptyText="test" type="password" validateMode="blur" rule="required" height="200px"></div>
+		</div>
+		<div id="example1">
+			text:<input itype="TextBox" container="example1" emptyText="test" validateMode="blur" rule="required"></div>
+		</div>
+		<div id="example2">
+			textarea:<textarea itype="TextBox" container="example2" emptyText="test" type="textarea" validateMode="blur" rule="required" height="200px"></textarea>
+		</div>
+		<select itype="Select" validateMode="blur" rule="required">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+		</select>
+		
+	</body>
+</html>
+

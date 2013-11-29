@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-RadioGroup'>/**
+</span> * @class fastDev.Ui.RadioGroup
+ * @extends fastDev.Ui.Component
+ * 单选框组控件，继承自CheckBoxGroup，表单类组件。&lt;p&gt;
+ * 作者：姜玲
+ *
+ *		 &lt;div itype=&quot;RadioGroup&quot; name=&quot;check2&quot; id=&quot;check2&quot;&gt;
+ *			&lt;div value=&quot;1&quot; text=&quot;足球&quot; &gt;&lt;/div&gt;			
+ *			&lt;div value=&quot;2&quot; text=&quot;排球&quot; checked=true&gt;&lt;/div&gt;
+ *			&lt;div value=&quot;3&quot; text=&quot;羽毛球&quot;&gt;&lt;/div&gt;
+ *			&lt;div value=&quot;4&quot; text=&quot;乒乓球&quot;&gt;&lt;/div&gt;
+ *		&lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.RadioGroup&quot;, {
+	extend : &quot;fastDev.Ui.CheckBoxGroup&quot;,
+	alias : &quot;RadioGroup&quot;,
+	_options : {
+<span id='fastDev-Ui-RadioGroup-property-allowMultiSelect'>		/**
+</span>		 * 是否允许多选
+		 * @type {Boolean}
+		 */
+		allowMultiSelect:false	
+	}
+});
+</pre>
+</body>
+</html>

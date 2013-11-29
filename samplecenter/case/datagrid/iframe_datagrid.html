@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>DataGrid一共有4个内置列，分别为复选框列、单选框列、以及序号列另外一个内置列是搭配行内信息使用的，详情参见行内信息示例</li>
+				<li>复选框列和单选框列是互斥的，同时存在的话只会显示复选框列</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+			function saveAndCloseWindow() {
+				
+				
+				var grid1 = fastDev.getInstance("grid1");
+				var dataList = fastDev.getInstance("grid1").getValue(), rs = [],rs1=[];
+				fastDev.each(dataList, function(i, data) {
+					var values = [];
+					var texts=[];
+					fastDev.each(data, function(key, value) {
+						if(key=="empno")
+						value && values.push(value);
+						if(key=="name")
+						value && texts.push(value);
+					});
+					
+					rs.push(values.join(","))
+					rs1.push(texts.join(","))
+				});
+				
+				
+				var parent = fastDev.Ui.Window.getData("parent");
+				parent.fastDev.getInstance("txtName").setValue(rs1);
+				parent.fastDev("#selecteduserids").prop("value",rs);
+				parent.fastDev.getInstance("window_1").close();
+			}
+			
+			function onload()
+			{
+				
+				try
+				{
+					
+				var users = fastDev.Ui.Window.getData("selecteduser");
+				//(users);
+				
+				if(users.length>0)
+				{
+				
+				var grid1 = fastDev.getInstance("grid1");
+				grid1.setSelected(users);
+				}
+				
+			}
+			catch(ex){}
+			}
+ 			
+ 			function closeWindow()
+ 			{
+ 				parent.fastDev.getInstance("window_1").close();
+ 			}
+			
+			
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">显示序号和复选框</div>
+			<div itype="DataGrid" id="grid1"
+			initSource="../../data/gooddata.jsp" showSeqColumn=true 
+			showCheckColumn=true saveInstance="true"
+			 onAfterInitRender="onload()" keyword="empno" pageSize="5"  pagePosition="top">
+				<div width="10%" name="empno" text="商品编码"></div>
+				<div width="20%" name="name" text="商品名称"></div>
+				
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 10px;text-align:center;">
+		<div itype="Button" text="选 中" iconCls="icon-add" iconPosition="top" onclick="saveAndCloseWindow()"></div>
+		<div itype="Button" text="关 闭" iconCls="icon-close" iconPosition="top" onclick="closeWindow()"></div>
+		</div>
+</html>

@@ -1,0 +1,105 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>示例中心</title>
+		<link href="../themes/default/css/ui-main.css" type="text/css" rel="stylesheet" />
+		<link href="resource/ui-welcome.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="resource/codemirror.css"/>
+		<script src="../src/fastDev-import.js"></script>
+		<script src="resource/codemirror.js"></script>
+		<script src="resource/xml.js"></script>
+		<script src="resource/javascript.js"></script>
+		<script src="resource/css.js"></script>
+		<script src="resource/htmlmixed.js"></script>
+		<script src="resource/clike.js"></script>
+		<script src="resource/index.js"></script>
+	</head>
+
+	<body class="ui-layout-body ui-layout-body-bg">
+		<div class="ui-layout-head">
+			<div class="ui-layout-logo"></div>
+			<h1>FastUI示例中心</h1>
+			<div class="ui-layout-menu">
+				<!--<ul class="ui-layout-theme">
+				<span class="ui-theme-text">请选择皮肤：</span>
+				<li class="ui-theme-wathet">
+				<div class="ui-theme-selected"></div>
+				</li>
+				<li class="ui-theme-blue"><div class=""></div></li>
+				<li class="ui-theme-red"><div class=""></div></li>
+				</ul>-->
+				<div class="ui-layout-nav">
+					<span class="ui-layout-nav-prev"></span>
+					<div class="ui-layout-nav-contain">
+						<ul class="ui-layout-nav-tab">
+							<li class="ui-layout-nav-frist">
+								<a href="http://fastui.talkweb.com.cn:8888">首页</a>
+							</li>
+							<li>
+								<a class="ui-layout-nav-active">在线示例</a>
+							</li>
+							<li>
+								<a href="../doc/index.html">Library API</a>
+							</li>
+							<li>
+								<a href="http://fastui.talkweb.com.cn:8888/down.html">下载</a>
+							</li>
+							<li>
+								<a href="http://fastui.talkweb.com.cn:8888/bbsforward.jsp">论坛</a>
+							</li>
+							<li class="ui-layout-nav-last">
+								<a href="http://fastui.talkweb.com.cn:8888/about.html">关于我们</a>
+							</li>
+						</ul>
+					</div>
+					<span class="ui-layout-nav-next"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="ui-layout">
+			<div class="ui-layout-left" style="width:18.5%; height:100%;">
+				<div itype="Accordion" currentNode="accordion2">
+					<div id="accordion1" text="知识库">
+						<div itype="Tree" container="accordion2" initSource="resource/menu1.json" customFields="exampleUrl,dataUrl,highlightline,hidehead" showIco="true"  id="tree1" onNodeClick="openExample()"></div>
+					</div>
+					<div id="accordion2" text="基础类控件">
+						<div itype="Tree" container="accordion2" textMaxLength="50" initSource="resource/menu.json" customFields="exampleUrl,dataUrl,apiUrl" showIco="true"  id="tree2" onNodeClick="openExample()"></div>
+					</div>
+					<div id="accordion3" text="业务控件">
+						<div itype="Tree" container="accordion3" initSource="resource/menu2.json" customFields="exampleUrl,dataUrl,apiUrl" showIco="true"  id="tree3" onNodeClick="openExample()"></div>
+					</div>
+					<div id="accordion4" text="大数据&性能">
+						<div itype="Tree" container="accordion4" initSource="resource/menu4.json" customFields="exampleUrl,dataUrl,apiUrl" showIco="true"  id="tree4" onNodeClick="openExample()"></div>
+					</div>
+				</div>
+
+			</div>
+			<div class="ui-layout-center" style="width:81.5%;  height:100%; top:0; left:19%; ">
+				<div id="indexPage">
+					<div class="welcome-center">
+						<img src="../themes/default/images/welcome.jpg" />
+						
+					</div>
+					<div style="margin:5px;">
+						<div id="uyan_frame"></div>
+					</div>
+				</div>
+				<div id="examplePage"  style="display: none;height:100%">
+					<div id="content" style="height:75%"></div>
+					<div id="description" style="height:23%" class="ui-layout-description">
+						<div class="ui-layout-show-down"></div>
+						<div id="des_content"></div>
+					</div>
+				</div>
+
+			</div>
+			<div class="ui-layout-right" style="display:none"></div>
+			<div class="ui-layout-handle-left" style="display: block; left: 18.5%; height: 450px; top: 0px;">
+				<div class="ui-layout-arrow-left"></div>
+			</div>
+		</div>
+	</body>
+</html>

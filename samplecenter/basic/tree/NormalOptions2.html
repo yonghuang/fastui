@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>常用属性</h4>
+        <ul>        
+        <li>树的默认顶级父节点id是"0" ，如果您的树默认顶级父节点不是"0" ，那么必须配置 topParentid为顶级id </li>
+        <li>rootValue是指给数据源里没有想要的顶级名称，给再加一个顶级节点名称。常见的是下拉树加一个顶级节点“-请选择-”</li>
+        <li>currentId 或value指的是默认选中节点。如果这个节点没展开会自动展开。</li>        
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+	</head>
+	<body><div style="margin:10px;">	
+           <table>
+           <tr>
+           <td> <div >
+        	<div class="ui-layout-text">顶级节点id设置</div>      
+            <div itype="Tree"  initSource="../../data/tree_data.txt" showIco="true" topParentid="5" openFloor=2  id="tree5" ></div>
+         </div>
+           </td>          
+           </tr>
+           </table>
+       
+      
+           </div>
+	</body>
+</html>

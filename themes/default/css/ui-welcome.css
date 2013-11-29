@@ -1,0 +1,51 @@
+.welcome-center {
+	margin:0 auto;
+}
+.welcome-center h2 {
+	color:#075587;
+	text-align:center;
+	font:bold 1.5em/40px Verdana,Arial,sans-serif, "宋体";
+}
+.welcome-box {
+	width:90%;
+	margin:20px auto;
+	border:1px solid #99BCE8;
+	background-color:#DDE9F5;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	overflow:hidden;
+}
+.welcome-box-title {
+	border-bottom:1px solid #99BCE8;
+	background:url(../images/welcome-box-title-bg.gif) left top \9; 
+	background: linear-gradient(top, #F3F6FF,#E5EEFF 50%,#DEE9FD 51%,#E1E9FC);
+	background: -webkit-linear-gradient(top, #F3F6FF,#E5EEFF 50%,#DEE9FD 51%,#E1E9FC);
+	background: -moz-linear-gradient(top, #F3F6FF,#E5EEFF 50%,#DEE9FD 51%,#E1E9FC);
+	background: -o-linear-gradient(top, #F3F6FF,#E5EEFF 50%,#DEE9FD 51%,#E1E9FC);
+	background: -ms-linear-gradient(top, #F3F6FF,#E5EEFF 50%,#DEE9FD 51%,#E1E9FC);
+}
+.welcome-box-title h3 {
+	font:bold 12px/25px Verdana,Arial,sans-serif, "宋体" !important;
+	text-indent:1em !important;
+	color:#075587 !important;
+	margin:0 !important;
+	padding:0 !important;
+}
+.welcome-box-text {
+	padding:10px 5px;
+	border-top:1px solid #fff;
+}
+.welcome-box p {
+	font:normal 12px/24px Verdana,Arial,sans-serif, "宋体";
+	text-indent:2em;
+	margin:0;
+	padding:0;
+}
+.welcome-box-code {
+	border:1px dashed #D8D7D7;
+	background:#F7F7F7;
+	margin:.5em 2em;
+	font:normal 12px/24px Verdana,Arial,sans-serif, "宋体";
+	padding:5px;
+}

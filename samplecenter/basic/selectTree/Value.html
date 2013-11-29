@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>初始选中值</h4>
+        <ul>       
+         <li>可以使用value和currentId两个属性赋初始选中值，效果一样。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+        <script>
+        var btnclick=function(){
+			 var tree=fastDev.getInstance("tree1");
+			 tree.setValue("204");
+		}
+        </script>
+	</head>
+	<body><div style="margin:10px;"><div class="ui-layout-text">使用value赋初始选中值</div>
+		<div itype="SelectTree" id="tree1" saveInstance="true" value="201" initSource="../../data/selectTree_data.txt" rootValue="-请选择-" topParentid="0" openFloor=3>
+		</div></div>
+        <div style="margin:10px;"><div class="ui-layout-text">使用currentId赋初始选中值</div>
+        <div itype="SelectTree"  initSource="../../data/selectTree_data.txt" rootValue="-请选择-" topParentid="0" openFloor=3 id="tree2" saveInstance="true" currentId="202">
+		</div>
+    	 </div>
+         <div style="margin:10px;">
+        <div itype="Button"  text="设置下拉树的选中值" id="btnevent" saveInstance="true" onclick="btnclick()" ></div></div><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+	</body>
+</html>

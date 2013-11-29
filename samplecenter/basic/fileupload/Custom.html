@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>
+			<ul>
+				<li>
+					可通过相关属性来隐藏文本输入框、上传按钮、Loading等，仅使用上传按钮（该按钮样式同样可以自定义）来定义更加符合用户场景的上传界面。
+				</li>
+				<li>
+					受某些浏览器的限制，HTML文件域提供的文件选取对话框仅能一次性选取单个文件（如IE中），而Flash控件则能一次性选取多个文件。
+				</li>
+				<li>
+					HTML文件上传在某些浏览器（如IE）中也存在不能实时获取上传进度的弊端（需通过后台协同完成），而Flash控件则能满足此需求（无需后台参与）。
+				</li>
+				<li>
+					自定义文件展现列表时，可开启控件的多文件队列功能，此时指定multiple属性为true即可。
+				</li>
+				<li>
+					若需获取当前的文件上传状态，可通过控件的getStats()方法获取到当前的上传统计详情。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-imports.js"></script>
+		<script type="text/javascript">
+			var isUploading, uploader, fileList;
+			// document onload后，获取控件实例等
+			fastDev(function() {
+				uploader = fastDev.getInstance("uploader");
+				// fileList为自定义的一个展现文件信息的列表
+				fileList = fastDev("#fileList");
+			});
+
+			function onFileChoose(file) {
+				var item, li = fastDev("<li style='font-size:17px'></li>").appendTo(fileList).prop("id", "li" + file.id);
+				li.append( item = fastDev("<div></div>").prop("id", "item" + file.id).css({
+					height : 25
+				}));
+				item.elems[0].innerHTML = "<span style='margin-right:10px'>" + file.name + "</span><span style='margin-right:10px' id='status" + file.id + "'>等待上传</span><span id='loading" + file.id + "' style='margin-right:10px'><a id='upload" + file.id + "' href='###'>上传</a></span><span style='margin-right:10px'><a id='cancel" + file.id + "' href='###'>删除</a></span>";
+				fastDev("#upload"+file.id).elems[0].onclick = function() {
+					if (isUploading) {
+						fastDev.tips("已经有文件正在上传，请耐心等待其上传完成后再尝试此操作！");
+						return;
+					}
+					uploader.startUpload(file.id);
+					fastDev("#status" + file.id).setText("正在上传");
+					fastDev("#loading" + file.id).empty().addClass("ui-loading-indicator");
+					fastDev("#cancel"+file.id).setText("取消").elems[0].onclick = function() {
+						// 取消当前文件上传
+						uploader.cancelUpload();
+					};
+				};
+				fastDev("#cancel"+file.id).elems[0].onclick = function() {
+					// 从文件队列中移除指定ID的文件
+					uploader.removeFile(file.id);
+					li.remove();
+				};
+			}
+
+			function onChooseError(file, code, msg) {
+				if (code === 2) {
+					fastDev.tips("仅能上传小于100M的文件");
+				}
+			}
+
+			function onUploadStart(file) {
+				isUploading = true;
+				fastDev("#status" + file.id).setText("正在上传");
+				fastDev("#loading" + file.id).empty().addClass("ui-loading-indicator");
+				fastDev("#cancel"+file.id).setText("取消").elems[0].onclick = function() {
+					// 取消当前文件上传
+					uploader.cancelUpload();
+				};
+			}
+
+			function onUploadSuccess(file, response) {
+				isUploading = false;
+				fastDev.tips("文件 " + file.name + " 上传成功");
+				fastDev("#item" + file.id).css("color", "green");
+				fastDev("#status" + file.id).setText("上传成功");
+				fastDev("#loading" + file.id).remove();
+				fastDev("#cancel" + file.id).prop("href", response[0].url).prop("target", "_blank").setText("下载");
+			}
+
+			function onUploadFail(file, response) {
+				isUploading = false;
+				fastDev.tips("文件 " + file.name + " 上传失败");
+				fastDev("#item" + file.id).css("color", "red");
+				fastDev("#status" + file.id).setText("上传失败");
+				fastDev("#loading" + file.id).remove();
+				fastDev("#cancel" + file.id).remove();
+			}
+
+			function onUploadCancel(file) {
+				isUploading = false;
+				fastDev.tips("文件 " + file.name + " 已经取消上传");
+				fastDev("#item" + file.id).css("color", "gray");
+				fastDev("#status" + file.id).setText("已经取消");
+				fastDev("#loading" + file.id).remove();
+				fastDev("#cancel" + file.id).remove();
+			}
+
+			// 综合示例"移除所有"按钮点击回调事件
+			function removeAllFile() {
+				if (isUploading) {
+					fastDev.tips("当前正在上传文件中，请等待其上传完成后再尝试此操作！");
+					return;
+				}
+				fileList.empty();
+				// 清空文件队列
+				uploader.cleanFileQueue();
+			}
+
+			// 获取统计信息
+			function getStats() {
+				var stats = uploader.getStats(), html = "";
+				fastDev.each(stats, function(name, value) {
+					html += (name + " : " + value + "<br/>");
+				});
+				fastDev.create("Window", {
+					content : html,
+					title : "文件上传统计"
+				});
+			}
+
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				仅显示文件选取按钮
+			</div>
+			<!-- 一般不显示文本输入框时,则上传按钮可作为一个上传接口来使用,此时也可以不需要显示上传按钮 -->
+			<input itype="FileUpload" showTextInput="false" showUploadBtn="false" autoUpload="true" action="../../data/fileupload.jsp"/>
+			<br />
+			<div class="ui-layout-text">
+				自定义按钮样式
+			</div>
+			<!-- 因为浏览器不解析input标签的子标签，所以，请用div标签声明下面的这个文件上传控件  -->
+			<div itype="FileUpload" typeLimit="jpg,png,gif" action="../../data/fileupload.jsp">
+				<!--下面chooseBtn和uploadBtn为FileUpload的2个配置属性名  -->
+				<div name="chooseBtn" text="选择图片" iconCls="icon-add"></div>
+				<div name="uploadBtn" text="上传图片" iconCls="icon-upload"></div>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				功能方法和事件回调综合示例
+			</div>
+			<table>
+				<tbody>
+					<tr>
+						<td></td>
+						<td width="800px"></td>
+					</tr>
+					<tr>
+						<td><!-- multiple属性可开启文件队列，并允许一次性上传多个文件 （即用户可选取多个文件后一并上传，但文件上传过程，仍是一个一个上传的） -->
+						<div itype="FileUpload" id="uploader" saveInstance="true" multiple="true" showTextInput="false" sizeLimit="102400" showLoading="false" action="../../data/fileupload.jsp" onFileChoose="onFileChoose()" onUploadStart="onUploadStart()" onUploadSuccess="onUploadSuccess()" onUploadFail="onUploadFail()" onUploadCancel="onUploadCancel()">
+							<div name="chooseBtn" text="选择文件" iconCls="icon-add"></div>
+							<div name="uploadBtn" text="上传所有" iconCls="icon-upload"></div>
+						</div></td>
+						<td>
+						<input itype="Button" text="移除所有" iconCls="icon-delete" onclick="removeAllFile()"/>
+						<input itype="Button" text="统计信息" iconCls="icon-edit" onclick="getStats()"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"><ul id="fileList"></ul></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>

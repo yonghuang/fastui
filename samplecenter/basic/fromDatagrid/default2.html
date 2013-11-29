@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>信息查询</title>
+<script src="../../../src/fastDev-import.js"></script>   
+<script src="default2.js"></script>
+<script src="add.html.js"></script>
+<script src="add.js"></script>
+<script src="edit.html.js"></script>
+<script src="edit.js"></script>
+</head>
+<body >
+	<div class="" id="mainDiv" style="height:98%;padding-left:5px;padding-top:5px;">
+		<div class="" style="width: 98%;height:98%;padding-left:5px;padding-right:5px;">			
+			<form id="searchForm" itype="Form" requestType="post" saveInstance="true"  initSource="data/from_init.jsp"  action="data/datagrid_init.json" onSubmitSuccess="submitSuccess()">
+				<table class="ui-form-table" style="width:100%;">
+					<tr valign="middle">
+						<td class="ui-form-table-dt">部门：</td>
+						<td class="ui-form-table-dd" style="margin-right: 5px;"><div itype="Select" id="orgid" width="200px" ><div>请选择</div></div></td>
+						<td class="ui-form-table-dt">姓名：</td>
+						<td class="ui-form-table-dd">
+						  <input itype="TextBox" id="name" iwidth="200px"/>
+						</td>
+						<td class="ui-form-table-dt">类型：</td>
+						<td  class="ui-form-table-dd" style="margin-right: 5px;">
+						<div itype="Select" id="type" width="200px">
+						<div>请选择</div>
+						</div></td>
+						
+					</tr>		
+                    <tr valign="middle">
+                    <td  class="ui-form-table-dt">起始日期：</td>
+						<td  class="ui-form-table-dd" style="margin-right: 5px;">
+						  <input itype="DatePicker" id="startDate" iwidth="200px" timeBefore="endDate" />
+						</td>
+						<td  class="ui-form-table-dt" style="margin-right: 5px;">截止日期：</td>
+						<td  class="ui-form-table-dd" style="margin-right: 5px;"><input itype="DatePicker" id="endDate" iwidth="200px" timeAfter="startDate"/></td>
+						<td colspan="2"  class="ui-form-table-dd"><input itype="Button"  iconCls="icon-search"  text="查询" width="55px" onclick="submit()"/></td>						
+                    </tr>			
+				</table>
+    </form>
+			<div class="datagrid" itype="DataGrid" keyword="id" allowAutoFillRow="false" id="datagrid" saveInstance="true" showCheckColumn="true" initSource="data/datagrid_init.jsp"  pageSize="10" onRowClick="onRowClick()">
+				<div name="top-toolbar">
+               		<div  text="增加"  iconCls="icon-add"  plain=true onClick="add()"></div>	
+                    <div itype="separator"></div>				
+					<div  text="批量删除"  iconCls="icon-delete" plain=true onClick="del()"></div>
+				</div>
+				<div width="5" name="id" hidden="true"></div>
+				<div width="15%" name="name" text="姓名"></div>
+				<div width="15%" name="orgname" text="部门"></div>
+				<div width="15%" name="type" text="类型"></div>
+				<div width="15%" name="date" text="时间"></div>
+				<div width="25%" name="remark" text="备注"></div>
+                <div width="15%" text="操作" renderer="operRenderer()"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

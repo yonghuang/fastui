@@ -1,0 +1,123 @@
+//init.txt
+[
+    {
+        "id": "radio1",
+        "data": [
+            {
+                "value": "man1",
+                "text": "男1"
+            },
+            {
+                "value": "woman1",
+                "text": "女1"
+            }
+        ]
+    },
+    {
+        "id": "check1",
+        "data": [
+            {
+                "value": "test1",
+                "text": "测试1"
+            },
+            {
+                "value": "test2",
+                "text": "测试2"
+            },
+            {
+                "value": "test3",
+                "text": "测试3"
+            }
+        ]
+    },
+    {
+        "id": "autotxt1",
+        "data": [
+            "Aaron1",
+            "Abel1",
+            "Baird1",
+            "Barnett1",
+            "Carr1",
+            "Christian1",
+            "David1",
+            "Derrick1",
+            "Eden1",
+            "Emmanuel1",
+            "Franklin1",
+            "Felix1",
+            "Gavin1",
+            "Greg1",
+            "Harlan1"
+        ]
+    },
+    {
+        "id": "autotxt11",
+        "data": [
+            "Aaron1",
+            "Abel1",
+            "Baird1",
+            "Barnett1",
+            "Carr1",
+            "Christian1",
+            "David1",
+            "Derrick1",
+            "Eden1",
+            "Emmanuel1",
+            "Franklin1",
+            "Felix1",
+            "Gavin1",
+            "Greg1",
+            "Harlan1"
+        ]
+    },
+    {
+        "id": "select1",
+        "data": [
+            {
+                "value": "test1",
+                "text": "测试111"
+            },
+            {
+                "value": "test2",
+                "text": "测试211"
+            }
+        ]
+    }
+]
+
+//errorConfig.txt
+{
+    "defaultInfo": {
+        "Required": "不能为空的哦",
+        "IsEmail": "邮件地址不合法",
+        "IsCode": "邮编不合法",
+        "IsIdCard": "不是有效的身份证",
+        "IsMobile": "必须是手机号码",
+        "IsIp": "非法IP地址",
+        "IsNumber": "不是数字",
+        "isEqual": "与上一个控件的值不匹配",
+        "SelfRegular": "格式不正确",
+        "IsTel": "必须是电话号码格式",
+        "MinLength:5": "长度只能在5以上的",
+        "MinLength": "长度只能在#{MinLength}以上",
+        "MaxLength": "长度只能在#{MaxLength}以内",
+        "LenEqual": "长度只能是#{LenEqual}",
+        "MaxNumber":"数值必须小于#{MaxNumber}",
+        "MinNumber":"数值必须大于#{MinNumber}"
+    },
+    "txt1": {
+        "required": "不填东西怎么行呀"
+    },    
+    "pwd1": {
+        "required": "密码不能为空"
+    }
+}
+
+//example_submit.jsp
+<%@ page language="java" import="java.io.PrintWriter"
+	pageEncoding="utf-8"%>
+<%
+	String data = request.getParameter("data");
+	PrintWriter pw = response.getWriter();
+	pw.print("{msg:"+data+"}");
+%>

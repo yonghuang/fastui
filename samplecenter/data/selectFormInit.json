@@ -1,0 +1,20 @@
+[
+	{
+		"id": "inFormSelect",
+		"data": [
+			{
+				"text": "远程数据1",
+				"value": "data1"
+			}, {
+				"text": "远程数据2",
+				"value": "data2"
+			}, {
+				"text": "远程数据3",
+				"value": "data3"
+			}, {
+				"text": "远程数据4",
+				"value": "data4"
+			}
+		]
+	}
+]

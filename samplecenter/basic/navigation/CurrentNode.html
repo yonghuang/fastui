@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>初始定位</h4><ul>  <li>初始定位指的是默认展开那个项</li>
+        <li>可以按索引，默认打开第几个项，索引从0开始，代表第1个链接。默认值为0</li>
+        <li>也可以按项id，即指定手风琴的currentNode属性为某个id</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+     	<script src="../../../src/fastDev-import.js"></script>	
+		
+	  <script>
+			var data = [{
+				id : "1",
+				"pid" : "-1",
+				"text" : "1级菜单"
+			}, {
+				id : "2",
+				"pid" : "-1",
+				"text" : "2级菜单"
+			}, {
+				id : "3",
+				"pid" : "-1",
+				"text" : "3级菜单"
+			}, {
+				id : "11",
+				"pid" : "1",
+				"text" : "11级菜单"
+			}, {
+				id : "12",
+				"pid" : "1",
+				"text" : "12级菜单"
+			}, {
+				id : "21",
+				"pid" : "2",
+				"text" : "21级菜单"
+			}, {
+				id : "22",
+				"pid" : "2",
+				"text" : "22级菜单"
+			}, {
+				id : "31",
+				"pid" : "3",
+				"text" : "31级菜单"
+			}, {
+				id : "111",
+				"pid" : "11",
+				"text" : "111级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "112",
+				"pid" : "11",
+				"text" : "112级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "121",
+				"pid" : "12",
+				"text" : "121级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "122",
+				"pid" : "12",
+				"text" : "122级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "211",
+				"pid" : "21",
+				"text" : "211级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "212",
+				"pid" : "21",
+				"text" : "212级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "221",
+				"pid" : "22",
+				"text" : "221级菜单"
+			}, {
+				id : "2211",
+				"pid" : "221",
+				"text" : "2211级菜单"
+			}, {
+				id : "22111",
+				"pid" : "2211",
+				"text" : "22111级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "22112",
+				"pid" : "2211",
+				"text" : "22112级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "221112",
+				"pid" : "22111",
+				"text" : "221112级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "311",
+				"pid" : "31",
+				"text" : "311级菜单"
+			}, {
+				id : "3111",
+				"pid" : "311",
+				"text" : "3111级菜单",
+				"url" : "http://www.baidu.com"
+			}, {
+				id : "3112",
+				"pid" : "311",
+				"text" : "3112级菜单",
+				"url" : "http://www.baidu.com"
+			}];
+		</script>
+	</head>
+	<body>
+		<div style="width:280px; float:left; margin:10px;" >
+        <div class="ui-layout-text">按项currentNode，值为某个id。</div>
+			<div itype="Navigation" width="260px"  currentNode="121"  items="#{data}"  target="main"></div>
+		</div>
+        <div style="width:280px; float:left; padding-left:10px; margin:10px;">
+        	<div class="ui-layout-text">按索引打开第几个链接项，从0开始。</div>
+        
+			<div itype="Navigation" width="260px"   activeIndex=4 initSource="../../data/navigationdata1.txt"  target="main"></div>
+		</div>
+        <iframe name="main"  height="300" width="300" frameborder="0"></iframe>        
+	</body>
+</html>

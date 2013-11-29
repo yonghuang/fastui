@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>
+					控件方法使用示例。
+				</li>
+			</ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			var ac, rac;
+
+			fastDev(function() {
+				ac = fastDev.getInstance("ac");
+				rac = fastDev.getInstance("rac");
+			});
+
+			// 设置控件值
+			function setValue() {
+				// 值可以为字符串，数组，或者普通JSON对象
+				ac.setValue([{
+					text : "标签A",
+					value : "标签A"
+				}, {
+					text : "标签B",
+					value : "标签B"
+				}, {
+					text : "标签C",
+					value : "标签C"
+				}]);
+			}
+
+			// 追加新标签
+			function appendValue() {
+				ac.appendValue([{
+					text : "标签D",
+					value : "标签D"
+				}, {
+					text : "标签E",
+					value : "标签E"
+				}]);
+			}
+
+			// 清除控件值
+			function clean() {
+				ac.clean();
+			}
+
+			// 获取文本值
+			function getValue() {
+				fastDev.tips(ac.getValue());
+			}
+
+			// 获取值对象
+			function getItems() {
+				// 值对象格式与数据源使用的数据格式对应
+				var items = ac.getItems();
+				fastDev.tips(items.toString());
+			}
+
+			// 设置静态数据（重设）
+			function setItems() {
+				// 该方法并不是追加静态数据，而是替换原静态数据为新的静态数据
+				// 值可以为字符串，数组，或者对象
+				ac.setItems("标签A,标签B,标签C,标签D");
+				fastDev.tips("静态数据已更新");
+			}
+
+			// 追加静态数据（追加）
+			function appendItems() {
+				// 值可以为字符串，数组，或者对象
+				ac.appendItems("标签E,标签F,标签G,标签H");
+				fastDev.tips("静态数据追加成功");
+			}
+
+			// 设置默认提示项
+			function setHintItems() {
+				// 该方法即设置hintItems属性的值，该属性的值类型说明请参考API文档
+				ac.setHintItems(true);
+				fastDev.tips("已开启默认提示项");
+			}
+
+			// 取消默认提示项
+			function disableHintItems() {
+				// 要取消默认提示项的展示，传递参数false（或者任何可转换为逻辑非的值）即可
+				ac.setHintItems(false);
+				fastDev.tips("已取消默认提示项");
+			}
+
+			// 高亮指定元素中的关键字
+			function highlight() {
+				// 第一个参数传HTML标签，标签选择器，DomObject，或者控件实例均可
+				// 第二个参数为关键字
+				// 第三个参数为自定义样式名，不指定则使用AutoComplete中预设的高亮样式名
+				// 此接口可在自定义搜索结果展现且需要高亮关键字的情况下使用，此处演示高亮当前文档中的"设置"、"标签"
+				ac.highlight(document.body, "设置");
+				ac.highlight(document.body, "标签");
+				fastDev.tips("已高亮\"设置\"、\"标签\"");
+			}
+
+			// 设置只读
+			function setRead() {
+				ac.setReadOnly(true);
+				fastDev.tips("已设置为只读");
+			}
+
+			// 设置可写
+			function setWrite() {
+				ac.setReadOnly(false);
+				fastDev.tips("已设置为可写");
+			}
+
+			// 启用控件
+			function enable() {
+				ac.enable();
+			}
+
+			// 禁用控件
+			function disable() {
+				ac.disable();
+			}
+
+			// 添加查询参数
+			function setParam() {
+				// 另外，extraParams用户配置属性可以用来在初始化时附加额外的查询参数
+				// 之前添加的同名的请求参数会被覆盖
+				// queryName配置属性，可用来设置关键字参数查询名，默认为"q"
+				// 也可通过onBeforeRetrieve事件回调，在检索前调用setParam方法来动态的添加查询参数
+				rac.setParam({
+					name : "stone",
+					gender : "男"
+				});
+				fastDev.tips("查询参数已添加（可通过网络请求查看请求参数发送情况）");
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text" style="color: green;">
+				静态数据
+			</div>
+			<div itype="AutoComplete" id="ac" saveInstance="true" multiple="true" noResultsText="没有相关项" hintText="输入字符查询" width="400px">
+				<div text="Aaron" value="1"></div>
+				<div text="Baird" value="2"></div>
+				<div text="Christian" value="3"></div>
+				<div text="David" value="4"></div>
+				<div text="Emmanuel" value="5"></div>
+				<div text="Franklin" value="6"></div>
+				<div text="Gavin" value="7"></div>
+				<div text="Harlan" value="8"></div>
+				<div text="Jack" value="9"></div>
+				<div text="King" value="10"></div>
+				<div text="Lance" value="11"></div>
+				<div text="Marcus" value="12"></div>
+				<div text="Norton" value="13"></div>
+				<div text="Oscar" value="14"></div>
+				<div text="Quinn" value="15"></div>
+				<div text="Robin" value="16"></div>
+				<div text="Virgil" value="17"></div>
+				<div text="Xavier" value="18"></div>
+			</div>
+			<br />
+			<div>
+				<!-- 设值方法，参数使用空字符串时，等效于调用clean()方法  -->
+				<input itype="Button" text="设置控件值" onclick="setValue()"/>
+				<input itype="Button" text="追加新标签" onclick="appendValue()"/>
+				<input itype="Button" text="清除控件值" onclick="clean()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取文本值" onclick="getValue()"/>
+				<input itype="Button" text="获取值对象" onclick="getItems()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="设置静态数据" onclick="setItems()"/>
+				<input itype="Button" text="追加静态数据" onclick="appendItems()"/>
+				<input itype="Button" text="开启静态数据提示" onclick="setHintItems()"/>
+				<input itype="Button" text="取消静态数据提示" onclick="disableHintItems()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="高亮指定元素中的关键字" onclick="highlight()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="设置只读" onclick="setRead()"/>
+				<input itype="Button" text="设置可写" onclick="setWrite()"/>
+				<input itype="Button" text="启用控件" onclick="enable()"/>
+				<input itype="Button" text="禁用控件" onclick="disable()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text" style="color: green;">
+				远程数据
+			</div>
+			<div>
+				<input itype="AutoComplete" id="rac" saveInstance="true" iwidth="200px" noResultsText="没有相关项" searchingText="正在搜索中" hintText="输入英文字母查询" initSource="../../data/autocomplete.jsp" />
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="添加查询参数" onclick="setParam()"/>
+			</div>
+		</div>
+	</body>
+</html>

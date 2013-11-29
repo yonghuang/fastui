@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>       
+         <li>复杂表单</li>
+         <li>示例里的布局是用的最简单的table布局，实例的样式仅供参考</li>
+         <li>您也可以采取div或其他方式布局，自行设计表单布局的样式。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+	  <script>			
+			var submit=function(){
+				var form=fastDev.getInstance("form1");
+				form.submit();
+			}
+			var submitSuccess=function(data){				
+				fastDev.tips("成功将数据"+fastDev.Util.JsonUtil.parseString(data.msg)+"提交到后台");	
+			}				
+			var clear=function(){
+				var form=fastDev.getInstance("form1");
+				form.cleanData();
+			}
+			var getname=function(){
+				var selecttree1=fastDev.getInstance("selecttree1");
+				var value=selecttree1.getValue();
+				if(!!value){
+					var tree=selecttree1.getGlobal().tree;
+					var item=tree.getNodeByid(value);
+					alert(item.name);
+				}
+			}
+			var getid =function(){
+				var select1=fastDev.getInstance("select1");
+				var item=select1.getItems();
+				if(!!item){
+					alert(item[0].id);
+				}
+			}
+		</script>
+	</head>
+	<body style="width:820px;"><div style="margin:10px; width:820px;"><div class="ui-layout-text">复杂表单</div>
+		 <form itype="Form" action="../../data/form_example_submit.jsp"  id="form1" initSource="../../data/form_example_11_init.jsp" dataSource="../../data/form_example_1_load.jsp" requestType="get" saveInstance="true" onSubmitSuccess="submitSuccess()">
+		<table width="800px" border="0" cellspacing="0" cellpadding="0"   class="ui-form-table">		 
+          <tr>
+          <td class="ui-form-table-dt">下拉框：</td>
+          <td class="ui-form-table-dd">
+			<select itype="Select"  id="select1"    width="200px"  value="test1"  onValueChange="handle1()">	<option  text="-请选择-"></option><option value="test5" text="测试5"></option></select>
+		  </td>
+          </tr>        
+          <tr>
+          <td class="ui-form-table-dt">下拉树：</td>
+          <td class="ui-form-table-dd">
+			<div itype="SelectTree" customFields="name" rootValue="-请选择-" topParentid="0" openFloor=2 id="selecttree1" sTreeClickAfterShow=false>
+			</div>
+		  </td>            
+         </table>
+         <div style="width:800px; text-align:center">
+			<div itype="Button" text="提交" onclick="submit()" ></div>
+			<div itype="Button" text="清空" onclick="clear()" ></div>
+			<div itype="Button" text="得到下拉树选中节点的个性化属性" onclick="getname()" ></div>
+			<div itype="Button" text="得到下拉框选中节点的个性化属性" onclick="getid()" ></div>
+		</div>
+	</form>   
+    </div>
+	</body>
+</html>

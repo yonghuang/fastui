@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					声明子控件（如：DataGrid、Tree）时，若同时声明了container属性，则该子控件会放入对应的容器内展示（若声明的容器不存在，则仍会放入默认的容器内展现）。
+				</li>
+				<li>
+					自定义控件展现容器后，同样可通过调用ChooseList控件的相关API来进行记录的选取等操作。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function select() {
+				fastDev.getInstance("list").select();
+			}
+
+			function deselect() {
+				fastDev.getInstance("list").deselect();
+			}
+
+			function getValue() {
+				fastDev.tips(fastDev.getInstance("list").getValue());
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<!-- 使用非默认列表控件时必须声明记录的主键字段名（primaryKey属性指定） -->
+			<div itype="ChooseList" id="list" primaryKey="empno">
+				<!-- 声明子控件时，container属性指定为对应的容器即可自定义该控件的展现容器 -->
+				<div name="leftWidget" isCopy="false">
+					<!-- 宽高属性按原控件声明方式声明至对应控件上即可 -->
+					<div itype="DataGrid" container="container1" width="380px" height="120px" initSource="../../data/chooselist_grid.jsp" showSeqColumn="true">
+						<div width="50%" name="empno" text="员工工号"></div>
+						<div width="50%" name="name" text="姓名"></div>
+						<div name="pageSizeList">
+							<div value="5" text="5条"></div>
+							<div value="10" text="10条"></div>
+						</div>
+					</div>
+				</div>
+				<div name="rightWidget">
+					<div itype="DataGrid" container="container2" width="380px" height="120px" showSeqColumn="true">
+						<div width="50%" name="empno" text="员工工号"></div>
+						<div width="50%" name="name" text="姓名"></div>
+					</div>
+				</div>
+			</div>
+			<!-- 待选数据展现表格使用的容器 -->
+			<div id="container1">
+				<div class="ui-layout-text">
+					待选数据
+				</div>
+				<input itype="Button" onclick="select()" text="选取" />
+			</div>
+			<br />
+			<!-- 已选数据展现表格使用的容器 -->
+			<div id="container2">
+				<div class="ui-layout-text">
+					已选数据
+				</div>
+				<input itype="Button" onclick="deselect()" text="移除" />
+			</div>
+			<br />
+			<div>
+				<input itype="Button" onclick="getValue()" text="取值" />
+			</div>
+		</div>
+	</body>
+</html>

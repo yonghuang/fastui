@@ -1,0 +1,1439 @@
+﻿[
+	{
+		"id": "animate",
+		"pid": "0",
+		"val": "Animate"
+	},
+	{
+		"id": "animate_basic",
+		"pid": "animate",
+		"val": "动画基础示例",
+		"exampleUrl": "basic/other/animate/Basic.html"
+	},
+    {
+        "id": "accordion",
+        "pid": "0",
+        "val": "Accordion"
+    },
+    {
+        "id": "autocomplete",
+        "pid": "0",
+        "val": "AutoComplete"
+    },
+    {
+        "id": "button",
+        "pid": "0",
+        "val": "Button"
+    },
+    {
+        "id": "breadcrumb",
+        "pid": "0",
+        "val": "BreadCrumb"
+    },
+    {
+        "id": "chooselist",
+        "pid": "0",
+        "val": "ChooseList"
+    },
+    {
+        "id": "checkboxgroup",
+        "pid": "0",
+        "val": "CheckBoxGroup"
+    },
+    {
+        "id": "dialog",
+        "pid": "0",
+        "val": "Dialog"
+    },
+    {
+        "id": "datagrid",
+        "pid": "0",
+        "val": "DataGrid"
+    },
+    {
+        "id": "datepicker",
+        "pid": "0",
+        "val": "DatePicker"
+    },
+    {
+        "id": "editor",
+        "pid": "0",
+        "val": "Editor"
+    },
+    {
+        "id": "form",
+        "pid": "0",
+        "val": "Form"
+    },
+    {
+        "id": "fileupload",
+        "pid": "0",
+        "val": "FileUpload"
+    },
+    {
+        "id": "messagebox",
+        "pid": "0",
+        "val": "MessageBox"
+    },
+    {
+        "id": "navigation",
+        "pid": "0",
+        "val": "Navigation"
+    },
+    {
+        "id": "panel",
+        "pid": "0",
+        "val": "Panel"
+    },
+    {
+        "id": "progressbar",
+        "pid": "0",
+        "val": "ProgressBar"
+    },
+    {
+        "id": "radiogroup",
+        "pid": "0",
+        "val": "RadioGroup"
+    },
+    {
+        "id": "select",
+        "pid": "0",
+        "val": "Select"
+    },
+    {
+        "id": "selecttree",
+        "pid": "0",
+        "val": "SelectTree"
+    },
+    {
+        "id": "swffileupload",
+        "pid": "0",
+        "val": "SWFFileUpload"
+    },
+    {
+        "id": "tabs",
+        "pid": "0",
+        "val": "Tabs"
+    },
+    {
+        "id": "tree",
+        "pid": "0",
+        "val": "Tree"
+    },
+    {
+        "id": "toolbar",
+        "pid": "0",
+        "val": "Toolbar"
+    },
+    {
+        "id": "window",
+        "pid": "0",
+        "val": "Window"
+    },
+    {
+        "id": "chart",
+        "pid": "0",
+        "val": "Chart"
+    },
+    {
+        "id": "datagrid_fn",
+        "pid": "datagrid",
+        "val": "功能类"
+    },
+    {
+        "id": "datagrid_view",
+        "pid": "datagrid",
+        "val": "外观显示控制"
+    },
+    {
+        "id": "datagrid_data",
+        "pid": "datagrid",
+        "val": "数据处理"
+    },
+    {
+        "id": "datagrid_fn_basic",
+        "pid": "datagrid_fn",
+        "val": "基本功能",
+        "exampleUrl": "basic/datagrid/Basic.html",
+        "dataUrl": "data/griddata.json",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_inlineediting",
+        "pid": "datagrid_fn",
+        "val": "行内编辑",
+        "exampleUrl": "basic/datagrid/InlineEditing.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_columntype",
+        "pid": "datagrid_fn",
+        "val": "格式化不同类型列",
+        "exampleUrl": "basic/datagrid/ColumnType.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_choosebox-seq",
+        "pid": "datagrid_fn",
+        "val": "内置行号以及选择列配置",
+        "exampleUrl": "basic/datagrid/ChooseBox-Seq.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_toolbar",
+        "pid": "datagrid_fn",
+        "val": "工具栏配置",
+        "exampleUrl": "basic/datagrid/ToolBar.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_pagebar",
+        "pid": "datagrid_fn",
+        "val": "分页栏配置",
+        "exampleUrl": "basic/datagrid/PageBar.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_sort",
+        "pid": "datagrid_fn",
+        "val": "排序",
+        "exampleUrl": "basic/datagrid/Sort.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_resizecellwidth",
+        "pid": "datagrid_fn",
+        "val": "调整列宽",
+        "exampleUrl": "basic/datagrid/ResizeCellWidth.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_complextitle",
+        "pid": "datagrid_fn",
+        "val": "多表头",
+        "exampleUrl": "basic/datagrid/ComplexTitle.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_mergecell",
+        "pid": "datagrid_fn",
+        "val": "表格融合",
+        "exampleUrl": "basic/datagrid/MergeCell.html",
+        "dataUrl": "data/griddata1.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_rowdedail",
+        "pid": "datagrid_fn",
+        "val": "行内信息",
+        "exampleUrl": "basic/datagrid/RowDedail.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_masterslave",
+        "pid": "datagrid_fn",
+        "val": "主从数据联动展现",
+        "exampleUrl": "basic/datagrid/MasterSlave.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_summary",
+        "pid": "datagrid_fn",
+        "val": "统计",
+        "exampleUrl": "basic/datagrid/Summary.html",
+        "dataUrl": "basic/datagrid/griddata1.json",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_opercolumn_html",
+        "pid": "datagrid_fn",
+        "val": "使用原生标签定制操作列",
+        "exampleUrl": "basic/datagrid/OperateCloumn_Html.html",
+        "dataUrl": "basic/datagrid/griddata1.json",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_opercolumn_control",
+        "pid": "datagrid_fn",
+        "val": "使用控件定制操作列",
+        "exampleUrl": "basic/datagrid/OperateCloumn_Control.html",
+        "dataUrl": "basic/datagrid/griddata1.json",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_customPageBar",
+        "pid": "datagrid_fn",
+        "val": "自定义分页栏",
+        "exampleUrl": "basic/datagrid/CustomPageBar.html",
+        "dataUrl": "basic/datagrid/griddata1.json",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_export",
+        "pid": "datagrid_fn",
+        "val": "数据导出",
+        "exampleUrl": "basic/datagrid/ExportExcel.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_show-hidecolumn",
+        "pid": "datagrid_view",
+        "val": "显示隐藏列",
+        "exampleUrl": "basic/datagrid/Show-HideColumn.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_titlestyle",
+        "pid": "datagrid_view",
+        "val": "设置列头样式",
+        "exampleUrl": "basic/datagrid/TitleStyle.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_trstyle",
+        "pid": "datagrid_view",
+        "val": "设置行样式",
+        "exampleUrl": "basic/datagrid/TrStyle.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_cellstyle",
+        "pid": "datagrid_view",
+        "val": "设置列或单元格样式",
+        "exampleUrl": "basic/datagrid/CellStyle.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_getselectedvalue",
+        "pid": "datagrid_data",
+        "val": "获取选中行的值",
+        "exampleUrl": "basic/datagrid/GetSelectedValue.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_getallvalue",
+        "pid": "datagrid_data",
+        "val": "获取当前页数据",
+        "exampleUrl": "basic/datagrid/GetAllValue.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_datawriteback",
+        "pid": "datagrid_data",
+        "val": "数据回写",
+        "exampleUrl": "basic/datagrid/DataWriteBack.html",
+        "dataUrl": "data/griddata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "datagrid_fn_inlineediting_server",
+        "pid": "datagrid_data",
+        "val": "行内编辑",
+        "exampleUrl": "basic/datagrid/InlineEditing_Server.html",
+        "dataUrl": "data/gridsubmitdata.txt",
+        "apiUrl": "api/fastDev.Ui.DataGrid"
+    },
+    {
+        "id": "select_localdata",
+        "pid": "select",
+        "val": "本地数据",
+        "exampleUrl": "basic/select/LocalData.html",
+        "apiUrl": "api/fastDev.Ui.Select"
+    },
+    {
+        "id": "select_remotedata",
+        "pid": "select",
+        "val": "远程数据",
+        "exampleUrl": "basic/select/RemoteData.html",
+        "dataUrl": "data/select.json",
+        "apiUrl": "api/fastDev.Ui.Select"
+    },
+    {
+        "id": "select_inform",
+        "pid": "select",
+        "val": "在表单中使用",
+        "exampleUrl": "basic/select/InForm.html",
+        "apiUrl": "api/fastDev.Ui.Select"
+    },
+    {
+        "id": "select_selectlist",
+        "pid": "select",
+        "val": "下拉列表",
+        "exampleUrl": "basic/select/SelectList.html",
+        "dataUrl": "data/select.json",
+        "apiUrl": "api/fastDev.Ui.Select"
+    },
+    {
+        "id": "select_linkageselect",
+        "pid": "select",
+        "val": "级联下拉框",
+        "exampleUrl": "basic/select/LinkageSelect.html",
+        "dataUrl": "data/select.txt",
+        "apiUrl": "api/fastDev.Ui.Select"
+    },
+    {
+        "id": "select_setwidth",
+        "pid": "select",
+        "val": "设置宽度",
+        "exampleUrl": "basic/select/SetWidth.html",
+        "apiUrl": "api/fastDev.Ui.Select"
+    },
+    {
+        "id": "select_methods",
+        "pid": "select",
+        "val": "方法集",
+        "exampleUrl": "basic/select/Methods.html",
+        "dataUrl": "data/select.json",
+        "apiUrl": "api/fastDev.Ui.Select"
+    },
+    {
+        "id": "datepicker_basic",
+        "pid": "datepicker",
+        "val": "基本功能",
+        "exampleUrl": "basic/datepicker/Basic.html",
+        "apiUrl": "api/fastDev.Ui.DatePicker"
+    },
+    {
+        "id": "datepicker_datetime",
+        "pid": "datepicker",
+        "val": "时间选择器",
+        "exampleUrl": "basic/datepicker/DateTime.html",
+        "apiUrl": "api/fastDev.Ui.DatePicker"
+    },
+    {
+        "id": "datepicker_datetimerange",
+        "pid": "datepicker",
+        "val": "范围限制",
+        "exampleUrl": "basic/datepicker/DateTimeRange.html",
+        "apiUrl": "api/fastDev.Ui.DatePicker"
+    },
+    {
+        "id": "datepicker_inline",
+        "pid": "datepicker",
+        "val": "平面日历",
+        "exampleUrl": "basic/datepicker/Inline.html",
+        "apiUrl": "api/fastDev.Ui.DatePicker"
+    },
+    {
+        "id": "datepicker_method",
+        "pid": "datepicker",
+        "val": "方法与事件",
+        "exampleUrl": "basic/datepicker/Method.html",
+        "apiUrl": "api/fastDev.Ui.DatePicker"
+    },
+    {
+        "id": "window_basic",
+        "pid": "window",
+        "val": "基本功能",
+        "exampleUrl": "basic/window/Basic.html",
+        "apiUrl": "api/fastDev.Ui.Window"
+    },
+    {
+        "id": "window_resize",
+        "pid": "window",
+        "val": "尺寸调节",
+        "exampleUrl": "basic/window/Resize.html",
+        "apiUrl": "api/fastDev.Ui.Window"
+    },
+    {
+        "id": "window_drag",
+        "pid": "window",
+        "val": "窗体拖拽",
+        "exampleUrl": "basic/window/Drag.html",
+        "apiUrl": "api/fastDev.Ui.Window"
+    },
+    {
+        "id": "window_cross",
+        "pid": "window",
+        "val": "跨级交互",
+        "exampleUrl": "basic/window/Cross.html",
+        "apiUrl": "api/fastDev.Ui.Window"
+    },
+    {
+        "id": "window_animation",
+        "pid": "window",
+        "val": "窗体动画",
+        "exampleUrl": "basic/window/Animation.html",
+        "apiUrl": "api/fastDev.Ui.Window"
+    },
+    {
+        "id": "window_method",
+        "pid": "window",
+        "val": "功能方法",
+        "exampleUrl": "basic/window/Method.html",
+        "apiUrl": "api/fastDev.Ui.Window"
+    },
+    {
+        "id": "window_event",
+        "pid": "window",
+        "val": "事件回调",
+        "exampleUrl": "basic/window/Event.html",
+        "apiUrl": "api/fastDev.Ui.Window"
+    },
+    {
+        "id": "panel_basic",
+        "pid": "panel",
+        "val": "基本功能",
+        "exampleUrl": "basic/panel/Basic.html",
+        "apiUrl": "api/fastDev.Ui.Panel"
+    },
+    {
+        "id": "panel_content",
+        "pid": "panel",
+        "val": "面板内容",
+        "exampleUrl": "basic/panel/Content.html",
+        "apiUrl": "api/fastDev.Ui.Panel"
+    },
+    {
+        "id": "dialog_basic",
+        "pid": "dialog",
+        "val": "基本功能",
+        "exampleUrl": "basic/dialog/Basic.html",
+        "apiUrl": "api/fastDev.Ui.Dialog"
+    },
+    {
+        "id": "messagebox_basic",
+        "pid": "messagebox",
+        "val": "基本功能",
+        "exampleUrl": "basic/messagebox/Basic.html",
+        "apiUrl": "api/fastDev.Ui.MessageBox"
+    },
+    {
+        "id": "autocomplete_basic",
+        "pid": "autocomplete",
+        "val": "基本功能",
+        "exampleUrl": "basic/autocomplete/Basic.html",
+        "dataUrl": "data/autocomplete.txt",
+        "apiUrl": "api/fastDev.Ui.AutoComplete"
+    },
+    {
+        "id": "autocomplete_multiple",
+        "pid": "autocomplete",
+        "val": "多值输入",
+        "exampleUrl": "basic/autocomplete/Multiple.html",
+        "dataUrl": "data/autocomplete.txt",
+        "apiUrl": "api/fastDev.Ui.AutoComplete"
+    },
+    {
+        "id": "autocomplete_datasource",
+        "pid": "autocomplete",
+        "val": "数据源",
+        "exampleUrl": "basic/autocomplete/DataSource.html",
+        "dataUrl": "data/autocomplete.txt",
+        "apiUrl": "api/fastDev.Ui.AutoComplete"
+    },
+    {
+        "id": "autocomplete_itemrenderer",
+        "pid": "autocomplete",
+        "val": "结果渲染",
+        "exampleUrl": "basic/autocomplete/ItemRenderer.html",
+        "dataUrl": "data/autocomplete.txt",
+        "apiUrl": "api/fastDev.Ui.AutoComplete"
+    },
+    {
+        "id": "autocomplete_method",
+        "pid": "autocomplete",
+        "val": "功能方法",
+        "exampleUrl": "basic/autocomplete/Method.html",
+        "dataUrl": "data/autocomplete.txt",
+        "apiUrl": "api/fastDev.Ui.AutoComplete"
+    },
+    {
+        "id": "autocomplete_event",
+        "pid": "autocomplete",
+        "val": "事件回调",
+        "exampleUrl": "basic/autocomplete/Event.html",
+        "dataUrl": "data/autocomplete.txt",
+        "apiUrl": "api/fastDev.Ui.AutoComplete"
+    },
+    {
+        "id": "fileupload_basic",
+        "pid": "fileupload",
+        "val": "基本功能",
+        "exampleUrl": "basic/fileupload/Basic.html",
+        "dataUrl": "data/fileupload.txt",
+        "apiUrl": "api/fastDev.Ui.FileUpload"
+    },
+    {
+        "id": "fileupload_custom",
+        "pid": "fileupload",
+        "val": "界面自定义",
+        "exampleUrl": "basic/fileupload/Custom.html",
+        "dataUrl": "data/fileupload.txt",
+        "apiUrl": "api/fastDev.Ui.FileUpload"
+    },
+    {
+        "id": "fileupload_event",
+        "pid": "fileupload",
+        "val": "方法与事件",
+        "exampleUrl": "basic/fileupload/Event.html",
+        "dataUrl": "data/fileupload.txt",
+        "apiUrl": "api/fastDev.Ui.FileUpload"
+    },
+    {
+        "id": "swffileupload_basic",
+        "pid": "swffileupload",
+        "val": "基本功能",
+        "exampleUrl": "basic/swffileupload/Basic.html",
+        "dataUrl": "data/fileupload.txt",
+        "apiUrl": "api/fastDev.Ui.SWFFileUpload"
+    },
+    {
+        "id": "swffileupload_custom",
+        "pid": "swffileupload",
+        "val": "界面自定义",
+        "exampleUrl": "basic/swffileupload/Custom.html",
+        "dataUrl": "data/fileupload.txt",
+        "apiUrl": "api/fastDev.Ui.SWFFileUpload"
+    },
+    {
+        "id": "swffileupload_event",
+        "pid": "swffileupload",
+        "val": "方法与事件",
+        "exampleUrl": "basic/swffileupload/Event.html",
+        "dataUrl": "data/fileupload.txt",
+        "apiUrl": "api/fastDev.Ui.SWFFileUpload"
+    },
+    {
+        "id": "breadcrumb_basic",
+        "pid": "breadcrumb",
+        "val": "基本功能",
+        "exampleUrl": "basic/breadcrumb/Basic.html",
+        "apiUrl": "api/fastDev.Ui.BreadCrumb"
+    },
+    {
+        "id": "breadcrumb_datasource",
+        "pid": "breadcrumb",
+        "val": "远程数据",
+        "exampleUrl": "basic/breadcrumb/DataSource.html",
+        "dataUrl": "data/breadcrumb.json",
+        "apiUrl": "api/fastDev.Ui.BreadCrumb"
+    },
+    {
+        "id": "breadcrumb_custom",
+        "pid": "breadcrumb",
+        "val": "自定义样式",
+        "exampleUrl": "basic/breadcrumb/Custom.html",
+        "apiUrl": "api/fastDev.Ui.BreadCrumb"
+    },
+    {
+        "id": "progressbar_loading",
+        "pid": "progressbar",
+        "val": "Loading",
+        "exampleUrl": "basic/progressbar/Loading.html",
+        "apiUrl": "api/fastDev.Ui.ProgressBar"
+    },
+    {
+        "id": "progressbar_progress",
+        "pid": "progressbar",
+        "val": "进度条",
+        "exampleUrl": "basic/progressbar/Progress.html",
+        "apiUrl": "api/fastDev.Ui.ProgressBar"
+    },
+    {
+        "id": "progressbar_method",
+        "pid": "progressbar",
+        "val": "方法与事件",
+        "exampleUrl": "basic/progressbar/Method.html",
+        "apiUrl": "api/fastDev.Ui.ProgressBar"
+    },
+    {
+        "id": "chooselist_datasource",
+        "pid": "chooselist",
+        "val": "基本功能",
+        "exampleUrl": "basic/chooselist/DataSource.html",
+        "dataUrl": "data/chooselist.json",
+        "apiUrl": "api/fastDev.Ui.ChooseList"
+    },
+    {
+        "id": "chooselist_customdatagrid",
+        "pid": "chooselist",
+        "val": "定义子控件（DataGrid）",
+        "exampleUrl": "basic/chooselist/CustomDataGridWidget.html",
+        "dataUrl": "data/chooselist_grid.txt",
+        "apiUrl": "api/fastDev.Ui.ChooseList"
+    },
+    {
+        "id": "chooselist_customtree",
+        "pid": "chooselist",
+        "val": "定义子控件（Tree）",
+        "exampleUrl": "basic/chooselist/CustomTreeWidget.html",
+        "dataUrl": "data/chooselist_tree.json",
+        "apiUrl": "api/fastDev.Ui.ChooseList"
+    },
+    {
+        "id": "chooselist_customdisplaytree",
+        "pid": "chooselist",
+        "val": "界面自定义（搜索列表）",
+        "exampleUrl": "basic/chooselist/CustomDisplay.html",
+        "dataUrl": "data/chooselist_tree.json",
+        "apiUrl": "api/fastDev.Ui.ChooseList"
+    },
+    {
+        "id": "chooselist_customdisplaysearchtree",
+        "pid": "chooselist",
+        "val": "界面自定义（搜索树）",
+        "exampleUrl": "basic/chooselist/CustomDisplaySearchTree.html",
+        "dataUrl": "data/chooselist_tree_1.json",
+        "apiUrl": "api/fastDev.Ui.ChooseList"
+    },
+    {
+        "id": "chooselist_customcontainer",
+        "pid": "chooselist",
+        "val": "自定义容器",
+        "exampleUrl": "basic/chooselist/CustomContainer.html",
+        "dataUrl": "data/chooselist_grid.txt",
+        "apiUrl": "api/fastDev.Ui.ChooseList"
+    },
+    {
+        "id": "chooselist_method",
+        "pid": "chooselist",
+        "val": "方法与事件",
+        "exampleUrl": "basic/chooselist/Method.html",
+        "dataUrl": "data/chooselist_grid.txt",
+        "apiUrl": "api/fastDev.Ui.ChooseList"
+    },
+    {
+        "id": "accordion_basic",
+        "pid": "accordion",
+        "val": "基本功能",
+        "exampleUrl": "basic/accordion/Basic.html",
+        "apiUrl": "api/fastDev.Ui.Accordion"
+    },
+    {
+        "id": "accordion_current",
+        "pid": "accordion",
+        "val": "初始定位",
+        "exampleUrl": "basic/accordion/CurrentNode.html",
+        "apiUrl": "api/fastDev.Ui.Accordion"
+    },
+    {
+        "id": "accordion_AllExpand",
+        "pid": "accordion",
+        "val": "全部展开",
+        "exampleUrl": "basic/accordion/AllExpand.html",
+        "apiUrl": "api/fastDev.Ui.Accordion"
+    },
+    {
+        "id": "accordion_EventFunction",
+        "pid": "accordion",
+        "val": "事件与方法集",
+        "exampleUrl": "basic/accordion/EventFunction.html",
+        "apiUrl": "api/fastDev.Ui.Accordion"
+    },
+    {
+        "id": "button_Basic",
+        "pid": "button",
+        "val": "普通按钮",
+        "exampleUrl": "basic/button/Basic.html",
+        "apiUrl": "api/fastDev.Ui.Button"
+    },
+    {
+        "id": "button_SelectBtn",
+        "pid": "button",
+        "val": "下拉按钮",
+        "exampleUrl": "basic/button/SelectBtn.html",
+        "apiUrl": "api/fastDev.Ui.Button"
+    },
+    {
+        "id": "checkboxgroup_Basic",
+        "pid": "checkboxgroup",
+        "val": "基本功能",
+        "exampleUrl": "basic/checkBoxGroup/Basic.html",
+        "dataUrl": "data/checkboxdada.json",
+        "apiUrl": "api/fastDev.Ui.CheckBoxGroup"
+    },
+    {
+        "id": "checkboxgroup_Checked",
+        "pid": "checkboxgroup",
+        "val": "初始选中值",
+        "exampleUrl": "basic/checkBoxGroup/Checked.html",
+        "dataUrl": "data/checkboxdada1.txt",
+        "apiUrl": "api/fastDev.Ui.CheckBoxGroup"
+    },
+    {
+        "id": "checkboxgroup_Layout",
+        "pid": "checkboxgroup",
+        "val": "布局",
+        "exampleUrl": "basic/checkBoxGroup/Layout.html",
+        "apiUrl": "api/fastDev.Ui.CheckBoxGroup"
+    },
+    {
+        "id": "checkboxgroup_ValueChange",
+        "pid": "checkboxgroup",
+        "val": "值改变事件",
+        "exampleUrl": "basic/checkBoxGroup/ValueChange.html",
+        "apiUrl": "api/fastDev.Ui.CheckBoxGroup"
+    },
+    {
+        "id": "checkboxgroup_Function",
+        "pid": "checkboxgroup",
+        "val": "方法集",
+        "exampleUrl": "basic/checkBoxGroup/Function.html",
+        "apiUrl": "api/fastDev.Ui.CheckBoxGroup"
+    },
+    {
+        "id": "editor_Simple",
+        "pid": "editor",
+        "val": "简单模式",
+        "exampleUrl": "basic/editor/Simple.html",
+        "apiUrl": "api/fastDev.Ui.Editor"
+    },
+    {
+        "id": "editor_Complete",
+        "pid": "editor",
+        "val": "完整模式",
+        "exampleUrl": "basic/editor/Complete.html",
+        "apiUrl": "api/fastDev.Ui.Editor"
+    },
+    {
+        "id": "editor_Form",
+        "pid": "editor",
+        "val": "表单提交",
+        "exampleUrl": "basic/editor/Form.html",
+        "dataUrl": "data/editordata.txt",
+        "apiUrl": "api/fastDev.Ui.Editor"
+    },
+    {
+        "id": "editor_Value",
+        "pid": "editor",
+        "val": "获取与设置值",
+        "exampleUrl": "basic/editor/Value.html",
+        "apiUrl": "api/fastDev.Ui.Editor"
+    },
+    {
+        "id": "editor_InitialContent",
+        "pid": "editor",
+        "val": "初始提示值",
+        "exampleUrl": "basic/editor/InitialContent.html",
+        "apiUrl": "api/fastDev.Ui.Editor"
+    },
+    {
+        "id": "form_Basic",
+        "pid": "form",
+        "val": "基本表单",
+        "exampleUrl": "basic/form/Basic.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_Complicacy",
+        "pid": "form",
+        "val": "复杂表单",
+        "exampleUrl": "basic/form/Complicacy.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_Complicacy1",
+        "pid": "form",
+        "val": "设置URL参数方式一",
+        "exampleUrl": "basic/form/Complicacy1.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_Complicacy12",
+        "pid": "form",
+        "val": "设置URL参数方式二",
+        "exampleUrl": "basic/form/Complicacy12.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_Complicacy11",
+        "pid": "form",
+        "val": "表单控件里有个性化数据",
+        "exampleUrl": "basic/form/Complicacy11.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_Complicacy13data",
+        "pid": "form",
+        "val": "1.3版本格式的数据源",
+        "exampleUrl": "basic/form/Complicacy13data.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_ComplicacyItems",
+        "pid": "form",
+        "val": "静态数据源和静态表单值",
+        "exampleUrl": "basic/form/ComplicacyItems.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_OtherSubmitData",
+        "pid": "form",
+        "val": "追加其他数据一起提交",
+        "exampleUrl": "basic/form/OtherSubmitData.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    }, 
+    {
+        "id": "form_Validate",
+        "pid": "form",
+        "val": "表单验证",
+        "exampleUrl": "basic/form/Validate.html",
+        "dataUrl": "data/formdata2.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_ValidateRule",
+        "pid": "form",
+        "val": "各种验证汇总",
+        "exampleUrl": "basic/form/ValidateRule.html",
+        "dataUrl": "data/formdata2.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_Value",
+        "pid": "form",
+        "val": "设置与得到值",
+        "exampleUrl": "basic/form/Value.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_RepeatedlySubmit",
+        "pid": "form",
+        "val": "防止重复提交",
+        "exampleUrl": "basic/form/RepeatedlySubmit.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_HasSpecialCode",
+        "pid": "form",
+        "val": "特殊字符提交",
+        "exampleUrl": "basic/form/HasSpecialCode.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_Function",
+        "pid": "form",
+        "val": "方法集",
+        "exampleUrl": "basic/form/Function.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "form_Event",
+        "pid": "form",
+        "val": "接口与事件",
+        "exampleUrl": "basic/form/Event.html",
+        "dataUrl": "data/formdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Form"
+    },
+    {
+        "id": "navigation_Basic",
+        "pid": "navigation",
+        "val": "基本用法",
+        "exampleUrl": "basic/navigation/Basic.html",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },
+    {
+        "id": "navigation_IrregularData",
+        "pid": "navigation",
+        "val": "混合数据",
+        "exampleUrl": "basic/navigation/IrregularData.html",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },
+    {
+        "id": "navigation_AutoOpenPage",
+        "pid": "navigation",
+        "val": "选中节点并打开页面",
+        "exampleUrl": "basic/navigation/AutoOpenPage.html",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },
+    {
+        "id": "navigation_Ico",
+        "pid": "navigation",
+        "val": "个性化节点图标",
+        "exampleUrl": "basic/navigation/Ico.html",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },
+    {
+        "id": "navigation_AllExpand",
+        "pid": "navigation",
+        "val": "全部展开",
+        "exampleUrl": "basic/navigation/AllExpand.html",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },
+    {
+        "id": "navigation_CurrentNode",
+        "pid": "navigation",
+        "val": "初始定位",
+        "exampleUrl": "basic/navigation/CurrentNode.html",
+        "dataUrl": "data/navigationdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },
+     {
+        "id": "navigation_CurrentNode12",
+        "pid": "navigation",
+        "val": "2级数据带数字展示",
+        "exampleUrl": "basic/navigation/Basic2num.html",
+        "dataUrl": "data/navigationdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },     
+     {
+        "id": "navigation_CurrentNode13",
+        "pid": "navigation",
+        "val": "多级数据带数字展示",
+        "exampleUrl": "basic/navigation/Basic3num.html",
+        "dataUrl": "data/navigationdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },
+    {
+        "id": "navigation_EventFunction",
+        "pid": "navigation",
+        "val": "方法事件集",
+        "exampleUrl": "basic/navigation/EventFunction.html",
+        "apiUrl": "api/fastDev.Ui.Navigation"
+    },
+    {
+        "id": "radiogroup_Basic",
+        "pid": "radiogroup",
+        "val": "基本功能",
+        "exampleUrl": "basic/radioGroup/Basic.html",
+        "dataUrl": "data/radiodata1.txt",
+        "apiUrl": "api/fastDev.Ui.RadioGroup"
+    },
+    {
+        "id": "radiogroup_Checked",
+        "pid": "radiogroup",
+        "val": "初始选中值",
+        "exampleUrl": "basic/radioGroup/Checked.html",
+        "dataUrl": "data/radiodata2.txt",
+        "apiUrl": "api/fastDev.Ui.RadioGroup"
+    },
+    {
+        "id": "radiogroup_Layout",
+        "pid": "radiogroup",
+        "val": "布局",
+        "exampleUrl": "basic/radioGroup/Layout.html",
+        "apiUrl": "api/fastDev.Ui.RadioGroup"
+    },
+    {
+        "id": "radiogroup_ValueChange",
+        "pid": "radiogroup",
+        "val": "值改变事件",
+        "exampleUrl": "basic/radioGroup/ValueChange.html",
+        "apiUrl": "api/fastDev.Ui.RadioGroup"
+    },
+    {
+        "id": "radiogroup_Function",
+        "pid": "radiogroup",
+        "val": "功能方法集",
+        "exampleUrl": "basic/radioGroup/Function.html",
+        "apiUrl": "api/fastDev.Ui.RadioGroup"
+    },
+    {
+        "id": "selecttree_Basic",
+        "pid": "selecttree",
+        "val": "基本功能",
+        "exampleUrl": "basic/selectTree/Basic.html",
+        "dataUrl": "data/selecttreedata1.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+     {
+        "id": "selecttree_Data",
+        "pid": "selecttree",
+        "val": "静态数据源",
+        "exampleUrl": "basic/selectTree/Data.html",
+        "dataUrl": "data/selecttreedata1.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+     {
+        "id": "selecttree_FormData",
+        "pid": "selecttree",
+        "val": "表单数据源",
+        "exampleUrl": "basic/selectTree/FormData.html",
+        "dataUrl": "data/selecttreedata1.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+    {
+        "id": "selecttree_InitSourceData",
+        "pid": "selecttree",
+        "val": "initSource和dataSource数据源",
+        "exampleUrl": "basic/selectTree/InitSourceData.html",
+        "dataUrl": "data/selecttreedata1.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+    {
+        "id": "selecttree_Value",
+        "pid": "selecttree",
+        "val": "初始值",
+        "exampleUrl": "basic/selectTree/Value.html",
+        "dataUrl": "data/selecttreedata1.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+    {
+        "id": "selecttree_Readonly",
+        "pid": "selecttree",
+        "val": "只读节点",
+        "exampleUrl": "basic/selectTree/Readonly.html",
+        "dataUrl": "data/selecttreedata2.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+    {
+        "id": "selecttree_SelectMultitree",
+        "pid": "selecttree",
+        "val": "下拉多选树",
+        "exampleUrl": "basic/selectTree/SelectMultitree.html",
+        "dataUrl": "data/selecttreedata1.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+    {
+        "id": "selecttree_Basic3",
+        "pid": "selecttree",
+        "val": "异步下拉树",
+        "exampleUrl": "basic/selectTree/Basic3.html",
+        "dataUrl": "data/selecttreedata1.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+    {
+        "id": "selecttree_Basic2",
+        "pid": "selecttree",
+        "val": "调用树的方法",
+        "exampleUrl": "basic/selectTree/Basic2.html",
+        "dataUrl": "data/selecttreedata1.txt",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },    
+    {
+        "id": "selecttree_EventFunction",
+        "pid": "selecttree",
+        "val": "普通下拉树的方法事件集",
+        "exampleUrl": "basic/selectTree/EventFunction.html",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+    {
+        "id": "selecttree_CSelectMultitree",
+        "pid": "selecttree",
+        "val": "下拉多选树的方法事件集",
+        "exampleUrl": "basic/selectTree/CSelectMultitree.html",
+        "apiUrl": "api/fastDev.Ui.SelectTree"
+    },
+    {
+        "id": "tabs_NotSameData",
+        "pid": "tabs",
+        "val": "不同类型数据",
+        "exampleUrl": "basic/tabs/NotSameData.html",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "tabs_Tools",
+        "pid": "tabs",
+        "val": "右侧工具栏",
+        "exampleUrl": "basic/tabs/Tools.html",
+        "dataUrl": "data/tabsdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "tabs_TabPosition",
+        "pid": "tabs",
+        "val": "位置自定义",
+        "exampleUrl": "basic/tabs/TabPosition.html",
+        "dataUrl": "data/tabsdata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "tabs_allowDND",
+        "pid": "tabs",
+        "val": "滚动与拖拽",
+        "exampleUrl": "basic/tabs/allowDND.html",
+        "dataUrl": "data/tabsdata2.txt",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "tabs_TabReloadPage",
+        "pid": "tabs",
+        "val": "在tabs内进行的datagrid加表单添删改的综合应用",
+        "exampleUrl": "basic/tabs/TabReloadPage.html",
+        "dataUrl": "data/tabsdata2.txt",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "tabs_Nested",
+        "pid": "tabs",
+        "val": "嵌套选项卡",
+        "exampleUrl": "basic/tabs/Nested.html",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "tabs_TabClick",
+        "pid": "tabs",
+        "val": "点击事件",
+        "exampleUrl": "basic/tabs/TabClick.html",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "tabs_add",
+        "pid": "tabs",
+        "val": "添加选项卡",
+        "exampleUrl": "basic/tabs/add.html",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "tabs_FunctionEvent",
+        "pid": "tabs",
+        "val": "方法事件集",
+        "exampleUrl": "basic/tabs/FunctionEvent.html",
+        "apiUrl": "api/fastDev.Ui.Tabs"
+    },
+    {
+        "id": "normaltree",
+        "pid": "tree",
+        "val": "普通树"
+    },
+    {
+        "id": "tree_Basic",
+        "pid": "normaltree",
+        "val": "基础功能",
+        "exampleUrl": "basic/tree/Basic.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_NormalShow",
+        "pid": "normaltree",
+        "val": "图标与连接线展开层数",
+        "exampleUrl": "basic/tree/NormalShow.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_NormalOptions",
+        "pid": "normaltree",
+        "val": "常用属性",
+        "exampleUrl": "basic/tree/NormalOptions.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_Async",
+        "pid": "normaltree",
+        "val": "异步数据",
+        "exampleUrl": "basic/tree/Async.html",
+        "dataUrl": "data/treedata2.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_FontIco",
+        "pid": "normaltree",
+        "val": "个性化字体图标",
+        "exampleUrl": "basic/tree/FontIco.html",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_NormalFunction",
+        "pid": "normaltree",
+        "val": "基本树方法集",
+        "exampleUrl": "basic/tree/NormalFunction.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_NormalEvent",
+        "pid": "normaltree",
+        "val": "基本树事件集",
+        "exampleUrl": "basic/tree/NormalEvent.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_AddDelEdit",
+        "pid": "normaltree",
+        "val": "节点添删改",
+        "exampleUrl": "basic/tree/AddDelEdit.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "multitree",
+        "pid": "tree",
+        "val": "多选树"
+    },
+    {
+        "id": "tree_Multitree",
+        "pid": "multitree",
+        "val": "多选树",
+        "exampleUrl": "basic/tree/Multitree.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_MultitreeInitChked",
+        "pid": "multitree",
+        "val": "初始选中",
+        "exampleUrl": "basic/tree/MultitreeInitChked.html",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_MultitreeInitDisabled",
+        "pid": "multitree",
+        "val": "只读禁用无复选框节点",
+        "exampleUrl": "basic/tree/MultitreeInitDisabled.html",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_MultitreeNotChk",
+        "pid": "multitree",
+        "val": "无复选框的多选树",
+        "exampleUrl": "basic/tree/MultitreeNotChk.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_MultitreeFunction",
+        "pid": "multitree",
+        "val": "多选树方法集",
+        "exampleUrl": "basic/tree/MultitreeFunction.html",
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "radiotree",
+        "pid": "tree",
+        "val": "单选树"
+    },
+    {
+        "id": "tree_Radiotree",
+        "pid": "radiotree",
+        "val": "单选树",
+        "exampleUrl": "basic/tree/Radiotree.html",
+        "dataUrl": "data/treedata3.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_RadiotreeInitDisabled",
+        "pid": "radiotree",
+        "val": "只读禁用无单选框节点",
+        "exampleUrl": "basic/tree/RadiotreeInitDisabled.html",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_RadiotreeNotChk",
+        "pid": "radiotree",
+        "val": "无单选框的单选树",
+        "exampleUrl": "basic/tree/RadiotreeNotChk.html",
+        "dataUrl": "data/treedata3.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "tree_RadiotreeFunction",
+        "pid": "radiotree",
+        "val": "单选树方法集",
+        "exampleUrl": "basic/tree/RadiotreeFunction.html",
+        "dataUrl": "data/treedata3.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+    },
+    {
+        "id": "toolbar_basic",
+        "pid": "toolbar",
+        "val": "基础使用",
+        "exampleUrl": "basic/toolbar/Basic.html",
+        "apiUrl": "api/fastDev.Ui.Toolbar"
+    },
+    {
+        "id": "toolbar_api",
+        "pid": "toolbar",
+        "val": "功能方法集",
+        "exampleUrl": "basic/toolbar/Api.html",
+        "apiUrl": "api/fastDev.Ui.Toolbar"
+    },
+    {
+        "id": "chart_ofc",
+        "pid": "chart",
+        "val": "Open Flash Chart"
+    },
+    {
+        "id": "chart_ofc_overview",
+        "pid": "chart_ofc",
+        "val": "概述",
+        "exampleUrl": "basic/other/chart/overview.html"
+    },
+    {
+        "id": "chart_ofc_line",
+        "pid": "chart_ofc",
+        "val": "LineChart",
+        "exampleUrl": "basic/other/chart/line.html",
+        "dataUrl": "data/chart/line.txt"
+    },
+    {
+        "id": "chart_ofc_bar",
+        "pid": "chart_ofc",
+        "val": "BarChart",
+        "exampleUrl": "basic/other/chart/bar.html",
+        "dataUrl": "data/chart/bar.txt"
+    },
+    {
+        "id": "chart_ofc_horizontal-bar",
+        "pid": "chart_ofc",
+        "val": "HorizontalBarChart",
+        "exampleUrl": "basic/other/chart/horizontal-bar.html",
+        "dataUrl": "data/chart/horizontal-bar.txt"
+    },
+    {
+        "id": "chart_ofc_stack-bar",
+        "pid": "chart_ofc",
+        "val": "StackBarChart",
+        "exampleUrl": "basic/other/chart/stack-bar.html",
+        "dataUrl": "data/chart/stack-bar.txt"
+    },
+    {
+        "id": "chart_ofc_candle",
+        "pid": "chart_ofc",
+        "val": "CandleChart",
+        "exampleUrl": "basic/other/chart/candle.html",
+        "dataUrl": "data/chart/candle.txt"
+    },
+    {
+        "id": "chart_ofc_area",
+        "pid": "chart_ofc",
+        "val": "AreaChart",
+        "exampleUrl": "basic/other/chart/area.html",
+        "dataUrl": "data/chart/area.txt"
+    },
+    {
+        "id": "chart_ofc_pie",
+        "pid": "chart_ofc",
+        "val": "PieChart",
+        "exampleUrl": "basic/other/chart/pie.html",
+        "dataUrl": "data/chart/pie.txt"
+    },
+    {
+        "id": "chart_ofc_scatter",
+        "pid": "chart_ofc",
+        "val": "ScatterChart",
+        "exampleUrl": "basic/other/chart/scatter.html",
+        "dataUrl": "data/chart/scatter.txt"
+    },
+    {
+        "id": "chart_ofc_radar",
+        "pid": "chart_ofc",
+        "val": "RadarChart",
+        "exampleUrl": "basic/other/chart/radar.html",
+        "dataUrl": "data/chart/radar.txt"
+    }
+]

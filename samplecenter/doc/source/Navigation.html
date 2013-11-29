@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Navigation'>/**
+</span> * @class  fastDev.Ui.Navigation
+ * @extends fastDev.Ui.Accordion
+ * 导航控件是支持多级功能导航控件，设计最多支持5级，手风琴主要是内容的收缩、展开显示的功能，导航控件主要是应用与左侧纵向的功能导航。继承自Accordion，导航类控件。&lt;p&gt;
+ * 作者：姜玲
+ *
+ *			&lt;div itype=&quot;Navigation&quot; width=&quot;260px&quot; activeIndex=2 initSource=&quot;data.txt&quot;  target=&quot;main&quot;&gt;&lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.Navigation&quot;, {
+	extend : &quot;fastDev.Ui.Accordion&quot;,
+	alias : &quot;Navigation&quot;,
+	_options : {
+<span id='fastDev-Ui-Navigation-property-items'>		/**
+</span>		 * 合法的json数据源 
+		 * @type {Json}
+		 * &lt;p&gt;纵向导航:[{id:&quot;1&quot;,&quot;pid&quot;:&quot;-1&quot;,&quot;text&quot;:&quot;1级菜单可收缩&quot;,&quot;ico&quot;:&quot;classname&quot;},{id:&quot;12&quot;,&quot;pid&quot;:&quot;1&quot;,&quot;text&quot;:&quot;12级菜单&quot;,&quot;url&quot;:&quot;http://www.baidu.com&quot;,&quot;target&quot;:&quot;_blank&quot;}]&lt;/p&gt;
+		 */
+		items : null,
+<span id='fastDev-Ui-Navigation-property-target'>		/**
+</span>		 * 所以链接指向哪儿的打开方式，同a标记的target属性
+		 * @type {String}
+		 */
+		target : null,
+<span id='fastDev-Ui-Navigation-property-topGroup'>		/**
+</span>		 * 顶级节点的Group值
+		 * @type {String}
+		 */
+		topGroup : &quot;-1&quot;,
+<span id='fastDev-Ui-Navigation-property-customFields'>		/**
+</span>		 * 自定义数据属性,不能和原有属性名相同
+		 * @type {String}多个用,分隔
+		 */
+		customFields:&quot;&quot;,		
+<span id='fastDev-Ui-Navigation-property-autoOpenPage'>		/**
+</span>		 * 是否打开当前或第一个链接页面
+		 * @type {Boolean}
+		 */
+		autoOpenPage : false
+	},
+	_global : {
+		level:1,
+		idAllChild:false,
+		selected:&quot;&quot;,
+		isdisplay:&quot;none&quot;,
+		newData:[]
+	},
+	/*template : [
+		'&lt;div class=&quot;ui-nav&quot; style=&quot;width:#{width}; height:auto; float:left;&quot;&gt;',
+			'&lt;div class=&quot;ui-nav-panle&quot; style=&quot;width:#{width};&quot;&gt;',
+				'&lt;tpl dynamic&gt;', 
+					'&lt;tpl each&gt;',
+						'&lt;tpl if(#{idAllChild})&gt;',
+							'&lt;div class=&quot;ui-nav-inner&quot; name=&quot;{id}&quot;&gt;',
+								'&lt;a class=&quot;ui-nav-text',
+								'&lt;tpl if({ico}!=&quot;&quot;)&gt;',
+								' ui-nav-ico {ico}',
+								'&lt;/tpl&gt;',
+								'&quot;',
+								'&lt;tpl if({url})&gt;',
+								 ' href=&quot;{url}&quot; target=&quot;{target}&quot;',
+								 '&lt;/tpl&gt;',	
+								 '&gt;{text}&lt;/a&gt;',
+				             '&lt;/div&gt;',
+						'&lt;tpl else&gt;',
+						    '&lt;div class=&quot;ui-nav-item',
+							'&lt;tpl if(#{level}&amp;gt;1)&gt;',	
+								' ui-nav-#{level}thstage',
+							'&lt;/tpl&gt;',				
+							'&quot; name=&quot;{id}&quot;&gt;', 
+							  '&lt;a class=&quot;#{selected}&quot; ',
+								'&lt;tpl if({url})&gt;',
+								 ' href=&quot;{url}&quot; target=&quot;{target}&quot;',
+								 '&lt;/tpl&gt;',	
+								 '&gt;',
+							'&lt;div class=&quot;ui-nav-header&quot;&gt;',
+								'&lt;div class=&quot;ui-nav-title&quot; &gt;{text}&lt;/div&gt;',
+								'&lt;div class=&quot;ui-nav-header-ico {ico}&quot;&gt;&lt;/div&gt;', 
+								'&lt;span class=&quot;ui-nav-arrow&quot;&gt;&lt;/span&gt;', 
+							'&lt;/div&gt;', 
+							'&lt;/a&gt;',
+							'&lt;div class=&quot;ui-nav-content&quot; id=&quot;{id}&quot; style=&quot;display: #{isdisplay};width:#{width};&quot;&gt;',									
+							'&lt;/div&gt;',
+						'&lt;/tpl&gt;',
+						'&lt;/div&gt;',
+					'&lt;/tpl&gt;',
+				'&lt;/tpl&gt;',
+			'&lt;/div&gt;',
+		'&lt;/div&gt;'	
+	],*/
+	tplParam : [&quot;height&quot;,&quot;width&quot;,&quot;selected&quot;,&quot;isdisplay&quot;],
+	fields : [&quot;id&quot;,&quot;pid&quot;,&quot;text&quot;,{name:&quot;url&quot;,defaultValue:&quot;&quot;},{name:&quot;target&quot;,defaultValue:&quot;&quot;},{name:&quot;ico&quot;,defaultValue:&quot;&quot;}],	
+	staticTemplate : function(params) {
+	  return '&lt;div class=&quot;ui-nav&quot; style=&quot;width:'+params.width+'; height:auto; float:left;&quot;&gt;&lt;div class=&quot;ui-nav-panle&quot; style=&quot;width:'+params.width+';&quot;&gt;&lt;/div&gt;&lt;/div&gt;';
+	},
+	dynamicTemplate : function(params,data){
+		var html = [],idAllChild=this._global.idAllChild,level=this._global.level;
+		for(var i=0,item;item=data[i];i++){
+			if(idAllChild){
+							html.push('&lt;div class=&quot;ui-nav-inner&quot; name=&quot;'+item.id+'&quot;&gt;');
+								html.push('&lt;a class=&quot;ui-nav-text');
+								if(!!item.ico){
+								 html.push(' ui-nav-ico '+item.ico+'');
+							    }
+								html.push('&quot;');
+								if(!!item.url){
+								 html.push(' href=&quot;'+item.url+'&quot; target=&quot;'+item.target+'&quot;');
+								}	
+								html.push('&gt;'+item.text+'&lt;/a&gt;');
+				             html.push('&lt;/div&gt;');
+				            }else{
+						    html.push('&lt;div class=&quot;ui-nav-item');							
+							if(level&gt;1){	
+								html.push(' ui-nav-'+level+'thstage');
+							}											
+							html.push('&quot; name=&quot;'+item.id+'&quot;&gt;');
+							  html.push('&lt;a class=&quot;'+params.selected+'&quot; ');
+								if(!!item.url){
+								 html.push(' href=&quot;'+item.url+'&quot; target=&quot;'+item.target+'&quot;');
+								}
+								 html.push('&gt;');
+							html.push('&lt;div class=&quot;ui-nav-header&quot;&gt;');
+								html.push('&lt;div class=&quot;ui-nav-title&quot; &gt;'+item.text+'&lt;/div&gt;');
+								html.push('&lt;div class=&quot;ui-nav-header-ico '+item.ico+'&quot;&gt;&lt;/div&gt;');
+								html.push('&lt;span class=&quot;ui-nav-arrow&quot;&gt;&lt;/span&gt;'); 
+							html.push('&lt;/div&gt;'); 
+							html.push('&lt;/a&gt;');
+							html.push('&lt;div class=&quot;ui-nav-content&quot; id=&quot;'+item.id+'&quot; style=&quot;display: '+params.isdisplay+';width:'+params.width+';&quot;&gt;');									
+							html.push('&lt;/div&gt;');		
+							html.push('&lt;/div&gt;');				
+						}
+				
+		}
+		return html.join('');
+	},
+<span id='fastDev-Ui-Navigation-method-ready'>	/**
+</span>	 * 面板参数准备
+	 * @protected
+	 */
+	ready : function(options, global) {		
+		if(options.mode===&quot;maxContent&quot;){
+			global.isdisplay=&quot;none&quot;;
+		}
+		if(options.showAll){
+			global.selected=&quot;ui-nav-selected&quot;;
+			global.isdisplay=&quot;block&quot;;	
+		}		
+		if(options.customFields){			
+			this.fields =this.fields.slice(0).concat(options.customFields.split(','));
+		}		
+	},
+<span id='fastDev-Ui-Navigation-method-constructItems'>	/**
+</span>	 * 初始化控件列表
+	 * @param {Array} items数据项
+	 * @protected
+	 */
+	constructItems : function() {
+		var me = this,options=this._options;
+		//var dataSet=this.dataset.select(&quot;pid=&quot;+options.topGroup);
+		var dataSet = this.dataset.select(function(i, data) {
+			return data.pid === options.topGroup;
+		});
+		
+		//this.renderDynamicHtml(null,dataSet);
+		this._renderDynamicHtml(this.find(&quot;.ui-nav-panle&quot;),dataSet);
+		var level=this._global.level;
+		for(var i=0;i&lt;dataSet.length;i++){
+			me.constructSubItem(dataSet[i].id,level+1);
+		}
+		this.setConstruct();
+		this.bindEvent();
+	},
+<span id='fastDev-Ui-Navigation-method-constructSubItem'>	/**
+</span>	 * 创建纵向导航的子项
+	 * @private
+	 */
+	constructSubItem : function(id,level){		
+		var me=this,global=this._global,//dataSet=this.dataset.select(&quot;pid=&quot;+id);
+		dataSet = this.dataset.select(function(i, data) {
+			return data.pid === id;
+		});
+		if(dataSet &amp;&amp; dataSet.length&gt;0){
+			//this.template._options.params.level=level;
+			//this.template._options.params.idAllChild=this.getIdAllChild(dataSet);
+			//var fragment = this.initDynamicHtml(null,dataSet);
+			global.level=level;
+			global.idAllChild=this.getIdAllChild(dataSet);
+			//var fragment =this.dynamicTemplate(tplParam,dataSet);
+			var iddiv = this.find(&quot;#&quot;+id);
+			this._renderDynamicHtml(iddiv,dataSet);
+			//iddiv.append(fragment);
+			if(!global.idAllChild){
+				var divlist=iddiv.find(&quot;.ui-nav-content&quot;).elems;
+				for(var i=0;i&lt;divlist.length;i++){
+					me.constructSubItem(fastDev(divlist[i]).prop(&quot;id&quot;),level+1);
+				}
+			}
+		}
+	},
+<span id='fastDev-Ui-Navigation-method-getIdAllChild'>	/**
+</span>	 * 得到是否全部都是带链接的子级
+	 * @private
+	 */
+	getIdAllChild:function(dataSet){	
+		var len=0,len2=0,length=0,ds;
+		for(var i=0;i&lt;dataSet.length;i++) {
+			if(!dataSet[i].url){
+				len+=1;
+			}
+			ds = this.dataset.select(function(j, data) {
+			return data.pid === dataSet[i].id;
+		    });
+		    length=ds.length;
+			if(length===0){
+				len2+=1;
+			}
+		}	
+		if((len+len2)===0 || len===0){
+			return true;
+		}else{
+			return false;
+		}
+	},
+<span id='fastDev-Ui-Navigation-method-setLastCls'>	/**
+</span>	 * 给尾部设置样式
+	 * @private
+	 */	
+	setLastCls:function(){
+		this.find(&quot;.ui-nav-last&quot;).removeClass(&quot;.ui-nav-last&quot;);
+		this.find(&quot;.ui-nav-panle&gt;a&gt;.ui-nav-item:last&gt;a&gt;.ui-nav-header&quot;).addClass(&quot;ui-nav-last&quot;);
+	},
+<span id='fastDev-Ui-Navigation-method-setConstruct'>	/**
+</span>	 * 设置控件属性
+	 * @private
+	 */
+	setConstruct : function() {
+		var options = this._options;		
+		this.setLastCls();
+		//currentNode 优先。在currentNode没有值的情况下，才用活动索引。
+		if(options.currentNode){
+			this.find(&quot;div[name='&quot;+options.currentNode+&quot;']&quot;).attr(&quot;current&quot;,&quot;1&quot;);
+		}else if(options.activeIndex&gt;-1){
+			this.find(&quot;.ui-nav-text:eq(&quot;+options.activeIndex+&quot;)&quot;).parent(&quot;div&quot;).attr(&quot;current&quot;,&quot;1&quot;);					
+		}	
+		if(options.target){
+			this.find(&quot;a[href!=''][target='']&quot;).prop(&quot;target&quot;,options.target);
+		}
+		if(options.autoOpenPage){
+			this.openCurrentPage();
+		}
+		//设置节点的展开收缩
+		if(!options.showAll){
+			this.setCurrentExpand();
+		}
+		this.find(&quot;.ui-nav-content:empty&quot;).height(&quot;0px&quot;);
+		this.find(&quot;.ui-nav-content:empty&quot;).prev(&quot;a&quot;).find(&quot;.ui-nav-arrow&quot;).attr(&quot;class&quot;,&quot;.ui-nav-kong&quot;);
+	},
+<span id='fastDev-Ui-Navigation-method-openCurrentPage'>	/**
+</span>	 * 打开当前节点的链接
+	 * @private
+	 */
+	openCurrentPage:function(){
+		var ec = this.find(&quot;[current='1']&quot;);
+		var href = ec.find(&quot;a:first&quot;).prop(&quot;href&quot;);
+		var target = ec.find(&quot;a:first&quot;).prop(&quot;target&quot;);
+		if(href &amp;&amp; href !== &quot;&quot; &amp;&amp; target) {
+			window.open(href, target);
+		}
+	},
+<span id='fastDev-Ui-Navigation-method-setExpandCollect'>	/**
+</span>	 * 设置div展开收缩与选中或没选中的样式
+	 * @private
+	 */
+	setExpandCollect:function(divin,selected){
+		if(divin.hasClass(&quot;ui-nav-item&quot;)===false){
+			return false;
+		}
+		var options=this._options,itemHeight=this._global.itemHeight;
+		if(selected){
+			if(!options.showAll &amp;&amp; options.showOne){
+				var pdiv=divin.parent();
+				fastDev(pdiv).find(&quot;.ui-nav-content&quot;).css(&quot;display&quot;,&quot;none&quot;);
+				fastDev(pdiv).find(&quot;.ui-nav-selected&quot;).removeClass(&quot;ui-nav-selected&quot;);
+				fastDev(pdiv).find(&quot;.ui-nav-inner-seleted&quot;).removeClass(&quot;ui-nav-inner-seleted&quot;);
+				if(options.mode===&quot;maxContent&quot;){
+					 divin.find(&quot;.ui-nav-content:first&quot;).css({&quot;height&quot;:itemHeight+&quot;px&quot;});
+				}
+			}
+			divin.find(&quot;.ui-nav-content:first&quot;).css(&quot;display&quot;,&quot;block&quot;);
+			divin.find(&quot;a:first&quot;).addClass(&quot;ui-nav-selected&quot;);			 
+			options.onExpand.call(this,divin.attr(&quot;name&quot;));
+		}else{
+			divin.find(&quot;.ui-nav-content:first&quot;).css(&quot;display&quot;,&quot;none&quot;);
+			divin.find(&quot;a:first&quot;).removeClass(&quot;ui-nav-selected&quot;);
+			options.onCollect.call(this,divin.attr(&quot;name&quot;));
+		}	
+	},	
+<span id='fastDev-Ui-Navigation-method-setDivClick'>	/**
+</span>	 * 设置项的点击事件
+	 * @private
+	 */
+	setDivClick:function(divcon,divin,event){		
+		var me=this;								
+		if(divcon.isShow()){						
+			this.setExpandCollect(divin,false);
+		}else{						
+			this.setExpandCollect(divin,true);
+		}
+		var content=divin.find(&quot;.ui-nav-content:first&quot;);
+		var len=content.elems.length,len2=0;
+		if(len&gt;0){
+			len2=content.children().elems.length;
+		}
+		if(len===0 || len2===0){
+			if(this._options.onItemClick.call(me,event,divin.attr(&quot;name&quot;))===false){
+				divin.children(&quot;a&quot;).removeAttr(&quot;href&quot;);
+				return false;
+			}
+		}
+	},
+<span id='fastDev-Ui-Navigation-method-setCurrentExpand'>	/**
+</span>	 * 设置当前节点的展开
+	 * @private
+	 */
+	setCurrentExpand:function(){		
+		var currentdiv=this.find(&quot;[current='1']&quot;).elems;
+		if(currentdiv.length&gt;0){
+			var currdiv=fastDev(currentdiv);
+			if(currdiv.hasClass(&quot;ui-nav-inner&quot;)){
+				currdiv.addClass(&quot;ui-nav-inner-seleted&quot;);
+			}
+			currdiv.parents(&quot;.ui-nav-content&quot;).show();
+			currdiv.parents(&quot;.ui-nav-content&quot;).prev().addClass(&quot;ui-nav-selected&quot;);
+		}
+		this.find(&quot;[current='1']&quot;).removeAttr(&quot;current&quot;);
+	},		
+<span id='fastDev-Ui-Navigation-method-getNavInner'>	/**
+</span>	 * 得到ui-nav-inner
+	 * @private
+	 */
+	getNavInner : function(event) {
+			var navInner, evobj = fastDev(event.target);
+			if(evobj.hasClass(&quot;ui-nav-text&quot;)) {
+				navInner = evobj.parent(&quot;div&quot;);
+			} else if(evobj.hasClass(&quot;ui-nav-inner&quot;)) {
+				navInner = evobj;
+			}
+			return navInner;
+	},		
+<span id='fastDev-Ui-Navigation-method-bindEvent'>	/**
+</span>	 * 绑定事件
+	 * @private
+	 */
+	bindEvent : function() {
+		var me = this,navinner=this.find(&quot;.ui-nav-inner&quot;),navPanle=this.find(&quot;.ui-nav-panle&quot;);
+		//按钮鼠标滑入滑出样式改变事件
+		var navInnerMouseOver = function(event) {
+			var navInner = me.getNavInner(event);
+			if(navInner &amp;&amp; navInner.hasClass(&quot;ui-nav-inner-over&quot;) === false){
+				navInner.addClass(&quot;ui-nav-inner-over&quot;);
+			}
+		};
+		var navInnerMouseOut = function(event) {
+			var navInner = me.getNavInner(event);
+			if(navInner){
+				navInner.removeClass(&quot;ui-nav-inner-over&quot;);
+			}
+		};
+		navinner.unbind(&quot;mouseover&quot;);
+		navinner.unbind(&quot;mouseout&quot;);
+		navinner.bind(&quot;mouseover&quot;, navInnerMouseOver).bind(&quot;mouseout&quot;, navInnerMouseOut);		
+		var navPanleClick = function(event) {
+			var anchor = me.getNavA(event);
+			if(anchor) {
+				var divin=anchor.parent(&quot;div&quot;);		
+				if(anchor.hasClass(&quot;ui-nav-text&quot;)){
+					me.find(&quot;.ui-nav-inner-seleted&quot;).removeClass(&quot;ui-nav-inner-seleted&quot;);
+					divin.addClass(&quot;ui-nav-inner-seleted&quot;);
+					if(me._options.onItemClick.call(me,event,divin.attr(&quot;name&quot;))===false){
+						anchor.removeAttr(&quot;href&quot;);
+						return false;
+					}
+				}else{
+				    var divcon=anchor.next();
+					me.setDivClick(divcon,divin,event);
+				}
+			}
+		};		
+		navPanle.unbind(&quot;click&quot;);		
+		navPanle.bind(&quot;click&quot;, navPanleClick);
+	},
+<span id='fastDev-Ui-Navigation-method-getSelected'>	/**
+</span>	 * 得到当前展开的节点,返回选择节点ID(必须是showOne=true时)
+	 * @return {String}
+	 */
+	getSelected:function(){
+		var options= this._options,currentid=&quot;&quot;;
+		if(options.showOne){
+			var ca=this.find(&quot;.ui-nav-inner-seleted&quot;);
+			if(ca.elems.length&gt;0){
+				currentid=ca.attr(&quot;name&quot;);
+			}else{
+				currentid=this.find(&quot;.ui-nav-selected:last&quot;).parent().attr(&quot;name&quot;);
+			}
+		}
+		return currentid;
+	},
+<span id='fastDev-Ui-Navigation-method-setActiveItem'>	/**
+</span>	 * 据ID设置当期活动的Item
+	 * @param {String} id
+	 */
+	setActiveItem : function(id) {
+		var options= this._options;
+		this.find(&quot;.ui-nav-selected&quot;).removeClass(&quot;ui-nav-selected&quot;);
+		this.find(&quot;.ui-nav-inner-seleted&quot;).removeClass(&quot;ui-nav-inner-seleted&quot;);
+		this.find(&quot;.ui-nav-content&quot;).hide();
+		this.find(&quot;div[name='&quot;+id+&quot;']&quot;).attr(&quot;current&quot;,&quot;1&quot;);
+		if(options.autoOpenPage){
+			this.openCurrentPage();
+		}
+		if(!options.showAll){
+			this.setCurrentExpand();
+		}
+	},
+<span id='fastDev-Ui-Navigation-method-_getItemById'>	/**
+</span>	 * 通过id得到节点数据
+	 * @param {String} id
+	 * @return  {Object}
+	 * @private
+	 */
+	_getItemById : function(id) {
+		//return  this.dataset.select(&quot;id=&quot;+id);
+		var ds = this.dataset.select(function(i, data) {
+			return data.id === id;
+		});
+		return ds;
+	},
+<span id='fastDev-Ui-Navigation-method-getItemById'>	/**
+</span>	 * 通过id得到节点数据
+	 * @param {String} id
+	 * @return  {Json}
+	 */
+	getItemById : function(id) {
+		var data=this._getItemById(id);
+		if(data.length&gt;0){
+			return data[0];
+		}else{
+			return null;
+		}
+	},
+<span id='fastDev-Ui-Navigation-method-addItem'>	/**
+</span>	 * 添加一个节点
+	 * @param {Array} item
+	 */
+	addItem:function(item){
+		//var tempds=this.dataset.select(&quot;id=&quot;+item.id);
+		var tempds=this._getItemById(item.id);
+		if(tempds.length&gt;0){
+			throw &quot;id为&quot;+item.id+&quot;的数据已经存在&quot;;
+		}
+		this.dataset.insert(item);
+		var dataSet=this._getItemById(item.id);//this.dataset.select(&quot;id=&quot;+item.id);
+		if(dataSet &amp;&amp; dataSet.length&gt;0){
+			this._global.idAllChild=true;
+			//var fragment = this.initDynamicHtml(null,dataSet);
+			var iddiv = this.find(&quot;#&quot;+item.pid);
+			//这里会替换而不是追加
+			this._renderDynamicHtml(iddiv,&quot;dynamicTemplate&quot;,dataSet,false,window,false);
+			//this.appendDynamicHTML(iddiv,dataSet);
+			//iddiv.append(fragment);
+			this._options.onAdd(item);
+		}		
+	},
+<span id='fastDev-Ui-Navigation-method-reLoad'>	/**
+</span>	 * 重新加载
+	 */
+	reLoad : function(config,data) {	
+		this._global.idAllChild=false;
+		this._global.level=1;
+		this.initRefresh(config,data);
+		this.setConstruct();
+	},
+<span id='fastDev-Ui-Navigation-method-getPidById'>	/**
+</span>	 * 根据id得到group
+	 * @param {String} id
+	 * @return  {String}节点group
+	 */
+	getPidById : function(id) {
+		var items = this._getItemById(id);
+		if(items.length&gt;0){
+			return items[0].pid;
+		}else{
+			return null;
+		}
+	},
+<span id='fastDev-Ui-Navigation-method-getAllItems'>	/**
+</span>	 * 得到全部节点数据
+	 * @return  {Json}
+	 */
+	getAllItems : function() {
+		return this.dataset.select();
+	},
+<span id='fastDev-Ui-Navigation-method-getParentItems'>	/**
+</span>	 * 得到指定节点的所有父祖先级节点
+	 * @param {String} id
+	 * @return  {Array}
+	 */
+	getParentItems : function(id) {
+		var node = this._getItemById(id);		
+		var itemsall = this.getPNode(node);
+		return itemsall;
+	},
+<span id='fastDev-Ui-Navigation-method-getPNode'>	/**
+</span>	 * 递归得到指定节点的父祖先级节点
+	 * @param {String} id
+	 * @return  {Array}
+	 * @private
+	 */
+	getPNode:function(node){		
+		var pnode=this._global.newData.slice(0).concat(node),ppnode;
+		if(node){ 
+			ppnode = this._getItemById(node[0].pid);
+			if(ppnode){
+				this.getPNode(ppnode);
+			}
+		}	
+		return pnode;
+	},
+<span id='fastDev-Ui-Navigation-method-getCurrParentItem'>	/**
+</span>	 * 得到当前节点的父级节点
+	 * @return  {Object}
+	 */
+	getCurrParentItem : function() {
+		var items, id = this.getSelected();
+		if(id){
+			 var node = this.getItemById(id);
+			 if(node){
+				 items=this.getItemById(node.pid);
+			 }
+		}
+		return items;
+	}
+});
+</pre>
+</body>
+</html>

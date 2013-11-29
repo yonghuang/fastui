@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>列宽调整</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../src/fastDev-import.js"></script>
+	</head>
+	<body>
+		<div style="margin: 20px">
+			<div itype="DataGrid" initSource="data.jsp" allowResizeColumn=true>
+				<div width="100px" name="empno" text="员工工号"></div>
+				<div width="100px" name="name" text="姓名"></div>
+				<div width="100px" name="department" text="所属部门"></div>
+				<div width="100px" name="isuse" text="是否可用"></div>
+				<div width="100px" name="position" text="职位"></div>
+				<div width="100px" name="pay" text="薪资"></div>
+				<div width="100px" name="datesemployed" text="入职时间"></div>
+				<div width="100px" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div width="100px" name="test" text="测试列" defaultValue="test" hidden=true></div>
+				<div width="100px" name="test1" text="测试列1" defaultValue="test" hidden=true></div>
+			</div>
+		</div>
+	</body>
+</html>

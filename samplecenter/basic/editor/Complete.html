@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title><ul>       
+         <li>富文本框的完整模式</li>
+         <li>富文本框采用的是百度的ueditor控件进行封装的。</li>
+         <li>除引用框架js外，还需要引用2个editor的js和1个css文件。</li>
+         <li>控件不能缺少container属性。</li>
+        </ul></title>
+<script src="../../../src/fastDev-import.js"></script>
+<script language="javascript" src="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/editor_config.js"></script>
+<script language="javascript" src="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/editor_all.js"></script>
+<link rel="stylesheet" type="text/css" href="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/themes/default/ueditor.css"/>	
+</head>
+
+<body>
+	<div id="example" style="width:500px; height:400px;margin: 10px">
+        <div class="ui-layout-text">完整模式</div>
+		<div itype="Editor" container="example" id="editor1" mode="complete" saveInstance="true" value="这是值"></div>
+	</div>
+</body>
+</html>

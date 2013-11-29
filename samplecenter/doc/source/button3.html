@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///import uicore
+///import ui/stateful.js
+(function (){
+    var utils = baidu.editor.utils,
+        UIBase = baidu.editor.ui.UIBase,
+        Stateful = baidu.editor.ui.Stateful,
+        Button = baidu.editor.ui.Button = function (options){
+            this.initOptions(options);
+            this.initButton();
+        };
+    Button.prototype = {
+        uiName: 'button',
+        label: '',
+        title: '',
+        showIcon: true,
+        showText: true,
+        initButton: function (){
+            this.initUIBase();
+            this.Stateful_init();
+        },
+        getHtmlTpl: function (){
+            return '&lt;div id=&quot;##&quot; class=&quot;edui-box %%&quot;&gt;' +
+                '&lt;div id=&quot;##_state&quot; stateful&gt;' +
+                 '&lt;div class=&quot;%%-wrap&quot;&gt;&lt;div id=&quot;##_body&quot; unselectable=&quot;on&quot; ' + (this.title ? 'title=&quot;' + this.title + '&quot;' : '') +
+                 ' class=&quot;%%-body&quot; onmousedown=&quot;return false;&quot; onclick=&quot;return $$._onClick();&quot;&gt;' +
+                  (this.showIcon ? '&lt;div class=&quot;edui-box edui-icon&quot;&gt;&lt;/div&gt;' : '') +
+                  (this.showText ? '&lt;div class=&quot;edui-box edui-label&quot;&gt;' + this.label + '&lt;/div&gt;' : '') +
+                 '&lt;/div&gt;' +
+                '&lt;/div&gt;' +
+                '&lt;/div&gt;&lt;/div&gt;';
+        },
+        postRender: function (){
+            this.Stateful_postRender();
+        },
+        _onClick: function (){
+            if (!this.isDisabled()) {
+                this.fireEvent('click');
+            }
+        }
+    };
+    utils.inherits(Button, UIBase);
+    utils.extend(Button.prototype, Stateful);
+
+})();
+</pre>
+</body>
+</html>

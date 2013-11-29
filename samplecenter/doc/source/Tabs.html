@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Tabs'>/**
+</span> * @class fastDev.Ui.Tabs
+ * @extends fastDev.Ui.Component
+ * 选项卡控件，可ajax,iframe,div等三种模式展示选项卡内容。继承自component，导航类控件。&lt;p&gt;
+ * 作者：姜玲
+ *
+ *		&lt;div itype=&quot;Tabs&quot; id=&quot;aaa&quot; width=&quot;900px&quot; saveInstance=&quot;true&quot; height=&quot;350px&quot; &gt;
+ *         &lt;div title=&quot;baidu&quot; url=&quot;http://www.baidu.com&quot; showCloseBtn=true&gt;&lt;/div&gt;
+ *         &lt;div title=&quot;Ajax&quot; url=&quot;aa.html&quot; type=&quot;ajax&quot; showCloseBtn=true&gt;&lt;/div&gt;
+ *         &lt;div title=&quot;Iframe&quot; url=&quot;bb.html&quot; showCloseBtn=true&gt;&lt;/div&gt;
+ *       &lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.Tabs&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;Tabs&quot;,
+	_options : {
+<span id='fastDev-Ui-Tabs-property-items'>		/**
+</span>		 * 合法的json数据源
+		 * @type {Json}
+		 * title:&quot;&quot;,--必须项
+		 * url:&quot;&quot;,id:&quot;&quot;,selected:false,type:&quot;iframe&quot;,allowCache:false,content:&quot;&quot;,
+		 * showCloseBtn:false,iconCls:&quot;&quot;,iconStyle:&quot;&quot;,iframeWidth,iframeHeight,width:88px
+		 */
+		items : &quot;&quot;,
+<span id='fastDev-Ui-Tabs-property-initSource'>		/**
+</span>		 * 控件初始化合法的json数据源url
+		 * @type {String}
+		 */
+		initSource : &quot;&quot;,
+<span id='fastDev-Ui-Tabs-property-id'>		/**
+</span>		 * 控件id
+		 * @type {String}
+		 */
+		id : &quot;tab&quot;,
+<span id='fastDev-Ui-Tabs-property-width'>		/**
+</span>		 * 宽
+		 * @type {String}
+		 */
+		width : &quot;100%&quot;,
+<span id='fastDev-Ui-Tabs-property-height'>		/**
+</span>		 * 高
+		 * @type {String}
+		 */
+		height : &quot;100%&quot;,
+<span id='fastDev-Ui-Tabs-property-tabMenu'>		/**
+</span>		 * 右键菜单(暂未实现)
+		 * @type {Array}
+		 */
+		tabMenu : null,
+<span id='fastDev-Ui-Tabs-property-tools'>		/**
+</span>		 * 右侧工具栏
+		 * @type {Array}
+		 */
+		tools : null,
+<span id='fastDev-Ui-Tabs-property-tabAlign'>		/**
+</span>		 * tab标题文本的对齐方式left/center/right/fit
+		 * @type {String}
+		 */
+		tabAlign : &quot;left&quot;,
+<span id='fastDev-Ui-Tabs-property-tabPosition'>		/**
+</span>		 * tab头部标题栏的定位方式left/right/top/bottom
+		 * @type {String}
+		 */
+		tabPosition : &quot;top&quot;,
+<span id='fastDev-Ui-Tabs-property-allowDblClickToClose'>		/**
+</span>		 * 是否允许双击关闭
+		 * @type {Boolean}
+		 */
+		allowDblClickToClose : false,
+<span id='fastDev-Ui-Tabs-property-allowDND'>		/**
+</span>		 * 是否允许拖动时改变tab项的位置
+		 * @type {Boolean}
+		 */
+		allowDND : false,
+<span id='fastDev-Ui-Tabs-property-overWidthMode'>		/**
+</span>		 * 选项卡的总宽度超长后的处理模式，有滚动和列表两种scroll/list模式 （暂未实现）
+		 * @type {String}
+		 */
+		overWidthMode : &quot;scroll&quot;,
+<span id='fastDev-Ui-Tabs-property-activeIndex'>		/**
+</span>		 * 默认打开第几个链接
+		 * @type {Number}
+		 */
+		activeIndex : 0,
+<span id='fastDev-Ui-Tabs-property-currentTitle'>		/**
+</span>		 * 默认选中节点title
+		 * @type {String}
+		 */
+		currentTitle : &quot;&quot;,
+<span id='fastDev-Ui-Tabs-property-type'>		/**
+</span>		 * 控件内容展示方式iframe,ajax,div
+		 * @type {String}[type=&quot;iframe&quot;]
+		 */
+		type : &quot;iframe&quot;,
+<span id='fastDev-Ui-Tabs-property-allowCache'>		/**
+</span>		 * 允许缓存
+		 * @type {Boolean}
+		 */
+		allowCache : false,
+<span id='fastDev-Ui-Tabs-property-showHeader'>		/**
+</span>		 * 是否显示tab头，只保留body部分。
+		 * @type {String}
+		 */
+		showHeader : true,
+<span id='fastDev-Ui-Tabs-property-showCloseBtn'>		/**
+</span>		 * true显示关闭按钮，允许tab关闭
+		 * @type {Boolean}
+		 */
+		showCloseBtn : false,
+<span id='fastDev-Ui-Tabs-property-iconCls'>		/**
+</span>		 * 标题图标样式类
+		 * @type {String}
+		 */
+		iconCls : &quot;&quot;,
+<span id='fastDev-Ui-Tabs-property-ie6Mode'>		/**
+</span>		 * ie6的显示模式，分iframe和tabs两种。
+		 * @type {String}
+		 */
+		ie6Mode : &quot;iframe&quot;,
+<span id='fastDev-Ui-Tabs-property-iconStyle'>		/**
+</span>		 * 标题图标样式
+		 * @type {String}
+		 */
+		iconStyle : &quot;&quot;,
+		defineMode : &quot;js&quot;,
+		autoRenderer : true,
+<span id='fastDev-Ui-Tabs-event-onTabClick'>		/**
+</span>		 * @event onTabClick
+		 * 自定义点击事件
+		 * @param {Object} 所点击的数据对象
+		 */
+		onTabClick : fastDev.noop,
+<span id='fastDev-Ui-Tabs-event-onBeforeClose'>		/**
+</span>		 * @event onBeforeClose
+		 * 关闭前事件，可以通过return false阻止操作
+		 * @param {Object} 所点击的数据对象
+		 */
+		onBeforeClose : fastDev.noop,
+<span id='fastDev-Ui-Tabs-event-onClose'>		/**
+</span>		 * @event onClose
+		 * 关闭后事件
+		 * @param {Object} 所点击的数据对象
+		 */
+		onClose : fastDev.noop,
+<span id='fastDev-Ui-Tabs-event-onTabMenu'>		/**
+</span>		 * @event onTabMenu
+		 * 右键弹出事件 暂未实现
+		 * @param {Object} 所点击的数据对象
+		 */
+		onTabMenu : fastDev.noop,
+<span id='fastDev-Ui-Tabs-event-onTabLoad'>		/**
+</span>		 * @event onTabLoad
+		 * Tabs的initSource数据源请求加载完成后
+		 */
+		onTabLoad : fastDev.noop,
+<span id='fastDev-Ui-Tabs-event-onAdd'>		/**
+</span>		 * @event onAdd
+		 * 添加后
+		 * @param {Object} 所添加的数据对象
+		 */
+		onAdd : fastDev.noop,
+<span id='fastDev-Ui-Tabs-event-onUpdate'>		/**
+</span>		 * @event onUpdate
+		 * 更新后
+		 * @param {Object} 所更新的数据对象
+		 */
+		onUpdate : fastDev.noop,
+<span id='fastDev-Ui-Tabs-event-onBeforeSelect'>		/**
+</span>		 * @event onBeforeSelect
+		 * 面板切换前发生，可以通过return false阻止操作
+		 * @param {Object} 所点击的数据对象
+		 */
+		onBeforeSelect : fastDev.noop,
+<span id='fastDev-Ui-Tabs-event-onAfterSelect'>		/**
+</span>		 * @event onAfterSelect
+		 * 面板切换完发生
+		 * @param {Object} 所点击的数据对象
+		 */
+		onAfterSelect : fastDev.noop
+	},
+	_global : {
+		bgclass : &quot;&quot;,
+		liobj : null,
+		ie6Iframe : false
+	},
+	/* template: [
+	 '&lt;tpl dynamic&gt;',
+		'&lt;table id=&quot;#{id}&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; class=&quot;ui-tab-table ui-tab-position-#{tabPosition}  ui-tab-align-#{tabAlign} #{bgclass}&quot; style=&quot;width:#{width}; height:#{height}&quot;&gt;',
+		'&lt;tpl if(&quot;#{tabPosition}&quot;==&quot;left&quot; || &quot;#{tabPosition}&quot;==&quot;right&quot;)&gt;',	
+			'&lt;tr&gt;&lt;td colspan=&quot;2&quot; class=&quot;ui-tab-align&quot;&gt;&lt;/td&gt;&lt;/tr&gt;',
+		'&lt;/tpl&gt;',	
+			'&lt;tr&gt;',
+		'&lt;tpl if(&quot;#{tabPosition}&quot;==&quot;bottom&quot; || &quot;#{tabPosition}&quot;==&quot;right&quot;)&gt;',	
+			'&lt;td class=&quot;ui-tab-align ui-tab-other&quot;&gt;',
+			'&lt;div class=&quot;ui-tab-content&quot;&gt;',			 
+			  '&lt;tpl each&gt;', 
+				'&lt;div id=&quot;{id}&quot; class=&quot;ui-tab-panel&quot; title=&quot;{title}&quot; url=&quot;{url}&quot; type=&quot;{type}&quot; allowCache=&quot;{allowCache}&quot; style=&quot;width: {iframeWidth}; height:{iframeHeight};',
+				 '&lt;tpl if({selected}!=&quot;true&quot;)&gt;',	
+				'display:none',
+				'&lt;/tpl&gt;',		
+				  '&quot;&gt;',
+				  '&lt;tpl if({type}==&quot;iframe&quot;)&gt;',
+					'&lt;iframe frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;',
+					'&lt;/tpl&gt;',
+				'&lt;/div&gt;',		 
+				'&lt;/tpl&gt;',				
+			 '&lt;/div&gt;',			
+			'&lt;/td&gt;', 
+		'&lt;/tpl&gt;',		
+		'&lt;tpl if(&quot;#{tabPosition}&quot;==&quot;bottom&quot;)&gt;',
+			'&lt;/tr&gt;&lt;tr&gt;',
+		'&lt;/tpl&gt;',	
+			'&lt;td class=&quot;ui-tab-align&quot;&gt;',
+				'&lt;div class=&quot;ui-tab-wrap&quot; style=&quot;margin-left: 0px; margin-right: 0px;', 
+				'&lt;tpl if(!#{showHeader})&gt;',	
+				'display:none;',
+				'&lt;/tpl&gt;',					
+		  '&quot;&gt;&lt;div class=&quot;ui-tab-scroller-left&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;',
+		  '&lt;div class=&quot;ui-tab-scroller-right&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;',
+		  '&lt;ul class=&quot;ui-tab ui-tab-bg&quot;&gt;',	
+		  '&lt;tpl each&gt;', 
+			// 这些循环中的判断提出去放在ready方法中做掉
+			'&lt;li name=&quot;{id}&quot; order=&quot;{row_id}&quot; url=&quot;{url}&quot; type=&quot;{type}&quot; txt=&quot;{title}&quot;',
+			 '&lt;tpl if({selected}==&quot;true&quot;)&gt;',	
+				' class=&quot;ui-tab-selected&quot;',
+			  '&lt;/tpl&gt;',
+			'&gt;',
+			  '&lt;a class=&quot;ui-tab-inner&quot;&gt;',
+			   '&lt;tpl if({iconCls} || {iconStyle})&gt;',
+			     '&lt;span class=&quot;ui-tab-icon {iconCls}&quot; style=&quot;{iconStyle}&quot;&gt;&lt;/span&gt;',
+			   '&lt;/tpl&gt;',   
+			  '&lt;span class=&quot;ui-tab-text&quot;&gt;{title}&lt;/span&gt;',	  
+			  '&lt;tpl if({showCloseBtn}==true)&gt;',
+				 '&lt;span class=&quot;ui-tab-close&quot;&gt;&lt;/span&gt;',
+			  '&lt;/tpl&gt;',
+			  '&lt;/a&gt;',			 
+			  '&lt;div class=&quot;ui-tab-left&quot;&gt;&lt;/div&gt;',
+			  '&lt;div class=&quot;ui-tab-right&quot;&gt;&lt;/div&gt;',
+			'&lt;/li&gt;',			
+			'&lt;/tpl&gt;',			
+		  '&lt;/ul&gt;',
+		  '&lt;div class=&quot;ui-tab-tool&quot; id=&quot;ui-tab-tool_#{id}&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;',
+		'&lt;/div&gt;',
+			'&lt;/td&gt;', 
+		'&lt;tpl if(&quot;#{tabPosition}&quot;==&quot;top&quot;)&gt;',	
+			'&lt;/tr&gt;&lt;tr&gt;',
+		'&lt;/tpl&gt;',		
+		'&lt;tpl if(&quot;#{tabPosition}&quot;==&quot;top&quot; || &quot;#{tabPosition}&quot;==&quot;left&quot;)&gt;',	
+			'&lt;td class=&quot;ui-tab-align ui-tab-other&quot;&gt;',
+			'&lt;div class=&quot;ui-tab-content&quot;&gt;',
+			  '&lt;tpl each&gt;',
+				'&lt;div id=&quot;{id}&quot; class=&quot;ui-tab-panel&quot; title=&quot;{title}&quot; url=&quot;{url}&quot; type=&quot;{type}&quot; allowCache=&quot;{allowCache}&quot; style=&quot;width: {iframeWidth}; height:{iframeHeight};',
+				 '&lt;tpl if({selected}!=&quot;true&quot;)&gt;',	
+				'display:none',
+				'&lt;/tpl&gt;',
+				  '&quot;&gt;',				  
+				  '&lt;tpl if({type}==&quot;iframe&quot;)&gt;', 
+					'&lt;iframe frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;',
+					'&lt;/tpl&gt;',
+				'&lt;/div&gt;',		 
+				'&lt;/tpl&gt;',
+			 '&lt;/div&gt;',		
+			'&lt;/td&gt;', 
+		'&lt;/tpl&gt;',			
+		'&lt;/tr&gt;&lt;/table&gt;',	
+		'&lt;/tpl&gt;'
+    ],*/
+	tplParam : [&quot;width&quot;, &quot;height&quot;, &quot;id&quot;, &quot;tabPosition&quot;, &quot;tabAlign&quot;, &quot;showHeader&quot;, &quot;type&quot;, &quot;bgclass&quot;],
+	fields : [&quot;title&quot;, {
+		name : &quot;url&quot;,
+		defaultValue : &quot;&quot;
+	}, {
+		name : &quot;type&quot;
+	}, {
+		name : &quot;allowCache&quot;
+	}, {
+		name : &quot;showCloseBtn&quot;
+	}, {
+		name : &quot;iconCls&quot;
+	}, {
+		name : &quot;iconStyle&quot;
+	}, {
+		name : &quot;id&quot;,
+		defaultValue : &quot;&quot;
+	}, {
+		name : &quot;selected&quot;,
+		defaultValue : false
+	}, {
+		name : &quot;iframeWidth&quot;,
+		defaultValue : &quot;100%&quot;
+	}, {
+		name : &quot;iframeHeight&quot;,
+		defaultValue : &quot;100%&quot;
+	}, {
+		name : &quot;width&quot;,
+		defaultValue : &quot;88px&quot;
+	}, &quot;content&quot;],
+	staticTemplate : function(params) {
+	 // return '&lt;table id=&quot;'+params.id+'&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; class=&quot;ui-tab-table ui-tab-position-'+params.tabPosition+' ui-tab-align-'+params.tabAlign+' '+params.bgclass+'&quot; style=&quot;width:'+params.width+'; height:'+params.height+'&quot;&gt;&lt;/table&gt;';
+	 return '&lt;div class=&quot;ui-tab-div-content&quot;&gt;&lt;/div&gt;';
+	},
+	dynamicTemplate : function(params,data){
+		var html = [];
+		html.push('&lt;table id=&quot;'+params.id+'&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; class=&quot;ui-tab-table ui-tab-position-'+params.tabPosition+' ui-tab-align-'+params.tabAlign+' '+params.bgclass+'&quot; style=&quot;width:'+params.width+'; height:'+params.height+'&quot;&gt;');
+		if(params.tabPosition===&quot;left&quot; || params.tabPosition===&quot;right&quot;){
+			html.push('&lt;tr&gt;&lt;td colspan=&quot;2&quot; class=&quot;ui-tab-align&quot;&gt;&lt;/td&gt;&lt;/tr&gt;');
+		}
+			html.push('&lt;tr&gt;');
+		if(params.tabPosition===&quot;bottom&quot; || params.tabPosition===&quot;right&quot;){
+			html.push('&lt;td class=&quot;ui-tab-align ui-tab-other&quot;&gt;');
+			html.push('&lt;div class=&quot;ui-tab-content&quot;&gt;');
+			  for(var i=0,item;item=data[i];i++){ 
+				html.push('&lt;div id=&quot;'+item.id+'&quot; class=&quot;ui-tab-panel&quot; title=&quot;'+item.title+'&quot; url=&quot;'+item.url+'&quot; type=&quot;'+item.type+'&quot; allowCache=&quot;'+item.allowCache+'&quot; style=&quot;width: '+item.iframeWidth+'; height:'+item.iframeHeight+';');
+				 if(item.selected!=true){
+				 html.push('display:none');
+				 }
+				  html.push('&quot;&gt;');
+				  if(item.type===&quot;iframe&quot;){
+					html.push('&lt;iframe frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;');
+				  }
+				html.push('&lt;/div&gt;');		 
+				}
+			 html.push('&lt;/div&gt;');
+			html.push('&lt;/td&gt;');
+		}		
+		if(params.tabPosition===&quot;bottom&quot;){
+			html.push('&lt;/tr&gt;&lt;tr&gt;');
+		}
+			html.push('&lt;td class=&quot;ui-tab-align&quot;&gt;');
+				html.push('&lt;div class=&quot;ui-tab-wrap&quot; style=&quot;margin-left: 0px; margin-right: 0px;');
+				if(!params.showHeader){	
+				html.push('display:none;');
+				}
+		  html.push('&quot;&gt;&lt;div class=&quot;ui-tab-scroller-left&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;');
+		  html.push('&lt;div class=&quot;ui-tab-scroller-right&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;');
+		  html.push('&lt;ul class=&quot;ui-tab ui-tab-bg&quot;&gt;');
+		  for(var i=0,item;item=data[i];i++){
+			html.push('&lt;li name=&quot;'+item.id+'&quot; order=&quot;'+i+'&quot; url=&quot;'+item.url+'&quot; type=&quot;'+item.type+'&quot; txt=&quot;'+item.title+'&quot;');
+			 if(item.selected==true){
+				html.push(' class=&quot;ui-tab-selected&quot;');
+			 }
+			html.push('&gt;');
+			  html.push('&lt;a class=&quot;ui-tab-inner&quot;&gt;');
+			   if(!!item.iconCls || !!item.iconStyle){
+			     html.push('&lt;span class=&quot;ui-tab-icon '+item.iconCls+'&quot; style=&quot;'+item.iconStyle+'&quot;&gt;&lt;/span&gt;');
+			   }
+			  html.push('&lt;span class=&quot;ui-tab-text&quot;&gt;'+item.title+'&lt;/span&gt;');
+			  if(item.showCloseBtn==true){
+				 html.push('&lt;span class=&quot;ui-tab-close&quot;&gt;&lt;/span&gt;');
+			  }
+			  html.push('&lt;/a&gt;');
+			  html.push('&lt;div class=&quot;ui-tab-left&quot;&gt;&lt;/div&gt;');
+			  html.push('&lt;div class=&quot;ui-tab-right&quot;&gt;&lt;/div&gt;');
+			html.push('&lt;/li&gt;');
+		}
+		  html.push('&lt;/ul&gt;');
+		  html.push('&lt;div class=&quot;ui-tab-tool&quot; id=&quot;ui-tab-tool_'+params.id+'&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;');
+		html.push('&lt;/div&gt;');
+			html.push('&lt;/td&gt;');
+		if(params.tabPosition===&quot;top&quot;){
+			html.push('&lt;/tr&gt;&lt;tr&gt;');
+		}
+		if(params.tabPosition===&quot;top&quot; || params.tabPosition===&quot;left&quot;){
+			html.push('&lt;td class=&quot;ui-tab-align ui-tab-other&quot;&gt;');
+			html.push('&lt;div class=&quot;ui-tab-content&quot;&gt;');
+			  for(var i=0,item;item=data[i];i++){
+				html.push('&lt;div id=&quot;'+item.id+'&quot; class=&quot;ui-tab-panel&quot; title=&quot;'+item.title+'&quot; url=&quot;'+item.url+'&quot; type=&quot;'+item.type+'&quot; allowCache=&quot;'+item.allowCache+'&quot; style=&quot;width: '+item.iframeWidth+'; height:'+item.iframeHeight+';');
+				 if(item.selected!=true){
+				 html.push('display:none');
+				 }
+				  html.push('&quot;&gt;');
+				    if(item.type===&quot;iframe&quot;){ 
+					html.push('&lt;iframe frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;');
+					}
+				html.push('&lt;/div&gt;');
+				}
+			 html.push('&lt;/div&gt;');
+			html.push('&lt;/td&gt;');
+		}
+		html.push('&lt;/tr&gt;&lt;/table&gt;');
+		return html.join('');
+	},
+<span id='fastDev-Ui-Tabs-method-ready'>	/**
+</span>	 * 面板参数准备
+	 * @protected
+	 */
+	ready : function(options, global) {
+		for(var i = 2; i &lt; 6; i++) {
+			this.fields[i].defaultValue = options[this.fields[i].name];
+		}
+		if(options.tabAlign === &quot;left&quot; &amp;&amp; options.tabPosition === &quot;top&quot;) {
+			global.bgclass = &quot;ui-tab-headerbg&quot;;
+		}
+		if(options.defineMode === &quot;html&quot;) {
+			options.autoRenderer = false;
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-constructItems'>	/**
+</span>	 * 初始化控件列表
+	 * @param {Array} items数据项
+	 * @protected
+	 */
+	constructItems : function() {
+		var options = this._options, data = this.dataset.select(function(i, item) {
+			return item.type === &quot;iframe&quot;;
+		});
+		if(fastDev.Browser.isIE6 &amp;&amp; options.ie6Mode === &quot;iframe&quot; &amp;&amp; data.length &gt; 0) {
+			this.createIframe();
+		} else {
+			//this.renderDynamicHtml();
+			this._renderDynamicHtml(this.find(&quot;.ui-tab-div-content&quot;));
+			options.onTabLoad.call(this);
+			this.setContent();
+			this.setConstruct();
+		}
+	},
+	createIframe : function() {
+		var data = this.dataset.select(function(i, item) {
+			return item.type === &quot;iframe&quot;;
+		});
+		if(data.length === 0) {
+			data = this.dataset.select(function(i, item) {
+				return item.url !== &quot;&quot;;
+			});
+		}
+		var url = data[0].url, options = this._options, container = options.container;
+		var height = options.height || container.height() + &quot;px&quot;, width = container.width() + &quot;px&quot;;
+		var htmlStr = &quot;&lt;div id=\&quot;&quot; + options.id + &quot;\&quot;&gt;&lt;iframe frameborder=\&quot;0\&quot; src=\&quot;&quot; + url + &quot;\&quot; style=\&quot;width:&quot; + width + &quot;; height:&quot; + height + &quot;;\&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;&quot;;
+		var iframe = fastDev.Dom.createByHTML(htmlStr);
+		container.children().remove();
+		container.append(iframe);
+		this._global.ie6Iframe = true;
+	},
+	getNameByUrl : function(url){
+		var urls = url.split('/'),len=urls.length,
+		urlname=urls[len-1].split('.')[0],lastml=&quot;&quot;;
+		if(len&gt;=2){
+			lastml=urls[len-2];
+		}
+		return lastml+urlname;
+	},
+<span id='fastDev-Ui-Tabs-method-setContent'>	/**
+</span>	 * 设置控件内容
+	 * @private
+	 */
+	setContent : function() {
+		var items = this.dataset.select(function(i, item) {
+			return item.type === &quot;div&quot;;
+		}), len = items.length;
+		for(var i = 0; i &lt; len; i++) {
+			this.find(&quot;[class='ui-tab-panel'][title='&quot; + items[i].title + &quot;']&quot;).append(items[i].content);
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-setConstruct'>	/**
+</span>	 * 设置控件属性
+	 * @private
+	 */
+	setConstruct : function() {
+		var options = this._options;
+		this.setSelected(options);
+		this.createTools(options);
+		this.setHeightWidth(options);
+		this.setType();
+		this.bindEvent();
+	},
+<span id='fastDev-Ui-Tabs-method-setType'>	/**
+</span>	 * 设置类型ajax的页面加载
+	 * @private
+	 */
+	setType : function() {
+		var divs = this.find(&quot;div.ui-tab-panel[type='ajax']&quot;).elems, len = divs.length, div, url, allowCache, completefc = function(rsp) {
+			div.append(fastDev(&quot;&lt;div&gt;&quot; + rsp.text + &quot;&lt;/div&gt;&quot;));
+		};
+		for(var i = 0; i &lt; len; i++) {
+			div = fastDev(divs[i]);
+			url = div.attr(&quot;url&quot;);
+			allowCache = div.attr(&quot;allowCache&quot;);
+			if(allowCache === &quot;true&quot; || div.children().elems.length &lt; 1) {
+				fastDev.Ajax.doGet(url, {
+					complete : completefc
+				});
+			}
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-getAllTitleWidth'>	/**
+</span>	 * 得到标题栏的总宽度
+	 * @private
+	 */
+	getAllTitleWidth : function() {
+		var data = this.dataset.select(), len = data.length, width = 2;
+		for(var i = 0; i &lt; len; i++) {
+			width += parseFloat(data[i].width) + 2;
+		}
+		return width;
+	},
+<span id='fastDev-Ui-Tabs-method-setHeightWidth'>	/**
+</span>	 * 设置宽高
+	 * @private
+	 */
+	setHeightWidth : function(options) {
+		var fn = fastDev.Util.StringUtil.stripUnits, parent = fastDev(options.container), paWidth = parent.width(),
+		//pWidth =options.width,
+		pHeight = parent.height(),
+		//pHeight=options.height,
+		wwidth = fastDev(window).width(), pWidth = Math.min(paWidth, wwidth), width = fn(options.width, pWidth),
+		//html模式，先执行了创建操作，而非先将控件创建到页面上。。。所以无法得到titleHeight titleWidth
+		titleHeight = (this.find(&quot;li:first&quot;).height() || 23) + 2, titleWidth = parseFloat(this.find(&quot;div.ui-tab-wrap&quot;).width()) || this.getAllTitleWidth(), height = fn(options.height, pHeight), divwidth = width, divheight = height;
+		//		if(width===wwidth &amp;&amp; fastDev.Browser.isIE6 ){
+		//			width=width-10;
+		//		}
+		this.find(&quot;table.ui-tab-table&quot;).css({
+			&quot;width&quot; : width + &quot;px&quot;,
+			&quot;height&quot; : height + &quot;px&quot;
+		});
+
+		if(options.tabPosition === &quot;top&quot; || options.tabPosition === &quot;bottom&quot;) {
+			divheight = height - parseFloat(titleHeight);
+			this.find(&quot;div.ui-tab-wrap&quot;).css(&quot;width&quot;, width + 2 + &quot;px&quot;);
+			this.find(&quot;ul.ui-tab&quot;).css(&quot;height&quot;, &quot;25px&quot;);
+			//titleHeight
+		} else {
+			if(width &gt; titleWidth) {
+				divwidth = width - titleWidth;
+				this.find(&quot;div.ui-tab-wrap .ui-tab-inner&quot;).css(&quot;width&quot;, titleWidth - 1 + &quot;px&quot;);
+			} else {
+				divwidth = width - 68;
+				this.find(&quot;div.ui-tab-wrap .ui-tab-inner&quot;).css(&quot;width&quot;, &quot;68px&quot;);
+			}
+		}
+
+		//this.find(&quot;ul.ui-tab&quot;).css(&quot;height&quot;,&quot;24px&quot;);
+		if(options.tabAlign === &quot;left&quot; &amp;&amp; options.tabPosition === &quot;top&quot;) {
+			var ulWidth = titleWidth;
+			//this.getUlWidth();
+			if(ulWidth &gt; width) {
+				this.find(&quot;ul.ui-tab&quot;).css(&quot;width&quot;, ulWidth + &quot;px&quot;);
+				this.find(&quot;div[class^='ui-tab-scroller-']&quot;).attr(&quot;show-scroller&quot;, &quot;1&quot;);
+			}
+		}
+		if(divheight &gt; 0) {
+			this.find(&quot;div.ui-tab-panel&quot;).css({
+				&quot;width&quot; : divwidth + &quot;px&quot;,
+				&quot;height&quot; : divheight + &quot;px&quot;
+			});
+			this.find(&quot;iframe&quot;).css({
+				&quot;width&quot; : divwidth + &quot;px&quot;,
+				&quot;height&quot; : divheight + &quot;px&quot;
+			});
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-getUlWidth'>	/**
+</span>	 * 得到ui总宽度
+	 * @private
+	 */
+	getUlWidth : function() {
+		var liobj = this.find(&quot;li&quot;), items = this.getliItemsAndSetLiLeft(liobj), width = 0, len = items.length;
+		for(var i = 0; i &lt; len; i++) {
+			width = width + items[i].width + 4;
+		}
+		return width;
+	},
+<span id='fastDev-Ui-Tabs-method-getliItemsAndSetLiLeft'>	/**
+</span>	 * 得到tab的右边距，宽度，并设置li的右边局
+	 * @private
+	 */
+	getliItemsAndSetLiLeft : function(liobj) {
+		var li, A = liobj.elems, n = A.length, items = [];
+		for(var k = 0; k &lt; n; k += 1) {
+			li = fastDev(A[k]);
+			var item = {};
+			item.order = li.attr(&quot;order&quot;);
+			item.left = li.offset().left;
+			li.css(&quot;left&quot;, item.left + &quot;px&quot;);
+			item.width = li.width();
+			items = items.slice(0).concat(item);
+		}
+		liobj.css(&quot;position&quot;, &quot;absolute&quot;);
+		return items;
+	},
+<span id='fastDev-Ui-Tabs-method-createTools'>	/**
+</span>	 * 创建工具栏
+	 * @private
+	 */
+	createTools : function(options) {
+		if(options.tools) {
+			//var div = this.find(&quot;#ui-tab-tool_&quot; + options.id);
+			var div = this.find(&quot;div[id='ui-tab-tool_&quot; + options.id + &quot;']&quot;);
+			for(var i = 0; i &lt; options.tools.length; i++) {
+				fastDev.create(&quot;Button&quot;, {
+					container : div,
+					text : options.tools[i].text,
+					iconCls : options.tools[i].iconCls,
+					onclick : options.tools[i].onclick
+				});
+			}
+			this.find(&quot;div.ui-tab-tool&quot;).show();
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-setSelected'>	/**
+</span>	 * 设置选中项。数据里的 selected优先，currentTitle 次之，activeIndex最低。
+	 * @private
+	 */
+	setSelected : function(options) {
+		var selectedli = this.find(&quot;li.ui-tab-selected&quot;);
+		if(selectedli.elems.length === 0) {
+			if(options.currentTitle) {
+				var currnode = this.find(&quot;li[txt='&quot; + options.currentTitle + &quot;']&quot;);
+				if(currnode) {
+					currnode.addClass(&quot;ui-tab-selected&quot;);
+					this.find(&quot;div.ui-tab-panel[title='&quot; + options.currentTitle + &quot;']&quot;).css(&quot;display&quot;, &quot;block&quot;);
+				} else if(options.activeIndex &gt; -1) {
+					this.find(&quot;li:eq(&quot; + options.activeIndex + &quot;)&quot;).addClass(&quot;ui-tab-selected&quot;);
+					this.find(&quot;div.ui-tab-panel:eq(&quot; + options.activeIndex + &quot;)&quot;).css(&quot;display&quot;, &quot;block&quot;);
+				}
+			} else if(options.activeIndex &gt; -1) {
+				this.find(&quot;li:eq(&quot; + options.activeIndex + &quot;)&quot;).addClass(&quot;ui-tab-selected&quot;);
+				this.find(&quot;div.ui-tab-panel:eq(&quot; + options.activeIndex + &quot;)&quot;).css(&quot;display&quot;, &quot;block&quot;);
+			}
+		} else if(selectedli.elems.length &gt; 1) {
+			this.find(&quot;li.ui-tab-selected:gt(0)&quot;).removeClass(&quot;ui-tab-selected&quot;);
+			this.find(&quot;div.ui-tab-panel:visible:gt(0)&quot;).css(&quot;display&quot;, &quot;none&quot;);
+		}
+		//还要做点击后的url赋值操作
+		var sedtxt = this.find(&quot;li.ui-tab-selected&quot;).attr(&quot;txt&quot;);
+		this.setSrcByTxt(sedtxt);
+	},
+<span id='fastDev-Ui-Tabs-method-setIframeSrc'>	/**
+</span>	 * 设置iframe的src
+	 * @private
+	 */
+	setIframeSrc : function(iframe, iframesrc) {
+		if(iframe.elems.length &gt; 0 &amp;&amp; !!iframesrc) {
+			var src = iframe.attr(&quot;src&quot;);
+			this.find(&quot;div.ui-tab-panel:visible&quot;).css(&quot;display&quot;, &quot;none&quot;);
+			iframe.parent(&quot;div&quot;).css(&quot;display&quot;, &quot;block&quot;);
+			if(src !== iframesrc) {
+				iframe.prop(&quot;src&quot;, iframesrc);
+				if(!iframe.attr(&quot;id&quot;)){
+					var nameurl=this.getNameByUrl(iframesrc);
+					iframe.attr(&quot;name&quot;,nameurl);				
+					iframe.attr(&quot;id&quot;,nameurl);
+				}
+				//this.find(&quot;.ui-tab-panel&quot;).hide();
+				//iframe.parent(&quot;div&quot;).show();
+			}
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-setUrlByTitle'>	/**
+</span>	 * 根据title设置iframe的url
+	 * @param {String} title
+	 * @param {String} url
+	 */
+	setUrlByTitle : function(title, url) {
+		if(this._global.ie6Iframe) {
+			var iframe = fastDev(&quot;#&quot; + this._options.id).find(&quot;iframe&quot;);
+			var src = iframe.attr(&quot;src&quot;);
+			if(src !== url) {
+				iframe.prop(&quot;src&quot;, url);
+			}
+		} else {
+			var panel = this.find(&quot;li[type='iframe'][txt='&quot; + title + &quot;']&quot;);
+			if(panel.elems.length &gt; 0) {
+				panel.attr(&quot;url&quot;, url);
+				this.setSrcByTxt(title);
+			}
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-setSrcByTxt'>	/**
+</span>	 * 根据txt设置iframe的url
+	 * @private
+	 */
+	setSrcByTxt : function(txt) {
+		var panel = this.find(&quot;li[type='iframe'][txt='&quot; + txt + &quot;']&quot;), iframe, iframesrc = panel.attr(&quot;url&quot;);
+		if(panel.elems.length === 1) {
+			if(fastDev.Browser.isIE6) {
+				iframe = this.find(&quot;iframe:first&quot;);
+				this.setIframeSrc(iframe, iframesrc);
+			} else if(fastDev.Browser.isIE7) {
+				var iframeNum = this.find(&quot;iframe&quot;).elems.length;
+				if(iframeNum &gt; 3) {
+					iframe = this.find(&quot;iframe:first&quot;);
+					this.setIframeSrc(iframe, iframesrc);
+				} else {
+					iframe = this.find(&quot;div.ui-tab-panel[type='iframe'][title='&quot; + txt + &quot;']&quot;).children(&quot;iframe&quot;);
+					this.setIframeSrc(iframe, iframesrc);
+				}
+			} else {
+				iframe = this.find(&quot;div.ui-tab-panel[type='iframe'][title='&quot; + txt + &quot;']&quot;).children(&quot;iframe&quot;);
+				this.setIframeSrc(iframe, iframesrc);
+			}
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-bindEvent'>	/**
+</span>	 * 绑定事件
+	 * @private
+	 */
+	bindEvent : function() {
+		var me = this, liobj = this.find(&quot;li&quot;), uldiv = fastDev(me.elems[0]), options = this._options;
+
+		var closeMouseOver = function(event) {
+			var evobj = fastDev(event.target);
+			if(evobj.hasClass(&quot;ui-tab-close&quot;)) {
+				evobj.addClass(&quot;ui-tab-close-over&quot;);
+			}
+		};
+		var closeMouseOut = function(event) {
+			var evobj = fastDev(event.target);
+			if(evobj.hasClass(&quot;ui-tab-close&quot;)) {
+				evobj.removeClass(&quot;ui-tab-close-over&quot;);
+			}
+		};
+		this.find(&quot;[class^='ui-tab-close']&quot;).bind(&quot;mouseover&quot;, closeMouseOver).bind(&quot;mouseout&quot;, closeMouseOut);
+		this.dargliEvent(options, liobj);
+		this.scrollerliEvent(options, liobj);
+
+		var liClick = function(event) {
+			var evobj = fastDev(event.target), li = evobj.parents(&quot;li:first&quot;) || evobj, txt = li.attr(&quot;txt&quot;);
+			if(evobj.hasClass(&quot;ui-tab-close&quot;)) {
+				me.removeTab(txt);
+			} else {
+				me.find(&quot;li.ui-tab-selected&quot;).removeClass(&quot;ui-tab-selected&quot;);
+				li.addClass(&quot;ui-tab-selected&quot;);
+				me.find(&quot;div.ui-tab-panel:visible&quot;).css(&quot;display&quot;, &quot;none&quot;);
+				me.find(&quot;div.ui-tab-panel[title='&quot; + txt + &quot;']&quot;).css(&quot;display&quot;, &quot;block&quot;);
+				me.setSrcByTxt(txt);
+				options.onTabClick.call(this, event, txt);
+			}
+		};
+		var liDblclick = function(event) {
+			var evobj = fastDev(event.target), li = evobj.parents(&quot;li:first&quot;) || evobj, txt = li.attr(&quot;txt&quot;);
+			me.removeTab(txt);
+		};
+		//liobj.unbind(&quot;click&quot;);
+		liobj.bind(&quot;mousedown&quot;, liClick);
+		if(options.allowDblClickToClose) {
+			liobj.bind(&quot;dblclick&quot;, liDblclick);
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-getMaxRight'>	/**
+</span>	 * 得到li最大的 right
+	 * @private
+	 */
+	getMaxRight : function() {
+		var con = this.find(&quot;li:last&quot;);
+		//.elems;
+		//var maxRight=0,len=liobj.length,con,firstLeft=0;
+		//for(var i=0;i&lt;len;i++){
+		//con=fastDev(liobj[i]);
+		var maxRight = con.position().left + con.width();
+		//}
+		return maxRight;
+	},
+<span id='fastDev-Ui-Tabs-method-scrollerliEvent'>	/**
+</span>	 * 左右两本的《》的事件
+	 * @private
+	 */
+	scrollerliEvent : function(options, liobj) {
+		// &lt; &gt;按钮鼠标滑入滑出样式改变事件
+		var me = this, uileft, maxliright, uileft, move, scroller = me.find(&quot;div[show-scroller='1']&quot;), scr1 = fastDev(scroller.elems[0]), scr2 = fastDev(scroller.elems[1]), tabsWidth = me.find(&quot;div.ui-tab-wrap&quot;).width();
+		if(scroller.elems.length &gt; 0) {
+			var disabledScroller = function() {
+				uileft = me.find(&quot;ul.ui-tab&quot;).position().left;
+				maxliright = me.getMaxRight();
+				//如果ul的left是负数，那么左边的可以点，否则不可以点
+				if(uileft &lt; 0) {
+					scr1.removeClass(&quot;ui-tab-scroller-left-disabled&quot;);
+				} else {
+					scr1.addClass(&quot;ui-tab-scroller-left-disabled&quot;);
+				}
+				//如果最后一个的right大于整个的left，那么右边的可以点，否则不可以点
+				if(maxliright + uileft &gt; tabsWidth) {
+					scr2.removeClass(&quot;ui-tab-scroller-right-disabled&quot;);
+				} else {
+					scr2.addClass(&quot;ui-tab-scroller-right-disabled&quot;);
+				}
+			};
+			var scrollerMouseOver = function() {
+				disabledScroller();
+				me.find(&quot;li&quot;).removeCss(&quot;z-index&quot;);
+				var src1disabled = scr1.hasClass(&quot;ui-tab-scroller-left-disabled&quot;);
+				var scr2disabled = scr2.hasClass(&quot;ui-tab-scroller-right-disabled&quot;);
+				if(!src1disabled || !scr2disabled) {
+					scroller.css(&quot;display&quot;, &quot;block&quot;);
+					//if (options.allowDND === false) {
+					//    options.allowDND = true;
+					//    me.dargliEvent(options, me.find(&quot;li&quot;));
+					//}
+				}
+			};
+			var scrollerMouseOut = function() {
+				scroller.hide();
+			};
+			this.find(&quot;div.ui-tab-wrap&quot;).bind(&quot;mouseover&quot;, scrollerMouseOver).bind(&quot;mouseout&quot;, scrollerMouseOut);
+			var li = me.find(&quot;ul.ui-tab&gt;li&quot;).elems, lilen = li.length, moveWidth = 4;
+			var move1 = function() {
+				//&lt;&lt;每次移动值为 left大于ui-tab-wrap宽度-2的第一个li的left+width+4
+				moveWidth = 92;
+				//me.getMoveWidth(false);
+				uileft = me.find(&quot;ul.ui-tab&quot;).position().left;
+				if(moveWidth &gt; 0 &amp;&amp; uileft &lt; 0) {
+					scr2.removeClass(&quot;ui-tab-scroller-right-disabled&quot;);
+					move = (uileft + moveWidth) &gt; 0 ? 0 : (uileft + moveWidth);
+					// me.find(&quot;.ui-tab&quot;).css(&quot;left&quot;,move+&quot;px&quot;);
+					me.find(&quot;ul.ui-tab&quot;).animate({
+						left : move
+					}, 200, &quot;quad-easeInOut&quot;);
+				} else {
+					scr1.addClass(&quot;ui-tab-scroller-left-disabled&quot;);
+					scrollerStop1();
+				}
+			};
+			var move2 = function() {
+				//&gt;&gt;每次移动值为 left大于0的第一个li的left+width+4
+				moveWidth = 92;
+				//me.getMoveWidth(true);
+				uileft = me.find(&quot;ul.ui-tab&quot;).position().left;
+				maxliright = me.getMaxRight();
+				if(moveWidth &gt; 0 &amp;&amp; maxliright + uileft &gt; tabsWidth) {
+					scr1.removeClass(&quot;ui-tab-scroller-left-disabled&quot;);
+					move = (uileft - moveWidth) &gt; (tabsWidth - maxliright - 4) ? (uileft - moveWidth) : (tabsWidth - maxliright - 4);
+					//  me.find(&quot;.ui-tab&quot;).css(&quot;left&quot;,move+&quot;px&quot;);
+					me.find(&quot;ul.ui-tab&quot;).animate({
+						left : move
+					}, 200, &quot;quad-easeInOut&quot;);
+				} else {
+					scr2.addClass(&quot;ui-tab-scroller-right-disabled&quot;);
+					scrollerStop2();
+				}
+			};
+			var sMove1, sMove2;
+			var scrollerMove1 = function() {
+				move1();
+				sMove1 = setInterval(move1, 500);
+			};
+			var scrollerMove2 = function() {
+				move2();
+				sMove2 = setInterval(move2, 500);
+			};
+			var scrollerStop1 = function() {
+				clearInterval(sMove1);
+			};
+			var scrollerStop2 = function() {
+				clearInterval(sMove2);
+			};
+			scr1.bind(&quot;mousedown&quot;, scrollerMove1).bind(&quot;mouseup&quot;, scrollerStop1);
+			scr2.bind(&quot;mousedown&quot;, scrollerMove2).bind(&quot;mouseup&quot;, scrollerStop2);
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-getMoveWidth'>	/**
+</span>	 * 得到移动区域的总宽度
+	 * @private
+	 */
+	getMoveWidth : function(isLast) {
+		//每次移动值为 left大于0或总宽度值的第一个li的left+width+4
+		var liitems = this.getliItems(this.find(&quot;li&quot;)), li;
+		var lileft, moveWidth = 4, tempWidth = 0, lileft;
+		if(isLast) {
+			tempWidth = this.find(&quot;div.ui-tab-wrap&quot;).width() - 2;
+		}
+		for(var i = 0; i &lt; liitems.length; i++) {
+			lileft = liitems[i].left;
+			if((lileft + liitems[i].width) &gt;= tempWidth) {
+				li = liitems[i];
+				break;
+			}
+		}
+		if(li) {
+			if(isLast) {
+				moveWidth = lileft + li.width + 4 - tempWidth - 1;
+			} else {
+				moveWidth = Math.abs(lileft) + 4;
+			}
+			return moveWidth &gt; 50 ? moveWidth : 50;
+		} else {
+			return 50;
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-getLeft'>	/**
+</span>	 * 得到某个li的left值
+	 * @private
+	 */
+	getLeft : function(obj) {
+		return parseInt(obj.css(&quot;left&quot;)) || fastDev(obj).offset().left;
+	},
+<span id='fastDev-Ui-Tabs-method-dargliEvent'>	/**
+</span>	 * 拖拽事件
+	 * @private
+	 */
+	dargliEvent : function(options, liobj) {
+		// var me = this,
+		// liobj = this.find(&quot;li&quot;);
+		if(options.allowDND &amp;&amp; (options.tabPosition === &quot;top&quot; || options.tabPosition === &quot;bottom&quot;)) {
+			var liobj = this.find(&quot;li&quot;);
+			fastDev.create(&quot;Draggable&quot;, {
+				element : liobj,
+				axis : &quot;x&quot;,
+				inside : true,
+				ghost : false,
+				oncreate : function() {
+					for(var i = 0, elem, position; elem = liobj.elems[i++]; ) {
+						( elem = fastDev(elem)).css({
+							left : ( position = elem.position()).left,
+							top : position.top
+						});
+					}
+					liobj.css(&quot;position&quot;, &quot;absolute&quot;);
+				},
+				onstart : function(event) {
+					var firstTab = this.parent().find(&quot;li:first&quot;);
+					this.elems[0]._tabWidth = this.outerWidth(true);
+					this.elems[0]._minTabPosition = firstTab.elems[0]._tabPosition || firstTab.position();
+					//this.elems[0]._tabWrapWidth = this.parent().parent().width();
+					this.parent().parent().find(&quot;div[show-scroller='1']&quot;).hide();
+				},
+				ondrag : function(event, offsetX, offsetY) {
+					var position = this.position(), nextTab = this.next(&quot;li&quot;), prevTab = this.prev(&quot;li&quot;), width = this.elems[0]._tabWidth, prevOffset = prevTab.position(), nextOffset = nextTab.position(), prevWidth = prevTab.outerWidth(true), nextWidth = nextTab.outerWidth(true), nextPosition = nextTab.hasElem() ? nextTab.elems[0]._tabPosition || nextOffset : {
+						left : prevOffset.left + prevWidth
+					}, prevPosition = prevTab.hasElem() ? prevTab.elems[0]._tabPosition || prevOffset : {
+						left : this.elems[0]._minTabPosition.left
+					};
+					if(position.left &lt; prevPosition.left + prevWidth / 2) {
+						(prevTab.insertAfter(this).animate({
+						left: position.left = nextPosition.left - (nextTab.hasElem() ? prevWidth : 0)
+						}, 200, &quot;quad-easeInOut&quot;).elems[0] || &quot;&quot;)._tabPosition = position;
+					} else if(position.left + width &gt; nextPosition.left + nextWidth / 2) {
+						(nextTab.insertBefore(this).animate({
+						left: position.left = prevPosition.left + prevWidth
+						}, 200, &quot;quad-easeInOut&quot;).elems[0] || &quot;&quot;)._tabPosition = position;
+					}
+				},
+				onstop : function() {
+					var nextTab = this.next(&quot;li&quot;), prevTab = nextTab.hasElem() ? null : this.prev(&quot;li&quot;), position = {};
+					this.animate({
+					left: position.left = Math.max(nextTab.hasElem() ? (nextTab.elems[0]._tabPosition || nextTab.position()).left - this.elems[0]._tabWidth : (prevTab.elems[0]._tabPosition || prevTab.position()).left + prevTab.outerWidth(true), this.elems[0]._minTabPosition.left)
+					}, 200, &quot;quad-easeInOut&quot;).elems[0]._tabPosition = position;
+					return false;
+				}
+			});
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-getliItems'>	/**
+</span>	 * 得到li的left,width和order
+	 * @private
+	 */
+	getliItems : function(liobj) {
+		var li, A = liobj.elems, n = A.length, items = [];
+		for(var k = 0; k &lt; n; k += 1) {
+			li = fastDev(A[k]);
+			var item = {};
+			item.order = li.attr(&quot;order&quot;);
+			item.left = this.getLeft(li);
+			item.width = li.width();
+			items = items.slice(0).concat(item);
+		}
+		return items;
+	},
+<span id='fastDev-Ui-Tabs-method-reLoad'>	/**
+</span>	 * 重新加载
+	 */
+	reLoad : function(config, data) {
+		this.initRefresh(config, data);
+		this.setConstruct();
+	},
+<span id='fastDev-Ui-Tabs-method-getCurrentTitle'>	/**
+</span>	 * 得到当前title
+	 * @return  {String} title
+	 */
+	getCurrentTitle : function() {
+		var sed = this.find(&quot;li.ui-tab-selected&quot;), title = &quot;&quot;;
+		if(sed.elems.length &gt; 0) {
+			title = sed.attr(&quot;txt&quot;);
+		}
+		return title;
+	},
+<span id='fastDev-Ui-Tabs-method-setActiveTabByTitle'>	/**
+</span>	 * 设置当前活动的title
+	 * @param {String} title
+	 */
+	setActiveTabByTitle : function(title) {
+		this.find(&quot;li.ui-tab-selected&quot;).removeClass(&quot;ui-tab-selected&quot;);
+		this.find(&quot;div.ui-tab-panel&quot;).css(&quot;display&quot;, &quot;none&quot;);
+		var currnode = this.find(&quot;li[txt='&quot; + title + &quot;']&quot;);
+		if(currnode) {
+			currnode.addClass(&quot;ui-tab-selected&quot;);
+			if(fastDev.Browser.isIE6 || fastDev.Browser.isIE7) {
+				this.setSrcByTxt(title);
+			} else {
+				this.find(&quot;div.ui-tab-panel[title='&quot; + title + &quot;']&quot;).css(&quot;display&quot;, &quot;block&quot;);
+			}
+
+		}
+	},
+<span id='fastDev-Ui-Tabs-method-addTab'>	/**
+</span>	 * 添加选项卡
+	 * @param {json} item
+	 */
+	addTab : function(item) {
+		var me = this, options = this._options;
+		var tempds = this.dataset.select(function(i, data) {
+			return data.title === item.title;
+		});
+		if(tempds.length &gt; 0) {
+			throw &quot;“&quot; + item.title + &quot;”已经存在，不能重复添加。&quot;;
+		}
+		if(this._global.ie6Iframe || (fastDev.Browser.isIE6 &amp;&amp; options.ie6Mode === &quot;iframe&quot;)) {
+			if(item.type !== &quot;ajax&quot; &amp;&amp; item.type !== &quot;div&quot;) {
+				item.type = &quot;iframe&quot;;
+				this.dataset.remove(&quot;type=iframe&quot;);
+				this.dataset.insert(item);
+				var datalen = this.dataset.select().length;
+				if(datalen === 1) {
+					this.createIframe();
+				}//else{
+				///	alert(&quot;949&quot;);
+				//	this.setUrlByTitle(&quot;&quot;,item.url);
+				//}
+				return;
+			}
+		}
+		options.currentTitle = item.title;
+		item.selected = true;
+		this.dataset.insert(item);
+		var datalen = this.dataset.select().length;
+
+		//if(datalen === 1) {
+			//this.renderDynamicHtml();
+			this._options.currentNode = item.id;
+			this.constructItems();
+			//this._renderDynamicHtml(this.find(&quot;table.ui-tab-table&quot;));
+			//this.setContent();
+			//this.setConstruct();
+			this._options.onAdd.call(me, item.title);
+			return;
+		//}
+		// var addDataSet = this.dataset.select(&quot;title=&quot; + item.title);
+		// var fragment = this.initDynamicHtml(null, addDataSet);
+		// var addli = fastDev(fragment.elems[0]).find(&quot;li[txt='&quot; + item.title + &quot;']&quot;);
+		// var adddiv = fastDev(fragment.elems[0]).find(&quot;div[title='&quot; + item.title + &quot;']&quot;);
+		// addli.addClass(&quot;ui-tab-selected&quot;);
+		// adddiv.css(&quot;display&quot;, &quot;block&quot;);
+		// var ul = fastDev(this.elems[0]).find(&quot;ul.ui-tab&quot;);
+		// var div = fastDev(this.elems[0]).find(&quot;div.ui-tab-content&quot;);
+		// ul.find(&quot;li.ui-tab-selected&quot;).removeClass(&quot;ui-tab-selected&quot;);
+		// var divSelected = div.find(&quot;div.ui-tab-panel:visible&quot;);
+		// var height = fastDev(divSelected).height();
+		// var width = fastDev(divSelected).width();
+		// divSelected.css(&quot;display&quot;, &quot;none&quot;);
+		// var lastli = ul.find(&quot;li:last&quot;);
+		// var left = 0;
+		// if(fastDev.Browser.isIE6) {
+			// left = parseInt(lastli.css(&quot;left&quot;)) &gt; 0 ? parseInt(lastli.css(&quot;left&quot;)) : lastli.offset().left;
+		// } else {
+			// left = parseInt(lastli.css(&quot;left&quot;)) &gt; 0 ? parseInt(lastli.css(&quot;left&quot;)) : lastli.position().left;
+		// }
+		// var order = parseInt(lastli.attr(&quot;order&quot;));
+		// var lwidth = lastli.width();
+		// addli.attr(&quot;order&quot;, (order + 1) + &quot;&quot;);
+		// ul.append(addli);
+		// var awidth = addli.width();
+		// var tabsWidth = this.find(&quot;div.ui-tab-wrap&quot;).width();
+		// if(left + lwidth + awidth + 8 &gt; tabsWidth) {
+			// var move = tabsWidth - (left + lwidth + awidth + 8);
+			// ul.css(&quot;left&quot;, move + &quot;px&quot;);
+		// }
+		// this.find(&quot;div[class^='ui-tab-scroller-']&quot;).attr(&quot;show-scroller&quot;, &quot;1&quot;);
+		// adddiv.height(height);
+		// adddiv.width(width);
+		// var addiframe = adddiv.find(&quot;iframe&quot;);
+		// addiframe.height(height);
+		// addiframe.width(width);
+		// div.append(adddiv);
+		// if(addiframe.elems.length === 1) {
+			// this.setSrcByTxt(item.title);
+		// }
+		// if(item.type === &quot;div&quot; &amp;&amp; item.content) {
+			// this.setContentByTitle(item.title, item.content);
+		// }
+		// this.setType();
+		// this.bindEvent();
+		// this._options.onAdd.call(me, item.title);
+	},
+	/*
+	 * 获取指定选项卡数据
+	 * @param {String} id
+	 * @return  {Json} item
+	 */
+	getTabById : function(id) {
+		var items = this.dataset.select(function(i,item){
+			return item.id===id;
+		});
+		return items;
+	},
+	/*
+	 * 获取指定选项卡数据
+	 * @param {String} title
+	 * @return  {Json} item
+	 */
+	getTabByTitle : function(title) {
+		var items = this.dataset.select(function(i,item){
+			return item.title===title;
+		});
+		if(items &amp;&amp; items.length&gt;0){
+		return items[0];
+		}
+	},
+	/*
+	 * 更新指定选项卡
+	 * @param {String} title
+	 * @param {json} item
+	 */
+	updateTab : function(title, item) {
+		var me = this;
+		this.removeTab(title);
+		this.addTab(item);
+		this._options.onUpdate.call(me, item.title);
+	},
+	/*
+	 * 清空指定选项卡的内容
+	 * @param {String} title
+	 */
+	cleanContentByTitle : function(title) {
+		var iframediv = this.find(&quot;div.ui-tab-panel[title='&quot; + title + &quot;']&quot;);
+		if(iframediv.elems.length &gt; 0) {
+			var children = iframediv.children();
+			children.remove();
+		}
+	},
+	/*
+	 * 添加指定选项卡的内容
+	 * @param {String} title
+	 * @param {String} content
+	 */
+	addContentByTitle : function(title, content) {
+		var iframediv = this.find(&quot;div.ui-tab-panel[title='&quot; + title + &quot;']&quot;);
+		if(iframediv.elems.length &gt; 0) {
+			var dom = fastDev.Dom.createByHTML(content);
+			iframediv.append(dom);
+		}
+	},
+	/*
+	 * 设置指定选项卡的内容
+	 * @param {String} title
+	 * @param {String} content
+	 */
+	setContentByTitle : function(title, content) {
+		var iframediv = this.find(&quot;div.ui-tab-panel[title='&quot; + title + &quot;']&quot;);
+		if(iframediv.elems.length &gt; 0) {
+			var children = iframediv.children();
+			children.remove();
+			var dom = fastDev.Dom.createByHTML(content);
+			iframediv.append(dom);
+		}
+	},
+	/*
+	 * 关闭指定选项卡项
+	 * @param {String} title
+	 */
+	removeTab : function(title) {
+		if(this.find(&quot;li[txt='&quot; + title + &quot;']&gt;a&gt;.ui-tab-close&quot;).elems.length === 0) {
+			return false;
+		}
+		var options = this._options;
+		if(options.onBeforeClose.call(this, title) !== false) {
+			var prevTitle = this.find(&quot;li[txt='&quot; + title + &quot;']&quot;).prev(&quot;li&quot;).attr(&quot;txt&quot;);
+			if(prevTitle === &quot;&quot;) {
+				prevTitle = this.find(&quot;li[txt='&quot; + title + &quot;']&quot;).next(&quot;li&quot;).attr(&quot;txt&quot;);
+			}
+			this.find(&quot;li[txt='&quot; + title + &quot;']&quot;).remove();
+			this.dataset.remove(&quot;title=&quot; + title);
+			this.find(&quot;div.ui-tab-panel[title='&quot; + title + &quot;']&gt;iframe&quot;).attr(&quot;src&quot;, &quot;&quot;);
+			this.find(&quot;div.ui-tab-panel[title='&quot; + title + &quot;']&quot;).remove();
+			this.setActiveTabByTitle(prevTitle);
+			var liobj = this.find(&quot;li&quot;);
+			liobj.removeAttr(&quot;style&quot;);
+			this.dargliEvent(options, liobj);
+			options.onClose.call(this, title);
+		}
+	},
+	/*
+	 * 关闭全部选项卡
+	 */
+	removeAll : function() {
+		this.find(&quot;li&quot;).remove();
+		this.find(&quot;div.ui-tab-panel&quot;).remove();
+	},
+	/*
+	 * 关闭所有选项卡除当前
+	 * @param {String} title
+	 */
+	removeAllBut : function(title) {
+		if(!title) {
+			title = this.getCurrentTitle();
+		}
+		if(title) {
+			this.find(&quot;li[txt!='&quot; + title + &quot;']&quot;).remove();
+			this.find(&quot;div.ui-tab-panel[title!='&quot; + title + &quot;']&quot;).remove();
+			this.find(&quot;div.ui-tab-panel[title='&quot; + title + &quot;']&quot;).show();
+		}
+	},
+	/*
+	 * 设置容器大小
+	 * @param {String} width
+	 * @param {String} height
+	 */
+	resize : function(width, height) {
+		var options = this._options;
+		if(width) {
+			options.width = width;
+		}
+		if(height) {
+			options.height = height;
+		}
+		this.setHeightWidth(options);
+	},
+	/*
+	 * 是否存在指定选项卡项
+	 * @param {String} title
+	 * @return  {Boolean}
+	 */
+	exists : function(title) {
+		return this.find(&quot;li[txt='&quot; + title + &quot;']&quot;).elems.length &gt; 0;
+	}
+}); </pre>
+</body>
+</html>

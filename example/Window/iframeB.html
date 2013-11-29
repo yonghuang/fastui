@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>iframeB</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+
+		<script type="text/javascript">
+			var win, input, p = 10;
+			$(function() {
+				// 通过fastDev.Ui.Window.getData(name)函数取值，默认可以通过"parent"键名取到原父窗口对象
+				win = fastDev.Ui.Window.getData("parent").win;
+				input = win.getData("input")// 也可以通过实例的getData(name)方法取值
+				$("#inputB").prop("value", input.prop("value"));
+			});
+			function closeWindow() {
+				input.prop("value", $("#inputB").prop("value"));
+				win.close();
+			}
+
+			function moveWindow() {
+				win.move({
+					left : p += 10,
+					top : p
+				});
+			}
+
+			function hideWindow() {
+				win.hide();
+			}
+		</script>
+	</head>
+	<body>
+		<h4>iframeB</h4>
+		<input id="inputB"/>
+		<p>
+			点击下方关闭弹窗按钮关闭弹窗并回传输入框的值到原父页面（iframeA）
+		</p>
+		<button class="button" onclick="closeWindow()">
+			关闭弹窗
+		</button>
+		<button class="button" onclick="moveWindow()">
+			移动弹窗
+		</button>
+		<button class="button" onclick="hideWindow()">
+			隐藏弹窗
+		</button>
+	</body>
+</html>
+

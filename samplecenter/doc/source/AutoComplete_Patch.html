@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">talkweb.Components.AutoComplete = fastDev.apply(function(settings) {
+    return fastDev.create(&quot;fastDev.Ui.AutoComplete&quot;, settings);
+}, fastDev.Ui.AutoComplete);
+
+fastDev.Core.ClassManager.addAlias(&quot;talkweb.Components.AutoComplete&quot;, &quot;fastDev.Ui.AutoComplete&quot;);
+/*
+ *方法兼容补丁
+ */
+fastDev.apply(fastDev.Ui.AutoComplete._options, {
+    /*
+     * 回调接口
+     * @event
+     * @type {String}
+     */
+    afterChoose : fastDev.noop,
+    /*
+     * 鼠标触发的样式名称
+     * @type {String}
+     * @deprecated
+     */
+    onClass : &quot;onClass&quot;,
+    /*
+     * 鼠标离开后的样式名称
+     * @type {String}
+     * @deprecated
+     */
+    unClass : &quot;unClass&quot;,
+    /*
+     * 请求数据源
+     * @type {String}
+     * @deprecated
+     */
+    dataSource : &quot;&quot;
+});
+fastDev.apply(fastDev.Ui.AutoComplete, {
+    ready : function(options, global) {
+        options.onAfterChoose = options.afterChoose;
+        options.selectedClass = options.onClass;
+        options.unSelectedClass = options.unClass;
+        //options.initSource = options.dataSource;
+    }
+});
+
+</pre>
+</body>
+</html>

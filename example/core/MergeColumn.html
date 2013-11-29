@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>MergeColumn</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-23 -->
+		<style>
+			td {
+				border: 1px solid blue;
+				width: 50px
+			}
+			table {
+				border: 1px solid blue
+			}
+		</style>
+		<script src="../../src/library/jquery-1.7.2.js"></script>
+		<script>
+			$(function() {
+				var tableColNum = 4;
+				var tableRowNum = 9
+				
+				var statementList = [];
+				var globaltext = "", count = 0;
+				statementList = getStatement(0, 0, tableRowNum).slice(0);
+				var totalStatement = [];
+
+				while(statementList[0]) {
+					var statement = [statementList.shift()];
+					var colIndex = 1;
+					for(var i = 0; i < statement.length && colIndex < tableColNum; i++) {
+						var s = statement[i];
+						var rowstart = s.split(":")[1].split("-")[0];
+						var rowlen = s.split(":")[1].split("-")[1];
+						var param = getStatement(colIndex, parseInt(rowstart), parseInt(rowlen)).slice(0);
+						statement = statement.concat(param);
+						colIndex++;
+					}
+					totalStatement.push(statement);
+
+				}
+				merge();
+
+				function getStatement(colnum, rowstart, rowlen) {
+					var startRow = 0, statement = [], exec = false;
+					for(; rowstart <= rowlen; rowstart++) {
+						var currtext = $("tr:eq(" + rowstart + ") td:eq(" + colnum + ")").text();
+						if(currtext != globaltext) {
+							globaltext = currtext;
+							if( exec = !!count) {
+								pushStatement(rowstart-(count+1), count, colnum, statement);
+								exec = false;
+								count = 0;
+								startRow = rowstart;
+							}
+
+						} else {
+							count++;
+						}
+						if(rowstart == rowlen) {
+							exec = !!count;
+						}
+						if(exec) {
+							pushStatement(rowstart-count, count, colnum, statement);
+							count=0;
+						}
+					}
+					return statement;
+				}
+
+				function pushStatement(start, count, colnum, list) {
+					if(count) {
+						list.push(colnum + ":" + start + "-" + (start + count));
+					}
+					return list;
+				}
+
+				/*function pushStatementList() {
+					var index = arguments[0];
+					for(var i = 1; i < arguments.length; i++) {
+						statementList.splice(index, 0, arguments[i]);
+						index++;
+					}
+				}*/
+				
+				function merge(){
+					var count=1,html=[];
+					for(var i=0;i<totalStatement.length;i++){
+						var statement = totalStatement[i];
+						while(statement[0]){
+							var s = statement.pop();
+								var rowindex= parseInt(s.split(":")[1].split("-")[0]);
+								var mergenum = parseInt(s.split(":")[1].split("-")[1])+1 ;
+								var colindex = parseInt(s.split(":")[0]);
+								$("tr:eq("+rowindex+") td:eq("+colindex+")").prop("rowspan",mergenum-rowindex);
+								for(;rowindex+1<mergenum;rowindex++){
+									$("tr:eq("+(rowindex+1) +") td:eq("+colindex+")").remove();
+								}
+						}
+					}
+				}
+			
+			});
+		</script>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+				<td>3</td>
+				<td>d</td>
+				<td>g</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+				<td>3</td>
+				<td>4</td>
+				<td>h</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+				<td>3</td>
+				<td>4</td>
+				<td>i</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+				<td>b</td>
+				<td>e</td>
+				<td>j</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>a</td>
+				<td>c</td>
+				<td>f</td>
+				<td>k</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td>22</td>
+				<td>33</td>
+				<td>44</td>
+				<td>55</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td>22</td>
+				<td>33</td>
+				<td>44</td>
+				<td>55a</td>
+			</tr>
+			<tr>
+				<td>111</td>
+				<td>221</td>
+				<td>331</td>
+				<td>441</td>
+				<td>55b</td>
+			</tr>
+			<tr>
+				<td>11a</td>
+				<td>22a</td>
+				<td>33a</td>
+				<td>44a</td>
+				<td>55b</td>
+			</tr>
+			<tr>
+				<td>11a</td>
+				<td>22a</td>
+				<td>33a</td>
+				<td>44a</td>
+				<td>55c</td>
+			</tr>
+		<div id="content"></div>
+		</table>
+	</body>
+</html>
+

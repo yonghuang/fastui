@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>常用属性</h4>
+        <ul>        
+        <li>树的默认顶级父节点id是"0" ，如果您的树默认顶级父节点不是"0" ，那么必须配置 topParentid为顶级id </li>
+        <li>rootValue是指给数据源里没有想要的顶级名称，给再加一个顶级节点名称。常见的是下拉树加一个顶级节点“-请选择-”</li>
+        <li>currentId 或value指的是默认选中节点。如果这个节点没展开会自动展开。</li>        
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+       		var data=[{pid:"0",id:"1",val:"基础控件",disabled:"true"},{pid:"0",id:"2",val:"复合控件",chk:"part"},{pid:"0",id:"3",val:"业务组件"},{pid:"0",id:"4",val:"业务模板",disabled:"true"},{pid:"1",id:"5",val:"基础控件父类基础控件父类基础控件父类",disabled:"true"},{pid:"5",id:"6",val:"基础表单控件"},{pid:"5",id:"7",val:"容器展示类控件"},{pid:"6",id:"8",val:"input类"},{pid:"8",id:"9",val:"按钮"},{pid:"8",id:"10",val:"文本框"},{pid:"6",id:"11",val:"文本域"},{pid:"8",id:"12",val:"密码框"},{pid:"8",id:"13",val:"隐藏域"},{pid:"8",id:"14",val:"单选框"},{pid:"8",id:"15",val:"复选框"},{pid:"6",id:"16",val:"下拉框"},{pid:"8",id:"17",val:"文件选择"},{pid:"6",id:"18",val:"表单"},{pid:"6",id:"29",val:"label标签"},{pid:"6",id:"28",val:"A标记"},{pid:"7",id:"19",val:"Pre标签"},{pid:"7",id:"20",val:"Ul列表"},{pid:"7",id:"21",val:"Div"},{pid:"7",id:"22",val:"Span"},{pid:"7",id:"23",val:"表格"},{pid:"7",id:"24",val:"Body"},{pid:"7",id:"25",val:"Dl"},{pid:"7",id:"26",val:"Iframe"},{pid:"7",id:"31",val:"图片"},{pid:"2",id:"222",val:"日历控件"},{pid:"2",id:"223",val:"消息框"},{pid:"2",id:"224",val:"弹出框",asyn:"true"},{pid:"2",id:"225",val:"面包屑",disabled:"true"},{pid:"2",id:"226",val:"上传组件"},{pid:"2",id:"227",val:"进度条"},{pid:"3",id:"301",val:"选人控件"},{pid:"3",id:"302",val:"复合选择列表"}];
+       
+       
+        </script>
+	</head>
+	<body><div style="margin:10px;">	
+           <table>
+           <tr>
+           <td> <div >
+        	<div class="ui-layout-text">顶级节点id设置</div>      
+            <div itype="Tree"  initSource="../../data/tree_data.txt" showIco="true" topParentid="5" openFloor=2  id="tree5" ></div>
+         </div>
+           </td>
+           <td>   <div >
+         	<div class="ui-layout-text">添加根节点</div>  
+            <div itype="Tree"  initSource="../../data/tree_data.txt" showIco="true" topParentid="0" rootValue="新根节点" openFloor=2  id="tree5" ></div>
+         </div>
+           </td>
+           <td>  <div >
+             	<div class="ui-layout-text">选中节点设置</div>
+            <div itype="Tree"  initSource="../../data/tree_data.txt" currentId="202" showIco="true" topParentid="0" openFloor=2  id="tree5" ></div>
+         </div>
+           </td>
+            <td>  <div >
+              	<div class="ui-layout-text">文本长度设置</div>
+            <div itype="Tree"  items="#{data}" textMaxLength="50" showIco="true" topParentid="0" openFloor=2  id="tree6" ></div>
+         </div>
+           </td>
+           </tr>
+           </table>
+       
+      
+           </div>
+	</body>
+</html>

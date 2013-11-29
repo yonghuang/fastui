@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					此示例综合应用AutoComplete、Tree等控件，自定义界面布局，并实现了对树形结构数据的智能搜索与过滤操作。
+				</li>
+				<li>
+					此例可应用于对树形结构通讯录的搜索选取场景。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 该全局变量用于保存当前搜索结果数，用计数的方式代替对树控件的搜索，用以提升性能
+			var searchResultCount = 0;
+
+			// 该全局变量用于保存所有待选数据
+			var availableData;
+
+			function onAfterChooseListInit() {
+				// ChooseList初始化完成后，创建一棵树控件，用来显示搜索结果
+				// 树控件接入ChooseList控件，需做一些预定义初始化（如树的宽高，容器，数据源初始，增删、刷新数据操作等实现），因此调用ChooseList的createWidget方法创建树控件实例
+				this.createWidget({
+					type : "Tree",
+					// 此处重写了添加数据项回调在ChooseList中为树控件预定义的实现，目的是为了做满足此场景的对树的操作
+					onAddItems : function(items) {
+						// 此回调的作用域指向当前使用的数据展现控件，此处即搜索结果树控件的实例
+						// 执行此回调则说明，一定是用户在以关键字进行搜索并展现了搜索结果树后，进行了移除已选记录的操作，该记录仍会被添加进搜索结果树中以方便用户再次选取
+						if (this.isShow()) {
+							// 展现搜索结果的树当前未被隐藏的情况下，以下操作才有意义
+							var chooselist = fastDev.getInstance("chooselist");
+							// getSize方法可获取当前已选择的记录数
+							if (!!chooselist.getSize()) {
+								// 找出树上的其他待选节点
+								// 需对重复的节点数据进行过滤，否则以静态数据刷新树控件，可能会出现重复节点
+								// 该getData()为从搜索结果树上获取待选数据，数据量均值不会很大，平均性能可接受
+								fastDev.each(chooselist.getData(), function(idx, item) {
+									for (var i = 0, node; node = items[i++]; ) {
+										// 需对重复的节点数据进行过滤，否则以静态数据刷新树控件，可能会出现重复节点
+										if (item.id == node.id) {
+											return;
+										}
+									}
+									items.push(item);
+								});
+								// 树形结构的数据有严格的父子关系，因此需要从找到这些叶子节点的父节点后一并添加进搜索结果树
+								fastDev.each(getParentNodes(items), function(id, item) {
+									if (item !== "root") {
+										items.push(item);
+									}
+								});
+								// 如果直接调用树的reLoad方法刷新，可能需要设置一些参数才能操作（此处直接调树控件的reLoad方法并不能以静态数据刷新）
+								// ChooseList控件的refresh方法对接入的控件的刷新操作统一做了参数预设或定义等，屏蔽了各控件的差异性
+								chooselist.refresh({
+									data : items
+								});
+							} else {
+								// 如果所有已选结果都被移除了，则没有必要再展现搜索结果树了，且搜索结果树上目前的数据不一定是所有待选数据，此处需设回原树展现
+								chooselist.setWidget(fastDev.getInstance("tree"));
+							}
+						}
+					},
+					options : {
+						id : "resultTree",
+						saveInstance : true,
+						// 搜索结果树默认展开层数为100，是为了让所有的叶子节点都能在构建时展开
+						openFloor : 100,
+						showIco : true,
+						onlySelectedLeaf : true
+					}
+				});
+			}
+
+			function onBeforeAutoCompleteRetrieve() {
+				// 将待选数据赋给搜索控件
+				this.setItems(availableData);
+			}
+
+			function onAfterTreeInitRender() {
+				// 保存所有待选数据
+				availableData = fastDev.getInstance("tree").getItems();
+			}
+
+			function onAfterAutoCompleteRetrieve(data, keyword) {
+				var chooseList = fastDev.getInstance("chooselist");
+				var tree = fastDev.getInstance("tree");
+				var items = [];
+				if (!!data.length) {
+					// AutoComplete的搜索源数据不再变更，以尽量减少对树的检索请求
+					// 对已选数据的过滤操作，交由ChooseList控件处理，以提升性能
+					for (var i = 0, item; item = data[i++]; ) {
+						// 此处可对不可选的数据进行过滤处理
+						if (!chooseList.isSelected(item)) {
+							items.push(item);
+						}
+					}
+					// 记录搜索结果 数
+					searchResultCount = items.length;
+
+					// 搜索控件搜索关键字后，若有结果则需刷新搜索结果树
+					// 需找到这些结果（叶子节点）的父节点
+					fastDev.each(getParentNodes(items), function(id, node) {
+						if (node !== "root") {
+							// 排除虚拟根节点
+							items.push(node);
+						}
+					});
+
+					var resultTree = fastDev.getInstance("resultTree");
+
+					// 切换至搜索结果树展现并刷新搜索结果树
+					chooseList.setWidget(resultTree).refresh({
+						data : items
+					});
+					// 此处调用AutoComplete的高亮API，对搜索结果树上的关键字进行高亮显示，该API参数说明请参考AutoComplete的API文档
+					this.highlight(resultTree, keyword);
+					// 返回布尔值false，是为了阻止AutoComplete控件执行搜索后的数据展现操作（因为我们已经自定义了以树来展现搜索结果）
+					return false;
+				} else {
+					// 没有搜索结果则返回原树展现
+					chooseList.setWidget(tree);
+				}
+			}
+
+			function getParentNodes(nodes, parents) {
+				// 此递归方法可找到传入的多个叶子节点（数组）的父节点，返回参数为对象数组
+				var parents = parents || {}, parent, node, i = 0;
+				while ( node = nodes[i++]) {
+					if (!!( parent = getParentNode(node))) {
+						// 此处使用对象而不直接使用数组，是为了去重
+						parents[parent.id] = parent;
+						// 递归查找枝节点的父节点
+						getParentNodes([parent], parents);
+					}
+				}
+				return parents;
+			}
+
+			// 获取子节点的父节点数据
+			function getParentNode(childNode) {
+				if (!!childNode._parentNode) {
+					return childNode._parentNode;
+				}
+				for (var i = 0, nodes = availableData, node; node = nodes[i++]; ) {
+					if (node.id == childNode.pid) {
+						return childNode._parentNode = node;
+					}
+				}
+				// 作根节点标记，避免下次再重复查找该节点的父节点
+				// root为虚拟根节点
+				childNode._parentNode = "root";
+			}
+
+			function onAutoCompleteValueChange(value) {
+				if (!value) {
+					// 若搜索输入框值为空，则展现原树
+					fastDev.getInstance("chooselist").setWidget(fastDev.getInstance("tree"));
+				}
+			}
+
+			function onAfterChooseListSelect(items) {
+				// 用计数的方式代替对树的DOM搜索，尽量减少DOM操作，用以提升性能
+				if (fastDev.getInstance("resultTree").isShow() && !(Math.max(searchResultCount -= items.length, 0))) {
+					this.setWidget(fastDev.getInstance("tree"));
+				}
+			}
+
+			function onAfterChooseListDeselect(items) {
+				searchResultCount += items.length;
+			}
+
+			function itemRenderer(item) {
+				// 这里是对列表数据进行自定义渲染，可用来加图片，或者其他渲染等
+				// 如果不返回任何结果，则该记录会被按默认的形式进行渲染（纯文本）
+				return "<img src='../../data/chooselist_img.gif' width='20px' height='20px' align='middle'/><span style='padding:4px;'>" + item.val + "(" + item.id + ")" + "</span>";
+			}
+
+			function getValue() {
+				var value = fastDev.getInstance("chooselist").getValue();
+				fastDev.tips(value);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<!-- primaryKey属性声明记录的主键字段 -->
+			<div itype="ChooseList" id="chooselist" itemRenderer="itemRenderer()" primaryKey="id" onAfterInit="onAfterChooseListInit()" onAfterSelect="onAfterChooseListSelect()" onAfterDeselect="onAfterChooseListDeselect()" saveInstance="true" leftWidth="240px" centerWidth="130px" buttonWidth="80px" rightWidth="200px" height="298px">
+				<!-- leftTop属性自定义左顶部区域 -->
+				<!-- 标签的height属性可定义控件的leftTopHeight属性值，也可以通过style行内样式定义 -->
+				<div name="leftTop" height="44px">
+					<div style="height: 19px">
+						待选项
+					</div>
+					<!-- 可声明其他控件 -->
+					<div itype="AutoComplete" id="autocomplete" onchange="onAutoCompleteValueChange()" keyDelay="500" onBeforeRetrieve="onBeforeAutoCompleteRetrieve()"  onAfterRetrieve="onAfterAutoCompleteRetrieve()" autoFill="false" hintText="输入字符查询" noResultsText="没有相关项" saveInstance="true" width="100%" showSearchIcon="true">
+						<!-- 配置字段映射，使得AutoComplete控件能够搜索树控件的数据 -->
+						<div name="fields">
+							<div name="val" mapping="text"></div>
+						</div>
+					</div>
+				</div>
+				<!-- 声明待选数据展现控件 -->
+				<div name="leftWidget">
+					<div id="tree" saveInstance="true" itype="Tree" onAfterInitRender="onAfterTreeInitRender()" initSource="../../data/chooselist_tree_1.json" showIco="true"></div>
+				</div>
+				<!-- 声明已选数据展现控件 -->
+				<!-- 使用默认的列表控件时，需对数据字段作映射（用textField，valueField属性指明） -->
+				<div name="rightWidget" textField="val" valueField="id"></div>
+				<!-- 自定义左底部区域 -->
+				<div name="leftBottom">
+					<!-- <span style="color:orange;">左边底部区域</span> -->
+				</div>
+				<!-- buttons属性，自定义按钮配置  -->
+				<div name="buttons">
+					<!-- 定义的name属性值等于select、selectAll、deselect、deselectAll、moveUp、moveDown时，自动绑定相应的点击事件  -->
+					<!-- 也可以通过定义onclick回调事件来自定义点击事件（自定义回调里面需自行调用相关的选值或移除值等API方法，按钮点击回调的作用域为当前按钮控件） -->
+					<div text="选取" name="select" iconCls="icon-add" onclick=""></div>
+					<div text="全选" name="selectAll" iconCls="icon-add"></div>
+					<div text="移除" name="deselect" iconCls="icon-delete"></div>
+					<div text="清空" name="deselectAll" iconCls="icon-delete"></div>
+					<div text="上移" name="moveUp" iconCls="icon-add"></div>
+					<div text="下移" name="moveDown" iconCls="icon-add"></div>
+				</div>
+				<!-- 自定义右顶部区域 -->
+				<div name="rightTop" style="height:20px;">
+					<div>
+						已选项
+					</div>
+				</div>
+				<!-- 自定义右底部区域 -->
+				<div name="rightBottom">
+					<!-- <span style="color:orange;">右边底部区域</span> -->
+				</div>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取选择结果" onclick="getValue()"/>
+			</div>
+		</div>
+	</body>
+</html>

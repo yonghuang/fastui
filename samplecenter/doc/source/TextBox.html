@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-TextBox'>/**
+</span> * @class fastDev.Ui.TextBox
+ * @extends fastDev.Ui.Box
+ * TextBox文本框控件，继承自box控件,实现对文本的输入、验证。内含文本框、密码框、隐藏文本框、文本域的实现
+ */
+fastDev.define(&quot;fastDev.Ui.TextBox&quot;, {
+    extend: &quot;fastDev.Ui.Box&quot;,
+    alias: &quot;TextBox&quot;,
+    _options: {
+<span id='fastDev-Ui-TextBox-property-width'>        /**
+</span>         * 输入框默认宽度
+         * @type {String}
+         */
+        width: &quot;150px&quot;,
+<span id='fastDev-Ui-TextBox-property-height'>        /**
+</span>         * 文本域的默认高度
+         * @type {String} 
+         */
+        height: &quot;52px&quot;,
+<span id='fastDev-Ui-TextBox-property-type'>        /**
+</span>         * 输入框类型: text, password, textarea、hidden
+         * @type {String}
+         */
+        type: &quot;text&quot;,
+<span id='fastDev-Ui-TextBox-property-resize'>        /**
+</span>         * 是否允许用户调节输入框大小 （目前只允许调节文本域的大小）
+         * &lt;p&gt;其值为以下枚举量：
+         * &lt;p&gt;-none 不允许调节大小（默认）
+         * &lt;p&gt;-both 允许调节宽度与高度（水平与垂直方向）
+         * &lt;p&gt;-horizontal 只允许调节宽度（水平方向）
+         * &lt;p&gt;-vertical 只允许调节高度（垂直方向）
+         * @type {String}
+         */
+        resize: &quot;none&quot;,
+<span id='fastDev-Ui-TextBox-property-tips'>        /**
+</span>         * 提示文本信息
+         * @type {String}
+         */
+        tips : &quot;&quot;
+    },
+<span id='fastDev-Ui-TextBox-method-staticTemplate'>    /**
+</span>     * 用于构建静态模板串
+     * @param {Object} params 模板已解析参数对象
+     * @private 
+     */
+    staticTemplate: function (params) {
+        var pub = 'id=&quot;' + params.id + '&quot; name=&quot;' + params.name + '&quot; value=&quot;' + params.value + '&quot;' + ' title=&quot;' + params.tips + '&quot;',
+            html = [],
+            type = params.type;
+        if (/hidden/i.test(type)) {
+            html.push('&lt;input ' + pub + ' type=&quot;hidden&quot;/&gt;');
+        } else {
+            html.push('&lt;div style=&quot;width:' + params.width + '&quot; class=&quot;ui-form&quot;&gt;&lt;div class=&quot;ui-form-wrap ' + params.wrapperCls + '&quot;&gt;');
+            if (/textarea/i.test(type)) {
+                html.push('&lt;div style=&quot;width:100%&quot;&gt;&lt;textarea ' + pub + ' class=&quot;ui-form-field ui-form-input&quot; autocomplete=&quot;off&quot; aria-invalid=&quot;false&quot; style=&quot;resize:none;overflow:auto;height:' + params.height + '&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;');
+            } else {
+                html.push('&lt;input ' + pub + ' type=&quot;' + type + '&quot; class=&quot;ui-form-field ui-form-input&quot;/&gt;');
+            }
+            html.push('&lt;/div&gt;&lt;/div&gt;');
+        }
+        return html.join('');
+    },
+    tplParam: [&quot;width&quot;, &quot;height&quot;, &quot;name&quot;, &quot;value&quot;, &quot;id&quot;, &quot;wrapperCls&quot;, &quot;type&quot;, &quot;tips&quot;],
+<span id='fastDev-Ui-TextBox-method-ready'>    /**
+</span>     * 输入框参数准备方法
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    ready: function (options, global) {
+        var type = (options.type + &quot;&quot;).toLowerCase(),
+            width;
+        // 确保ID存在,用于内部查找
+        options.id = options.id || fastDev.getID();
+        global.wrapperCls = type === &quot;textarea&quot; ? &quot;ui-textarea&quot; : &quot;ui-input&quot;;
+        if (width = /^(-?\d+\.?\d+|-?\d)(px|%|em|cm)?$/.exec(fastDev.Util.StringUtil.trim(options.width + &quot;&quot;))) {
+            options.width = width[1] + (width[2] || &quot;px&quot;);
+        } else {
+            options.width = &quot;150px&quot;;
+        }
+        if (type === &quot;password&quot;) {
+            // 输入框为密码框时，提示文本无效
+            options.emptyText = &quot;&quot;;
+        } else if (type === &quot;textarea&quot;) {
+            // 文本域高度计算确定像素值
+            options.height = (fastDev.Util.StringUtil.stripUnits(options.height, options.container.height()) || 52) - 4 + &quot;px&quot;;
+        }
+    },
+<span id='fastDev-Ui-TextBox-method-init'>    /**
+</span>     * 输入框初始化方法
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    init: function (options, global) {
+        if (options.type === &quot;textarea&quot; &amp;&amp; (global.resize = /(both|horizontal|vertical)/i.exec(options.resize))) {
+            fastDev.create(&quot;Resizable&quot;, {
+                element: global.wrapper,
+                handles: &quot;se&quot;,
+                minWidth: 150,
+                minHeight: Math.min(parseInt(options.height, 10), 52),
+                axis: /horizontal/i.test(global.resize[1]) ? &quot;x&quot; : /vertical/i.test(global.resize[1]) ? &quot;y&quot; : &quot;x,y&quot;,
+                onstop: function (event, width, height) {
+                    var dimension = global.resize[1];
+                    if (/both|horizontal/i.test(dimension)) {
+                        global.wrapper.parent().width(width + 4);
+                    }
+                    if (/both|vertical/i.test(dimension)) {
+                        global.box.height(height - 2);
+                    }
+                    return false;
+                }
+            });
+        }
+        if (options.disabled) {
+            this.disable();
+        }
+    }
+});</pre>
+</body>
+</html>

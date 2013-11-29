@@ -1,0 +1,14 @@
+[{"radio1",[{
+	value : "4",
+	text : "旅游"
+}, {
+	value : "5",
+	text : "唱歌"
+}, {
+	value : "6",
+	text : "电视"
+}]},
+{"check1",[{
+	value : "6",
+	text : "阅读"
+}]}]

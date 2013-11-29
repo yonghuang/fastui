@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		  <link rel="stylesheet" type="text/css" href="../../../themes/default/css/ui-main.css"/>	
+		<script src="../../../history/fastui-1.5.0.5.js"></script>
+        <script src="../../../example/common.js"></script>
+        <script>
+		var time_to_page_start = new Date()*1;
+(function(){
+	function domreadyTime(){
+	    window.pmc_start_render_time = new Date()*1 - time_to_page_start;
+		var h = document.createElement('h3');
+		h.innerHTML = 'Time To Dom Ready: ' + window.pmc_start_render_time + ' ms';
+		document.body.appendChild(h);
+    }
+    this.conf = {enableMozDOMReady:true};   
+    var isReady = false;   
+    function doReady(){   
+        if( isReady ) return;   
+        isReady = true;   
+        domreadyTime();   
+    }   
+    if( /MSIE/.test(navigator.userAgent) ){   
+      (function(){   
+       if ( isReady ) return;   
+       try {   
+          document.documentElement.doScroll("left");   
+       } catch( error ) {   
+          setTimeout( arguments.callee, 0 );   
+          return;   
+       }   
+       doReady();   
+     })();   
+    window.attachEvent('onload',doReady);   
+  }   
+  else if (/Chrome/.test(navigator.userAgent)){   
+    (function(){   
+      if( isReady ) return;   
+      if (/loaded|complete/.test(document.readyState))   
+         doReady();   
+      else  
+         setTimeout( arguments.callee, 0 );   
+     })();   
+    window.addEventListener('load',doReady,false);   
+  }   
+  else{   
+     if( /Firefox/.test(navigator.userAgent) || this.conf.enableMozDOMReady)   
+       document.addEventListener( "DOMContentLoaded", function(){   
+       document.removeEventListener( "DOMContentLoaded", arguments.callee, false );   
+       doReady();   
+     }, false );   
+     window.addEventListener('load',doReady,false);   
+   }   
+})();
+
+		</script>
+	</head>
+	<body>
+    <div><div itype="DataGrid" initSource="griddata.json" pagePosition="none" showSeqColumn=true height="200px">
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+					<div value="50" text="50条"></div>
+					<div value="100" text="100条"></div>
+				</div>
+			</div></div>
+	</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>DatePicker</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+		<script src="../../src/component/MessageBox.js"></script>
+
+		<script src="../../src/component/form/Box.js"></script>
+		<script src="../../src/component/form/DatePicker.js"></script>
+		<style type="text/css">
+			input {
+				width:500px;
+			}
+			div.container {
+				height:60px;
+			}
+		</style>
+
+		<script type="text/javascript">
+			var datepicker;
+			function _clear() {
+				if (datepicker) {
+					try {
+						datepicker.destroy();
+					} catch(e) {
+					}
+				}
+			};
+			function createIncludes(id) {
+				_clear();
+				datepicker = $.create('DatePicker', {
+					container : 'example' + id,
+					format : "yyyy-MM-dd HH:mm:ss",
+					includes : $('#' + id).prop('value'),
+					onSelect : function(date, value) {
+						fastDev.tips(value);
+					}
+				}).show();
+			}
+
+			function createExcludes(id) {
+				_clear();
+				datepicker = $.create('DatePicker', {
+					container : 'example' + id,
+					format : "yyyy-MM-dd HH:mm:ss",
+					excludes : $('#' + id).prop('value'),
+					onSelect : function(date, value) {
+						fastDev.tips(value);
+					}
+				}).show();
+			};
+			function createIncludesAndExcludes(container, includes, excludes) {
+				_clear();
+				datepicker = $.create('DatePicker', {
+					container : 'example' + container,
+					format : "yyyy-MM-dd HH:mm:ss",
+					includes : $('#' + includes).prop('value'),
+					excludes : $('#' + excludes).prop('value'),
+					onSelect : function(date, value) {
+						fastDev.tips(value);
+					}
+				}).show();
+			};
+		</script>
+	</head>
+	<body>
+		<p>
+			为增加用户日期选取的灵活性，此日历控件应用Cron日期表达式来配置可选日期和禁选日期。
+			<br />
+			<strong>includes</strong>属性指定可选日期Cron表达式组。单一表达式可用字符串表示，多个表达式可用数组表示。
+			<br />
+			<strong>excludes</strong>属性指定禁选日期Cron表达式组。单一表达式可用字符串表示，多个表达式可用数组表示。
+			<br />
+			includes表达式声明所匹配到的值若也被excludes表达式所匹配，则同样会被排除掉。
+			<br />
+			Cron 表达式各字段<strong style="color: red;">有序声明</strong>如下所示（用空格分隔）：
+			<table width="650">
+				<tbody>
+					<tr>
+						<td><strong>名称</strong></td>
+						<td><strong>是否必须</strong></td>
+						<td><strong>允许值</strong></td>
+						<td><span style="color: #800080;"><strong>特殊字符</strong></span></td>
+					</tr>
+					<tr>
+						<td style="color: blue;">秒</td>
+						<td><span style="color: red;">标准Cron表达式里面必须，本控件可选</span></td>
+						<td>0-59</td><td><span style="color: #800080;">, - * /</span></td>
+					</tr>
+					<tr>
+						<td style="color: blue;">分</td>
+						<td><span style="color: red;">标准Cron表达式里面必须，本控件可选</span></td>
+						<td>0-59</td>
+						<td><span style="color: #800080;">, - * /</span></td>
+					</tr>
+					<tr>
+						<td style="color: blue;">时</td>
+						<td><span style="color: red;">标准Cron表达式里面必须，本控件可选</span></td>
+						<td>0-23</td>
+						<td><span style="color: #800080;">, - * /</span></td>
+					</tr>
+					<tr>
+						<td style="color: blue;">日</td>
+						<td>是</td>
+						<td>1-31</td>
+						<td><span style="color: #800080;">, - * ? / L W</span></td>
+					</tr>
+					<tr>
+						<td style="color: blue;">月</td>
+						<td>是</td>
+						<td>1-12 或 JAN-DEC(不区分大小写)</td>
+						<td><span style="color: #800080;">, - * /</span></td>
+					</tr>
+					<tr>
+						<td style="color: blue;">周</td>
+						<td>是</td>
+						<td>1-7 或 SUN-SAT(不区分大小写)</td>
+						<td><span style="color: #800080;">, - * ? / L #</span></td>
+					</tr>
+					<tr>
+						<td style="color: blue;">年</td>
+						<td style="color: red;">否</td>
+						<td>空 或 1970-2099</td>
+						<td><span style="color: #800080;">, - * /</span></td>
+					</tr>
+				</tbody>
+			</table>
+			<span style="color:blue;">你可以根据上面所列的规则，在下面的输入框中输入表达式，然后点右边的运行按钮查看结果</span>
+			<br />
+			（"秒 分 时"时间子表达式组是可以省略的，如果你不需要选择时间值的话。它们将默认以"?"补足。）
+			<br />
+			以下为includes Cron表达式配置示例：
+		</p>
+		<br />
+		<div class="container" id="example1">
+			<h3><strong style="color: red;">*</strong> 通配符，表示任何有效值</h3>
+			<input id="1" value="* * * * * * *" />
+			<button class="button" onclick="createIncludes(1)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example2">
+			<h3><strong style="color: red;">?</strong> 未定值，表示忽略该字段，本控件将该符号等同于*处理</h3>
+			<input id="2" value="? ? ? ? ? ?" />
+			<button class="button" onclick="createIncludes(2)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+
+		<div class="container" id="example3">
+			<h3><strong style="color: red;">,</strong> 枚举值</h3>
+			<input id="3" value="0    10,20,30,40,50    2,4,6,8,10    1,3,5,7,9 2,4,6,8,10    1,3,5,7    2011,2012,2013" />
+			<button class="button" onclick="createIncludes(3)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example4">
+			<h3><strong style="color: red;">-</strong> 范围值</h3>
+			<input id="4" value="10-50    10-50    8-17    2-30    1-8   2-6   2011-2015" />
+			<button class="button" onclick="createIncludes(4)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example5">
+			<h3><strong style="color: red;">/</strong> 步进值</h3>
+			<input id="5" value="0    10/10    8/1    1/2    1/2   1/2   2011/3" />
+			<button class="button" onclick="createIncludes(5)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example6">
+			<h3><strong style="color: red;">L</strong> "Last"单词的缩写，表示月的最后一天，或者月的最后一个星期几，仅能应用在"日"和"周"字段上</h3>
+			<h5>"日"字段上应用L字符，表示该月最后一天，且仅仅只能为单一的一个L字符</h5>
+			<input id="6" value="L * *" />
+			<button class="button" onclick="createIncludes(6)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example7">
+			<h5>"周"字段上应用L字符，表示当前月的最后一个星期几，所以需要跟一个星期几前缀，如<strong style="color: red;">2L</strong>表示<strong style="color: red;">最后一个星期一</strong></h5>
+			<h5>请注意，星期是以1-7分别表示星期日、星期一、星期二、...</h5>
+			<input id="7" value="* 2L *" />
+			<button class="button" onclick="createIncludes(7)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example8">
+			<h3><strong style="color: red;">W</strong> Workday的缩写，表示离当前日子最近的工作日（周一至周五），需跟一个当前日子前缀，仅能应用在"日"字段上</h3>
+			<input id="8" value="10W * * 2012" />
+			<button class="button" onclick="createIncludes(8)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example9">
+			<h3><strong style="color: red;">#</strong> 哈希值，指定当前月第几周的星期值，需跟一个星期前缀，仅能应用在"周"字段上</h3>
+			<input id="9" value="* * 3#3" />
+			<button class="button" onclick="createIncludes(9)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<h2>以下是更多的示例</h2>
+		<div class="container" id="example10">
+			<h3>包含2008-2014年，单数月份，单数且排除双休日的日子</h3>
+			<strong style="color: red;">includes</strong>
+			<input id="10" value="1/2    1/2    MON-FRI    2008-2014"/>
+			<button class="button" onclick="createIncludes(10)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example11">
+			<h3>排除所有单数月的星期三</h3>
+			<strong style="color: red;">excludes</strong>
+			<input id="11" value="*    1/2    4"/>
+			<button class="button" onclick="createExcludes(11)">
+				运行
+			</button>
+
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example12">
+			<h3>排除周末</h3>
+			<strong style="color: red;">excludes</strong>
+			<input id="12" value="*    *    1,7"/>
+			<button class="button" onclick="createExcludes(12)">
+				运行
+			</button>
+
+		</div>
+		<br />
+		<br />
+		<div class="container" id="example13">
+			<h3>包含所有偶数月的星期三，如果该星期三处于第一周则排除</h3>
+			<strong style="color: red;">includes</strong>
+			<input id="14" value="*    2/2    4"/>
+			<br />
+			<strong style="color: red;">excludes</strong>
+			<input id="15" value="*    *    4#1"/>
+			<button class="button" onclick="createIncludesAndExcludes(13,14,15)">
+				运行
+			</button>
+		</div>
+		<br />
+		<br />
+	</body>
+</html>
+

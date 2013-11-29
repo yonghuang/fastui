@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>树节点的添删改以及相关事件</h4>
+        <ul>        
+        <li>本例子包括添、删、改节点的方法，和显示，隐藏，是否隐藏的方法</li>
+        <li>以及添、删、改前/后的事件接口</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+		//隐藏一个节点
+        var btnhideNode=function(){
+			var tree1=fastDev.getInstance("tree1");
+			tree1.hideNode("301");
+		}
+		//显示隐藏的一个节点
+		var btnshowNode=function(){
+			var tree1=fastDev.getInstance("tree1");
+			tree1.showNode("301");
+		}
+		//节点是否隐藏
+		var  btnishide=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(""+(tree1.isHideNode("301")));
+		}
+		//添加一个节点
+		var  btnaddNode = function(){
+			var tree=fastDev.getInstance("tree1");
+			var item={id:"299",pid:"1",val:"其他控件"};
+			try{
+				tree.addNode(item);
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		//删除一个节点
+		var  btndelNode = function(){
+			var tree=fastDev.getInstance("tree1");
+			try{
+			tree.delNode("203");			
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}		
+		//编辑一个节点
+		var  btneditNode = function(){
+			var tree=fastDev.getInstance("tree1");
+			var item={id:"202",pid:"2",val:"表单控件"};
+			try{
+				tree.editNode(item);
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		//移动一个节点
+		var  btneditNode2 = function(){
+			var tree=fastDev.getInstance("tree1");
+			//移动到其他父节点
+			//var item={id:"302",pid:"2",val:"复合选择列表"};
+			//移动到叶子节点
+			//var item={id:"302",pid:"215",val:"复合选择列表"};
+			//移动到跟节点
+			//var item={id:"302",pid:"0",val:"复合选择列表"};
+			//移动一枝节点到其他枝节点
+			var item={id:"3",pid:"215",val:"业务组件"};
+			
+			try{
+				tree.editNode(item);
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		//添加前事件接口
+		var   beforeAdd=function(item){
+			fastDev.tips("添加前方法，返回false不执行添加操作");
+			return true;
+		}
+		//编辑前事件接口
+		var  beforeEdit=function(item){
+			fastDev.tips("编辑前方法，返回false不执行编辑操作");
+			return true;
+		}
+		//删除前事件接口
+		var  beforeDel=function(id){
+			fastDev.tips("删除前方法，返回false不执行删除操作");
+			return true;
+		}
+		//添加成功后事件接口
+		var  afterAdd=function(item){			
+			fastDev.tips("添加"+item.id+"节点成功");
+		}
+		//编辑成功后事件接口
+		var  afterEdit=function(item){
+			fastDev.tips("修改"+item.id+"节点成功");
+		}
+		//删除成功后事件接口
+		var  afterDel=function(id){
+			fastDev.tips("删除"+id+"节点成功");
+		}
+        </script>	
+	</head>
+	<body><div style="margin:10px;"><div class="ui-layout-text">树节点的添删改以及相关事件</div>
+		   <div><div itype="Tree" openFloor=2 showIco="true" initSource="../../data/tree_data.txt"  topParentid="0"  id="tree1"  saveInstance="true" onBeforeAdd="beforeAdd()"  onBeforeEdit="beforeEdit()"  onBeforeDel="beforeDel()"  onAfterAdd="afterAdd()"  onAfterEdit="afterEdit()"  onAfterDel="afterDel()"></div></div>
+           <div>
+			<div itype="Button"  text="添加其他控件节点" onclick="btnaddNode()" ></div>
+            <div itype="Button"  text="删除单选框组节点" onclick="btndelNode()" ></div>          
+            <div itype="Button"  text="修改表单节点为表单控件" onclick="btneditNode()" ></div>
+            <div itype="Button"  text="修改复合选择列表为复合 控件下的子控件" onclick="btneditNode2()" ></div>                      
+            <div itype="Button"  text="隐藏选人控件节点" onclick="btnhideNode()" ></div>
+            <div itype="Button"  text="显示选人控件节点" onclick="btnshowNode()" ></div>
+            <div itype="Button"  text="选人控件节点是否被隐藏" onclick="btnishide()" ></div>
+            </div></div>
+	</body>
+</html>

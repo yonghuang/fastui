@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ajax'>/**
+</span> * 基于浏览器的异步请求封装
+ * @class fastDev.Ajax
+ * @author  袁刚
+ * @singleton
+ */
+
+<span id='fastDev-Ajax-event-success'>/**
+</span> * @event success
+ * 请求成功后执行
+ * @param {Object} responses
+ * @param {XML} [responses.xml] XML形式的响应数据
+ * @param {String} [responses.text] 字符串形式的响应数据
+ */
+
+<span id='fastDev-Ajax-event-failure'>/**
+</span> * @event failure
+ * 请求失败后执行
+ * @param {String} msg 错误信息
+ */
+
+<span id='fastDev-Ajax-event-complete'>/**
+</span> * @event complete
+ * 请求完成（无论是否执行成功 ）后执行
+ * @param {Object|String} result 请求成功时为responses对象，失败时错误信息字符串
+ */
+
+fastDev.Ajax = {
+	_settings : {
+		method : &quot;get&quot;,
+		data : null,
+		async : true,
+		timeout : 0,
+		success : fastDev.noop,
+		failure : fastDev.noop,
+		complete : fastDev.noop,
+		headers : null,
+		cache : false,
+		username : &quot;&quot;,
+		password : &quot;&quot;
+	},
+	_getXHR : function() {
+		if(window.XMLHttpRequest) {
+			return new XMLHttpRequest();
+		} else {
+			return new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+		}
+	},
+<span id='fastDev-Ajax-method-doAjax'>	/**
+</span>	 * 执行Ajax请求
+	 * @param {Object} url 请求地址
+	 * @param {object} settings 请求配置信息
+	 * @param {String} [settings.method=&quot;get&quot;] 请求类型
+	 * @param {String} [settings.default] 请求附加数据
+	 * @param {Boolean} [settings.async=true] 是否异步
+	 * @param {Boolean} [settings.timeout=false] 是否开启请求超时
+	 * @param {Function} [settings.success] 成功时回调
+	 * @param {Function} [settings.failure] 失败时回调
+	 * @param {Function} [settings.complete] 完成时回调
+	 * @param {JsonObject} [settings.headers] 请求HTTP头部信息
+	 * @param {Boolean} [settings.cache=false] 是否使用缓存数据
+	 * @param {String} [settings.username] 服务调用用户名
+	 * @param {String} [settings.password] 服务调用密码
+	 */
+	doAjax : function(url, settings) {
+		var s = fastDev.clone(fastDev.Ajax._settings), xhr = fastDev.Ajax._getXHR(), timeout;
+		s = fastDev.apply(s, settings);
+
+		if(!s.cache) {
+			url += (/\?/.test(url) ? &quot;&amp;&quot; : &quot;?&quot;) + (+new Date()) + '=1';
+		}
+
+		if(s.data &amp;&amp; s.method === &quot;get&quot;) {
+			url += (/\?/.test(url) ? &quot;&amp;&quot; : &quot;?&quot;) + settings.data;
+		}
+
+		if(s.username) {
+			xhr.open(s.method, url, s.async, s.username, s.password);
+		} else {
+			xhr.open(s.method, url, s.async);
+		}
+
+		if(s.async) {
+			xhr.onreadystatechange = function() {
+				if(xhr.readyState === 4) {
+					var status, msg, responses = {}, xml;
+					clearTimeout(timeout);
+
+					try {
+						status = xhr.status;
+						if(status === 200) {
+							xml = xhr.responseXML;
+							if(xml &amp;&amp; xml.documentElement) {
+								responses.xml = xml;
+							}
+							responses.text = xhr.responseText;
+							msg = responses;
+						} else if(status === 404) {
+							msg = &quot;请求地址不存在&quot;;
+						} else {
+							msg = &quot;请求失败,错误代码&quot; + status;
+						}
+						s.success(msg);
+					} catch(e) {
+						if(!status) {
+							msg = &quot;网络中断,请求失败&quot;;
+						}
+						s.failure(msg);
+					} finally {
+						s.complete(msg);
+					}
+
+				}
+			};
+		}
+
+		for(var key in s.headers) {
+			xhr.setRequestHeader(key, s.headers[key]);
+		}
+		if(s.method === &quot;post&quot;) {
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8;');
+		}
+
+		if(s.timeout !== 0) {
+			timeout = setTimeout(function() {
+				xhr.abort();
+			}, s.timeout);
+		}
+		xhr.send(s.data);
+	},
+<span id='fastDev-Ajax-method-doGet'>	/**
+</span>	 * 执行get类型请求
+	 * @param {Object} url 请求地址
+	 * @param {object} settings 请求配置信息
+	 * @param {String} [settings.method=&quot;get&quot;] 请求类型
+	 * @param {String} [settings.default] 请求附加数据
+	 * @param {Boolean} [settings.async=true] 是否异步
+	 * @param {Number} [settings.outtime=30000] 请求超时时间
+	 * @param {Function} [settings.success] 成功时回调
+	 * @param {Function} [settings.failure] 失败时回调
+	 * @param {Function} [settings.complete] 完成时回调
+	 * @param {JsonObject} [settings.headers] 请求HTTP头部信息
+	 * @param {Boolean} [settings.cache=false] 是否使用缓存数据
+	 * @param {String} [settings.username] 服务调用用户名
+	 * @param {String} [settings.password] 服务调用密码
+	 */
+	doGet : function(url, settings) {
+		settings.method = &quot;get&quot;;
+		fastDev.Ajax.doAjax(url, settings);
+	},
+<span id='fastDev-Ajax-method-doPost'>	/**
+</span>	 * 执行post类型请求
+	 * @param {Object} url 请求地址
+	 * @param {object} settings 请求配置信息
+	 * @param {String} [settings.method=&quot;get&quot;] 请求类型
+	 * @param {String} [settings.default] 请求附加数据
+	 * @param {Boolean} [settings.async=true] 是否异步
+	 * @param {Number} [settings.outtime=30000] 请求超时时间
+	 * @param {Function} [settings.success] 成功时回调
+	 * @param {Function} [settings.failure] 失败时回调
+	 * @param {Function} [settings.complete] 完成时回调
+	 * @param {JsonObject} [settings.headers] 请求HTTP头部信息
+	 * @param {Boolean} [settings.cache=false] 是否使用缓存数据
+	 * @param {String} [settings.username] 服务调用用户名
+	 * @param {String} [settings.password] 服务调用密码
+	 */
+	doPost : function(url, settings) {
+		settings.method = &quot;post&quot;;
+		fastDev.Ajax.doAjax(url, settings);
+	}
+}; </pre>
+</body>
+</html>

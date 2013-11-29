@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>onBeforeReady：在ready执行前被调用,可用于动态设定控件参数</li>
+				<li>onAfterReady：在ready执行后被调用,可用于获取控件最终所使用到的配置信息</li>
+				<li>onBeforeConstruct：在construct执行前被调用,此时控件元素并未被放置到界面上</li>
+				<li>onAfterConstruct：在construct执行之后被调用,此时控件的数据代理、模板以及数据集已被初始化且静态界面元素已经被放置于界面上</li>
+				<li>onBeforeInit：onBeforeInit在init执行前被调用,此时控件还未被绑定事件且initSource和dataSource还未被请求,可以通过setInitReqParam、addInitReqParam、setDataReqParam、addDataReqParam等方法来为为请求追加查询参数</li>
+				<li>onAfterInit：此时initSource与dataSource正处于异步请求中而控件与用户交互所需要的事件已经被绑定完成（特别注意，此回调事件不能用于获取initSource或dataSource的返回结果）</li>
+				<li>onAfterLoadInit：此事件在initSource所请求的数据返回到控件时触发，之后constructItems方法会被调用</li>
+				<li>onAfterInitRender：此事件在数据已经被使用并生成为界面展示之后调用，此时已经可以通过查询器获得到initSource返回数据所产生的界面元素</li>
+				<li>onAfterLoadData：此事件在dataSource所请求的数据返回到控件时触发，之后setValue方法会被调用</li>
+				<li>onAfterDataRender：此事件在数据已经被使用并且成功展现到界面时调用，此时调用getValue方法可以成功获得到当前控件的数据（多用于输入类控件）</li>
+			</ul>
+		</title>
+	</head>
+	<body>
+		<img src="exec.jpg" />
+	</body>
+</html>
+

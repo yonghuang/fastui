@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>内容选择器</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function() {
+				var container = fastDev("#example");
+
+				function clearCss() {
+					// 如果input没有指定type="text",由浏览器默认解析，则在IE8以上火狐谷歌中找到
+					container.find("*").css("border", "1px dashed #fff");
+				}
+
+
+				fastDev("#btn1").bind("click", function() {
+					clearCss();
+					// 查找包含文本为"文字"的div元素
+					container.find("div:contains('文字')").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn2").bind("click", function() {
+					clearCss();
+					// 查找没有任何子元素或文本的td元素
+					container.find("td:empty").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn3").bind("click", function() {
+					clearCss();
+					// 查找包含p元素的td元素
+					container.find("td:has(p)").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn4").bind("click", function() {
+					clearCss();
+					// 匹配包含子元素或者文本的td元素
+					container.find("td:parent").css("border", "1px dashed #f00");
+				});
+
+			});
+		</script>
+	</head>
+	<body>
+		<div class="ui-other-content">
+		<p>查找包含文本为"文字"的div元素:
+		<a id="btn1" href="#">div:contains('文字')</a>
+		</p>
+		<p>查找没有任何子元素或文本的td元素:
+		<a id="btn2" href="#">td:empty</a>
+		</p>
+		<p>查找包含p元素的td元素:
+		<a id="btn3" href="#">td:has(p)</a>
+		</p>
+		<p>查找包含子元素或者文本的td元素:
+		<a id="btn4" href="#">td:parent</a>
+		</p>
+		<p>&nbsp;</p>
+		<!-- HTML元素测试区 -->
+		<div id="example">
+			<div>&lt;div>&lt;/div></div>
+			<div>
+				&lt;div>文字&lt;/div>
+			</div>
+			<div>&lt;div>&lt;/div></div>
+			<div>&lt;div>&lt;/div></div>
+
+			<table>
+				<tr>
+					<td>&lt;td>&lt;/td></td>
+					<td>
+						&lt;td>
+						<p>&nbsp;&nbsp;&lt;p>&lt;/p></p>
+						&lt;/td>
+					</td>
+				</tr>
+				<tr>
+					<td>&lt;td>&lt;/td></td><td></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	</body>
+</html>
+

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>
+        </ul><h4>基本功能</h4></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>	
+	  <script>
+			
+			
+			function openTabs(e,id) {
+				//alert(id);
+				
+				 var map =this.getItemById(id);
+var url=map["taburl"]||"";
+var text=map["text"]||""; 
+				return false;
+			}
+			function afterInitRender(){
+			//	debugger;
+				var selectid=this.getSelected();
+				
+			}
+			function btnsetNumberByid(){
+			    var nav=fastDev.getInstance("nav1");
+			    nav.setNumByid("11",7);
+			}
+			function btngetNumberByid(){
+                var nav=fastDev.getInstance("nav1");
+               alert(nav.getNumByid("12"));
+            }
+            function btnreload(){
+                var nav=fastDev.getInstance("nav1");
+                nav.reLoad();
+            }
+             function btnreload2(){
+                var nav=fastDev.getInstance("nav1");
+                nav.reLoad({url:"../../data/navigationdata3.txt"});
+            }
+		</script>
+	</head>
+	<body>
+		<div style="width:260px; margin:10px; float:left">
+			<div class="ui-layout-text">基本功能</div>
+			<div itype="Navigation"  id="nav1" saveInstance="true"  width="200px" initSource="../../data/navigationdata2.txt"  target="main"  onItemClick="openTabs()" activeIndex="0" onAfterInitRender="afterInitRender()"></div>
+			
+			<div itype="Button" text="设置id为11的菜单数字为7"  onclick="btnsetNumberByid()" ></div>
+			<div itype="Button" text="得到id为12的菜单数字"  onclick="btngetNumberByid()" ></div>
+			<div itype="Button" text="刷新"  onclick="btnreload()" ></div>
+			<div itype="Button" text="换数据源并刷新" onclick="btnreload2()" ></div>
+        
+		</div>
+          <iframe name="main"  height="600" width="600" frameborder="0"></iframe>
+	</body>
+</html>

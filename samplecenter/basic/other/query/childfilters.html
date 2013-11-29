@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>子元素选择器</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function() {
+				var container = fastDev("#example");
+
+				function clearCss() {
+					container.find("*").css("border", "1px dashed #fff");
+				}
+
+
+				fastDev("#btn1").bind("click", function() {
+					clearCss();
+					// 在每个 ul 查找第 2 个li(索引从1开始)
+					container.find("ul li:nth-child(2)").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn2").bind("click", function() {
+					clearCss();
+					// 在每个 ul 中查找第一个 li
+					container.find("ul li:first-child").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn3").bind("click", function() {
+					clearCss();
+					// 在每个 ul 中查找最后一个 li
+					container.find("ul li:last-child").css("border", "1px dashed #f00");
+				});
+				fastDev("#btn4").bind("click", function() {
+					clearCss();
+					// 在每个 ul 中查找是唯一子元素的 li
+					container.find("ul li:only-child").css("border", "1px dashed #f00");
+				});
+
+			});
+		</script>
+	</head>
+	<body>
+		<div class="ui-other-content">
+		<p>在每个 ul 查找第 2 个li(索引从1开始):<a id="btn1" href="#">ul li:nth-child(2)</a>
+		</p>
+		<p>在每个 ul 中查找第一个 li:<a id="btn2" href="#">ul li:first-child</a>
+		</p>
+		<p>在每个 ul 中查找最后一个 li:<a id="btn3" href="#">ul li:last-child</a>
+		</p>
+		<p>在每个 ul 中查找是唯一子元素的 li:<a id="btn4" href="#">"ul li:only-child</a>
+		</p>
+		<p>&nbsp;</p>
+		<!-- HTML元素测试区 -->
+		<div id="example">
+			<ul>
+				&lt;ul>
+				<li>&nbsp;&nbsp;&lt;li>&lt;/li></li>
+				<li>&nbsp;&nbsp;&lt;li>&lt;/li></li>
+				<li>&nbsp;&nbsp;&lt;li>&lt;/li></li>
+				&lt;/ul>
+			</ul>
+			<ul>
+				&lt;ul>
+				<li>&nbsp;&nbsp;&lt;li>&lt;/li></li>
+				<li>&nbsp;&nbsp;&lt;li>&lt;/li></li>
+				<li>&nbsp;&nbsp;&lt;li>&lt;/li></li>
+				&lt;/ul>
+			</ul>
+			<ul>
+				&lt;ul>
+				<li>&nbsp;&nbsp;&lt;li>&lt;/li></li>
+				&lt;/ul>
+			</ul>
+		</div>
+	</div>
+	</body>
+</html>
+

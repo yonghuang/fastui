@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					控件方法与事件回调示例。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			var list;
+			fastDev(function() {
+				list = fastDev.getInstance("list");
+			});
+			// 选取已勾选的值
+			function select(event, chooselist) {
+				// 控件中部区域的按钮，，按钮点击回调的作用域为当前按钮控件
+				chooselist.select();
+			}
+
+			// 选取所有可选值
+			function selectAll(event, chooselist) {
+				// 控件中部区域的按钮，，按钮点击回调的作用域为当前按钮控件
+				chooselist.selectAll();
+			}
+
+			// 撤销选取已勾选的值
+			function deselect(event, chooselist) {
+				// 控件中部区域的按钮，，按钮点击回调的作用域为当前按钮控件
+				chooselist.deselect();
+			}
+
+			// 撤销选取所有已选值
+			function deselectAll(event, chooselist) {
+				// 控件中部区域的按钮，，按钮点击回调的作用域为当前按钮控件
+				chooselist.deselectAll();
+			}
+
+			// 上移选中的记录
+			function moveUp(event, chooselist) {
+				// 控件中部区域的按钮，，按钮点击回调的作用域为当前按钮控件
+				// move方法仅被特定控件支持
+				chooselist.moveUp();
+			}
+
+			// 下移选中的记录
+			function moveDown(event, chooselist) {
+				// 控件中部区域的按钮，，按钮点击回调的作用域为当前按钮控件
+				// move方法仅被特定控件支持
+				chooselist.moveDown();
+			}
+
+			// 获取已选记录的主键值
+			function getValue() {
+				var value = list.getValue();
+				fastDev.tips(value.toString());
+			}
+
+			// 获取已选记录的文本值（适用于列表控件等）
+			function getText() {
+				var text = list.getText();
+				fastDev.tips(text.toString())
+			}
+
+			// 获取已选数据的对象数组（原始数据格式）
+			function getItems() {
+				var items = list.getItems();
+				fastDev.tips(items.toString());
+			}
+
+			// 获取当前已选记录数
+			function getSize() {
+				fastDev.tips("当前已选 " + list.getSize() + " 条记录");
+			}
+
+			// 获取当前待选数据的对象数组（原始数据格式）
+			function getData() {
+				// getItems为获取已选记录对象数组，getData为获取待选记录对象数组
+				var data = list.getData();
+				fastDev.tips(data.toString());
+			}
+
+			// 判定某记录是否已被选取
+			function isSelected() {
+				// isSelected判断某项记录是否已被选取，传递参数为记录对象（其中须包含记录的主键值），或者记录的主键值
+				var data = {
+					empno : 2001,
+					name : "关羽"
+				}, isSelected = list.isSelected(data);
+				fastDev.tips("<span style='color:blue;'>关羽</span>" + ( isSelected ? "<span style='color:green;'>已被</span>" : "<span style='color:red;'>未被</span>") + "选取");
+			}
+
+			// 选取值
+			function setValue() {
+				var data = list.getData();
+				// setValue方法等同于select方法
+				list.setValue(data);
+				fastDev.tips("已设值");
+			}
+
+			// 刷新待选数据
+			function refresh() {
+				// refresh方法可刷新待选数据，第一个参数为参数配置对象，有2个属性，可选属性url用于设置请求链接，param用于设置查询参数
+				// url不指定时，默认使用initSource属性值
+				// data用于指定静态的数据
+				list.refresh({
+					// url : "",
+					// data: "",
+					param : {
+						department : "产品研发部"
+					}
+				});
+				fastDev.tips("已刷新");
+			}
+
+			// 刷新待选数据，且同时清理已选数据
+			function refreshWithClean() {
+				// refresh方法第二个参数为true时，则会清空已选数据
+				list.refresh({
+					// url : "",
+					// data: "",
+					param : {
+						department : "产品研发部"
+					}
+				}, true);
+				fastDev.tips("已刷新");
+			}
+
+			// 获取左边控件的实例
+			function getLeftWidget() {
+				// 函数返回值为控件的实例
+				var left = list.getLeftWidget();
+				fastDev.tips("左边控件名：" + left.alias);
+			}
+
+			// 获取右边控件的实例
+			function getRightWidget() {
+				// 函数返回值为控件的实例
+				var right = list.getRightWidget();
+				fastDev.tips("右边控件名：" + right.alias);
+			}
+
+			// 自定义渲染列表项
+			function itemRenderer(item) {
+				// 该回调仅应用于默认的列表控件，参数为从待选数据展现控件（左边的那个）上获取的数据记录
+				return "<img src='../../data/chooselist_img.gif' width='20px' height='20px' align='middle'/><span style='padding:4px;'>" + item.name + "(" + item.empno + ")" + "</span>";
+			}
+
+			// 每条记录选取前的回调事件
+			function onBeforeSelect(item) {
+				// 回调返回布尔值false，则该记录不会被选取
+				fastDev.tips("onBeforeSelect：" + item.name);
+			}
+
+			// 每条记录选取后的回调事件
+			function onAfterSelect(items) {
+				fastDev.tips("onAfterSelect：" + items);
+			}
+
+			// 每条记录撤销选取前的回调事件
+			function onBeforeDeselect(item) {
+				// 回调返回布尔值false，则该记录不会被取消选取
+				fastDev.tips("onBeforeDeselect：" + item.name);
+			}
+
+			// 每条记录撤销选取后的回调事件
+			function onAfterDeselect(items) {
+				fastDev.tips("onAfterDeselect：" + items);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				方法与事件回调
+			</div>
+			<div itype="ChooseList" id="list" saveInstance="true" primaryKey="empno" onBeforeSelect="onBeforeSelect()" onAfterSelect="onAfterSelect()" onBeforeDeselect="onBeforeDeselect()" onAfterDeselect="onAfterDeselect()" itemRenderer="itemRenderer()"  leftWidth="380px"  rightWidth="180px" height="273px">
+				<div name="leftWidget" isCopy="true">
+					<div itype="DataGrid" initSource="../../data/chooselist_grid.jsp" showSeqColumn="true">
+						<div width="50%" name="empno" text="员工工号"></div>
+						<div width="50%" name="name" text="姓名"></div>
+						<div name="pageSizeList">
+							<div value="5" text="5条"></div>
+							<div value="10" text="10条"></div>
+						</div>
+					</div>
+				</div>
+				<div name="rightWidget" textField="name" valueField="empno"></div>
+				<div name="buttons">
+					<!-- 定义的name属性值等于select、selectAll、deselect、deselectAll、moveUp、moveDown时，自动绑定相应的点击事件  -->
+					<!-- 也可以通过定义onclick回调事件来自定义点击事件（自定义回调里面需自行调用相关的选值或移除值等API方法，按钮点击回调的作用域为当前按钮控件） -->
+					<div text="选取" onclick="select()"></div>
+					<div text="移除" onclick="deselect()"></div>
+					<div text="全选" onclick="selectAll()"></div>
+					<div text="清空" name="deselectAll"></div>
+					<div text="上移" name="moveUp"></div>
+					<div text="下移" name="moveDown"></div>
+				</div>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取记录主键值" onclick="getValue()"/>
+				<input itype="Button" text="获取记录文本值" onclick="getText()"/>
+				<input itype="Button" text="获取记录对象" onclick="getItems()"/>
+				<input itype="Button" text="获取当前已选记录数" onclick="getSize()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取待选数据" onclick="getData()"/>
+				<input itype="Button" text="判断某记录是否已被选取" onclick="isSelected()"/>
+				<input itype="Button" text="设置值" onclick="setValue()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="刷新待选数据" onclick="refresh()"/>
+				<input itype="Button" text="刷新待选数据并清空已选值" onclick="refreshWithClean()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取待选数据展现控件实例" onclick="getLeftWidget()"/>
+				<input itype="Button" text="获取已选数据展现控件实例" onclick="getRightWidget()"/>
+			</div>
+		</div>
+	</body>
+</html>

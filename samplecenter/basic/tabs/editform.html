@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>        
+        <li>基本功能</li>
+        <li>表单里的控件不可缺少itype与id属性，否则表单读不到控件</li>
+        <li>requestType默认为get,提交的内容较多时，如用到文本域，富文本框一般设置为post</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+	  <script>
+	  		//页面初始加载方法
+	 		var request = fastDev.Browser.getRequest();//获取请求对象
+			var empno = request['empno'] || "";
+			var name = request['name'] || "";
+			var index = request['index'] || "";
+			fastDev(function(){
+			   if(!!empno){
+			     fastDev.getInstance("id").setValue(empno);
+			     fastDev.getInstance("id").setReadOnly(true);
+			   }
+			   if(!!name){
+			     fastDev.getInstance("name").setValue(name);
+			   }
+			});
+			
+			//提交方法
+			var submit=function(){
+				//获取老数据
+				var txtempno=fastDev.getInstance("id").getValue();
+				var txtname=fastDev.getInstance("name").getValue();
+				var tab1=window.parent.fastDev.getInstance("tabs1");
+				alert("修改成功,本页面将关闭并刷新前一个页面");
+				var datagrid= window.parent.document.getElementById("datagrid").contentWindow.fastDev.getInstance("datagrid1");
+				var data = datagrid.getValueByIndex(index);
+				data.empno=txtempno;
+				data.name=txtname;
+				datagrid.updateRow(data,true);
+				//tab1.refreshTabByTitle("datagrid页面");				
+				tab1.removeTab("修改员工信息");
+				
+			}
+			
+			
+		</script>
+	</head>
+	<body>
+		<table width="800px" border="0" style="margin:10px;" class="ui-form-list">
+        <tr>
+        <td><div class="ui-layout-text">修改员工信息</div></td> <td></td>
+        </tr>        
+		  <tr>
+		    <td>员工工号:</td>
+		    <td><input itype="TextBox" id="id" saveInstance="true"></td>
+	      </tr>
+		  <tr>
+		    <td>姓名:</td>
+		    <td><input itype="TextBox" id="name" saveInstance="true"></td>
+	      </tr>		  
+         </table>
+         <div style="width:400px; text-align:center">
+			<div itype="Button" text="提交" onclick="submit()" ></div>
+		 </div>
+	</body>
+</html>

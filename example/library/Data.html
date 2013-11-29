@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Data</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-06 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Model.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script>
+			debugger;
+			// create model
+			fastDev.create("Model", {
+				name : "User",
+				fields : [{
+					name : 'name',
+					type : 'string'
+				}, {
+					name : 'age',
+					type : 'int',
+					convert : null
+				}, {
+					name : 'phone',
+					type : 'string'
+				}, {
+					name : 'alive',
+					type : 'boolean',
+					defaultValue : true,
+					convert : null
+				}]
+			});
+
+			fastDev.create("DataSet", {
+				fields : [{
+					name : 'name',
+					type : 'string'
+				}, {
+					name : 'age',
+					type : 'int',
+					convert : null
+				}, {
+					name : 'phone',
+					type : 'string'
+				}, {
+					name : 'alive',
+					type : 'boolean',
+					defaultValue : true,
+					convert : null
+				}],
+				/*
+				proxy : {
+					type : 'ajax',
+					url : 'users.json',
+					reader : {
+						type : 'json',
+						root : 'users'
+					}
+				},*/
+				data : [{
+					name : 'Conan',
+					age : 24,
+					phone : '555-555-5555'
+				}]
+			});
+		</script>
+	</head>
+	<body>
+
+	</body>
+</html>
+

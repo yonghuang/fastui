@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.apply(fastDev.Core.DataBus._options, {
+	checkFnType : null,
+	checkFnBody : null,
+	checkUrl : null
+});
+
+fastDev.apply(fastDev.Core.DataBus._global, {
+	checkResult : true
+});
+
+fastDev.apply(fastDev.Core.DataBus, {
+	_dataStore : {},
+	getCache : function(key) {
+		var returnObj = null;
+		(this._dataStore[key] &amp;&amp; typeof this._dataStore[key] === &quot;object&quot;) ? returnObj = talkweb.Tools.clone(this._dataStore[key]) : returnObj = this._dataStore[key];
+		return returnObj;
+	},
+	setCache : function(key, value) {
+		this._dataStore[key] = value;
+	},
+	JsonEncodeURI : function(jsonObj) {
+		var data = &quot;&quot;, result, value;
+		for(var p in jsonObj) {
+			if(jsonObj[p]) {
+				result = jsonObj[p];
+				result = encodeURIComponent(result);
+				value = p + &quot;=&quot; + result;
+				data.length &gt; 0 ? data += &quot;&amp;&quot; + value : data += value;
+			}
+		}
+		return data;
+	},
+	execute : function(queueFn) {
+		//判断queueFn.parameters是否字符串，如果是字符串，则encodeURIComponent，如果是json对象，则解析成字符串在encodeURIComponent
+		var that = this, callback = function() {
+		};
+		var fnCallback = queueFn.callback;
+		if(queueFn.fnType === &quot;ajax&quot;) {
+			//debugger;
+			if(queueFn.parameters) {
+				if( typeof queueFn.parameters === &quot;string&quot;) {
+					queueFn.parameters = encodeURI(queueFn.parameters);
+				} else if( typeof queueFn.parameters === &quot;object&quot;) {
+					queueFn.parameters = this.JsonEncodeURI(queueFn.parameters);
+				}
+			}
+
+			callback = function(data) {
+				//debugger;
+				try {
+					data = eval(&quot;(&quot; + data + &quot;)&quot;);
+
+				} catch (e) {
+					try {
+						data = $.parseJSON(data);
+					} catch (e) {
+					}
+				}
+				if( data instanceof Array) {
+					for(var i = 0; i &lt; data.length; i += 1) {
+						data[i].cacheID &amp;&amp; that.setCache(data[i].cacheID, data[i].cacheData);
+					}
+				} else {
+					data &amp;&amp; data.cacheID &amp;&amp; that.setCache(data.cacheID, data.cacheData)
+				}
+				//queueFn.cacheid &amp;&amp; that.setCache(queueFn.cacheid, data);
+				fnCallback(data);
+			};
+		}
+		queueFn.callback = callback;
+		talkweb.Tools.executeQueue.add(queueFn);
+	},
+	executeURI : function(queueFn) {
+		//queueFn.parameters &amp;&amp; typeof queueFn.parameters === &quot;string&quot;
+		//	&amp;&amp; (queueFn.parameters = encodeURI(queueFn.parameters));
+		var that = this, callback = function() {
+		};
+		var fnCallback = queueFn.callback;
+		if(queueFn.fnType === &quot;ajax&quot;) {
+			callback = function(data) {
+				try {
+					data = eval(&quot;(&quot; + data + &quot;)&quot;);
+				} catch (e) {
+					try {
+						data = $.parseJSON(data);
+					} catch (e) {
+					}
+				}
+				if( data instanceof Array) {
+					for(var i = 0; i &lt; data.length; i += 1) {
+						data[i].cacheID &amp;&amp; that.setCache(data[i].cacheID, data[i].cacheData);
+					}
+				} else {
+					data &amp;&amp; data.cacheID &amp;&amp; that.setCache(data.cacheID, data.cacheData)
+				}
+				//queueFn.cacheid &amp;&amp; that.setCache(queueFn.cacheid, data);
+				fnCallback(data);
+			};
+		}
+		queueFn.callback = callback;
+		talkweb.Tools.executeQueue.add(queueFn);
+	},
+	/*
+	 * Description:构造控件集请求信息方法
+	 * Param:queueFn 控件集配置信息
+	 * Return:请求信息对象
+	 */
+	buildRequestInfo : function(items) {
+		var requestInfo = {};
+		for(var i = 0; i &lt; items.length; i += 1) {
+			var item = items[i], key = item.initGroup;
+			if(key) {
+				(requestInfo[key] &amp;&amp; requestInfo[key].push(item.initMethod || &quot;&quot;)) || (requestInfo[key] = new Array(item.initMethod || &quot;&quot;));
+			} else {
+				key = talkweb.ControlBus.getID();
+				requestInfo[key] = 1;
+			}
+			item.initGroup = key;
+			key = item.dataGroup;
+			if(key) {
+				(requestInfo[key] &amp;&amp; requestInfo[key].push(item.dataMethod || &quot;&quot;)) || (requestInfo[key] = new Array(item.dataMethod || &quot;&quot;));
+			} else {
+				key = talkweb.ControlBus.getID();
+				requestInfo[key] = 1;
+			}
+			item.dataGroup = key;
+		}
+		return requestInfo;
+	},
+	check : function() {
+		var ajax = talkweb.Tools.queueFn.getInstance({
+			fnType : &quot;nomal&quot;,
+			fnBody : function() {
+			}
+		});
+		talkweb.DataBus.execute(ajax);
+	}
+});
+
+</pre>
+</body>
+</html>

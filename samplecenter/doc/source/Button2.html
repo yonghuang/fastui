@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Button'>/**
+</span> * @class fastDev.Ui.Button
+ * @extends fastDev.Ui.Component
+ * 按钮控件，支持链接按钮、图片按钮，图文按钮、文本按钮、下拉按钮等展示形式。继承自component基类，表单类控件。&lt;p&gt;
+ * 作者：姜玲
+ *
+ *		 &lt;div itype=&quot;Button&quot; text=&quot;添加&quot; iconCls=&quot;icon-add&quot;&gt;&lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.Button&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;Button&quot;,
+	_options : {
+<span id='fastDev-Ui-Button-property-text'>		/**
+</span>		 * 按钮文本
+		 * @type {String}
+		 */
+		text : &quot;&quot;,
+<span id='fastDev-Ui-Button-property-tips'>		/**
+</span>		 * 按钮提示文本
+		 * @type {String}
+		 */
+		tips:&quot;&quot;,
+<span id='fastDev-Ui-Button-property-iconCls'>		/**
+</span>		 * 按钮图标样式名，有常用添、删、改、查、打印样式，也可自行写其他样式
+		 * @type {String}
+		 * &lt;p&gt;icon-search、icon-add、icon-edit、icon-delete、icon-print为可选内置添、删、改、查、打印样式&lt;/p&gt;
+		 */
+		iconCls : &quot;&quot;,
+<span id='fastDev-Ui-Button-property-iconStyle'>		/**
+</span>		 * 按钮图标样式，如果只有一个样式，直接写“键:值”字符串，多个样式写json格式
+		 * @type {String|jsonObj} 
+		 */
+		iconStyle : &quot;&quot;,
+<span id='fastDev-Ui-Button-property-iconPosition'>		/**
+</span>		 * 图标位置left/top
+		 * @type {String}
+		 */
+		iconPosition : &quot;left&quot;,
+<span id='fastDev-Ui-Button-property-href'>		/**
+</span>		 * 超链接地址
+		 * @type {String}
+		 */
+		href : &quot;&quot;,
+<span id='fastDev-Ui-Button-property-target'>		/**
+</span>		 * 超链接弹出方式
+		 * @type {String}
+		 */
+		target : &quot;&quot;,
+<span id='fastDev-Ui-Button-property-plain'>		/**
+</span>		 * 背景透明
+		 * @type {Boolean}
+		 */
+		plain : false,
+<span id='fastDev-Ui-Button-property-width'>		/**
+</span>		 * 宽度
+		 * @type {String}
+		 */
+		width : &quot;&quot;,
+<span id='fastDev-Ui-Button-property-disabled'>		/**
+</span>		 * 是否禁用
+		 * @type {Boolean}
+		 */
+		disabled:false,		
+<span id='fastDev-Ui-Button-property-subItems'>		/**
+</span>		 * 定义下拉条目，如果没定义则为普通的按钮
+		 * @type {Object}
+		 */
+		subItems : null,
+<span id='fastDev-Ui-Button-property-showMenuOnMouseover'>		/**
+</span>		 * 带下拉按钮在鼠标滑过出来时即弹出，否则点击按钮出来弹出
+		 * @type {Boolean}
+		 */
+		showMenuOnMouseover : false,
+<span id='fastDev-Ui-Button-event-onBtnClick'>		/**
+</span>		 * 按钮点击事件
+		 * @event
+		 */
+		onBtnClick : fastDev.noop,
+		enabledInitProxy : false,
+		enabledDataProxy : false
+	},
+	_global : {
+		button : null,
+		buttonText : null,
+		buttonListText : null,
+		btnBind:false
+	},
+	template : [
+		'&lt;tpl if(#{plain})&gt;', 
+			'&lt;a class=&quot;ui-button ui-button-plain ui-button-radius #{cls}&quot; id=&quot;#{id}&quot;&gt;&lt;em class=&quot;ui-button-em&quot;&gt;&lt;span class=&quot;ui-button-text&quot; title=&quot;#{tips}&quot;&gt;#{text}&lt;/span&gt;', 
+		'&lt;tpl else if(&quot;#{text}&quot;==&quot;&quot;)&gt;', 
+			'&lt;a class=&quot;ui-button ui-button-plain #{cls}&quot; id=&quot;#{id}&quot;&gt;&lt;em class=&quot;ui-button-em&quot;&gt;&lt;span class=&quot;ui-button-text-no&quot; title=&quot;#{tips}&quot;&gt;&lt;/span&gt;', 
+		'&lt;tpl else&gt;', 
+			'&lt;a class=&quot;ui-button ui-button-bg ui-button-radius #{cls}&quot; id=&quot;#{id}&quot;&gt;&lt;em class=&quot;ui-button-em&quot;&gt;&lt;span class=&quot;ui-button-text&quot; title=&quot;#{tips}&quot;&gt;#{text}&lt;/span&gt;', 
+		'&lt;/tpl&gt;', 
+		'&lt;tpl if(#{subItems})&gt;', 
+			'&lt;span class=&quot;icon-arrow&quot;&gt;&lt;/span&gt;', 
+		'&lt;/tpl&gt;', 
+		'&lt;/em&gt;&lt;/a&gt;', 
+		'&lt;tpl dynamic&gt;', 
+			'&lt;div class=&quot;ui-button-list ui-shadow ui-hidden&quot;&gt;', 
+			'&lt;tpl each&gt;', 
+				'&lt;a&gt;&lt;span class=&quot;ui-button-list-text&quot;&gt;{text}&lt;/span&gt;&lt;/a&gt;', 
+			'&lt;/tpl&gt;', 
+			'&lt;/div&gt;', 
+		'&lt;/tpl&gt;'
+	],
+	tplParam : [&quot;text&quot;,&quot;tips&quot;, &quot;subItems&quot;, &quot;plain&quot;,&quot;cls&quot;,&quot;width&quot;,&quot;id&quot;],
+	fields : [&quot;text&quot;],
+<span id='fastDev-Ui-Button-method-ready'>	/**
+</span>	 * 参数准备
+	 * @protected
+	 */
+	ready : function(options,global){
+		if(options.subItems){
+			options.enabledInitProxy = true;
+		}	
+	},
+<span id='fastDev-Ui-Button-method-init'>	/**
+</span>	 * 初始化方法
+	 * @protected
+	 */
+	init : function(options, global) {
+		var me = this, items = options.subItems;
+		// 将外部配置的子项读入数据集并渲染至动态模板中
+		if(items) {
+			me.dataset.load(items);
+			me.renderDynamicHtml();
+		}
+		// 缓存常用Dom，避免重复查询
+		var btn= this.find(&quot;.ui-button&quot;);
+		this._global.button =btn;
+		this._global.buttonText = this.find(&quot;[class^='ui-button-text']&quot;);
+		this._global.buttonListText = this.find(&quot;.ui-button-list-text&quot;);
+		// 样式功能初始化
+		this.setIcon(options,global);
+		this.setHref(options,global);
+		if(options.disabled){
+			options.disabled=false;
+			this.disable();
+		}
+		if(options.width){
+			 btn.children(&quot;.ui-button-em&quot;).css(&quot;width&quot;,options.width);
+		}
+		this.bindEvent(options,global);
+	},
+<span id='fastDev-Ui-Button-method-setIcon'>	/**
+</span>	 * 设置图片
+	 * @private
+	 */
+	setIcon : function(options,global) {
+		var buttonText = global.buttonText, button = global.button;
+		options.text &amp;&amp; (options.iconCls || options.iconStyle) &amp;&amp; buttonText.addClass(&quot;ui-button-icon&quot;);
+		options.iconCls &amp;&amp; buttonText.addClass(options.iconCls);
+		options.iconStyle &amp;&amp; buttonText.css(options.iconStyle);
+		options.iconPosition === &quot;top&quot; &amp;&amp; button.addClass(&quot;ui-button-ico-top&quot;);
+		options.style &amp;&amp; button.css(options.style);
+	},
+<span id='fastDev-Ui-Button-method-setHref'>	/**
+</span>	 * 设置链接
+	 * @private
+	 */
+	setHref : function(options,global) {
+		var button = global.button;
+		options.href &amp;&amp; button.prop(&quot;href&quot;, options.href);
+		options.target &amp;&amp; button.prop(&quot;target&quot;, options.target);
+	},
+<span id='fastDev-Ui-Button-property-'>	/**
+</span>	 * 绑定事件接口
+	 * @private
+	 */
+<span id='fastDev-Ui-Button-method-showButtonList'>	/**
+</span>	 * 展示下拉按钮
+	 * @private
+	 */
+	showButtonList : function(button, buttonList) {
+		var offset = button.offset();
+		buttonList.css(&quot;top&quot;, offset.top + button.outerHeight() - 1);
+		buttonList.css(&quot;left&quot;, offset.left);
+		buttonList.css(&quot;width&quot;, button.width());
+		buttonList.isShow() == false &amp;&amp; buttonList.show();
+	},
+<span id='fastDev-Ui-Button-method-bindEvent'>	/**
+</span>	 * 按钮事件
+	 * @private
+	 */
+	bindEvent : function(options,global) {
+		var me=this,buttonText = global.buttonText, button = global.button, buttonList = me.find(&quot;.ui-button-list&quot;), buttonListText = global.buttonListText, buttonArrow = me.find(&quot;.icon-arrow&quot;),overCls=&quot;ui-button-over&quot;,
+		items = options.subItems, buttonem = global.button.find(&quot;.ui-button-em&quot;),buttonText=global.buttonText;
+		if(items) {
+			var itemlen = items.length;
+			for(var i = 0; i &lt; itemlen; i++) {
+				var item = items[i];
+				item.onBtnClick &amp;&amp; fastDev(buttonListText.elems[i]).bind(&quot;click&quot;, item.onBtnClick);
+			}
+		}
+		if(options.iconPosition === &quot;top&quot;){
+			overCls=&quot;ui-button-ico-top-over&quot;;
+		}else if(options.cls!=&quot;&quot;){
+			overCls=options.cls+&quot;-over&quot;;
+		}	
+		//按钮鼠标滑入滑出样式改变事件
+		var btnMouseOver = function(event) {
+			//如果有子按钮，则将子按钮列表显示出来
+			options.subItems &amp;&amp; options.showMenuOnMouseover &amp;&amp; me.showButtonList(button, buttonList);
+			button.hasClass(overCls) == false &amp;&amp; button.addClass(overCls);
+		};
+		var btnMouseOut = function(event) {
+			if(!(options.subItems &amp;&amp; buttonList.isShow())) {
+				button.removeClass(overCls);
+			}
+		};
+		button.bind(&quot;mouseover&quot;, btnMouseOver).bind(&quot;mouseout&quot;, btnMouseOut);
+		// 下拉按钮鼠标滑入滑出样式改变事件
+		var btnListTextMouseOver = function(event) {
+			fastDev(event.target).addClass(&quot;ui-button-list-over&quot;);
+		};
+		var btnListTextMouseOut = function(event) {
+			fastDev(event.target).removeClass(&quot;ui-button-list-over&quot;);
+		};
+		var bodyClick = function(event) {
+			var target = fastDev(event.target);
+			var btnanniu=fastDev(me.elems[0]);
+			var tkey= target.parents(&quot;[eventkey]:first&quot;).attr(&quot;eventkey&quot;);
+		 	var akey= btnanniu.attr(&quot;eventkey&quot;);			
+			if(tkey!=akey){
+				button.removeClass(overCls);
+				buttonList.isShow() &amp;&amp; buttonList.hide();
+			}
+		};
+		if(options.onBtnClick!== fastDev.noop){
+			 global.btnBind=true;
+		}
+		var btnemClick=function(){
+			 options.onBtnClick.call(me);			
+		};		
+		//按钮鼠标滑入滑出样式改变事件
+		var btnClick = function(event) {
+			//如果有子按钮，则将子按钮列表显示出来
+			options.subItems &amp;&amp; me.showButtonList(button, buttonList);
+		};		
+		var body =fastDev(window);
+		if(fastDev.Browser.isIE){
+			 body =fastDev(&quot;body&quot;);
+		}
+		body.bind(&quot;click&quot;, bodyClick);
+		if(options.subItems) {			
+			if(global.btnBind) {
+				buttonArrow.bind(&quot;click&quot;, btnClick);		
+			} else {
+				button.bind(&quot;click&quot;, btnClick);	
+			}
+			buttonText.bind(&quot;click&quot;, btnemClick);	
+			buttonListText.bind(&quot;mouseover&quot;, btnListTextMouseOver).bind(&quot;mouseout&quot;, btnListTextMouseOut);
+		}else{
+			if(options.onBtnClick!== fastDev.noop){
+				buttonem.bind(&quot;click&quot;, btnemClick);
+			}		
+		}
+	},
+<span id='fastDev-Ui-Button-method-enable'>	/**
+</span>	 * 启用按钮
+	 */
+	enable : function() {
+		var options=this._options;
+		if(options.disable){
+			var global=this._global, button = global.button, iconPosition = options.iconPosition,disabledCls=&quot;ui-button-disabled&quot;;
+			if(iconPosition === &quot;top&quot;) {
+				disabledCls=&quot;ui-button-ico-top-disabled&quot;;
+			} else if(options.cls!=&quot;&quot;) {
+				disabledCls=options.cls+&quot;-disabled&quot;;
+			}			
+			if(button.hasClass(disabledCls)){
+				button.removeClass(disabledCls);
+			}			
+			this.bindEvent(options,global);
+			this._options.disable=false;
+		}
+	},
+<span id='fastDev-Ui-Button-method-disable'>	/**
+</span>	 * 禁用控件
+	 */
+	disable : function() { 
+		var options=this._options;
+		if(!options.disable){
+			var button = this._global.button, iconPosition = options.iconPosition,disabledCls=&quot;ui-button-disabled&quot;;
+			if(iconPosition === &quot;top&quot;) {
+				disabledCls=&quot;ui-button-ico-top-disabled&quot;;
+			} else if(options.cls!=&quot;&quot;) {
+				disabledCls=options.cls+&quot;-disabled&quot;;
+			}	
+			if(!button.hasClass(disabledCls)){
+				button.addClass(disabledCls);
+			}	
+			this.unbindClick();		
+			options.disable=true;
+		}
+	},
+<span id='fastDev-Ui-Button-method-unbindClick'>	/**
+</span>	 * 解绑按钮事件
+	 * @private
+	 */
+	unbindClick : function() {
+		var options = this._options,global=this._global, items = options.subItems, buttonem = global.button.find(&quot;.ui-button-em&quot;),buttonText=global.buttonText, buttonListText = global.buttonListText;
+		if(options.onBtnClick!== fastDev.noop){
+		     buttonem.unbind(&quot;click&quot;);
+			 buttonText.unbind(&quot;click&quot;);
+		}		
+		// 优化同bindClick方法
+		if(items) {
+			var itemlen = items.length;
+			for(var i = 0; i &lt; itemlen; i++) {
+				var item = items[i];
+				item.onBtnClick &amp;&amp; fastDev(buttonListText.elems[i]).unbind(&quot;click&quot;, item.onBtnClick);
+			}
+		}
+	},
+<span id='fastDev-Ui-Button-method-destroy'>	/**
+</span>	 * 销毁控件
+	 */
+	destroy : function() {
+		this.remove();
+	}
+});
+</pre>
+</body>
+</html>

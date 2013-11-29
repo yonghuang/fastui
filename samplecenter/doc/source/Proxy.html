@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Data-Proxy'>/**
+</span> * @class fastDev.Data.Proxy
+ * @extends fastDev.Core.Base
+ * @author 袁刚
+ * 数据代理实现类，协助数据集与后台进行交互的辅助类
+ */
+
+fastDev.define(&quot;fastDev.Data.Proxy&quot;, {
+	extend : &quot;fastDev.Core.Base&quot;,
+	alias : &quot;Proxy&quot;,
+	_options : {
+<span id='fastDev-Data-Proxy-property-url'>		/**
+</span>		 * 远程数据地址
+		 * @type {String}
+		 */
+		url : null,
+<span id='fastDev-Data-Proxy-property-method'>		/**
+</span>		 * 远程请求类型
+		 * @type {string}
+		 */
+		method : &quot;get&quot;,
+<span id='fastDev-Data-Proxy-property-action'>		/**
+</span>		 * 数据提交地址
+		 * @type {String}
+		 */
+		action : null,
+<span id='fastDev-Data-Proxy-property-urlParam'>		/**
+</span>		 * load方法执行时附带参数(如果load方法传了参数则此设置不生效)
+		 * @type {JsonObject}
+		 */
+		urlParam : null,
+<span id='fastDev-Data-Proxy-property-data'>		/**
+</span>		 * 代理中的静态数据源
+		 */
+		data : null,
+<span id='fastDev-Data-Proxy-property-timeout'>		/**
+</span>		 * 代理超时时间
+		 */
+		timeout : 0,
+<span id='fastDev-Data-Proxy-property-dataType'>		/**
+</span>		 * 数据读取类型
+		 * @type {String}
+		 */
+		dataType : &quot;json&quot;,
+<span id='fastDev-Data-Proxy-property-queue'>		/**
+</span>		 * 代理所属队列
+		 * @type {fastDev.Queue}
+		 */
+		queue : null,
+<span id='fastDev-Data-Proxy-event-onError'>		/**
+</span>		 * 加载数据错误时的事件
+		 * @event  onError
+		 */
+		onError : fastDev.noop,
+<span id='fastDev-Data-Proxy-event-onAfterLoad'>		/**
+</span>		 *  数据加载完成事件
+		 * @event onAfterLoad
+		 * @private
+		 */
+		onAfterLoad : fastDev.noop,
+		onAfterSave : fastDev.noop
+	},
+<span id='fastDev-Data-Proxy-method-ready'>	/**
+</span>	 * 代理对象参数准备方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	ready : function(options, global) {
+		this._jobs = [];
+		
+		if(options.dataset) {
+			global.handle = fastDev.setFnInScopeByParam(options.dataset, options.dataset.load, true, true);
+		}
+	},
+<span id='fastDev-Data-Proxy-method-construct'>	/**
+</span>	 * 代理对象构造方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	construct : function(options, global) {
+		this.reader = fastDev.create(&quot;Reader&quot;, options.reader);
+
+		if(!fastDev.isValid(options.queue)) {
+			options.queue = fastDev.Queue.getInstance();
+		}
+	},
+<span id='fastDev-Data-Proxy-method-load'>	/**
+</span>	 * 远程数据加载
+	 * @param {JsonObject/String} data Json格式键值对数据或者字符串格式数据
+	 * @param {Function} [callback] 后台处理完成后的回调函数
+	 * @param {Boolean} [encode=false] 是否编码
+	 * @param {Boolean} [json=false] 是否提交Json格式参数(此参数为true时系统追加data为数据键：url?data=jsondata)
+	 */
+	load : function(data, callback, encode, json) {
+		var url, options = this._options,global = this._global,
+		// 代理所使用的队列
+		queue = options.queue,
+		// load方法请求类型
+		method = options.method,
+		// load方法超时时间
+		timeout = options.timeout,
+		// 统一数据处理
+		dataProcessing = fastDev.Core.DataBus.processing,
+		// 代理所驱动的数据集
+		dataset = options.dataset,
+		// 修正传入参数
+		params = this.correctParam(data, callback, encode, json, options.urlParam),
+		// 数据加载完成回调事件
+		onAfterLoad = fastDev.isNoop(params[1]) ? fastDev.isFunction(options.onAfterLoad) ? options.onAfterLoad : params[1] : params[1],
+		// 数据总线加载数据成功的回调
+		handle = dataset? global.handle : onAfterLoad;
+		
+		if(handle === onAfterLoad) {
+			onAfterLoad = fastDev.noop;
+		} 
+		// if(fastDev.isValid(params[1])){
+		// this.addJob({
+		// name : &quot;exec&quot;,
+		// object : params[1]
+		// });
+		// }
+
+		if( url = options.url) {
+			var complete = fastDev.setFnInScopeByParam(this, dataProcessing, handle, options.onError, onAfterLoad);
+
+			// 格式化提交参数
+			data = this.formatData(params[0], params[2], params[3]);
+
+			queue.add({
+				url : url,
+				data : data,
+				method : method,
+				complete : complete,
+				timeout : timeout
+			});
+			return true;
+		}
+		return false;
+	},
+<span id='fastDev-Data-Proxy-method-save'>	/**
+</span>	 * 提交数据至远程服务
+	 * @param {JsonObject/String} data Json格式键值对数据或者字符串格式数据
+	 * @param {Function} [callback] 后台处理完成后的回调函数
+	 * @param {Boolean} [encode=false] 是否编码
+	 * @param {Boolean} [json=false] 是否提交Json格式参数(此参数为true时系统追加data为数据键：url?data=jsondata)
+	 */
+	save : function(data, callback, encode, json) {
+		var options = this._options,
+		// 代理所使用的队列
+		queue = options.queue,
+		// 代理数据提交地址
+		url = options.action,
+		// save方法超时时间
+		timeout = options.timeout,
+		// 数据总线数据处理中心
+		dataProcessing = fastDev.Core.DataBus.processing,
+		onAfterSave = options.onAfterSave,
+		// 修正传入参数
+		params = this.correctParam(data, callback, encode, json),
+		// 回调函数
+		complete = fastDev.setFnInScopeByParam(this, dataProcessing, params[1], options.onError,onAfterSave);
+		// 格式化提交参数
+		data = this.formatData(params[0], params[2], params[3]);
+
+		queue.add({
+			url : url,
+			data : data,
+			method : &quot;post&quot;,
+			complete : complete,
+			timeout : timeout
+		});
+	},
+<span id='fastDev-Data-Proxy-method-'>	/**
+</span>	 *  增加一个任务在远程数据加载(load方法)完成后执行
+	 * @param {JsonObject} jobConfig 任务配置信息
+	 * @param {String} jobConfig.name 任务类型名称，分为local(将Proxy中的静态数据增加至绑定数据集)、remote(将Proxy请求到的动态数据增加至绑定数据集)、exec(执行自定义函数)
+	 * @param {fastDev.Data.DataSet/Function} jobConfig.object 任务的核心对象 name等于local或者remote时，该参数应传DataSet对象；name为exec时，该参数应传Function对象
+	 * @param {String} [jobConfig.root] 代理读取远程数据的根节点
+	 * @param {Boolean} [jobConfig.once=false] 该任务是否执行一次后自动删除
+	 * @private
+	 */
+	// addJob : function(jobConfig) {
+	// this._jobs.push(jobConfig);
+	// return this;
+	// },
+<span id='fastDev-Data-Proxy-method-'>	/**
+</span>	 * 开始执行任务
+	 * @param {Object} data
+	 * @private
+	 */
+	// execJobs : function(data) {
+	// var reader = fastDev.Data.Reader, jobs = this._jobs, name, object, root, datafragment;
+	//
+	// for(var i = 0, job; job = jobs[i]; i++) {
+	// object = job.object;
+	// switch(job.name) {
+	// case &quot;local&quot;:
+	// var localData = reader.read(this._options.data);
+	// if(localData) {
+	// datafragment = reader.readDataSegment(localData);
+	// object.load(localData);
+	// }
+	// break;
+	// case &quot;remote&quot;:
+	// if(fastDev.isValid(data)) {
+	// datafragment = reader.readDataSegment(data, job.root);
+	// object.load(datafragment,true,true);
+	// }
+	// break;
+	// case &quot;exec&quot;:
+	// object(reader.readDataSegment(data || this._options.data || &quot;&quot;, job.root));
+	// break;
+	// }
+	// if(job.once === true) {
+	// jobs.splice(i, 1);
+	// }
+	// }
+	// },
+<span id='fastDev-Data-Proxy-method-setParam'>	/**
+</span>	 * 设置远程数据加载(load方法)时的参数
+	 * @param {JsonObject} param 数据参数
+	 */
+	setParam : function(param) {
+		this._options.urlParam = param;
+		return this;
+	},
+<span id='fastDev-Data-Proxy-method-addParam'>	/**
+</span>	 * 增加远程数据加载(load方法)时的参数
+	 * @param {JsonObject} param 数据参数
+	 */
+	addParam : function(param) {
+		this._options.urlParam = fastDev.apply(this._options.urlParam || {}, param);
+		return this;
+	},
+<span id='fastDev-Data-Proxy-method-setTimeout'>	/**
+</span>	 * 设置代理的超时时间
+	 * @param {Number} time 超时时间(ms)
+	 */
+	setTimeout : function(time) {
+		this._options.timeout = time;
+		return this;
+	},
+<span id='fastDev-Data-Proxy-method-setAction'>	/**
+</span>	 * 设置数据提交的远程服务地址
+	 * @param {String} action 服务地址
+	 */
+	setAction : function(action) {
+		this._options.action = action;
+		return this;
+	},
+<span id='fastDev-Data-Proxy-method-formatData'>	/**
+</span>	 * 处理提交数据
+	 * @param {JsonObject} data 数据对象
+	 * @param {Boolean} encode 是否编码
+	 * @param {Bollean} json 是否转换成Json格式
+	 */
+	formatData : function(data, encode, json) {
+		if(json === true) {
+			return &quot;data=&quot; + fastDev.Util.JsonUtil.parseString(data, encode);
+		} else {
+			return fastDev.Util.UrlUtil.jsonToQuery(data, encode);
+		}
+	},
+<span id='fastDev-Data-Proxy-method-correctParam'>	/**
+</span>	 * 修正save/load方法传入参数
+	 * @param {JsonObject} data 数据对象
+	 * @param {Function} callback 回调函数
+	 * @param {Boolean} encode 是否编码
+	 * @param {Bollean} json 是否转换成Json格式
+	 */
+	correctParam : function(data, callback, encode, json, urlParam) {
+		if(!fastDev.isBoolean(encode)) {
+			encode = fastDev.isBoolean(data) ? encode : fastDev.isBoolean(data) ? data : fastDev.isBoolean(callback) ? callback : false;
+		} else if(fastDev.isBoolean(callback)) {
+			json = encode;
+			encode = callback;
+		}
+
+		if(!fastDev.isBoolean(json)) {
+			json = false;
+		}
+
+		if(!fastDev.isPlainObject(data) &amp;&amp; !fastDev.isArray(data)) {
+			callback = fastDev.isFunction(callback) ? callback : fastDev.isFunction(data) ? data : fastDev.noop;
+			data = urlParam || {};
+		} else {
+			callback = fastDev.isFunction(callback) ? callback : fastDev.noop;
+		}
+
+		return [data, callback, encode, json];
+	},
+	bindAfterLoad : function(fn){
+		this._options.onAfterLoad = fn;
+	}
+});
+</pre>
+</body>
+</html>

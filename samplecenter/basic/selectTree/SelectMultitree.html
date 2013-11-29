@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>下拉多选树</h4>
+        <ul>        
+        <li>下拉多选树的弹出树拉到最下方有确定按钮，选中复选框点击按钮即可把选中值全部按,分隔放到文本框中</li>
+        <li>同时演示了下拉树的宽度与zindex设置</li>
+        <li>如果下拉多选树还想实现其他效果，相关配置请参考树</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+	</head>
+	<body><div style="margin:10px;">
+    <div><div class="ui-layout-text">默认全部值</div>
+		<div itype="SelectTree" id="tree1" width="210px" initSource="../../data/selectTree_data.txt" treeType="multitree" topParentid="0" openFloor=2>				
+		</div>
+        </div>
+        <div class="ui-layout-text">只要全选值</div>   
+        <div ><!--树配置的partchkValue为false属性后，则半选状态的值通过树的getValue方式是不会得到的。此方法同样使用于在多选树中使用-->
+        <div itype="SelectTree"  id="tree2" width="260px" zIndex="30" initSource="../../data/selectTree_data.txt" treeType="multitree" topParentid="0" openFloor=2 partchkValue="false">
+		</div>
+        </div>
+        <div class="ui-layout-text">只要叶节点的值</div>
+        <!--树配置的onlyLeafValue为true属性后，则非叶节点的值通过树的getValue方式是不会得到的。此方法同样使用于在多选树中使用-->
+        <div>
+        <div itype="SelectTree"   id="tree3" saveInstance="true" width="100px" zIndex="40" initSource="../../data/selectTree_data.txt" treeType="multitree" topParentid="0" openFloor=1 onlyLeafValue="true">
+		</div>
+        </div></div><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+	</body>
+</html>

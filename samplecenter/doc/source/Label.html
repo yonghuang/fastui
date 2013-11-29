@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">﻿(function() {
+	talkweb.BaseControl.Label = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Label.Class&quot;,settings);
+	};
+	
+	fastDev.define(&quot;talkweb.BaseControl.Label.Class&quot;,{
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			id : null,
+			name : null,
+			className : &quot;label&quot;,
+			value : &quot;label:&quot;,
+			target : &quot;&quot;
+		},
+		construct : function() {
+			var label = this.create(&quot;label&quot;);
+			this.storage(label);
+		},
+		setValue : function(value) {
+			this.setText(value);
+		},
+		getValue : function() {
+			return this.getText();
+		},
+		setTarget : function(target) {
+			target &amp;&amp; (this.addAttr(this.createAttr(&quot;for&quot;,target)));
+		},
+		getTarget : function() {
+			return this.attr(&quot;htmlFor&quot;);
+		},
+		init : function(options){
+			this.setTarget(options.target);
+		},
+		reConstruct :function(obj){
+			obj instanceof Array &amp;&amp; ( obj = obj[0]);
+			this.reConstruct_TextNode.call(this,obj);
+			return this.superClass.reConstruct.call(this,obj);
+		}
+	})
+})()</pre>
+</body>
+</html>

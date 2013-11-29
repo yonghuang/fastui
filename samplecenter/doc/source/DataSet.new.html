@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.define(&quot;fastDev.Data.DataSet&quot;, {
+	extend : &quot;fastDev.Core.Base&quot;,
+	alias : &quot;DataSet&quot;,
+	_options : {
+		data : null,
+		fields : null,
+		structure : &quot;S_Array&quot;
+	},
+	ready : function(options) {
+		switch(options.structure) {
+			case &quot;S_Array&quot;:
+				this._global.curd = [&quot;push&quot;, &quot;splice&quot;, &quot;findby&quot;, &quot;splice&quot;];
+				break;
+			case &quot;S_Map&quot;:
+				this._global.curd = [&quot;put&quot;, &quot;put&quot;, &quot;get&quot;, &quot;remove&quot;];
+				break;
+			case &quot;S_Tree&quot;:
+				this._global.curd = [&quot;addNode&quot;, &quot;updateNode&quot;, &quot;getRoot&quot;, &quot;removeNode&quot;];
+				break;
+		}
+	},
+	construct : function(options) {
+		this.model = options.fields ? fastDev.create(&quot;Model&quot;, {
+			fields : options.fields
+		}) : null;
+	},
+	load : function(data) {
+		var mixdata, setting = {}, options = this._options, fields = options.fields, structure = options.structure;
+
+		switch(structure) {
+			case &quot;S_Array&quot;:
+			case &quot;S_Tree&quot;:
+				mixdata = data || [];
+				if(fastDev.isArray(options.data)) {
+					mixdata = mixdata.concat(options.data);
+				}
+				break;
+			case &quot;S_Map&quot;:
+				mixdata = data || options.data || {};
+				break;
+		}
+
+		if(this.source) {
+			this.source.load(data);
+		} else {
+			setting.data = mixdata;
+			setting.model = this.model;
+			this.source = fastDev.create(structure, setting);
+		}
+	},
+	reload : function(config, resetParam) {
+		this.source.clean();
+		if(fastDev.isPlainObject(config)) {
+			if(fastDev.isPlainObject(config.urlParam)) {
+				var method = resetParam === false ? &quot;setParam&quot; : &quot;addParam&quot;;
+				this.proxy[method](config.urlParam);
+				delete config.urlParam;
+			}
+			this.proxy.setOptions(config);
+		}
+		this.proxy.load();
+	},
+	each : function(fn){
+		this.source.each(fn);
+	}
+});
+
+fastDev.each(&quot;insert update select remove&quot;.split(&quot; &quot;), function(index, name) {
+	fastDev.Data.DataSet[name] = function() {
+		return this.source[this._global.curd[index]].apply(this.source, arguments);
+	};
+});
+</pre>
+</body>
+</html>

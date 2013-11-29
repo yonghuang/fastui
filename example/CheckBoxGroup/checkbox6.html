@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Checkbox 静态数据和远程数据合并</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-09 -->
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+        <script src="../../src/component/form/CheckBoxGroup.js"></script>
+      
+
+		<script>
+			$(function() {
+				//无图按钮
+				var data1= [{value:11,text:"aaaaaaaaaaaa1aa",checked:true},{value:12,text:"提供了3中解决方案"},{value:13,text:"1.默认自适应宽度并对齐"},{value:1,text:"aaaaaaaaaaaaaa，"},{value:2,text:"规则是按(字数*13)+25算。"},{value:3,text:"2：自行设置列数，"},{value:4,text:"方法是添加属性："},{value:5,text:"aaaaa2aaaaaaaaa"},{value:6,text:"值为一个数字"},{value:7,text:"支持1-20。"},{value:8,text:"3：自行设置列宽度"},{value:9,text:"属性aaaaaaaaaaaaaa"},{value:10,text:"值可以是像素和百分比"},{value:14,text:"三种方法用一种即可"},{value:15,text:"满足你的需求了吧"}];
+				
+				$.create("CheckBoxGroup", {
+					container : "example",
+					name:"check1",		
+					itemWidth:"245px",		
+					itemHeight:"50px",	
+					items:data1,
+					initSource : "dada.txt"
+				});
+			
+			});
+		</script>
+	</head>
+	<body>
+	<div id="example" ></div>
+	</body>
+
+</html>
+

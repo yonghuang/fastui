@@ -1,0 +1,211 @@
+    @charset "utf-8";
+
+    /*
+     * button基本样式
+     * */
+    .btn {
+    	border-color: #b9b9b9 #8e8e8e #8e8e8e #b9b9b9;
+		border-style: solid;
+		border-width: 1px;
+    	background: #f6f6f6 url(../images/btn/btnbg.gif) repeat-x;
+    	color:#333;
+    	cursor:pointer;
+    	font:normal 12px/20px "宋体";
+    	height:22px !important;
+    	margin:0 10px 0 0;
+    	padding:0 15px;
+    	text-transform:uppercase;
+    	text-decoration:none;
+    }
+    /*
+     * 带图标的button样式
+     * */
+    .btn_edit, .btn_search, .btn_add, .btn_save, .btn_ok, .btn_close, .btn_return, .btn_reset, .btn_export, .btn_delete {
+    	border-color: #b9b9b9 #8e8e8e #8e8e8e #b9b9b9;
+		border-style: solid;
+		border-width: 1px;
+    	color:#333;
+    	cursor:pointer;
+    	font:normal 12px/20px "宋体";
+    	height:22px !important;
+    	margin:0 10px 0 0;
+    	padding:1px 5px 0 22px;
+    	_padding:0 0 0 16px;
+    	width:auto !important;
+    	text-transform:uppercase;
+    	text-decoration:none;
+    }
+    .btn_edit {
+    	background:#f6f6f6 url(../images/btn/edit.gif) no-repeat;
+    }
+    .btn_search {
+    	background:#f6f6f6 url(../images/btn/search.gif) no-repeat;
+    }
+    .btn_add {
+    	background:#f6f6f6 url(../images/btn/btn_add.gif) no-repeat;
+    }
+    .btn_save {
+    	background:#f6f6f6 url(../images/btn/btn_save.gif) no-repeat;
+    }
+    .btn_ok {
+    	background:#f6f6f6 url(../images/btn/ok.gif) no-repeat;
+    }
+    .btn_close {
+    	background:#f6f6f6 url(../images/btn/btn_close1.gif) no-repeat;
+    }
+    .btn_return {
+    	background:#f6f6f6 url(../images/btn/return.gif) no-repeat;
+    }
+    .btn_reset {
+    	background:#f6f6f6 url(../images/btn/reset.gif) no-repeat;
+    }
+    .btn_reset:focus {
+    	outline-style:none;
+    }
+    .btn_export {
+    	background:#f6f6f6 url(../images/btn/export.gif) no-repeat;
+    }
+    .btn_delete {
+    	background:#f6f6f6 url(../images/btn/btn_delete.gif) no-repeat;
+    }
+    /*
+     * a标签的基本样式
+     * */
+    a.btn1:link, a.btn1:visited, a.btn1:active {
+    	border-color: #b9b9b9 #8e8e8e #8e8e8e #b9b9b9;
+		border-style: solid;
+		border-width: 1px;
+    	background:#f6f6f6 url(../images/btn/btnbg.gif) repeat-x;
+    	color:#d43a00;
+    	display:block;
+    	float:left;
+    	font:normal 12px/20px "宋体";
+    	height:20px !important;
+    	margin:0 3px;
+    	padding:0 8px;
+    	text-transform:uppercase;
+    	text-decoration:none;
+    }
+    a.btn1:hover {
+    	background:#fffaf2 url(../images/btn/btnbg_hover.gif) repeat-x;
+    	border-color: #b9b9b9 #8e8e8e #8e8e8e #b9b9b9;
+		border-style: solid;
+		border-width: 1px;
+    	color:#d43a00;
+    	text-decoration:none;
+    }
+    /*
+     * 带图标的a标签样式
+     * */
+    .btn1 span {
+    	color:#333;
+    	font:normal 12px/20px "宋体";
+        hide-focus:expression(this.hideFocus=true);
+    	margin:0;
+    	padding:1px 0 1px 22px;
+    	text-transform:lowercase;
+    }
+    a.btn1 span.add {
+    	background:url(../images/btn/add.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.delete {
+    	background:url(../images/btn/delete.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.save {
+    	background:url(../images/btn/save.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.edit {
+    	background:url(../images/btn/edit.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.export {
+    	background:url(../images/btn/export.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.import {
+    	background:url(../images/btn/import.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.return {
+    	background:url(../images/btn/return.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.sort {
+    	background:url(../images/btn/sort.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.synchronous {
+    	background:url(../images/btn/synchronous.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.search {
+    	background:url(../images/btn/search.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    	margin-left:-75px;
+    }
+    a.btn1 span.select input {
+    	cursor:hand;
+    	filter:alpha(opacity=0);
+    	height:14px;
+    	_height:18px;
+        hide-focus:expression(this.hideFocus=true);
+    	margin:0;
+    	_margin-left:-30px;
+    	opacity:0;
+    	width:70px;
+    	_width:50px;
+    }
+    a.btn1 span.select {
+    	background:url(../images/btn/select.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    	margin-left:-75px;
+    }
+    a.btn1 span.upload {
+    	background:url(../images/btn/upload.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.task {
+    	background:url(../images/btn/task.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.history {
+    	background:url(../images/btn/history.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.artificial {
+    	background:url(../images/btn/artificial.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.interface {
+    	background:url(../images/btn/interface.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.empty {
+    	background:url(../images/btn/empty.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }
+    a.btn1 span.batch {
+    	background:url(../images/btn/batch.gif) no-repeat left center;
+        hide-focus:expression(this.hideFocus=true);
+    	padding-left:22px;
+    }

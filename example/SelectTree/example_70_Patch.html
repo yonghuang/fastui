@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Tree</title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link href="../../themes/base/css/main.css" rel="stylesheet" type="text/css" />
+		<script src="../../src/library/jquery-1.5.1.min.js"></script>
+	<script src="../../src/library/FastDev.js"></script>
+	<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/core/ClassManager.js"></script>
+	<script src="../../src/core/Base.js"></script>
+	<script src="../../src/core/Base_Patch.js"></script>
+	<script src="../../src/core/ControlBus.js"></script>
+	<script src="../../src/core/ControlBus_Patch.js"></script>
+	<script src="../../src/core/DataBus.js"></script>
+	<script src="../../src/core/DataBus_Patch.js"></script>
+	  <script src="../../src/library/Tools.js"></script>
+	<script src="../../src/component/basecontrol/SimpleControl.js"></script>
+		<script src="../../src/component/basecontrol/Input.js"></script>
+		<script src="../../src/component/basecontrol/Anchor.js"></script>
+		<script src="../../src/component/basecontrol/Body.js"></script>
+		<script src="../../src/component/basecontrol/Button.js"></script>
+		<script src="../../src/component/basecontrol/CheckBox.js"></script>
+		<script src="../../src/component/basecontrol/Div.js"></script>
+		<script src="../../src/component/basecontrol/Dl.js"></script>
+		<script src="../../src/component/basecontrol/File.js"></script>
+		<script src="../../src/component/basecontrol/Form.js"></script>
+		<script src="../../src/component/basecontrol/Hidden.js"></script>
+		<script src="../../src/component/basecontrol/Iframe.js"></script>
+		<script src="../../src/component/basecontrol/Image.js"></script>
+		<script src="../../src/component/basecontrol/Label.js"></script>
+		<script src="../../src/component/basecontrol/Password.js"></script>
+		<script src="../../src/component/basecontrol/Pre.js"></script>
+		<script src="../../src/component/basecontrol/Radio.js"></script>
+		<script src="../../src/component/basecontrol/Span.js"></script>
+		<script src="../../src/component/basecontrol/Table.js"></script>
+		<script src="../../src/component/basecontrol/Text.js"></script>
+		<script src="../../src/component/basecontrol/TextArea.js"></script>
+		<script src="../../src/component/basecontrol/Ul.js"></script>
+        
+		<script src="../../src/library/Patch.js"></script>
+	<script src="../../src/component/Component.js"></script>
+	<script src="../../src/component/Component_Patch.js"></script>
+	<script src="../../src/component/form/RadioGroup.js"></script>
+	<script src="../../src/component/form/RadioGroup_Patch.js"></script>
+       <script src="../../src/component/Form.js"></script>
+	<script src="../../src/component/Form_Patch.js"></script>
+    <script src="../../src/component/list/Tree.js"></script>
+	<script src="../../src/component/list/Tree_Patch.js"></script>
+	<script>
+			   var data='[{pid :"0",id:"1",val:"文本1"},{pid:"0",id: "2",val:"文本2"},{pid:"1",id:"11",val:"文本11"},{pid:"11",id:"111",val:"文本111"},{pid:"11",id:"112",val:"文本112"},{pid:"11",id:"113",val:"文本113"},{pid:"11",id:"114",val:"文本114"},{pid:"11",id:"115",val:"文本115"},{pid:"115",id:"1514",val:"文本1514"},{pid:"115",id:"1415",val:"文本1415"}]';
+
+			talkweb.Bus.ready({
+				items : [
+				{
+					classPath : "Components.Tree",
+					options : {
+						container : "example",								
+						items : data,							
+						showIco:true,	
+						treeType : "multitree", 
+						id:"tree1",
+						saveInstance:true,
+						nodeEdit:true,						
+						openFloor:3,
+						addBefore:function(id){
+							var nid=Math.floor(Math.random()*1000);
+							alert(id+"可选方法：先添加到数据库，再返回新的id:"+nid+",如果没有返回，则不执行添加操作。但如果没有这个方法，则添加会生成随机的nid");
+							return nid;
+						},
+						addAfter:function(items){
+							alert(items+"添加成功");
+						},						
+						delBefore:function(id){
+							alert(id+"可选方法：先将数据库里数据删除等删除前的操作，如果删除成功返回true,执行页面的删除，否则不删除");
+							return true;
+						},
+						delAfter:function(id){
+							alert(id+"删除成功");
+						},
+						editBefore:function(id){
+							alert(id+"可选方法：执行添加前的操作，如果返回true,则执行页面的编辑，否则不执行");
+							return true;
+						},
+						editAfter:function(items){
+							alert(items+"编辑成功");
+						},
+						autoLoadData:true
+					}
+				}
+				]
+			})
+	</script>
+</head>
+<body>
+	<div id="example"></div>
+</body>
+</html>
+

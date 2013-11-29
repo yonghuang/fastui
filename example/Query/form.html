@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Form</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script>
+			$(function() {
+				function clearCss() {
+					$(":input").show();
+				}
+
+
+				$("#btn1").bind("click", function() {
+					clearCss();
+					// 隐藏所有input元素
+		
+					$(":input").hide();
+				});
+
+				$("#btn2").bind("click", function() {
+					clearCss();
+					// 隐藏input type="text"的元素  
+		
+					$(":text").hide();
+				});
+
+				$("#btn3").bind("click", function() {
+					clearCss();
+					// 隐藏input type="password"的元素
+		
+					$(":password").hide();
+				});
+				$("#btn4").bind("click", function() {
+					clearCss();
+					// 隐藏input type="radio"的元素
+					$(":radio").hide();
+				});
+
+				$("#btn5").bind("click", function() {
+					clearCss();
+					// 隐藏input type="checkbox"的元素
+					$(":checkbox").hide();
+				});
+
+				$("#btn6").bind("click", function() {
+					clearCss();
+					// 隐藏input type="submit"的元素
+					$(":submit").hide();
+				});
+				
+				$("#btn7").bind("click", function() {
+					clearCss();
+					// 隐藏input type="image"的元素
+					$(":image").hide();
+				});
+				
+				$("#btn8").bind("click", function() {
+					clearCss();
+					// 隐藏input type="reset"的元素
+					$(":reset").hide();
+				});
+				
+				$("#btn9").bind("click", function() {
+					clearCss();
+					//  隐藏input type="button"的元素
+					$(":button").hide();
+				});
+				
+					$("#btn10").bind("click", function() {
+					clearCss();
+					// 隐藏input type="file"的元素
+					$(":file").hide();
+				});
+				$("#btn11").bind("click", function() {
+					clearCss();
+					// 获取input type="hidden"的值:<a id="btn11" href="#">:hidden</a><br>
+					alert($("input:hidden").prop("value"));
+				});
+			});
+		</script>
+	</head>
+	<body>
+		隐藏所有input元素:<a id="btn1" href="#">:input</a><br>
+		隐藏input type="text"的元素:<a id="btn2" href="#">:text</a><br>  
+		隐藏input type="password"的元素:<a id="btn3" href="#">:password</a><br>
+		隐藏input type="radio"的元素:<a id="btn4" href="#">:radio</a><br>
+		隐藏input type="checkbox"的元素:<a id="btn5" href="#">:checkbox</a><br>
+		隐藏input type="submit"的元素:<a id="btn6" href="#">:submit</a><br>
+		隐藏input type="image"的元素:<a id="btn7" href="#">:image</a><br>
+		隐藏input type="reset"的元素:<a id="btn8" href="#">:reset</a><br>
+		隐藏input type="button"的元素:<a id="btn9" href="#">:button</a><br>
+		隐藏input type="file"的元素:<a id="btn10" href="#">:file</a><br>
+		获取input type="hidden"的值:<a id="btn11" href="#">:hidden</a><br>
+		
+
+		<!-- HTML元素测试区 -->
+		<form>
+			text:<input type="text" /><br>
+			password:<input type="password" /><br>
+			radio:<input type="radio" /><br>
+		    checkbox:<input type="checkbox" /><br>
+			submit:<input type="submit" /><br>
+			image:<input type="image" /><br>
+			reset:<input type="reset" /><br>
+			button:<input type="button" value="Input Button"/><br>
+			button标签:<button>Button</button><br>
+		    file:<input type="file" /><br>
+		    hidden:<input type="hidden" value="这是隐藏文本框值"/><br>
+		</form>
+	</body>
+</html>
+

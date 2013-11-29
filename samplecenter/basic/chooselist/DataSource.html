@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					控件可使用静态数据源或者远程数据源。
+				</li>
+				<li>
+					数据源的格式与使用的子控件相关，默认的数据格式为列表控件的数据格式。
+				</li>
+				<li>
+					initSource属性用于指定远程数据源，而dataSource用于指定已选值的数据源。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function getValue1() {
+				var value = fastDev.getInstance("list1").getValue();
+				fastDev.tips(value.toString());
+			}
+
+			function getValue2() {
+				var value = fastDev.getInstance("list2").getValue();
+				fastDev.tips(value.toString());
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				使用静态数据源
+			</div>
+			<div  itype="ChooseList" id="list1" saveInstance="true" leftWidth="160px" rightWidth="160px">
+				<!-- 需在name为items的div标签下声明静态数据源 -->
+				<div name="items">
+					<div text="Aaron" value="1"></div>
+					<div text="Baird" value="2"></div>
+					<div text="Christian" value="3"></div>
+					<div text="David" value="4"></div>
+					<div text="Emmanuel" value="5"></div>
+					<div text="Franklin" value="6"></div>
+					<div text="Gavin" value="7"></div>
+					<div text="Harlan" value="8"></div>
+					<div text="Jack" value="9"></div>
+					<div text="King" value="10"></div>
+					<div text="Lance" value="11"></div>
+					<div text="Marcus" value="12"></div>
+					<div text="Norton" value="13"></div>
+					<div text="Oscar" value="14"></div>
+					<div text="Quinn" value="15"></div>
+					<div text="Robin" value="16"></div>
+					<div text="Virgil" value="17"></div>
+					<div text="Xavier" value="18"></div>
+				</div>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取选择结果" onclick="getValue1()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				使用远程数据源
+			</div>
+			<!-- initSource指定控件初始数据（与控件的结构构造相关），dataSource指定控件当前值（与控件的值相关，本控件即指已选择的项）  -->
+			<div itype="ChooseList" id="list2" saveInstance="true" leftWidth="160px" rightWidth="160px" initSource="../../data/chooselist.json" dataSource="../../data/chooselist_select.json"></div>
+			<br />
+			<div>
+				<input itype="Button" text="获取选择结果" onclick="getValue2()"/>
+			</div>
+		</div>
+	</body>
+</html>
+

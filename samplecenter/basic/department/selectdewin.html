@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="selectde.css" />
+<script type="text/javascript" src="fastui/fastDev-import.js"></script>
+<script type="text/javascript" src="selectde.js"></script>
+</head>
+<body>
+	<div id="left" class="left">
+        <div class="tab">
+        
+        <div itype="Tabs" id="tabs"  saveInstance="true" height="320px" width="99%" >
+        	<div title="选择部门" type="div" >
+        	<div itype="Tree"  onBeforeReady="onBeforeReady()" onlySelectedLeaf="true" mTreeShowCkb="false" onCheckClick="checkClick()" treeType="multitree" onAfterInitRender="onAfterInitRender()" onNodeClick="onNodeClick()" showIco="true" topParentid="0" openFloor=2  id="tree1" saveInstance="true"></div>
+        	</div>
+        </div>
+        
+        </div>
+    </div>
+    <div id="right" class="right">
+    	<div class="tool">
+			<div itype="Button" cls="removeAll" onclick="removeAll()" text="全部清空"></div>
+    	</div>
+        <div class="right-content">
+            <div id="content-right" class="content-right">
+            	<div class="content-right-tool">
+            		当前选择的部门数：<span id="selectedNum" style="color:#FF0000">0</span>
+            	</div>
+            	<div id="content-right-selected" class="content-right-selected">
+            		<input type="hidden" name="selectData" id="selectData" value="">
+            	</div>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</body>
+</html>

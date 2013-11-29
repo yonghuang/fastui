@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>ProgressBar</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+		<script src="../../src/component/MessageBox.js"></script>
+		<script src="../../src/component/ProgressBar.js"></script>
+
+		<script type="text/javascript">
+			var progressbar, loading, curValue, totalValue;
+			// 创建progressbar
+			function createProgressBar() {
+				if (progressbar) {
+					return;
+				}
+				curValue = fastDev("#progress-cur-value").prop("value");
+				totalValue = fastDev("#progress-total-value").prop("value");
+				progressbar = fastDev.create("ProgressBar", {
+					model : "progress", // 默认就为progress
+					container : "example", // 指定进度条的容器
+					value : curValue, // 当前进度值
+					totalValue : totalValue, // 总进度值
+					width : fastDev("#progress-width").prop("value"), // 控件宽度
+					onValueChange : function(value, total) {// 进度值改变时的回调事件
+						fastDev.tips("当前进度值改变为：" + value + ", 总进度值为：" + total);
+					}
+				});
+				// 设置文本提示信息
+				// getPercentage 可用于获取当前百分比（字符串值）
+				progressbar.setText(progressbar.getPercentage() + " Completed");
+			};
+			// 刷新progressbar
+			function refreshProgressBar() {
+				if (progressbar) {
+					progressbar.setValue(fastDev("#progress-cur-value").prop("value"));
+					progressbar.setTotalValue(fastDev("#progress-total-value").prop("value"));
+					progressbar.setText(progressbar.getPercentage() + " Completed");
+				}
+			};
+			// 显示progressbar
+			function showProgressBar() {
+				progressbar && progressbar.show();
+			};
+			// 隐藏progressbar
+			function hideProgressBar() {
+				progressbar && progressbar.hide();
+			};
+			// 关闭并销毁progressbar
+			function closeProgressBar() {
+				progressbar && progressbar.close();
+				progressbar = null;
+			};
+			// 创建loading
+			function createLoading() {
+				if (loading) {
+					return;
+				}
+				loading = fastDev.create("ProgressBar", {
+					model : "graphical", //指定为图形模式
+					text : "加载中..",
+					container : "example",
+					value : fastDev("#loading-cur-value").prop("value"),
+					totalValue : fastDev("#loading-total-value").prop("value"),
+					allowAutoClose : false, // 是否满进度时自动关闭
+					onValueChange : function(value, total) {//值改变时的回调函数
+						fastDev.tips("当前进度值改变为：" + value + ", 总进度值为：" + total);
+					}
+				});
+			};
+			function refreshLoading() {
+				if (loading) {
+					loading.setValue(fastDev("#loading-cur-value").prop("value"));
+					loading.setTotalValue(fastDev("#loading-total-value").prop("value"));
+					loading.setText(loading.getPercentage() + " 已完成");
+				}
+			};
+			// 显示loading
+			function showLoading() {
+				loading && loading.show();
+			};
+			// 隐藏loading
+			function hideLoading() {
+				loading && loading.hide();
+			};
+			// 关闭并销毁loading
+			function closeLoading() {
+				loading && loading.close();
+				loading = null;
+			};
+		</script>
+
+	</head>
+	<body>
+		<div id="example" style="height:250px;border: 30px solid #123456">
+			进度条展现区域
+			<br />
+			当前进度值：
+			<input id="progress-cur-value" value="2.8"/>
+			总进度值：
+			<input id="progress-total-value" value="100"/>
+			控件宽度：
+			<input id="progress-width" value="50%"/>
+			<br/>
+			<button class="button" onclick="createProgressBar()">
+				创建进度条
+			</button>
+			<button class="button" onclick="refreshProgressBar()">
+				刷新进度条
+			</button>
+			<button class="button" onclick="showProgressBar()">
+				显示进度条
+			</button>
+			<button class="button" onclick="hideProgressBar()">
+				隐藏进度条
+			</button>
+			<button class="button" onclick="closeProgressBar()">
+				关闭进度条（销毁）
+			</button>
+		</div>
+		<div style="height: 80px;border: 30px solid #654321">
+			当前进度值：
+			<input id="loading-cur-value" value="2.8" />
+			总进度值：
+			<input id="loading-total-value" value="100" />
+			<br/>
+			<button class="button" onclick="createLoading()">
+				创建图形模式的进度条
+			</button>
+			<button class="button" onclick="refreshLoading()">
+				刷新图形模式的进度条文本提示
+			</button>
+			<button class="button" onclick="showLoading()">
+				显示图形模式的进度条
+			</button>
+			<button class="button" onclick="hideLoading()">
+				隐藏图形模式的进度条
+			</button>
+			<button class="button" onclick="closeLoading()">
+				关闭图形模式的进度条（销毁）
+			</button>
+		</div>
+	</body>
+</html>
+

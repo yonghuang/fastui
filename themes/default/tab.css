@@ -1,0 +1,9 @@
+#top_nav{position:relative; top:40px; text-align:right; float:right;}
+.contain{float:left;height:29px;width:630px; background: url(images/top_tabbg.gif) repeat-x;border-bottom:1px solid #2199D8; border-top:1px solid #2898D6; position:relative;z-index:0;}
+.tab{height:30px; position:absolute;left:0;width: 630px;}
+.tab li{float:left; background:url(images/top_tabbg_line.gif) right no-repeat;color:#fff; height:30px; line-height:30px; padding:0 10px; cursor:pointer; list-style:none; font-family:Arial,Verdana,Helvetica,sans-serif "Î¢ÈíÑÅºÚ"; font-size:12px; text-align:center}
+.tab a{ color:#fff; text-decoration:none; display:block;}
+.tab .active{background:url(images/top_tabbg_hover.gif) repeat-x;color:#075587; font-weight:normal;}
+.prev{float:left; background:url(images/top_tabbg_left.gif) no-repeat; display:block;height:30px; padding:5px;width:13px;font-family:ËÎÌå; font-size:12px;text-align:right;cursor:pointer; color:#fff;}
+.next{float:left; background:url(images/top_tabbg_right.gif) top center no-repeat; display:block;height:30px; padding:5px;width:10px;font-family:ËÎÌå; font-size:12px;text-align:left;cursor:pointer; color:#fff;}
+.dis{color:#ccc;cursor:auto;}

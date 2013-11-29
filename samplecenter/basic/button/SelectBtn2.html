@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+        <ul>
+        <li>下拉选择按钮</li>
+        <li>有下列三种形势：点击整个弹出、点击小三角弹出和鼠标滑过弹出</li>
+        <li>第一二种的区别在于按钮是否定义了点击事件。定义了点击事件的点击文本区域响应按钮事件，点击小三角区域相应弹出事件。</li>
+        <li>鼠标滑过弹出的定义showMenuOnMouseover属性为true即可</li>
+        <li>下拉区域的下拉按钮暂只支持配置文本和点击事件</li>
+        </ul>
+        </title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+        <script>
+      
+			var btnclickall1=function(){
+					fastDev.tips("你点击了打印方式(点击小三角弹出)按钮");
+				}				
+				var btnclickall3=function(){
+					fastDev.tips("你点击了打印方式(滑过弹出)按钮");
+				}
+				var btnclick1=function(){
+					fastDev.tips("你点击了横向打印按钮");
+				}
+				//按钮的事件
+				var btnclick2=function(){
+					fastDev.tips("你点击了纵向打印按钮");
+				}
+				//按钮的事件
+				var btnclick3=function(){
+					fastDev.tips("你点击了双面打印按钮");
+				}
+				var btnclick21=function(){
+					fastDev.tips("你点击了横向打印2按钮");
+				}
+				//按钮的事件
+				var btnclick22=function(){
+					fastDev.tips("你点击了纵向打印2按钮");
+				}
+				//按钮的事件
+				var btnclick23=function(){
+					fastDev.tips("你点击了双面打印2按钮");
+				}
+				var btnclick31=function(){
+					fastDev.tips("你点击了横向打印3按钮");
+				}
+				//按钮的事件
+				var btnclick32=function(){
+					fastDev.tips("你点击了纵向打印3按钮");
+				}
+				//按钮的事件
+				var btnclick33=function(){
+					fastDev.tips("你点击了双面打印3按钮");
+				}
+
+        </script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">下拉按钮点击弹出</div>
+			<div itype="Button" text="打印方式(点击弹出)" iconCls="icon-print icon-arrow-right">
+				<div text="横向打印" onclick="btnclick1()"></div>
+				<div text="纵向打印" onclick="btnclick2()"></div>
+				<div text="双面打印" onclick="btnclick3()"></div>
+			</div>
+		</div>
+        <p style="height:210px;"></p>
+	</body>
+</html>

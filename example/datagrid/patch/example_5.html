@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>数据回填事例</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <link href="../../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+		<script src="../../../src/library/FastDev.js"></script>
+		<script src="../../../src/library/Query.js"></script>
+		<script src="../../../src/library/Dom.js"></script>
+		<script src="../../../src/library/Ajax.js"></script>
+		<script src="../../../src/library/Event.js"></script>
+		<script src="../../../src/library/Browser.js"></script>
+		<script src="../../../src/library/Queue.js"></script>
+		<script src="../../../src/library/Tools.js"></script>
+		<script src="../../../src/library/Library_Patch.js"></script>
+
+		<script src="../../../src/core/ClassManager.js"></script>
+		<script src="../../../src/core/EventManager.js"></script>
+		<script src="../../../src/core/Base.js"></script>
+		<script src="../../../src/core/Template.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+		<script src="../../../src/core/Core_Patch.js"></script>
+		
+		<script src="../../../src/data/Proxy.js"></script>
+		<script src="../../../src/data/DataSet.js"></script>
+		<script src="../../../src/data/Record.js"></script>
+		<script src="../../../src/data/Field.js"></script>
+		<script src="../../../src/data/Reader.js"></script>
+		<script src="../../../src/data/Data_Patch.js"></script>
+		
+
+		<script src="../../../src/core/DomObject.js"></script>
+		<script src="../../../src/core/ControlBus.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+
+		<script src="../../../src/component/Validation.js"></script>
+		<script src="../../../src/component/Component.js"></script>
+		<script src="../../../src/component/list/datagrid/DataGrid.js"></script>
+		<script src="../../../src/component/list/datagrid/Pagination.js"></script>
+		<script src="../../../src/component/list/datagrid/Column.js"></script>
+		<script src="../../../src/component/list/datagrid/Thead.js"></script>
+		<script src="../../../src/component/Toolbar.js"></script>
+		<script src="../../../src/component/form/Button.js"></script>
+		<script src="../../../src/component/form/Box.js"></script>
+		<script src="../../../src/component/form/TextBox.js"></script>
+		<script src="../../../src/component/form/Select.js"></script>
+		<script src="../../../src/component/form/DatePicker.js"></script>
+		<script src="../../../src/component/form/Form.js"></script>
+		<script src="../../../src/component/form/CheckBoxGroup.js"></script>
+    <script type="text/javascript">
+        /*
+         *talkweb.Bus.ready({
+         *items : [{
+         *...
+         *}]
+         *});
+         *
+         *1)上方结构体为控件库中的总线托管使用模式,是在基础应用示例中所提到的jquery结构体上做的封装与扩展
+         *2)items属性是一个数组类型,里面存放的是页面控件对象的定义
+         *3)classPath属性用来指明控件对象所对应的包路径
+         *4)options属性用来定义控件的各属性值
+         *5)rows属性非必填属性,其默认值为10,也就是每页显示10条数据
+         */
+        talkweb.Bus.ready({
+            items : [{
+                classPath : "Components.Form",
+                options : {
+                    container : "datagrid2",
+                    haveResetBtn : false,
+                    haveSubmitBtn : false,
+                    id : "form",
+                    saveInstance : true,
+                    items : [{
+                        classPath : "BaseControl.Text",
+                        width : "100%",
+                        options : {
+                            name : "school",
+                            notes : "学校:",
+                            width : "100%"
+                        }
+                    }, {
+                        classPath : "BaseControl.Text",
+                        width : "100%",
+                        options : {
+                            name : "time",
+                            notes : "入学时间:"
+                        }
+                    }]
+                }
+            }, {
+                classPath : "BaseControl.Button",
+                options : {
+                    container : "datagrid2",
+                    className : "button_nofloat",
+                    id : "button1",
+                    saveInstance : true,
+                    value : "提交至grid",
+                    click : function() {
+                        if(dataItems.data.length < 5) {
+                            var from = talkweb.ControlBus.getInstance("form");
+                            var grid = talkweb.ControlBus.getInstance("datagrid1");
+                            grid.cleanData();
+                            var data = eval("({" + from.getValues() + "})");
+                            dataItems.data.push(data);
+                            dataItems.info.total = dataItems.data.length
+                            dataItems.info.records = parseInt((dataItems.info.total + 4) / 5);
+                            grid.constructItems(dataItems);
+                        } else {
+                            alert("示例只能添加5条数据")
+                        }
+                    }
+                }
+            },{
+                classPath : "Components.DataGrid",
+                options : {
+                    // 默认每页显示行数,该数字必须存在于页数选择器列表中，否则会出现显示与实际不匹配的情况
+                    rows : "5",
+                    container : "example",
+                    id:"datagrid1",
+                    saveInstance : true,
+                    width : "50%",
+                    // fileds用来定义列
+                    fields : [{
+                        name : "school",
+                        text : "学校",
+						width : "50%"
+                    }, {
+                        name : "time",
+                        text : "入学时间",
+						width : "50%"
+                    }]
+                }
+            }]
+        });
+        var dataItems = {
+            data : [],
+            info : {
+                total : 0,
+                page : 1,
+                records : 1,
+                rows : 5
+            }
+        };
+
+    </script>
+</head>
+<body>
+
+        <div id="example"></div>
+        <div style="clear: both; margin-top:20px;">此示例纯客户端操作,在左侧表单中录入数据提交后在右侧表格中展现</div>
+        <div id="button" style="clear: both; margin-top:20px;"></div>
+   
+</body>
+</html>

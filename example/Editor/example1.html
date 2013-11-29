@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>富文本框 </title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+    
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>    
+        <script src="../../src/component/layout/Panel.js"></script>
+        <script src="../../src/component/form/Button.js"></script> 
+        <script src="../../src/component/list/Tree.js"></script> 
+        <script src="../../src/component/form/Editor.js"></script>
+         <script language="javascript" src="../../thirdparty/ueditor/editor_config.js"></script>
+		<script language="javascript" src="../../thirdparty/ueditor/editor_all.js"></script>
+		 <link rel="stylesheet" type="text/css" href="../../thirdparty/ueditor/themes/default/ueditor.css"/>	
+        
+     <script>
+			$(function() {
+				
+				$.create("Editor", {
+					container : "example",
+					id:"editor1",
+					value : "aagsfdgfaa",
+					saveInstance:true
+				});
+				//按钮的事件
+				var btnclick=function(){		
+					var editor1=fastDev.Core.ControlBus.getInstance("editor1");
+					alert(editor1.getValue());
+				}
+				$.create("Button", {
+					container : "example1",
+					text:"得到值",
+					name:"btn1",	
+					id:"btn1",
+					onBtnClick:btnclick
+				});
+				
+				//按钮的事件
+				var btnclick1=function(){		
+					var editor1=fastDev.Core.ControlBus.getInstance("editor1");
+					editor1.setValue("新设置的值");
+				}
+				$.create("Button", {
+					container : "example1",
+					text:"设置值",
+					name:"btn2",	
+					id:"btn2",
+					onBtnClick:btnclick1
+				});
+			
+			});
+	</script>
+</head>
+<body>
+	<div id="example" style="width:500px; height:400px">
+    </div>
+    <div id="example1">
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>DataGrid工具栏为外置的，也就是说虽然配置是写在DataGrid中，但实现却是由工具栏控件完成的</li>
+				<li>所以工具栏的使用请参考工具栏的Api与示例，当前示例只介绍在DataGrid中，工具栏配置应该如何写</li>
+				<li>工具栏配置在DataGrid中属于特殊属性配置，所以需要定义在列配置的同级标签上，并将name属性值设置为"top-toolbar"</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-imports.js"></script>
+		<script>
+			function exportXLS(){
+				fastDev.getInstance("datagrid").exportData("http://fastui.talkweb.com.cn:8888/twdpe-webcomponent/exportStream_exportGrid.action","xls", "current", "stream");
+			}
+			
+			function exportPDF(){
+				fastDev.getInstance("datagrid").exportData("http://fastui.talkweb.com.cn:8888/twdpe-webcomponent/exportStream_exportGrid.action","pdf", "current", "stream");
+			}
+			
+			
+			function exportAll(){
+				fastDev.getInstance("datagrid").exportData("http://fastui.talkweb.com.cn:8888/twdpe-webcomponent/export_exportGrid.action", "xls", "all" , "stream", "http://fastui.talkweb.com.cn:8888/twdpe-webcomponent/exportStream_exportGrid.action");
+			}
+			
+			function print(){
+				fastDev.getInstance("datagrid").exportData("http://fastui.talkweb.com.cn:8888/twdpe-webcomponent/export_exportGrid.action","pdf", "all");
+			}
+			
+			
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">DataGrid工具栏配置</div>
+			<div itype="DataGrid" initSource="../../data/griddata2.jsp" id="datagrid" saveInstance=true>
+				<div name="top-toolbar">
+					<div plain=true text="导出excel" iconCls="icon-export" onclick="exportXLS()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="导出pdf" iconCls="icon-export" onclick="exportPDF()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="导出全部" iconCls="icon-export" onclick="exportAll()"></div>
+					<div itype="separator"></div>
+					<div plain=true text="打印" iconCls="icon-print" onclick="print()"></div>
+				</div>
+				<div text="员工信息" titleStyle="text-align:center;">
+					<div width="10%" name="empno" text="员工工号" titleStyle="text-align:center;"></div>
+					<div width="20%" name="name" text="姓名" titleStyle="text-align:center;"></div>
+				</div>
+				<div text="工作信息" titleStyle="text-align:center;">
+					<div text="部门&职务" titleStyle="text-align:center;" >
+						<div width=""12%" name="department" text="所属部门" titleStyle="text-align:center;"></div>
+						<div width="15%" name="positionName" text="职位" idColumn="position"></div>
+					</div>
+					<div width="10%" name="pay" text="薪资" itype="number" format="0,0.00" editby="TextBox"></div>
+				</div>
+				<div width="8%" name="isuse" text="是否可用" itype="boolean" trueText="是" falseText="否"></div>
+				<div width="18%" name="datesemployed" text="入职时间" itype="date" format="yyyy年MM月dd日" editby="DatePicker"></div>
+				<div width="" name="birthday" text="生日" itype="date" format="yyyy年MM月dd日" defaultValue="1985-01-01"></div>
+				<div name="position" hidden=true></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

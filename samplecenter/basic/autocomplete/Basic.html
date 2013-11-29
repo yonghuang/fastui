@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>
+			<ul>
+				<li>
+					<h4>定义状态提示信息</h4>
+				</li>
+				<li>
+					AutoComplete控件属检索提示类控件，支持对静态数据源和远程数据源的检索，远程检索结果缓存，关键字高亮，多值输入等。
+				</li>
+				<li>
+					initSource属性用于配置远程数据源地址，静态数据源以子标签形式声明至控件声明标签下或通过控件API动态设置。
+				</li>
+				<li>
+					hintText属性用于设置默认的输入提示文本信息（可使用HTML标签）。
+				</li>
+				<li>
+					searchingText属性用于设置搜索时的提示文本信息。
+				</li>
+				<li>
+					<h4>限制检索触发条件</h4>
+				</li>
+				<li>
+					minChars指定触发检索的最小输入字符数。
+				</li>
+				<li>
+					keyDelay定义使用远程数据源时，用户输入的按键延迟，单位为毫秒（加大该值会显著减少ajax请求次数）。
+				</li>
+				<li>
+					<h4>限制检索结果列表</h4>
+				</li>
+				<li>
+					maxItems属性可限制从检索结果中提取的最大项数，多余的项会被丢弃。
+				</li>
+				<li>
+					scrollHeight用于限制下拉弹出层的最大高度，当内容高度大于该限制高度时，会自动出滚动条。
+				</li>
+				<li>
+					<h4>自定义高亮样式</h4>
+				</li>
+				<li>
+					keywordHighlight属性可开启或关闭关键字高亮功能。
+				</li>
+				<li>
+					highlightCls可设置自定义的高亮样式。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<style type="text/css">
+			.ui-highlight-custom {
+				font-style: italic;
+				color: green;
+				font-weight: bold;
+				background-color: #D6FF00;
+			}
+		</style>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				定义状态提示信息
+			</div>
+			<input itype="AutoComplete" initSource="../../data/autocomplete.jsp" hintText="输入英文字母查询" searchingText="正在搜索中.." noResultsText="未找到相关结果"/>
+			<br />
+			<div class="ui-layout-text">
+				限制检索触发条件
+			</div>
+			<input itype="AutoComplete" minChars="2" keyDelay="1000" maxItems="5" initSource="../../data/autocomplete.jsp" hintText="最少输入2个字母查询" searchingText="正在搜索中.." noResultsText="未找到相关结果"/>
+			<br />
+			<div class="ui-layout-text">
+				限制检索结果列表
+			</div>
+			<input itype="AutoComplete" maxItems="5" scrollHeight="100px" initSource="../../data/autocomplete.jsp" hintText="输入英文字母查询" searchingText="正在搜索中.." noResultsText="未找到相关结果"/>
+			<br />
+			<div class="ui-layout-text">
+				自定义高亮样式
+			</div>
+			<input itype="AutoComplete" keywordHighlight="true" highlightCls="ui-highlight-custom" maxItems="5" initSource="../../data/autocomplete.jsp" hintText="输入英文字母查询" searchingText="正在搜索中.." noResultsText="未找到相关结果"/>
+		</div>
+	</body>
+</html>

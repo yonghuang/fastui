@@ -1,0 +1,10 @@
+[{
+	id : "accordion1",
+	text : "菜单1"
+}, {
+	id : "accordion2",
+	text : "菜单2"
+}, {
+	id : "accordion3",
+	text : "菜单3"
+}]

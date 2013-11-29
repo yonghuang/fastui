@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					Window控件可跨级至顶层有权访问的IFrame内展现，并提供与原页面存取数据的接口，以期给用户带来更好的浏览体验。
+				</li>
+				<li>
+					由于浏览器本身安全限制，对于跨域交互问题，本控件目前并未提供相应功能实现。
+				</li>
+				<li>
+					跨级弹窗与一般弹窗的主要区别在于，其内部子页面的父页面（parent对象）将指向展现弹窗的窗体，而非原来的那个触发创建弹窗的页面。
+				</li>
+				<li>
+					通过Window控件的静态函数（意指可以不通过弹窗实例而直接调用的函数）fastDev.Ui.Window.getData("parent")可以获取到当前弹窗内部子页面的真正父页面窗口对象。
+				</li>
+				<li>
+					静态函数fastDev.Ui.Window.getData(name)与fastDev.Ui.Window.setData(name, value)也可以用来分别进行数据的获取与存储。
+				</li>
+				<li>
+					注意!除内置的原父窗口对象变量外，通过数据存取接口存取的数据变量共享同一存储区域（即后面同名的变量将覆盖前面同名的变量）。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 创建跨级子页面弹窗
+			function createWindow() {
+				fastDev.create("Window", {
+					id : "window_1",
+					saveInstance : true,
+					inside : false,
+					width : "90%",
+					height : "70%",
+					// src可指定弹窗加载一个子页面
+					src : "basic/window/iframe_a.html",
+					buttons : {
+						text : "获取获取该弹窗内部子页面的日期输入框的值",
+						align : "center",
+						// 按钮配置中，回调事件可接收4个参数
+						onclick : function(event, that, win, fast){
+							// event为点击事件对象
+							// that为当前弹窗实例
+							// win为iframe子页面的window对象，若子页面为跨域页面，则该参数为undefined
+							// fast为iframe子页面上的fastDev对象，若子页面为跨域页面或者子页面未加载fastDev库，则此参数为undefined
+							// 除使用数据存取接口与内部子页面交互外，也可通过此种方式与内部子页面交互
+							// 此回调的作用域（this）为当前点击的按钮控件
+							fastDev.tips(fast.getInstance("datepicker_1").getValue());
+						}
+					}
+				});
+			}
+
+			// 获取子页面保存的值
+			function getStoragedValue() {
+				// 此种方式属通过数据存取接口获取数据
+				var value = fastDev.Ui.Window.getData("value");
+				fastDev.tips("子页面弹窗保存的值为：" + value);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				窗口跨级
+			</div>
+			<div>
+				<input itype="Button" text="创建跨级子页面弹窗" onclick="createWindow()" />
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取子页面保存的值" onclick="getStoragedValue()" />
+			</div>
+			<br />
+			<div>
+				<div class="ui-layout-text">
+					使用到的内部子页面：
+				</div>
+				<a href="iframe_a.html" target="_blank">iframe_a.html</a>
+				<br />
+				<br />
+				<a href="iframe_b.html" target="_blank">iframe_b.html</a>
+			</div>
+		</div>
+	</body>
+</html>
+

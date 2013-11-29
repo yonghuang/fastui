@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Visibility Filters.html</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script>
+			$(function(){
+				$("#btn1").bind("click", function() {
+					// 查找隐藏的 tr
+					$("tr:hidden").show().css("border", "2px dotted blue");;
+				});
+				
+				$("#btn2").bind("click", function() {
+					// 匹配type为hidden的元素
+					alert($("input:hidden").prop("value"));
+				});
+				
+				$("#btn3").bind("click", function() {
+					// 匹配所有的可见元素
+					$("tr:visible").hide();
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		查找隐藏的 tr:<input type="button" value="tr:hidden" id="btn1"/><br>
+		查找可见的 tr:<input type="button" value="tr:visible" id="btn3"/><br>
+		获取隐藏框的值:<input type="button" value="input:hidden" id="btn2"/><br>
+		
+
+
+		<!-- HTML元素测试区 -->
+		<table>
+			<tr style="display:none"><td>Value 1</td></tr>
+			<tr><td>Value 2</td></tr>
+		</table>
+		
+		<form>
+			<input type="text" name="email" />
+			<input type="hidden" name="id" value="这是隐藏框的值" />
+		</form>
+	</body>
+</html>
+

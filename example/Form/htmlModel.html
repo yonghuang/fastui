@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>form</title>
+		<meta name="author" content="admin" />
+		<link href="../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+<style>
+
+#example2{ margin:10px 0}
+</style>
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+        <script src="../../src/core/ControlBus_Patch.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+        <script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+        <script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+		<script src="../../src/component/Validation.js"></script>
+		<script src="../../src/component/form/Box.js"></script>
+		<script src="../../src/component/form/TextBox.js"></script>
+        <script src="../../src/component/form/AutoComplete.js"></script>
+        <script src="../../src/component/form/CheckBoxGroup.js"></script>
+        <script src="../../src/component/form/DatePicker.js"></script>
+        <script src="../../src/component/form/RadioGroup.js"></script>
+        <script src="../../src/component/form/Select.js"></script>
+        <script src="../../src/component/list/Tree.js"></script> 
+        <script src="../../src/component/form/SelectTree.js"></script>
+        <script src="../../src/component/form/Form.js"></script>
+        <script src="../../src/component/form/Button.js"></script>
+		<script>
+			var submit=function(){
+					var form=fastDev.getInstance("form1");
+					form.submit();
+				}
+			var submitSuccess=function(data){				
+			alert("成功将数据"+data.text+"提交到后台");	
+			}
+				
+			var clear=function(){
+					var form=fastDev.getInstance("form1");
+					form.cleanData();
+				}
+				
+			var getValue=function(){
+				var form=fastDev.getInstance("form1");
+					alert( form.getValues());
+			}
+			setValue=function(){
+			var	txt1=fastDev.getInstance("txt1");
+			txt1.setValue("控件实例新设置的值");
+			var form=fastDev.getInstance("form1");
+					 form.setValue({area1:"用表单实例给控件设置的新值",pwd1:"aaaaaa" });
+			
+			}
+			$(function() {				
+				fastDev.Core.ControlBus.compile();
+			});
+		</script>
+	</head>
+	<body>
+   
+    <form itype="Form" action="example_submit.jsp" id="form1"  saveInstance="true" onSubmitSuccess="submitSuccess()">
+    
+    
+    
+		<p>&nbsp;</p>
+		<table width="800px" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+		    <td >&nbsp;text:</td>
+		    <td ><div id="example1">
+			<div itype="TextBox" id="txt1" saveInstance="true"  ></div>
+		</div></td>
+	      </tr>
+		  <tr>
+		    <td>&nbsp;password:</td>
+		    <td>&nbsp;<div id="example">
+			<div itype="TextBox" id="pwd1" saveInstance="true"  type="password" ></div>
+		</div></td>
+	      </tr>
+		  <tr>
+		    <td>&nbsp;textarea:</td>
+		    <td><div id="example2">
+			<div itype="TextBox" id="area1" saveInstance="true"  type="textarea" height="50px"></div>
+		</div></td>
+	      </tr>
+		  <tr>
+		    <td>&nbsp;智能提示框：</td>
+		    <td>&nbsp; <div id="example4">
+        <div id="autotxt1" itype="AutoComplete" saveInstance="true"  initSource="data.jsp" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" width="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100"></div>
+        </div></td>
+	      </tr>
+           <tr>
+		    <td>&nbsp;智能提示框1：</td>
+		    <td>&nbsp; <div id="example43">
+        <div id="autotxt11" itype="AutoComplete" saveInstance="true"  items="Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" width="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100"></div>
+        </div></td>
+	      </tr>
+		  <tr>
+		    <td>&nbsp;复选框：</td>
+		    <td>&nbsp;<div id="example5">
+			<div itype="CheckBoxGroup"   saveInstance="true" name="check1" id="check1" itemWidth="245px"  initSource="dada.txt" dataSource="test.txt" ></div>
+		</div></td>
+	      </tr>
+		  <tr>
+		    <td>&nbsp;单选框：</td>
+		    <td>&nbsp; <div id="example6">	
+<div itype="RadioGroup"  name="radio1" id="radio1" saveInstance="true"  itemWidth="245px" >
+			<div value=1 text="男" checked=true></div>			
+			<div value=0 text="女"></div>
+		</div>
+		</div></td>
+	      </tr>
+          <tr>
+          <td>下拉框：</td>
+          <td><div id="example7" style="width:1200px;margin:0 auto;">
+<div itype="Select"  id="select1" initSource="data1.json"  saveInstance="true"  width="200px" firstOption="--请选择--" value="test1,test3"  onValueChange="handle1()">
+				<div value="test5" text="测试5"></div>
+			</div>
+		</div></td>
+          </tr>
+           <tr>
+          <td>下拉树：</td>
+          <td><div id="example8" >
+			<div itype="SelectTree"  id="selecttree1" saveInstance="true">
+				<div initSource="data2.txt" rootValue="-请选择-" topParentid="0" openFloor=2></div>
+			</div>
+		</div></td>
+          </tr>
+          
+           <tr>
+          <td>日历控件：</td>
+          <td><div id="example9" >
+			<div itype="DatePicker" id="data1" saveInstance="true"  trigger="click"></div>
+		</div></td>
+          </tr>
+          
+          <tr>
+          <td>&nbsp;</td>
+          <td> <div id="example3" >
+			<div itype="Button" text="提交" onBtnClick="submit()" ></div>
+			<div itype="Button" text="清空" onBtnClick="clear()" ></div>
+            <div itype="Button" container="example3" text="设置值" onBtnClick="setValue()" ></div>
+			<div itype="Button" container="example3" text="获取值" onBtnClick="getValue()" ></div>
+     	 </div></td>
+          </tr>
+	  </table>
+	</form>   
+    
+</body>
+</html>
+

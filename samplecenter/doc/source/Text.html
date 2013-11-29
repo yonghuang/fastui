@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+
+	talkweb.BaseControl.Text = function(settings) {
+		return fastDev.create(&quot;talkweb.BaseControl.Text.Class&quot;, settings);
+	};
+
+	fastDev.define(&quot;talkweb.BaseControl.Text.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.Input&quot;,
+		_options : {
+			id : null,
+			name : null,
+			className : null,
+			value : null,
+			initialContent : &quot;&quot;,
+			type : &quot;text&quot;
+		},
+		init : function() {
+			this.setInitContent();
+			//talkweb.BaseControl.Button.Class.superClass.init.call(this);
+		},
+		getValue : function() {
+			var options = this.getOptions();
+			if(options.initialContent &amp;&amp; options.initialContent === this.attr(&quot;value&quot;)) {
+				return &quot;&quot;;
+			} else {
+				return this.attr(&quot;value&quot;);
+			}
+		},
+		getInitText : function() {
+			return this.attr(&quot;value&quot;);
+		},
+		setValue : function(param) {
+			if(param === &quot;&quot; || param === 0 || param) {
+				this.attr(&quot;value&quot;, param);
+				this.getOptions().initialContent &amp;&amp; this.setStyle({
+					color : &quot;#075586&quot;
+				});
+			}
+		},
+		setInitContent : function(initialContent) {
+			var options = this.getOptions();
+			if(options.initialContent) {
+				this.setValue(options.initialContent);
+				this.setStyle({
+					color : &quot;#cccccc&quot;
+				});
+				var that = this;
+				var focusIncon = function() {
+					if(options.initialContent &amp;&amp; options.initialContent === that.getInitText()) {
+						that.setValue(&quot;&quot;);
+						that.setStyle({
+							color : &quot;#075586&quot;
+						});
+					}
+					return that;
+				};
+				var blurIncon = function() {
+					if(options.initialContent &amp;&amp; (!that.getInitText())) {
+						that.setValue(options.initialContent);
+						that.setStyle({
+							color : &quot;#cccccc&quot;
+						});
+					}
+					return that;
+				};
+				this.onFocus(focusIncon);
+				this.onBlur(blurIncon);
+			}
+		}
+	});
+})()</pre>
+</body>
+</html>

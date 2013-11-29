@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>基本功能</title>
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+		<script src="../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function showDate(date, value) {
+				// date参数为日期对象(Date)，value参数为格式化后的日期字符串
+				fastDev.tips("已选日期值：" + value);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 30px">
+			<div>
+				<!-- 当format格式化属性不带时间格式时，控件默认不加载时间选择器  -->
+				<p>
+					默认配置
+				</p>
+				<input itype="DatePicker"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					定义显示面板触发方式
+				</p>
+				<input itype="DatePicker" trigger="click"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					设置日期值格式
+				</p>
+				<input itype="DatePicker" format="yyyy年MM月dd日"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					定义控件宽度
+				</p>
+				<!-- 可带百分比或px或em单位 -->
+				<input itype="DatePicker" width="20%"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					只读模式
+				</p>
+				<input itype="DatePicker" value="2012-8-25" readonly="true"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					禁用模式
+				</p>
+				<input itype="DatePicker" disabled="true"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					指定第一列显示的星期
+				</p>
+				<!-- 星期日为0，星期一为1，依此类推 -->
+				<input itype="DatePicker" firstDayOfWeek="1"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					选取事件回调
+				</p>
+				<input itype="DatePicker" onSelect = "showDate()" format="yyyy年MM月dd日 HH时mm分ss秒"/>
+			</div>
+		</div>
+	</body>
+</html>
+

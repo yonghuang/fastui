@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Accordion'>/**
+</span> * @class fastDev.Ui.Accordion
+ * @extends fastDev.Ui.Component
+ * 手风琴控件是一个提供多个收缩展开功能的控件。由数个标题和及其具体内容组成。点击标题可以收缩或展开其内容。继承自Component，导航类控件。&lt;p&gt;
+ * 作者：姜玲
+ *
+ *		&lt;div itype=&quot;Accordion&quot; &gt;
+ *			&lt;div id=&quot;accordion1&quot; text=&quot;文本&quot;&gt;
+ *                我们的名字...
+ *			&lt;/div&gt;
+ *			&lt;div id=&quot;accordion2&quot; text=&quot;列表&quot;&gt;
+ *				&lt;ul&gt;&lt;li&gt;第1条数据&lt;/li&gt;&lt;li&gt;第2条数据&lt;/li&gt;&lt;li&gt;第3条数据&lt;/li&gt;&lt;li&gt;第4条数据&lt;/li&gt;&lt;/ul&gt;
+ *			&lt;/div&gt;
+ *			&lt;div id=&quot;accordion4&quot; text=&quot;树&quot;&gt;
+ *			 &lt;div itype=&quot;Tree&quot;  initSource=&quot;data1.txt&quot; showIco=&quot;true&quot; topParentid=&quot;0&quot; openFloor=2 &gt;&lt;/div&gt;
+ *			&lt;/div&gt;
+ *		&lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.Accordion&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;Accordion&quot;,
+	_options : {
+<span id='fastDev-Ui-Accordion-property-items'>		/**
+</span>		 * 合法的json数据源
+		 * @type {Json}
+		 * &lt;p&gt;手风琴:[{id:&quot;accordion1&quot;,text:&quot;1级菜单&quot;,content:&quot;内容&quot;},{id:&quot;accordion2&quot;,text:&quot;2级菜单&quot;}]&lt;/p&gt;
+		 */
+		items : null,
+<span id='fastDev-Ui-Accordion-property-initSource'>		/**
+</span>		 * 控件初始化合法的json数据源url
+		 * @type {String}
+		 */
+		initSource : &quot;&quot;,
+<span id='fastDev-Ui-Accordion-property-currentNode'>		/**
+</span>		 * 默认选中节点id
+		 * @type {String}
+		 */
+		currentNode : null,
+<span id='fastDev-Ui-Accordion-property-showAll'>		/**
+</span>		 * 是否展开所有节点
+		 * @type {Boolean}
+		 */
+		showAll : false,
+<span id='fastDev-Ui-Accordion-property-showOne'>		/**
+</span>		 * 手风琴单击节点时每次打开一个节点，关闭其他的节点，设置此属性为true时不能同时设置showAll为true
+		 * @type {Boolean}
+		 */
+		showOne : true,
+<span id='fastDev-Ui-Accordion-property-height'>		/**
+</span>		 * 高度
+		 * @type {String}
+		 */
+		height : &quot;100%&quot;,
+<span id='fastDev-Ui-Accordion-property-width'>		/**
+</span>		 * 宽度
+		 * @type {String}
+		 */
+		width : &quot;100%&quot;,
+<span id='fastDev-Ui-Accordion-property-mode'>		/**
+</span>		 * 模式分最大内容高度模式和最小内容高度模式(maxContent/minContent)，只对手风琴控件有效。
+		 * @type {String}
+		 */
+		mode : &quot;maxContent&quot;,
+<span id='fastDev-Ui-Accordion-property-activeIndex'>		/**
+</span>		 * 默认打开第几个项,索引从0开始，代表第1个链接，-1为不打开
+		 * @type {number}
+		 */
+		activeIndex : 0,
+<span id='fastDev-Ui-Accordion-event-onExpand'>		/**
+</span>		 * @event onExpand
+		 * 自定义展开事件
+		 * @param {String} id
+		 */
+		onExpand : fastDev.noop,
+<span id='fastDev-Ui-Accordion-event-onCollect'>		/**
+</span>		 * @event onCollect
+		 * 自定义收缩事件 手风琴 导航
+		 * @param {String} id
+		 */
+		onCollect : fastDev.noop,
+<span id='fastDev-Ui-Accordion-event-onItemClick'>		/**
+</span>		 * @event onItemClick
+		 * 选中一个节点后触发
+		 * @param {String} id
+		 */
+		onItemClick : fastDev.noop,
+<span id='fastDev-Ui-Accordion-event-onAdd'>		/**
+</span>		 * @event onAdd
+		 * 添加一个节点后触发
+		 * @param {json}
+		 */
+		onAdd : fastDev.noop,
+<span id='fastDev-Ui-Accordion-event-onBeforeRemove'>		/**
+</span>		 * @event onBeforeRemove
+		 * 移除一个节点前，返回false不执行删除
+		 * @param {String} id
+		 */
+		onBeforeRemove : fastDev.noop,
+<span id='fastDev-Ui-Accordion-event-onRemove'>		/**
+</span>		 * @event onRemove
+		 * 移除一个一个节点后
+		 * @param {String} id
+		 */
+		onRemove : fastDev.noop
+	},
+	_global : {
+		selected : &quot;&quot;,
+		isdisplay : &quot;none&quot;,
+		itemHeight : &quot;&quot;,
+		titleAllHeight : &quot;&quot;
+	},
+	/*template : [
+		'&lt;div class=&quot;ui-nav ui-accordion&quot; style=&quot;width:#{width}; height:auto; float:left;&quot;&gt;',
+			'&lt;div class=&quot;ui-nav-panle&quot; style=&quot;width:#{width};&quot;&gt;',
+			'&lt;tpl dynamic&gt;',
+			'&lt;tpl each&gt;',
+				'&lt;div class=&quot;ui-nav-item&quot; name=&quot;{id}&quot;&gt;&lt;a class=&quot;#{selected}&quot; style=&quot;height:26px;margin:0;padding:0;&quot; &gt;',
+					'&lt;div class=&quot;ui-nav-header&quot;&gt;',
+						'&lt;div class=&quot;ui-nav-title&quot; &gt;{text}&lt;/div&gt;',
+						'&lt;div class=&quot;ui-nav-header-ico&quot;&gt;&lt;/div&gt;',
+						'&lt;span class=&quot;ui-nav-arrow&quot;&gt;&lt;/span&gt;',
+					'&lt;/div&gt;',
+				'&lt;/a&gt;',
+				'&lt;div class=&quot;ui-nav-content&quot; id=&quot;{id}&quot; style=&quot;display: #{isdisplay};&quot;&gt;',
+				//'{content}',
+				'&lt;/div&gt;',
+				'&lt;/div&gt;',
+			'&lt;/tpl&gt;',
+			'&lt;/tpl&gt;',
+			'&lt;/div&gt;',
+		'&lt;/div&gt;'
+		],*/		
+	staticTemplate : function(params) {
+	  return '&lt;div class=&quot;ui-nav ui-accordion&quot; style=&quot;width:'+params.width+'; height:auto; float:left;&quot;&gt;&lt;div class=&quot;ui-nav-panle&quot; style=&quot;width:'+params.width+';&quot;&gt;&lt;/div&gt;&lt;/div&gt;';
+	},
+	dynamicTemplate : function(params,data){
+		var html = [];
+		for(var i=0,item;item=data[i];i++){
+			html.push('&lt;div class=&quot;ui-nav-item&quot; name=&quot;'+item.id+'&quot;&gt;&lt;a class=&quot;'+params.selected+'&quot; style=&quot;height:26px;margin:0;padding:0;&quot; &gt;');
+					html.push('&lt;div class=&quot;ui-nav-header&quot;&gt;');
+						html.push('&lt;div class=&quot;ui-nav-title&quot; &gt;'+item.text+'&lt;/div&gt;');
+						html.push('&lt;div class=&quot;ui-nav-header-ico&quot;&gt;&lt;/div&gt;');
+						html.push('&lt;span class=&quot;ui-nav-arrow&quot;&gt;&lt;/span&gt;');
+					html.push('&lt;/div&gt;');
+				html.push('&lt;/a&gt;');
+				html.push('&lt;div class=&quot;ui-nav-content&quot; id=&quot;'+item.id+'&quot; style=&quot;display: '+params.isdisplay+';&quot;&gt;');
+				//'{content}',
+				html.push('&lt;/div&gt;');
+				html.push('&lt;/div&gt;');
+		}
+		return html.join('');
+	},
+	tplParam : [&quot;height&quot;, &quot;selected&quot;, &quot;isdisplay&quot;, &quot;width&quot;],
+	fields : [&quot;id&quot;, &quot;text&quot;, &quot;content&quot;],
+<span id='fastDev-Ui-Accordion-method-ready'>	/**
+</span>	 * 面板参数准备
+	 * @protected
+	 */
+	ready : function(options, global) {
+		if(options.mode === &quot;maxContent&quot;) {
+			global.isdisplay = &quot;block&quot;;
+		}
+		if(options.showAll) {
+			global.selected = &quot;ui-nav-selected&quot;;
+			global.isdisplay = &quot;block&quot;;
+		}
+
+	},
+<span id='fastDev-Ui-Accordion-method-constructItems'>	/**
+</span>	 * 初始化控件列表
+	 * @param {Array} items数据项
+	 * @protected
+	 */
+	constructItems : function() {
+		//this.renderDynamicHtml();ui-nav-panle
+		this._renderDynamicHtml(this.find(&quot;.ui-nav-panle&quot;));	
+		this.setContent();
+		this.setConstruct();
+		this.bindEvent();
+	},
+<span id='fastDev-Ui-Accordion-method-setContent'>	/**
+</span>	 * 设置控件内容
+	 * @private
+	 */
+	setContent : function() {
+		var items = this.dataset.select(), len = items.length;
+		this._global.titleAllHeight = len * 26;
+		for(var i = 0; i &lt; len; i++) {
+			this.find(&quot;[class='ui-nav-content'][id='&quot; + items[i].id + &quot;']&quot;).append(items[i].content);
+		}
+	},
+<span id='fastDev-Ui-Accordion-method-setConstruct'>	/**
+</span>	 * 设置控件属性
+	 * @private
+	 */
+	setConstruct : function() {
+		var options = this._options, global = this._global, currentNode;
+		this.setLastCls();
+		//currentNode 优先。在currentNode没有值的情况下，才用活动索引。
+		if(!options.showAll) {
+			if(options.currentNode) {
+				currentNode = this.find(&quot;div[name='&quot; + options.currentNode + &quot;']&quot;);
+			} else if(options.activeIndex &gt; -1) {
+				currentNode = this.find(&quot;.ui-nav-item:eq(&quot; + options.activeIndex + &quot;)&quot;);
+			}
+			if((&quot;&quot; + options.height).indexOf(&quot;%&quot;) &gt; 0) {
+				var pHeight = fastDev(options.container).height();
+				if(pHeight === 0) {
+					pHeight = fastDev(window).height() - fastDev(options.container).offset().top;
+				}
+				options.height = fastDev.Util.StringUtil.stripUnits(options.height, pHeight - 1);
+			}
+			global.itemHeight = (parseFloat(options.height)) - global.titleAllHeight;
+			if(currentNode) {
+				this.setExpandCollect(currentNode, true);
+			}
+		}
+	},
+<span id='fastDev-Ui-Accordion-method-setLastCls'>	/**
+</span>	 * 给尾部设置样式
+	 * @private
+	 */
+	setLastCls : function() {
+		this.find(&quot;.ui-nav-last&quot;).removeClass(&quot;.ui-nav-last&quot;);
+		this.find(&quot;.ui-nav-item:last&gt;a&gt;.ui-nav-header&quot;).addClass(&quot;ui-nav-last&quot;);
+	},
+<span id='fastDev-Ui-Accordion-method-getNavA'>	/**
+</span>	 * 得到A
+	 * @private
+	 */
+	getNavA : function(event) {
+		var navA, evobj = fastDev(event.target);
+		var className = evobj.getClass();
+		if(evobj.hasClass(&quot;ui-nav-a&quot;) || evobj.hasClass(&quot;ui-nav-text&quot;)) {
+			navA = evobj;
+		} else if(evobj.hasClass(&quot;ui-nav-header&quot;)) {
+			navA = evobj.parent(&quot;a&quot;);
+		} else if(evobj.hasClass(&quot;ui-nav-item&quot;) || evobj.hasClass(&quot;ui-nav-inner&quot;)) {
+			navA = evobj.children(&quot;a&quot;);
+		} else if(/\sui-nav-(title|header-ico|arrow|arrow-default)\s/.test(&quot; &quot; + className + &quot; &quot;)) {
+			navA = evobj.parent(&quot;div&quot;).parent(&quot;a&quot;);
+		}
+		return navA;
+	},
+<span id='fastDev-Ui-Accordion-method-setExpandCollect'>	/**
+</span>	 * 设置div展开收缩与选中或没选中的样式
+	 * @private
+	 */
+	setExpandCollect : function(divin, selected) {
+		if(divin.hasClass(&quot;ui-nav-item&quot;) === false) {
+			return false;
+		}
+		var options = this._options, itemHeight = this._global.itemHeight;
+		if(selected) {
+			if(!options.showAll &amp;&amp; options.showOne) {
+				var pdiv = divin.parent();
+				if(options.mode === &quot;maxContent&quot;) {
+					//debugger;
+					//var narh= fastDev(pdiv).find(&quot;.ui-nav-content[style!='display: block; height: 0px;']&quot;);
+					//if(narh.elems.length===1){
+					//	narh.animate({height : 0}, 200, &quot;quad-easeInOut&quot;);
+					//}else{
+					//if(fastDev.Browser.isIE6 || fastDev.Browser.isIE7 ){
+					//	fastDev(pdiv).find(&quot;.ui-nav-content&quot;).css(&quot;height&quot;,&quot;0px&quot;);
+					//	fastDev(pdiv).find(&quot;.ui-nav-content&quot;).css(&quot;display&quot;,&quot;none&quot;);
+					//}else{
+					fastDev(pdiv).find(&quot;.ui-nav-content&quot;).animate({
+						height : 0
+					}, 200, &quot;expo-easeOut&quot;);
+					//}
+					//}
+					//fastDev(pdiv).find(&quot;.ui-nav-content&quot;).css(&quot;height&quot;,&quot;0px&quot;);
+				} else {
+					fastDev(pdiv).find(&quot;.ui-nav-content&quot;).css(&quot;display&quot;, &quot;none&quot;);
+				}
+				fastDev(pdiv).find(&quot;.ui-nav-selected&quot;).removeClass(&quot;ui-nav-selected&quot;);
+				fastDev(pdiv).find(&quot;.ui-nav-inner-seleted&quot;).removeClass(&quot;ui-nav-inner-seleted&quot;);
+			}
+			if(options.mode === &quot;maxContent&quot; &amp;&amp; !options.showAll) {
+				//debugger;
+				//divin.find(&quot;.ui-nav-content:first&quot;).css(&quot;display&quot;,&quot;block&quot;);
+				//divin.find(&quot;.ui-nav-content:first&quot;).css({&quot;height&quot;:&quot;0px&quot;});
+				//divin.find(&quot;.ui-nav-content:first&quot;).css({&quot;height&quot;:itemHeight+&quot;px&quot;});
+				//if(){
+				///	divin.find(&quot;.ui-nav-content:first&quot;).css({&quot;height&quot;:itemHeight+&quot;px&quot;});
+				//	divin.find(&quot;.ui-nav-content:first&quot;).css(&quot;display&quot;,&quot;block&quot;);
+				//}else{
+				divin.find(&quot;.ui-nav-content:first&quot;).animate({
+					height : itemHeight
+				}, 200, &quot;expo-easeOut&quot;);
+				//}
+			} else {
+				divin.find(&quot;.ui-nav-content:first&quot;).css(&quot;display&quot;, &quot;block&quot;);
+			}
+			divin.find(&quot;a:first&quot;).addClass(&quot;ui-nav-selected&quot;);
+			options.onExpand.call(this, divin.attr(&quot;name&quot;));
+		} else {
+			if(options.mode === &quot;maxContent&quot; &amp;&amp; !options.showAll) {
+				//debugger;
+				divin.find(&quot;.ui-nav-content:first&quot;).animate({
+					height : 0
+				}, 200, &quot;expo-easeOut&quot;);
+				//divin.find(&quot;.ui-nav-content:first&quot;).css(&quot;display&quot;,&quot;none&quot;);
+			} else {
+				divin.find(&quot;.ui-nav-content:first&quot;).css(&quot;display&quot;, &quot;none&quot;);
+			}
+			divin.find(&quot;a:first&quot;).removeClass(&quot;ui-nav-selected&quot;);
+			options.onCollect.call(this, divin.attr(&quot;name&quot;));
+		}
+	},
+<span id='fastDev-Ui-Accordion-method-bindEvent'>	/**
+</span>	 * 绑定事件
+	 * @private
+	 */
+	bindEvent : function() {
+		var me = this, navPanle = fastDev(me.elems[0]);
+		var navPanleClick = function(event) {
+			var anchor = me.getNavA(event);
+			if(anchor) {
+				var divin = anchor.parent(&quot;div&quot;);
+				var divcon = anchor.next();
+				me.setDivClick(divcon, divin, event);
+			}
+		};
+		navPanle.unbind(&quot;click&quot;);
+		navPanle.bind(&quot;click&quot;, navPanleClick);
+	},
+<span id='fastDev-Ui-Accordion-method-setDivClick'>	/**
+</span>	 * 设置项的点击事件
+	 * @private
+	 */
+	setDivClick : function(divcon, divin, event) {
+		//debugger;
+		var displayEx = true;
+		if(this._options.mode === &quot;maxContent&quot; &amp;&amp; !this._options.showAll) {
+			displayEx = false;
+		}
+		if((displayEx &amp;&amp; divcon.isShow()) || (!displayEx &amp;&amp; divcon.parent().find(&quot;.ui-nav-content&quot;).css(&quot;height&quot;) !== &quot;0px&quot;)) {
+			this.setExpandCollect(divin, false);
+		} else {
+			this.setExpandCollect(divin, true);
+		}
+		this._options.onItemClick.call(this, event, divin.attr(&quot;name&quot;));
+	},
+<span id='fastDev-Ui-Accordion-method-getSelected'>	/**
+</span>	 *得到当前展开的节点,返回选择节点ID（需showOne=true时）
+	 */
+	getSelected : function() {
+		var options = this._options, currentid = &quot;&quot;;
+		if(options.showOne) {
+			currentid = this.find(&quot;.ui-nav-selected&quot;).parent().attr(&quot;name&quot;);
+		}
+		return currentid;
+	},
+<span id='fastDev-Ui-Accordion-method-addItem'>	/**
+</span>	 * 手风琴添加一个节点
+	 * @param {Array} item
+	 */
+	addItem : function(item) {
+		var tempds = this.dataset.select(function(i, data) {
+			return data.id === item.id;
+		});
+		if(tempds.length &gt; 0) {
+			fastDev.error(&quot;Accordion&quot;, &quot;addItem&quot;, &quot;id为&quot; + item.id + &quot;的数据已经存在&quot;);
+			return;
+		}
+		if(item.content) {
+			item.content = fastDev(&quot;&lt;div&gt;&quot; + item.content + &quot;&lt;/div&gt;&quot;);
+		}
+		this.dataset.insert(item);
+		var dataSet = this.dataset.select(function(i, data) {
+			return data.id === item.id;
+		});
+		if(dataSet.length &gt; 0) {
+			//var fragment = this.initDynamicHtml(null, dataSet);
+			//var fragment = this.appendDynamicHTML
+			var iddiv = this.find(&quot;.ui-nav-panle&quot;);
+			this._renderDynamicHtml(iddiv,&quot;dynamicTemplate&quot;,dataSet,false,window,false);
+			//this.appendDynamicHTML(null,dataSet);
+			//var iddiv = this.find(&quot;.ui-nav-panle&quot;);
+			//iddiv.append(fragment);
+			this._options.currentNode = item.id;
+			this.setContent();
+			this.setConstruct();
+			////this.constructItems();
+			this._options.onAdd.call(this, item);
+		}
+	},
+<span id='fastDev-Ui-Accordion-method-removeItem'>	/**
+</span>	 * 手风琴移除一个节点
+	 * @param {String} id
+	 */
+	removeItem : function(id) {
+		var options = this._options;
+		//if(options.onBeforeRemove!==fastDev.noop){
+		if(options.onBeforeRemove.call(this, id) === false) {
+			return false;
+		}
+		//}
+		this.dataset.remove(function(i, data) {
+			return data.id === id;
+		});
+		this.find(&quot;[name='&quot; + id + &quot;']&quot;).remove();
+		this.setLastCls();
+		options.onRemove.call(this, id);
+	},
+<span id='fastDev-Ui-Accordion-method-reLoad'>	/**
+</span>	 * 重新加载
+	 */
+	reLoad : function(config, data) {
+		this.initRefresh(config, data);
+	}
+});
+</pre>
+</body>
+</html>

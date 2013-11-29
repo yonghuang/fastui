@@ -1,0 +1,43 @@
+//from_init.jsp
+<%@ page language='java' import='java.io.PrintWriter'
+	pageEncoding='utf-8'%>
+<%
+	StringBuilder formdata = new StringBuilder();
+	formdata.append("{'orgid':[{value:'1',text:'研发部'},{value:'2',text:'销售部'}],'type':[{value:'0',text:'奖'},{value:'1',text:'惩'}]}");
+	PrintWriter pw = response.getWriter();
+	pw.print(formdata.toString());
+%>
+//from_load.jsp
+<%@ page language='java' import='java.io.PrintWriter'
+	pageEncoding='utf-8'%>
+<%
+	StringBuilder formdata = new StringBuilder();
+	String id = request.getParameter("id");
+	if(id.equals("1")){
+	formdata.append("{'id':'1','name':'张三','type':'0','orgid':'2','date':'2013-05-05','remark' :'无'}");
+	}else if(id.equals("2")){
+	formdata.append("{'id':'2','name':'李四','type':'0','orgid':'1','date':'2012-04-04','remark' :'备注'}");	
+	}
+	PrintWriter pw = response.getWriter();
+	pw.print(formdata.toString());
+%>
+//fromsubmit.jsp
+<%@ page language="java" import="java.io.PrintWriter"
+	pageEncoding="utf-8"%>
+<%
+	PrintWriter pw = response.getWriter();	
+	String data = request.getParameter("data");	
+	pw.print("{msg:'提交"+data+"成功'}");
+%>
+//datagrid_init.json
+{'data': [{'id': '1','name': '张三','orgname': '销售部','type': '奖','date':'2013-05-05','remark':'无'
+},{'id': '2','name': '李四','orgname': '研发部','type': '奖','date':'2012-04-04','remark':'备注'
+}],'info': {'pageSize': 10,'records': 10,'page': 1,'total': 1}}
+//del.jsp
+<%@ page language="java" import="java.io.PrintWriter"
+	pageEncoding="utf-8"%>
+<%
+	PrintWriter pw = response.getWriter();	
+	String data = request.getParameter("ids");	
+	pw.print("{msg:'删除"+data+"成功'}");
+%>

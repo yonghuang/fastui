@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>tree测试场景-外观显示1</h4></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+	</head>
+	<body>
+		<div style="margin:10px">
+			<div itype="Tree"  initSource="../../data/treedata2.txt" 
+			customFields="url" showIco="false" topParentid="0" 
+			openFloor=3  id="tree2" saveInstance="true" 	
+showLine="false" currentId="5" rootValue="新根节点"></div>
+	</div>
+	
+	<div width="200px" style="margin:10px">
+			<div itype="Tree"  initSource="../../data/treedata2.txt" 
+			customFields="url" showIco="false" topParentid="1" openFloor=2
+			  id="tree3" saveInstance="true"  ></div>
+	</div>
+			<div  style="margin: 10px">
+			<div class="ui-layout-feature">此场景涵盖tree外观显示控制的以下功能点：</div>
+			<div class="ui-layout-feature">01	无连接线 showLine参数设置</div>
+			<div class="ui-layout-feature">02	无节点图标 showIco参数设置</div>
+			<div class="ui-layout-feature">03	打开层数设置  openFloor参数设置打开节点层数</div>
+			<div class="ui-layout-feature">04	顶级节点id设置 topParentid设置顶级节点，分别设置为0,1 查看效果</div>
+			<div class="ui-layout-feature">05	添加非数据根节点 </div>
+			<div class="ui-layout-feature">06	设置当前节点</div>
+			
+		</div>
+	</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					Dialog控件继承自Window控件，Window控件的属性及API同样适用于Dialog控件。
+				</li>
+				<li>
+					Dialog可在内容区域顶部定义工具栏。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 默认对话框
+			function showDefaultDialog() {
+				fastDev.create("Dialog");
+			}
+
+			// 内嵌子页
+			function showSrcDialog() {
+				fastDev.create("Dialog", {
+					src : "http://www.talkweb.com.cn",
+					inside : false,
+					modal : false
+				});
+			}
+
+			// 工具栏
+			function showToolbarDialog() {
+				fastDev.create("Dialog", {
+					width : "400px",
+					// Toolbar控件的配置对象
+					toolbar : {
+						items : ["测试", "-", {
+							plain : true,
+							text : "增加",
+							onclick : function(event, that, win, fast) {
+								// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+								// 参数that为当前对话框控件实例
+								// 参数win为内部子页面（如果存在的话）的window对象，第二个参数fast为内部子页面的fastDev对象
+								// 若内部子页面跨域，因为跨域无权访问页面内容，所以window对象和fastDev对象值为undefined
+								// 若需要获取工具栏控件实例，可通过对话框控件的getToolbar方法获取，如：
+								var toolbar = that.getToolbar();
+								fastDev.tips("增加按钮");
+							}
+						}, "|", {
+							plain : true,
+							text : "修改",
+							onclick : function(event, that, win, fast) {
+								fastDev.tips("修改按钮");
+							}
+						}, "|", {
+							plain : true,
+							text : "保存"
+						}, "|", {
+							plain : true,
+							text : "删除"
+						}, ">", {
+							text : "搜索",
+							iconCls : "icon-delete"
+						}, "|", {
+							text : "打印",
+							iconCls : "icon-print"
+						}]
+					},
+					src : "http://www.baidu.com",
+					buttons : [{
+						text : "底部按钮",
+						onclick : function(event, that, win, fast) {
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							// 参数win为内部子页面（如果存在的话）的window对象，第二个参数fast为内部子页面的fastDev对象
+							// 若内部子页面跨域，因为跨域无权访问页面内容，所以window对象和fastDev对象值为undefined
+							fastDev.tips("底部按钮");
+						}
+					}]
+				});
+			}
+
+			// 底部按钮（居右）
+			function showButtonDialog() {
+				fastDev.create("Dialog", {
+					buttons : [{
+						text : "保存",
+						iconCls : "icon-save",
+						onclick : function(event, that, win, fast) {
+							fastDev.tips("你点击了保存按钮");
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}, {
+						text : "关闭",
+						iconCls : "icon-close",
+						onclick : function(event, that, win, fast) {
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}]
+				});
+			}
+
+			// 底部按钮（左右）
+			function showButtonAlignDialog() {
+				fastDev.create("Dialog", {
+					buttons : [{
+						text : "是",
+						align : "right", //默认居右
+						iconCls : "icon-accept",
+						onclick : function(event, that, win, fast) {
+							fastDev.tips("你点击了\"是\"按钮");
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}, {
+						text : "否",
+						align : "right",
+						iconCls : "icon-delete",
+						onclick : function(event, that, win, fast) {
+							fastDev.tips("你点击了\"否\"按钮");
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}, {
+						text : "取消",
+						align : "left",
+						iconCls : "icon-close",
+						onclick : function(event, that, win, fast) {
+							fastDev.tips("你点击了\"取消\"按钮");
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}]
+				});
+			}
+
+			// 底部按钮（居中）
+			function showButtonCenterAlignDialog() {
+				fastDev.create("Dialog", {
+					buttons : [{
+						text : "保存",
+						align : "center",
+						iconCls : "icon-save",
+						onclick : function(event, that, win, fast) {
+							fastDev.tips("你点击了保存按钮");
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}, {
+						text : "关闭",
+						align : "center",
+						iconCls : "icon-close",
+						onclick : function(event, that, win, fast) {
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}]
+				});
+			}
+
+			// 显示或隐藏工具栏或按钮栏或内容区域
+			function showAndHideButton() {
+				var toolbarHided = false, footerHided = false, contentHided = false;
+				fastDev.create("Dialog", {
+					width : 582,
+					height : 396,
+					// 跨级展现
+					inside : false,
+					// 声明工具栏控件
+					toolbar : {
+						items : [{
+							plain : true,
+							text : "隐藏窗体内容",
+							onclick : function(event, that) {
+								if (contentHided) {
+									contentHided = false;
+									// 弹窗显示内容API
+									that.showContent();
+									// 按钮更新文本API
+									this.setText("隐藏窗体内容");
+								} else {
+									contentHided = true;
+									// 弹窗隐藏内容API
+									that.hideContent();
+									this.setText("显示窗体内容");
+								}
+							}
+						}]
+					},
+					// 声明按钮控件（多个按钮声明可以使用数组传参）
+					buttons : {
+						text : "底部按钮"
+					},
+					showSizeTips : true,
+					// 弹窗打开后的回调函数
+					onAfterInit : function() {
+						// 弹窗回调作用域指向弹窗控件
+						var that = this;
+						// 追加内容至弹窗中，可追加普通文本、标签字符串、控件声明字符串、标签元素对象、控件对象等
+						// 可使用数组一次性追加多个元素
+						var top = fastDev.Ui.Window.top;
+						// 弹窗跨级时，为兼容IE6浏览器，直接通过fastDev.create接口创建的控件实例将无法追加进弹窗内容区域中，可通过弹窗展现页面(top)上的fastDev.create接口创建该实例
+						that.append(["<h3>内容区域</h3><hr/><br/>", "<input itype='DatePicker' display='inline'/><br/>", top.document.createElement("hr"), "<br/>", top.fastDev.create("Button", {
+							text : "隐藏工具栏",
+							// 按钮控件点击回调事件
+							onclick : function(event) {
+								if (toolbarHided) {
+									toolbarHided = false;
+									// 弹窗显示工具栏API
+									that.showToolbar();
+									this.setText("隐藏工具栏");
+								} else {
+									toolbarHided = true;
+									// 弹窗隐藏工具栏API
+									that.hideToolbar();
+									this.setText("显示工具栏");
+								}
+							}
+						}), top.fastDev.create("Button", {
+							text : "隐藏底部按钮栏",
+							onclick : function(event) {
+								if (footerHided) {
+									footerHided = false;
+									// 弹窗显示底部按钮栏API
+									that.showFooter();
+									this.setText("隐藏底部按钮栏");
+								} else {
+									footerHided = true;
+									// 弹窗隐藏底部按钮栏API
+									that.hideFooter();
+									this.setText("显示底部按钮栏");
+								}
+							}
+						})]);
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				对话框
+			</div>
+			<div>
+				<input itype="Button" text="默认对话框" onclick="showDefaultDialog()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="内嵌子页" onclick="showSrcDialog()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="定义工具栏" onclick="showToolbarDialog()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="定义按钮栏（按钮居右）" onclick="showButtonDialog()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="定义按钮栏（左右按钮）" onclick="showButtonAlignDialog()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="定义按钮栏（按钮居中）" onclick="showButtonCenterAlignDialog()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="显示与隐藏工具栏、按钮栏、内容区域" onclick="showAndHideButton()" />
+			</div>
+		</div>
+	</body>
+</html>

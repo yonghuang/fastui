@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Data-Reader'>/**
+</span> * @class fastDev.Data.Reader
+ * @extends fastDev.Core.Base
+ * @author 袁刚
+ * 数据读取实现类，协助数据集读取后台返回数据的辅助类
+ */
+fastDev.define(&quot;fastDev.Data.Reader&quot;, {
+	alias : &quot;Reader&quot;,
+<span id='fastDev-Data-Reader-method-read'>	/**
+</span>	 *  数据读取方法
+	 * @param {JsonObject/String/Xml} data 原始数据
+	 */
+	read : function(data, type) {
+
+		var method = &quot;read&quot; + fastDev.Util.StringUtil.capitalize(type || &quot;json&quot;);
+
+		return this[method](data);
+	},
+<span id='fastDev-Data-Reader-method-readJson'>	/**
+</span>	 * Json格式数据读取方法
+	 * @param {String|JsonObject} data Json格式数据
+	 */
+	readJson : function(data) {
+		return fastDev.Util.JsonUtil.parseJson(data);
+	},
+<span id='fastDev-Data-Reader-method-readArray'>	/**
+</span>	 * 数据格式数据读取方法(暂未实现)
+	 */
+	readArray : function(data) {
+
+	},
+<span id='fastDev-Data-Reader-method-readXml'>	/**
+</span>	 * Xml格式数据读取方法(暂未实现)
+	 */
+	readXml : function(data) {
+
+	},
+	readString : function(data) {
+		return data?data + &quot;&quot;:&quot;&quot;;
+	},
+	readDataSegment : function(data, root, record) {
+		if(!fastDev.isValid(root)) {
+			return data;
+		}
+		var rootPath = root.split(&quot;.&quot;);
+		while(rootPath[0]) {
+			root = rootPath.shift();
+			if(/^\d*$/.test(root)){
+				root = +root;
+			}
+			data = data[root];
+		}
+		return data;
+	},
+	readToTarget : function(data, config) {
+		var object = config.object, root = config.root;
+		data = this.readRoot(data, root);
+		object.load(data);
+	}
+});
+</pre>
+</body>
+</html>

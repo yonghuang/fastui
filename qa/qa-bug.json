@@ -1,0 +1,562 @@
+[
+	{
+		"personLiable": "",
+		"bugsynopsis": "树节点的删除方法，删除后，仍然能通过id得到数据。",
+		"cause": "树的数据集里，root格式里的删除干净了，但map里还在",
+		"test": "无",
+		"bugno": "1383633364430",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-11-05 14:38:17",
+		"fixedVersion": "1.5.1.8",
+		"solution": "在删除树数据时，将map里的数据一起删除",
+		"version": "1.5.1.7"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid点击列时报editby无效",
+		"cause": "同一个也页面放置多个DataGrid时，每个DataGrid都会在Body上绑定一个onclick事件监听行内编辑，点击任何一个DataGrid列都会触发每一个DataGrid的行内编辑事件，导致列索引查找时出错",
+		"test": "无",
+		"bugno": "1377161096973",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-08-22 16:48:31",
+		"fixedVersion": "1.5.1.8",
+		"solution": "修复监听事件，每一个DataGrid只监听自己的点击事件",
+		"version": "1.5.1.7"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "下拉多选树在DataGrid行内编辑中无法选取值",
+		"cause": "下拉树未将面板部分纳入控件Dom中，DataGrid单击事件认定下拉树面板点击时执行数据回写",
+		"test": "无",
+		"bugno": "1377133033850",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-08-22 09:00:27",
+		"fixedVersion": "1.5.1.8",
+		"solution": "修复下拉树，将下拉面板纳入控件Dom，DataGrid对下拉树面板单击事件做排除",
+		"version": "1.5.1.7"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "树控件调用删除节点方法时，节点与父节点关系没有删除干净",
+		"cause": "删除节点时，只删除了数据集中的节点信息，未删除对应数据结构中的节点信息",
+		"test": "无",
+		"bugno": "1376538178558",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-08-15 11:43:43",
+		"fixedVersion": "1.5.1.8",
+		"solution": "删除节点时，加上数据结构的处理",
+		"version": "1.5.1.7"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid启用列合并后在渲染器中获取当前行数据会导致死循环",
+		"cause": "在处理合并列的真实列索引值时未做异常处理",
+		"test": "无",
+		"bugno": "1375841834417",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-08-07 10:18:59",
+		"fixedVersion": "1.5.1.8",
+		"solution": "在获取当前行数据时，匹配真实列索引值时加入值无效处理",
+		"version": "1.5.1.7"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "树控件initSource返回空数组时，调任何树控件的方法都会抛出异常",
+		"cause": "树控件没有处理数据为空时的调用情况",
+		"test": "无",
+		"bugno": "1375841660723",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-08-07 10:16:08",
+		"fixedVersion": "1.5.1.8",
+		"solution": "在constructItems中加入空数据的处理",
+		"version": "1.5.1.7"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid的addRow方法传入指定新增数据的行索引时导致界面数据全部显示为undefiend",
+		"cause": "由于DataSet中的changeIndex方法对传参处理异常，数据被加载为错误的格式，导致界面显示异常",
+		"test": "无",
+		"bugno": "1375232198191",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-07-31 08:59:10",
+		"fixedVersion": "1.5.1.7",
+		"solution": "修正DataSet的changeIndex方法对传参的处理",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid在查询结果无数据时，会导致设置的高度失效",
+		"cause": "在DataGrid数据集为空的情况下，会放弃后续界面操作，同时不会处理高度",
+		"test": "无",
+		"bugno": "1372996212722",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-07-05 11:51:11",
+		"fixedVersion": "1.5.1.7",
+		"solution": "修正代码，数据集为空时仅放弃界面渲染相关操作，界面结构性操作继续执行",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "下拉树调用disable方法禁用控件后还可以继续操作和选择",
+		"cause": "下拉树未对disable方法做私有实现，父类实现不能满足下拉树的禁用功能",
+		"test": "无",
+		"bugno": "1372838670039",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-07-03 15:26:56",
+		"fixedVersion": "1.5.1.7",
+		"solution": "在下拉树中实现disable和enable方法",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "多选下拉树和单选下拉书初始化选中值时，不会自动初始化值前方的选择框",
+		"cause": "下拉树未实现此功能",
+		"test": "无",
+		"bugno": "1372833549671",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-07-03 14:01:01",
+		"fixedVersion": "1.5.1.7",
+		"solution": "在下拉树的setValue方法中加入此功能的实现代码",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "后台返回null会报异常",
+		"cause": "DataBus不能处理null数据",
+		"test": "无",
+		"bugno": "1372812787760",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-07-03 08:15:25",
+		"fixedVersion": "1.5.1.7",
+		"solution": "当后台返回null时，将其设置为空对象",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "输入框控件无法清空数据",
+		"cause": "输入类控件父类Box的setValue方法过滤了空字符串，导致不能重新给输入框控件重设空值",
+		"test": "无",
+		"bugno": "1372812689581",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-07-03 08:13:39",
+		"fixedVersion": "1.5.1.7",
+		"solution": "去除空字符串过滤，改为null和undefined过滤",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "tabs的重置宽度方法有问题，宽度上下部统一",
+		"cause": "上面的ul层的宽度没有重置",
+		"test": "无",
+		"bugno": "1371546681760",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-06-18 17:12:12",
+		"fixedVersion": "1.5.1.7",
+		"solution": "将上面ul层的宽度重置",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "纵向导航控件在有数字的情况下选中的点击点在文字后面无效",
+		"cause": "加了一层div后，没有在加的div上对应触发事件",
+		"test": "无",
+		"bugno": "1371449167316",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-06-17 14:07:22",
+		"fixedVersion": "1.5.1.7",
+		"solution": "将应该能触发的点补全",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid同时开启复选框列跟排序功能时，全选框无法选中",
+		"cause": "点击复选框时会触发到列排序，导致数据界面刷新，清空了之前的复选状态",
+		"test": "无",
+		"bugno": "1371434124167",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-06-17 09:57:45",
+		"fixedVersion": "1.5.1.7",
+		"solution": "在排序功能事件响应中加入有效列判断，如果当前列不是数据列则直接返回，不执行剩余排序逻辑",
+		"version": "1.5.1.6"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid启用allowCellMerge功能后，调用updateRows接口会导致界面数据不再合并",
+		"cause": "updateRows会触发界面重新渲染但并不会重新对数据进行合并",
+		"test": "无",
+		"bugno": "1369634998625",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-05-27 14:13:33",
+		"fixedVersion": "1.5.1.6",
+		"solution": "在所有数据更新的通用界面处理方法processingGrid中加入重新计算合并行数据功能",
+		"version": "1.5.1.5"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid启用allowCellMerge功能后，调用所有的获取值的接口返回的数据都会错位",
+		"cause": "行被合并后，无法正常的从界面以行索引和列索引获取到正确的值",
+		"test": "无",
+		"bugno": "1369383134270",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-05-24 16:15:43",
+		"fixedVersion": "1.5.1.6",
+		"solution": "修复获取值得通用实现getValueImpl接口，在启用了数据合并功能时，如果行、列索引值匹配失败则从上一行(循环往上寻找)获取",
+		"version": "1.5.1.5"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DatePicker点击选择日期时无法触发onchange事件",
+		"cause": "DatePicker点击选择日期未实现onchange事件",
+		"test": "无",
+		"bugno": "1369364060232",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-05-24 10:56:23",
+		"fixedVersion": "1.5.1.6",
+		"solution": "补上点击选择日期时的onchange实现",
+		"version": "1.5.1.5"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "多选树只有一个节点时，获取选中的叶节点方法返回值错误",
+		"cause": "只有一个节点时，判断节点是否选中的方法有问题",
+		"test": "无",
+		"bugno": "1368429326465",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-05-13 15:16:19",
+		"fixedVersion": "1.5.1.5",
+		"solution": "解决判断节点是否选中的方法的问题",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid使用多表头时，调用hideColumn或者showColumn接口时会抛异常",
+		"cause": "显示隐藏列时会重新生成表头，因为Component与Template之间的接口调整，调用Component接口重新设置表头时会出现异常",
+		"test": "无",
+		"bugno": "1367997270777",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-05-08 15:16:57",
+		"fixedVersion": "1.5.1.5",
+		"solution": "重新调整调用Component接口的代码",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid大数据演示加载功能无法使用",
+		"cause": "因Component与Template之间接口以及参数调整导致动态加载数据功能无效",
+		"test": "无",
+		"bugno": "1367914263108",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-05-07 16:12:40",
+		"fixedVersion": "1.5.1.5",
+		"solution": "调整DataGrid对父类接口使用",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid查询出来的数据不足当前设定的显示行数时，调用还原接口不会自动补充空行",
+		"cause": "还原接口中未做数据补充空行处理",
+		"test": "无",
+		"bugno": "1367031550960",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-27 11:00:30",
+		"fixedVersion": "1.5.1.5",
+		"solution": "在还原接口中增加数据补充处理",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid配置了行内编辑时，对没有数据的补充列也可编辑，且会报异常",
+		"cause": "补充列是虚构的空列，在数据集中是没有的，因此在行内编辑时获取主键并进行相关操作时会抛异常",
+		"test": "无",
+		"bugno": "1366957619801",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-26 14:28:33",
+		"fixedVersion": "1.5.1.5",
+		"solution": "加入数据列的行索引校验，判断超出有效数据的操作行操作无效",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid行内编辑数据验证失败时调用新增、删除、保存、还原的动作会导致行内编辑部可用",
+		"cause": "验证失败时，DataGrid不会销毁当前编辑框，等待用户修正数据，但内部的新增、删除、保存、还原接口会强制销毁编辑框，导致错误状态仍然存在，无法激活下次编辑",
+		"test": "无",
+		"bugno": "1366948225528",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-26 11:52:48",
+		"fixedVersion": "1.5.1.5",
+		"solution": "在内部接口触发时，检测当前验证状态，等待用户修正数据后接口才能继续运行",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid在配置了单选框列时，选择表头的单选框然后获取数据会得到一个所有数据值都为null的对象",
+		"cause": "标题列确实没有数据可以获取",
+		"test": "无",
+		"bugno": "1366855206278",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-25 10:02:37",
+		"fixedVersion": "1.5.1.5",
+		"solution": "去除标题列的单选框",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "DataGrid刷新数据时，如果返回数据为空数组的话，界面不会重新渲染",
+		"cause": "DataGrid在判断界面渲染时如果没有数据则直接返回不做任何处理",
+		"test": "无",
+		"bugno": "1366855042448",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-25 09:59:56",
+		"fixedVersion": "1.5.1.5",
+		"solution": "在没有数据时仍然需要渲染数据区域，将优化判断后置到其他界面数据处理功能之前",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "tabs控件在ie6下removeTab方法无效",
+		"cause": "ie6下修改iframe的src属性的方法无效",
+		"test": "无",
+		"bugno": "1366708028034",
+		"browser": "ie6",
+		"coder": "姜玲",
+		"datetime": "2013-04-23 17:08:42",
+		"fixedVersion": "1.5.1.5",
+		"solution": "改成原生修改iframe的src属性的方法即可",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "下拉多选树在清空选中项点确定后，值没有了，但文本还在",
+		"cause": "值没有了时，文本变量里还有之前的值",
+		"test": "无",
+		"bugno": "1366707988178",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-04-23 17:06:54",
+		"fixedVersion": "1.5.1.5",
+		"solution": "值没有了时，文本变量里的值同时清空",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "表单判断是否验证通过的方法结果不正确",
+		"cause": "表单提交这块有改过，没有把这个方法相应改好",
+		"test": "无",
+		"bugno": "1366622792892",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-04-22 17:26:21",
+		"fixedVersion": "1.5.1.5",
+		"solution": "相应改好",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "不依赖DataGrid的InitSource属性加载数据导致表头和表数据无法对齐",
+		"cause": "在DataGrid的首次加载数据时会计算数据区域的高度，并根据此高度和数据容器的高度比较结果来修正表头的滚动条预留宽度，因此如果首次加在时没有数据会导致其后的数据加在也不会触发数据高度以及表头滚动条宽度计算",
+		"test": "无",
+		"bugno": "1366335910160",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-19 09:50:10",
+		"fixedVersion": "1.5.1.5",
+		"solution": "修改首次加载数据时计算为首次加在有效数据时计算",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "同时启用DataGrid的数据合并和行内编辑时，被合并的行无法使用行内编辑",
+		"cause": "数据合并后，表格的列索引会发生变化，未合并前的cellIndex是7但如果前面所有列都合并了，那么他的cellIndex会变成0，如此导致根据列索引查找列配置时返回错误值，导致无法启用行内编辑",
+		"test": "无",
+		"bugno": "1366335701118",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-19 09:45:28",
+		"fixedVersion": "1.5.1.5",
+		"solution": "在启用合并功能时，在td元素上增加realCellIndex属性以供行内编辑时获取正确的索引值",
+		"version": "1.5.1.4"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "复选框组竖向布局第一列没判断准确",
+		"cause": "复选框组竖向布局改为函数模板时有对应竖向布局时的判断没判断准，函数模板里对应之前的row_id改i时，一个是1开始，一个是0开始的，改成i后是0开始的而不是1开始的",
+		"test": "无",
+		"bugno": "1365754858204",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-04-12 16:21:57",
+		"fixedVersion": "1.5.1.4",
+		"solution": "函数模板里对应之前的row_id改i时，一个是1开始，一个是0开始的，改成i后是0开始的",
+		"version": "1.5.1.3"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "树变更父节点时出错，移动枝节点后结果不正确。",
+		"cause": "树变更父节点时出错，移动枝节点后结果不正确。之前移动父节点是先删除再添加的。没测试整个移动一个枝节点会出问题。",
+		"test": "无",
+		"bugno": "1365751802187",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-04-12 15:33:57",
+		"fixedVersion": "1.5.1.4",
+		"solution": "整个改成先修改数据，然后移动节点，再整理相关样式，不依赖删除和添加节点的方法。",
+		"version": "1.5.1.3"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "异步树节点判断是否枝节点的结果是不正确的",
+		"cause": "异步树节点没加入判断",
+		"test": "无",
+		"bugno": "1365736041558",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-04-12 11:09:17",
+		"fixedVersion": "1.5.1.4",
+		"solution": "加入判断，如果是asny为真时，则不管是否有叶节点的数据都为枝节点",
+		"version": "1.5.1.3"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "选人控件树里只有一个人时，没有自动选过去",
+		"cause": "选人控件树新版本这个功能点没测试仔细",
+		"test": "无",
+		"bugno": "1365735862528",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-04-12 11:07:15",
+		"fixedVersion": "1.5.1.4",
+		"solution": "选人控件树里只有一个人时，自动选过去对应改好",
+		"version": "1.5.1.3"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "修复弹出框阴影在闪烁状态下时，关闭弹出框的同时立即点击锁屏层可能会出现阴影不能正确隐藏的问题。",
+		"cause": "计时器id变量在异步触发操作时，可能会被覆写导致不能正确立即结束应该结束的计时器。",
+		"test": "无",
+		"bugno": "1365733198304",
+		"browser": "全部",
+		"coder": "程伟",
+		"datetime": "2013-04-12 10:23:58",
+		"fixedVersion": "1.5.1.4",
+		"solution": "修正相关状态下的判断，以确保正确执行了对应的操作。",
+		"version": "1.5.1.3"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "修复MessageBox控件预设消息框（alert、confirm、prompt等）用户回调返回值（&ldquo;return false&ldquo;）未正确处理导致页面卸载时可能抛出执行已释放脚本错误的问题。",
+		"cause": "用户回调函数的返回值未被返回给主调函数。",
+		"test": "无",
+		"bugno": "1365729954470",
+		"browser": "全部",
+		"coder": "程伟",
+		"datetime": "2013-04-12 09:29:50",
+		"fixedVersion": "1.5.1.4",
+		"solution": "返回用户回调函数的返回值给主调函数。",
+		"version": "1.5.1.3"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "tabs的ie6的宽度不对",
+		"cause": "tabs的ie6的宽度计算时写错为高度",
+		"test": "无",
+		"bugno": "1365664855191",
+		"browser": "ie6",
+		"coder": "姜玲",
+		"datetime": "2013-04-11 15:21:32",
+		"fixedVersion": "1.5.1.3",
+		"solution": "tabs的ie6的宽度计算时写错为高度",
+		"version": "1.5.1.2"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "下拉树用其他数据源重新加载数据报错",
+		"cause": "新改版的下拉树数据集都托给树在管理，下拉树不能直接刷新数据",
+		"test": "无",
+		"bugno": "1365664624517",
+		"browser": "全部",
+		"coder": "姜玲",
+		"datetime": "2013-04-11 15:19:30",
+		"fixedVersion": "1.5.1.3",
+		"solution": "调用下拉树的刷新方法时，下拉树去调树的刷新方法",
+		"version": "1.5.1.2"
+	}, {
+		"personLiable": "",
+		"bugsynopsis": "IE6下拉框提示动态模板渲染失败",
+		"cause": "改进后的动态模板渲染未对跨级渲染做处理，导致下拉面板跨级创建追加失败，进而引发下拉项的动态模板渲染时提示未指定动态模板容器",
+		"test": "无",
+		"bugno": "1365664331798",
+		"browser": "ie6",
+		"coder": "袁刚",
+		"datetime": "2013-04-11 15:13:04",
+		"fixedVersion": "1.5.1.3",
+		"solution": "改进动版模板渲染，使其支持跨级创建",
+		"version": "1.5.1.2"
+	}, {
+		"bugsynopsis":"DataGrid刷新或者翻页会导致高度变小",
+		"bugno" : 1365582077508,
+		"personLiable": "",
+		"cause": "DataGrid如果设置了高度，在初始化时会计算数据区域高度，并将计算结果保存，刷新时会取上一次数据区域的高度当做整体高度重新计算，导致每次刷新过后DataGrid高度都会缩小",
+		"test": "无",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-10 16:05:03",
+		"fixedVersion": "1.5.1.3",
+		"solution": "只在第一次构建时根据设置的高度计算数据区域高度，另外数据区域的高度值也不再覆盖总体高度值",
+		"version": "1.5.1.2"
+	}, {
+		"bugsynopsis":"Select的onItemDblclick事件会导致",
+		"bugno" : 1365582117410,
+		"personLiable": "姜玲",
+		"cause": "下拉框选项双击事件会在下拉框选项执行俩次单击事件后触发，如果当前选项在事件前是未选中状态，俩次单击事件会依次选中当前项然后取消选中当前项，这样导致双击事件触发时，当前项并没有被选中",
+		"test": "无",
+		"browser": "全部",
+		"coder": "袁刚",
+		"datetime": "2013-04-09 17:01:31",
+		"fixedVersion": "1.5.1.3",
+		"solution": "双击事件时下拉框强制当前项为选中项，不受之前的俩次单击事件影响",
+		"version": "1.5.1.2"
+	}, {
+		"bugsynopsis":"DataGrid展开行内信息会导致标题与数据对不齐",
+		"bugno" : 1365582174651,
+		"personLiable": "",
+		"cause": "DataGrid设置了固定高度并且配置行内信息展现时，展开行内信息会导致表格数据区域高度变化并自动出现滚动条，滚动条占位将数据单元格左移，导致行数据与表头对不齐问题",
+		"test": "无",
+		"browser": "全部",
+		"coder": "袁刚",
+		"fixedVersion": "1.5.1.3",
+		"solution": "在展开或关闭行内信息时导致DataGrid数据区域高度变化时调用Thead子类中adaptWidth(已实现)方法，使表头能根据表数据区域的滚动条自适应",
+		"version": "1.5.1.2"
+	}, {
+		"bugsynopsis":"表单reset方法会清空静态默认值",
+		"bugno" : 1365582239158,
+		"coder": "姜玲",
+		"browser": "全部",
+		"cause": "修复表单重置方法不能重置静态值的问题",
+		"fixedVersion": "1.5.1.3",
+		"personLiable": "",
+		"test": "无",
+		"solution": "表单在setValue方法里先调用所有控件的getValue方法再统一保存",
+		"version": "1.5.1.2"
+	}, {
+		"bugsynopsis":"选人控件reloadTree方法会报参数错误",
+		"bugno" : 1365582202079,
+		"coder": "姜玲",
+		"browser": "全部",
+		"cause": "修复选人控件reloadTree方法调用前没有treeInitSource参数就会报错问题",
+		"fixedVersion": "1.5.1.3",
+		"personLiable": "",
+		"test": "无",
+		"solution": "选人控件tree有没有treeInitSource参数值都保存实例",
+		"version": "1.5.1.2"
+	}, {
+		"bugsynopsis":"自定义正则验证里不能带逗号",
+		"bugno" : 1365582253965,
+		"version": "1.5.1.2", // 版本
+		"cause": "验证里的自定义正则验证里不能带逗号", // 原因
+		"browser": "全部", // 浏览器
+		"solution": "取消使用逗号作为分隔符,分隔符待定", // 解决方案
+		"test": "无", //测试用例
+		"coder": "姜玲", // 作者
+		"personLiable": "",//责任人
+		"fixedVersion": "1.5.1.3"
+	}, {
+		"bugsynopsis":"下拉树只读节点点击触发onchang事件",
+		"bugno" : 1365582257157,
+		"version": "1.5.1.2", // 版本
+		"cause": "下拉树只读节点点击触发onchang事件", // 原因
+		"browser": "全部", // 浏览器
+		"solution": "判断是否节点是只读的，不是只读才触发", // 解决方案
+		"test": "无", //测试用例
+		"coder": "姜玲", // 作者
+		"personLiable": "",//责任人
+		"fixedVersion": "1.5.1.3"
+	}
+]

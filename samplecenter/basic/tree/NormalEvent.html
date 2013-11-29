@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>基本树的事件</h4>
+        <ul>        
+        <li>双击、单击、收缩、展开方法。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+		//节点双击事件
+        var nodeDblClick=function(e,id,val){
+			fastDev.tips("双击了"+id+"："+val+"的节点");
+		}
+		//节点单击事件
+        var nodeClick=function(e,id,val){
+			fastDev.tips("点击了"+id+"："+val+"的节点");
+		}
+		//展开节点后事件接口
+        var expand=function(id){
+			fastDev.tips("展开了"+id+"节点");
+		}
+		//收缩节点后事件接口
+        var collect=function(id){
+			fastDev.tips("收缩了"+id+"节点");
+		}
+        
+        </script>	
+	</head>
+	<body><div style="margin:10px;">
+    <table>
+           <tr>
+           <td><div >
+			<div class="ui-layout-text">双击事件</div>        
+			<div itype="Tree"  initSource="../../data/tree_data.txt" customFields="url" showIco="true" topParentid="0" openFloor=2  id="tree1" saveInstance="true" onNodeDblClick="nodeDblClick()"  ></div>
+	</div>
+           </td>
+           <td> <div >
+    	<div class="ui-layout-text">单击、展开、折叠事件</div>    
+			<div itype="Tree"  initSource="../../data/tree_data.txt" customFields="url" showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true" onNodeClick="nodeClick()" onExpand="expand()" onCollect="collect()" ></div>
+	</div>
+           </td>       
+           </tr>
+           </table>
+   </div>
+	</body>
+</html>

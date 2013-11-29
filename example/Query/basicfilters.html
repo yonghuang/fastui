@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Basic Filters</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script>
+			$(function(){
+				function clearCss() {
+					$("li,h1,h2").css("border", "none");
+				}
+				
+				$("#btn1").bind("click", function() {
+					clearCss();
+					// 获取第一个元素
+					$("li:first").css("border", "2px dotted blue");
+				});
+				
+				$("#btn2").bind("click", function() {
+					clearCss();
+					// 获取最后一个元素
+					$("li:last").css("border", "2px dotted blue");
+				});
+				
+				$("#btn3").bind("click", function() {
+					clearCss();
+					// 去除所有与给定选择器匹配的元素
+					$("li:not(.liClass)").css("border", "2px dotted blue");
+				});
+				$("#btn4").bind("click", function() {
+					clearCss();
+					//匹配所有索引值为偶数的元素
+					$("li:even").css("border", "2px dotted blue");
+				});
+				
+				$("#btn5").bind("click", function() {
+					clearCss();
+					//匹配所有索引值为奇数的元素
+					$("li:odd").css("border", "2px dotted blue");
+				});
+				
+				$("#btn6").bind("click", function() {
+					clearCss();
+					//匹配一个给定索引值的元素
+					$("li:eq(4)").css("border", "2px dotted blue");
+				});
+				
+				$("#btn7").bind("click", function() {
+					clearCss();
+					//匹配所有大于给定索引值的元素
+					$("li:gt(2)").css("border", "2px dotted blue");
+				});
+				
+				$("#btn8").bind("click", function() {
+					clearCss();
+					//匹配所有小于给定索引值的元素
+					$("li:lt(2)").css("border", "2px dotted blue");
+				});
+				
+				$("#btn9").bind("click", function() {
+					clearCss();
+					//匹配如 h1, h2, h3之类的标题元素
+					$(":header").css("border", "2px dotted blue");
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		获取最后一个元素:<input type="button" value="li:first" id="btn1"/><br>
+		获取最后一个元素:<input type="button" value="li:last" id="btn2"/><br>
+		去除所有与给定选择器匹配的元素:<input type="button" value="li:not(.liClass)" id="btn3"/><br>
+		匹配所有索引值为偶数的元素:<input type="button" value="li:even" id="btn4"/><br>
+		匹配所有索引值为奇数的元素:<input type="button" value="li:odd" id="btn5"/><br>
+		匹配一个给定索引值的元素:<input type="button" value="li:eq(4)" id="btn6"/><br>
+		匹配所有大于给定索引值的元素:<input type="button" value="li:gt(2)" id="btn7"/><br>
+		匹配所有小于给定索引值的元素:<input type="button" value="li:lt(2)" id="btn8"/><br>
+		匹配如 h1, h2, h3之类的标题元素:<input type="button" value=":header" id="btn9"/><br>
+		<!-- HTML元素测试区 -->
+		<ul>
+			<li>
+				list item 1
+			</li>
+			<li>
+				list item 2
+			</li>
+			<li class="liClass">
+				list item 3 class="liClass"
+			</li>
+			<li>
+				list item 4
+			</li>
+			<li class="liClass">
+				list item 5 class="liClass"
+			</li>
+		</ul>
+		<h1>Header 1</h1>
+		<p>Contents 1</p>
+		<h2>Header 2</h2>
+		<p>Contents 2</p>
+		<input type="text" id="input1">
+	</body>
+</html>
+

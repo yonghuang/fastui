@@ -1,0 +1,99 @@
+    .cu-div {
+        background-color: #eaf1f9;
+        border: 1px solid #AFCFDD;
+        height: 240px;
+        padding-left: 12px;
+        min-width: 950px;
+    }
+    .cu-l-div1 {
+        float: left;
+        width: 25%;
+    }
+    .cu-l-div2 {
+        float: left;
+        width: 32%;
+    }
+    .cu-l-div3 {
+        float: left;
+        width: 80px;
+        padding-top: 73px;
+    }
+    .cu-l-div4 {
+        float: left;
+        width: 25%;
+    }
+    .cu-l-div5 {
+        float: left;
+        width: 75px;
+    }
+    .cu-title {
+        font-size: 12px;
+        color: #73b4d2;
+        font-weight: bold;
+        width: 100%; 
+        height: 54px;
+        line-height: 54px;
+    }
+    .cu-select {
+        width: 90%;
+        display: block;
+    }
+    .cu-btn {
+        border: 1px solid #8f98a7;
+        background: #8f98a7 url(../images/btnbg.gif) repeat-x;
+        margin: 0 5px;
+        padding: 0 15px;
+        display: block;
+        float: left;
+        color: #0A2A43;
+        text-transform: uppercase;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: normal;
+        height: 22px;
+        line-height: 22px;
+        _line-height: 22px;
+        cursor: pointer;
+        border-radius: 2px;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        width: 45px;
+    }
+    .cu-btn-cllc {
+        text-transform: uppercase;
+        border-radius: 2px;
+        border: 1px solid #eaf1f9;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        text-decoration: none;
+        margin-top: 96px;
+        height: 42px;
+        width: 51px;
+        background: #eaf1f9 url(../images/culiliucheng.jpg) repeat-x;
+        cursor: pointer-x;
+    }
+    .cu-multiple {
+        width: 90%; 
+        height: 141px;
+    }
+    .cu-tree {
+        width: 90%;
+        height: 138px;
+        background-color: #FFF;
+        border: 1px solid #000;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+        max-height: 138px; 
+    }
+    .cu-l-div4 select {
+        height: 141px
+    }
+    .cu-l-div5 input {
+        border: 1px solid #EAF1F9;
+        height: 42px;
+        margin-top: 96px;
+    }
+    .form dd div .cu-l-div3 {
+        padding-top: 73px;
+    }

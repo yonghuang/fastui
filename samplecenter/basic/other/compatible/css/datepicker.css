@@ -1,0 +1,322 @@
+    @charset "utf-8";
+	.datepicker_ui {
+		border-top-style: none;
+		color: #445566;
+		font-size: 12px;
+		font-family: Verdana, Arial, Helvetica, AppleGothic, sans-serif;
+		/*height: 100%;*/
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+    /*
+     * 日历控件弹出窗口div样式
+     * */
+    .datepicker-div {
+        background: #fff;
+        border: 1px solid #99BCE8;
+        color: #333;
+        margin: 1px 0 0;
+        width: 190px;
+    }
+	/*
+     * 日历控件input样式
+     * */
+    .datepicker-input {
+        background: url(../images/calendar.gif) right center no-repeat;
+        border: 1px solid #A0BCD4;
+        cursor: pointer;
+        height: 18px !important;
+        _height: 16px !important;
+        color:#333 !important;
+    }
+	/*
+     * 日历控件弹出窗口header div样式
+     * */
+    .datepicker-header {
+        background: #BCD9FF url(../images/dialog_titlebg.gif) repeat-x center center;
+        color: #075587;
+        font: bold 13px/26px Arial, "微软雅黑";
+        height: 26px;
+        position: relative;
+        text-align: center;
+    }
+    .datepicker-hiden {
+        display: none;
+    }
+    .datepicker-header a {
+        height: 12px;
+        position: absolute;
+        top: 6px;
+        width: 12px;
+    }
+	/*
+     * 日历控件弹出窗口 时钟table样式
+     * */
+    .datepicker-times-select .table {
+        border-bottom-width: 0;
+        font: 11px/14px Arial;
+        padding: 0;
+        margin: 0;
+        table-layout: fixed;
+        width: 100%;
+    }
+    .datepicker-times-select .table td {
+        padding: 0;
+        margin: 0;
+        text-align: center;
+    }
+	/*
+     * 日历控件弹出窗口header 选择年月图标样式
+     * */
+    .datepicker-year-prev {
+        background: url(../images/datepicker-ico.gif) 24px -54px;
+        cursor: pointer;
+        text-indent: -99999px;
+        overflow: hidden;
+        left: 5px;
+    }
+    .datepicker-year-next {
+        background: url(../images/datepicker-ico.gif) 12px -54px;
+        cursor: pointer;
+        text-indent: -99999px;
+        overflow: hidden;
+        right: 5px;
+    }
+    .datepicker-edit-text {
+        border: 0 none;
+	    cursor: pointer;
+	    height: 20px;
+	    margin-top: 2px;
+	    text-align: center;
+	    width: 45px;
+	    font-size:14px;
+	    background:#BCD9FF url(../images/dialog_titlebg.gif) repeat-x center center;
+	    border:1px solid transparent !important;
+	    _border-color:tomato;  
+		_filter:chroma(color=tomato);
+	    box-shadow: none !important;
+		-webkit-box-shadow: none !important;
+		-moz-box-shadow: none !important;
+    }
+    .datepicker-edit-text-over {
+        border: 0 none;
+	    cursor: pointer;
+	    height: 20px;
+	    margin-top: 2px;
+	    text-align: center;
+	    width: 45px;
+	    font-size:14px;
+    }
+    .datepicker-downYearDiv {
+    	text-align:center;
+    	margin:0 auto 3px;
+    }
+    .datepicker-downYearDiv a {
+    	display:inline-block;
+    }
+    .datepicker-downYearDiv a:hover{
+    	text-decoration:none;
+    	color:#369;
+    }
+    .datepicker-downYearDiv .anchor{
+    	height:12px;
+    	width:40px;
+    	overflow: hidden;
+    	position: relative;
+		top: -3px;
+    }
+    .datepicker-yeartable-prev {
+    	background:url(../images/datepicker-ico.gif) 0 -54px;
+    	text-indent: -99px;
+    	*margin-left:99px;
+    	overflow: hidden;
+    	height: 12px;
+    	width:12px;
+    }
+    .datepicker-yeartable-next {
+    	background:url(../images/datepicker-ico.gif) 36px -54px;
+    	text-indent: -99px;
+    	overflow: hidden;
+    	height: 12px;
+    	width:12px;
+    }
+    .datepicker-table .anchor{
+    	font-size:14px !important;
+    }
+    .datepicker-table .anchor a:hover{
+    	font-weight:normal;   	
+    }
+    .datepicker-month-prev {
+        background: url(../images/datepicker-ico.gif) 0 -54px;
+        cursor: pointer;
+        text-indent: -99999px;
+        overflow: hidden;
+        left: 20px;
+    }
+    .datepicker-month-next {
+        background: url(../images/datepicker-ico.gif) 36px -54px;
+        cursor: pointer;
+        text-indent: -99999px;
+        overflow: hidden;
+        right: 20px;
+    }
+	/*
+     * 日历控件弹出窗口　日期table样式
+     * */
+    .datepicker-table {
+        color: #0E2C44;
+        font-size: 12px/21px Verdana, Arial, sans-serif;
+        margin: 0;
+        border:none;
+        table-layout: fixed;
+        width: 100%;
+    }
+    .datepicker-table thead{
+    	border:none;
+    }
+	/*
+     * 日历控件弹出窗口 日期table第一行标题样式
+     * */
+    .datepicker-table th {
+        /*background-color: #cce7ff;
+        color: #444;
+        font-weight: normal;
+        white-space: nowrap;*/
+        text-align: center;
+        background: #E2EEFF;
+        border:none;
+		border-top: 1px solid #8BB6EF;
+		border-bottom: 1px solid #99BCE8;
+		color: #30607F;
+		font-size: 14px;
+		padding: 3px 0;
+		height:20px;
+		line-height:20px;
+    }
+	/*
+     * 日历控件弹出窗口 日期table td样式
+     * */
+    .datepicker-table td {
+        background-color: #fff;
+        border-collapse: separate !important;
+        color: #333;
+        padding:2px 0;
+        text-align: center;
+        font-weight: normal;
+        height:auto !important;
+    }
+	/*
+     * 日历控件弹出窗口 日期table td 链接字样式
+     * */
+    .datepicker-table td a:link, .datepicker-table td a:visited {
+        background: #fff;
+    }
+    .datepicker-table td a:hover, .datepicker-table td a:active {
+        /*font-weight: bold;*/
+        color:#FF663A;
+    }
+	/*
+     * 日历控件弹出窗口 日期table td样式
+     * */
+    .datepicker-table td a {
+        color: #333;
+        text-decoration: none;
+    }
+    .datepicker-table td.highlight{
+    	background:#FFE7A2;
+    }
+    .datepicker-table td.highlight a {
+        color: #ff663a;
+        font-weight: bold;
+    }
+	/*
+     * 日历控件弹出窗口 日期table 当前日期的样式
+     * */
+    .datepicker-table td.hightlight:hover, .datepicker-table td.hightlight:active {
+        color: #ff663a;
+        font-weight: bold;
+    }
+	/*
+     * 日历控件弹出窗口 日期table td灰色背景样式
+     * */
+    .datepicker-table td.gray {
+        background: #f0f0f0;
+        color: #777;
+    }
+    .datepicker-table td.gray:link, .datepicker-table td.gray:visited, .datepicker-table td.gray:hover, .datepicker-table td.gray:active {
+        color: #777;
+        cursor: default;
+        text-decoration: none;
+        background: #ccc;
+    }
+	/*
+     * 日历控件弹出窗口 日期table td白色背景样式
+     * */
+    .datepicker-table td.whitebg {
+        background: #fff;
+    }
+    .datepicker-table td.whitebg:link, .datepicker-table td.whitebg:visited, .datepicker-table td.whitebg:hover, .datepicker-table td.whitebg:active {
+        background: #fff;
+        text-decoration: none;
+    }
+    .datepicker-table td.whitebg:hover {
+        font-weight: bold;
+        color:#ff663a;
+    }
+    
+	/*
+     * 日历控件弹出窗口 button div样式
+     * */
+    .datepicker-btndiv {
+        background: #E7EFFE url(../images/datepicker-btndiv-bg.gif) repeat-x;
+        padding: 2px 0;
+        text-align: right;
+        border-top: 1px solid #A6C9E2;
+    }
+	/*
+     * 日历控件弹出窗口 table基础样式
+     * */
+    td, th {
+        /*cursor: pointer;*/
+        display: table-cell;
+        vertical-align: inherit;
+    }
+    .datepicker-div .table {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+	/*
+     * 日历控件弹出窗口 时钟div样式
+     * */
+    .datepicker-footer {
+        background: #f3f7fa /*url(../images/datagridImg.gif) 0 0 repeat-x*/;
+        color: #075587;
+        font-size: 12px/24px Verdana, Arial, "宋体";
+        height: 22px;
+        /*position:relative;*/
+        text-align: center;
+        vertical-align: middle;
+        border-top: 1px solid #99BCE8;
+        padding:3px 0 0;
+    }
+    /*
+     * 日历控件弹出窗口 时钟选择图标样式
+     * */
+    .datepicker_arrowtop {
+        background: url(../images/icon_arrowtop.gif) no-repeat center center;
+        border: none;
+        display: inline-block;
+        height: 16px;
+        vertical-align: middle;
+        width: 18px;
+    }
+    .datepicker_arrowdown {
+        background: url(../images/icon_arrowdown.gif) no-repeat center center;
+        border: none;
+        display: inline-block;
+        height: 16px;
+        vertical-align: middle;
+        width: 18px;
+    }

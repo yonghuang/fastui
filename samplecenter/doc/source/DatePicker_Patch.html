@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.namespace(&quot;talkweb.Components&quot;);
+fastDev.define(&quot;fastDev.Patch.Datepicker&quot;, {
+	extend : &quot;fastDev.Ui.DatePicker&quot;,
+	alias : &quot;Patch.DatePicker&quot;,
+	mapping : {
+		&quot;TimeafterID&quot; : &quot;timeBefore&quot;,
+		&quot;FormertimeID&quot; : &quot;timeAfter&quot;
+	},
+	parseAttr : function(config) {
+		if (config.isPanle) {
+			config.display = &quot;inline&quot;;
+		}
+		if (config.switchClock === &quot;on&quot;) {
+			config.showTimePicker = true;
+		}
+		if (!config.width) {
+			config.width = &quot;177px&quot;;
+		}
+		if (!config.trigger) {
+			config.trigger = &quot;click&quot;;
+		}
+		if ( typeof config.callback === &quot;function&quot;) {
+			var onSelect = config.callback;
+			config.onSelect = function(date, value) {
+				onSelect.call(this, value, date);
+			};
+		}
+		if (/\d{4}\-\d{1,2}-\d{1,2}\s+\d+.*/.test(fastDev.Util.StringUtil.trim(config.value))) {
+			config.format = &quot;yyyy-MM-dd HH:mm:ss&quot;;
+		} else {
+			config.format = fastDev.Util.StringUtil.trim(config.displayFormat || &quot;yyyy-mm-dd&quot;).toLowerCase() === &quot;yyyy-mm-dd&quot; ? &quot;yyyy-MM-dd&quot; : &quot;yyyy-MM-dd HH:mm:ss&quot;;
+		}
+		return fastDev.create(&quot;Patch.DatePicker&quot;, fastDev.parseMapping(config, this.mapping));
+	}
+});
+talkweb.Components.Datepicker = function(config) {
+	return fastDev.Patch.Datepicker.parseAttr(config);
+};
+</pre>
+</body>
+</html>

@@ -1,0 +1,133 @@
+﻿.fileuploadbody {
+	margin:0;  padding:0; border:1px solid #c6c6c6;
+}
+
+/* header
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.fileupload-headerdiv {
+    background: url(../images/upload.gif) repeat-x;
+	border-bottom:1px solid #a41100;
+	height:28px;
+	margin:0 auto;
+	padding:0;
+	width:100%;
+}
+.fileupload-headerdiv div {
+    background:url(../images/upload.gif) repeat-x;
+	height:28px;
+	font:bold 14px/28px "微软雅黑";
+	padding:0 12px;
+	margin:0;
+	width:660px;
+}
+
+/* content
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.fileupload-conternt {
+    background:#fff;
+	height: auto;width:100%; overflow:hidden;
+}
+
+.fileupload-conternt .uploadtable1 {
+    width:100%; margin:0 0 12px; padding:0;
+	border-collapse:collapse;
+}
+.fileupload-conternt .uploadtable1 td {
+    text-align:left; font-weight:normal;color:#d43a00; text-indent:20px;
+	line-height:30px; padding:0;cursor:default; vertical-align:middle;
+}
+.fileupload-conternt .uploadtable1 .tdbg {
+    background:#fcfcfc; border-bottom:1px solid #f1f1f1; height:34px; clear:both;
+}
+.fileupload-conternt .uploadtable2 {
+    width:100%; margin:10px 0 0;
+	border-collapse:collapse;
+}
+.fileupload-conternt .uploadtable2 td {
+    padding:0;height:28px; line-height:28px; color:#333; cursor: default; text-indent:20px;
+}
+.fileupload-conternt .uploadtable2 td span {
+	height:28px; margin:0 4px;
+}
+
+
+/* button
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+a.fileupload:link, a.fileupload:active, a.fileupload:visited {
+	background: #f6f6f6 url(../images/btn/btnbg.gif) repeat-x;
+	border:1px solid #D0E1E6;
+	color:#4f4f4f;
+	display:block;
+	float:right;
+	font:normal 12px/22px "宋体";
+	height: 22px;
+	padding:0 8px 0 0;
+	margin:0 12px 0 0;
+	vertical-align:middle;
+	text-transform:uppercase;
+	text-decoration:none;
+}
+a.fileupload:hover{
+	background: #f6f6f6 url(../images/btn/btnbg_hover.gif) repeat-x;
+	border:1px solid #cdcdcd;
+	color:#4f4f4f;
+	vertical-align:middle;
+	text-decoration:none;
+}
+.fileupload span{
+	color:#4f4f4f;font:normal 12px/22px "宋体";
+	text-transform:lowercase;
+	padding:1px 0 1px 0px; margin:0;vertical-align:middle;
+    hide-focus:expression(this.hideFocus=true);
+}
+a.fileupload span.load{
+background: url(../images/upload_load.gif) no-repeat left top;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.fileupload span.delete {
+background: url(../images/upload_delete.gif) no-repeat left top;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.fileupload span.add{
+background: url(../images/upload_add.gif) no-repeat left top;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+.fileupload-conternt .uploadtable1 div {width: auto;position:relative; height:24px; float:right; padding:0px; vertical-align:middle; overflow:hidden;}
+.fileupload-conternt .uploadtable1 label {float:left; heigth:24px; margin:0; padding:0;}
+.fileupload-conternt .uploadtable1 .file {position:absolute;top:0px;left:3px; right:0;width:90px;height:24px;filter:alpha(opacity=0); -moz-opacity:0;opacity:0;padding:0; cursor:hand;}
+
+span.fileupload_btnred  {
+    background:url(../images/upload_icon1.gif) #fff no-repeat left bottom; width:16px; height:16px; cursor:pointer;
+	text-decoration:none; display:inline-block;
+}
+span.fileupload_btnyellow  {
+    background:url(../images/upload_icon2.gif) #fff no-repeat left bottom; width:16px; height:16px; cursor:pointer;
+	text-decoration:none; display:inline-block;
+}
+span.fileupload_btngreen  {
+    background:url(../images/upload_icon3.gif) #fff no-repeat left bottom; width:16px; height:16px; cursor:pointer;
+	text-decoration:none; display:inline-block;
+}
+span.fileupload_btn4  {
+    background:url(../images/upload_icon4.gif) #fff no-repeat left bottom; width:16px; height:16px; cursor:pointer;
+	text-decoration:none; display:inline-block;
+}
+
+
+/* footer
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.fileupload-footerdiv {
+	background:#fff4d9;
+	border-top:1px solid #fff;
+	color:#999;
+	height:28px;
+	line-height:28px;
+	padding:0 20px;
+    margin:0;
+	text-align:right;
+}

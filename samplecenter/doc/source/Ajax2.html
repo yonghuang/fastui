@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.define(&quot;fastDev.Core.Ajax&quot;, {
+	ajax : function(url, option) {
+		if(/post/i.test(option.type)) {
+			this.post(url, option);
+		} else {
+			this.get(url, option);
+		}
+	},
+	get : function(url, option) {
+		fastDev.create(&quot;Proxy&quot;, {
+			url : url,
+			onError : option.error
+		}).load(option.data, option.success);
+	},
+	post : function(url, option) {
+		fastDev.create(&quot;Proxy&quot;, {
+			action : url,
+			onError : option.error
+		}).save(option.data, option.success);
+	}
+});
+
+fastDev.apply({
+	&quot;get&quot; : fastDev.Core.Ajax.get,
+	&quot;post&quot; : fastDev.Core.Ajax.post,
+	&quot;ajax&quot; : fastDev.Core.Ajax.ajax
+});
+</pre>
+</body>
+</html>

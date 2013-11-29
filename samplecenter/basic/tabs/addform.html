@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>        
+        <li>基本功能</li>
+        <li>表单里的控件不可缺少itype与id属性，否则表单读不到控件</li>
+        <li>requestType默认为get,提交的内容较多时，如用到文本域，富文本框一般设置为post</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+	  <script>
+			//提交
+			var submit=function(){
+				var txtempno=fastDev.getInstance("id").getValue();
+				var txtname=fastDev.getInstance("name").getValue();
+				var tab1=window.parent.fastDev.getInstance("tabs1");
+				alert("添加成功后，本页面将关闭并刷新前一个页面里的datagrid控件");
+				tab1.setActiveTabByTitle("datagrid页面");
+				var datagrid= window.parent.document.getElementById("datagrid").contentWindow.fastDev.getInstance("datagrid1");
+				var config={};
+				config.data=[].slice(0).concat({"empno": txtempno,"name": txtname});
+				config.renderer=true;
+				config.overwrite=false;
+				datagrid.refreshDataSet(config);
+				tab1.removeTab("添加员工信息");
+			}
+			
+			
+		</script>
+	</head>
+	<body>
+		<table width="800px" border="0" style="margin:10px;" class="ui-form-list">
+        <tr>
+        <td><div class="ui-layout-text">新增员工信息</div></td> <td></td>
+        </tr>        
+		  <tr>
+		    <td>员工工号:</td>
+		    <td><input itype="TextBox" id="id" saveInstance="true"></td>
+	      </tr>
+		  <tr>
+		    <td>姓名:</td>
+		    <td><input itype="TextBox" id="name" saveInstance="true"></td>
+	      </tr>		  
+         </table>
+         <div style="width:400px; text-align:center">
+			<div itype="Button" text="提交" onclick="submit()" ></div>
+		</div>
+	</body>
+</html>

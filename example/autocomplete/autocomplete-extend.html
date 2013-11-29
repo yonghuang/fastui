@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>AutoComplete</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/jquery-1.7.2.js"></script>
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+		<script src="../../src/component/MessageBox.js"></script>
+		<script src="../../src/component/ProgressBar.js"></script>
+
+		<script src="../../src/component/form/Box.js"></script>
+		<script src="../../src/component/list/Tree.js"></script>
+		<script src="../../src/component/form/AutoComplete.js"></script>
+
+		<script type="text/javascript">
+			var ac;
+			fastDev(function() {
+				fastDev.create("AutoComplete", {
+					container : "example1",
+					items : "Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin,Felix,Gavin,Greg,Harlan,Jack,Jeff,Kelly,King,Lance,Levi,Marcus,Newman,Norton,Ivan,Oscar,Peter,Quinn,Robin,Simon,Sam,Tiffany,Virgil,Will,Xavier,Zachary",
+					matchContains : false,
+					highlightCls : "ui-highlight-custom",
+					multiple : true,
+					width : 300,
+					hintText : "输入字符以查询",
+					noResultsText : "未查询到结果",
+					selectionLimit : 6
+				});
+
+				fastDev.create("AutoComplete", {
+					container : "example2",
+					items : "Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin,Felix,Gavin,Greg,Harlan,Jack,Jeff,Kelly,King,Lance,Levi,Marcus,Newman,Norton,Ivan,Oscar,Peter,Quinn,Robin,Simon,Sam,Tiffany,Virgil,Will,Xavier,Zachary",
+					matchContains : false,
+					highlightCls : "ui-highlight-custom",
+					itemRenderer : function(data, keyword) {
+						return "<img src='img.gif' width='20px' height='20px' align='middle'/><span style='padding:4px;'>" + data + "</span>";
+					}
+				});
+
+				ac = fastDev.create("AutoComplete", {
+					container : "example4",
+					width : 300,
+					value : "标签A,标签B,标签C",
+					multiple : true,
+					items : "Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin,Felix,Gavin,Greg,Harlan,Jack,Jeff,Kelly,King,Lance,Levi,Marcus,Newman,Norton,Ivan,Oscar,Peter,Quinn,Robin,Simon,Sam,Tiffany,Virgil,Will,Xavier,Zachary",
+					highlightCls : "ui-highlight-custom",
+					disabled : true
+				});
+
+				fastDev.create("AutoComplete", {
+					container : "example3",
+					matchContains : false,
+					multiple : true,
+					width : 500,
+					highlightCls : "ui-highlight-custom",
+					hintText : "输入字符以查询",
+					noResultsText : "未查询到结果",
+					scrollHeight : 200,
+					initSource : "data2.jsp",
+					fields : ["id", "pid", "val"],
+					resultRenderer : function(ui, data, keyword) {
+						// this指向AutoComplete控件
+						var that = this;
+						var tree = fastDev.create("Tree", {
+							container : fastDev(ui).css("height", 300),
+							id : "tree1",
+							topGroup : "0",
+							showIco : true,
+							openFloor : 10,
+							items : data,
+							saveInstance : true,
+							onNodeClick : function(id) {
+								var tree = fastDev.getInstance("tree1");
+								that.setValue({
+									text : tree.getValByid(id),
+									value : id
+								});
+							}
+						});
+					}
+				});
+			});
+
+			function enable() {
+				ac.enable();
+			};
+
+			function disable() {
+				ac.disable();
+			};
+
+			function readonly(b) {
+				ac.setReadOnly(b);
+			};
+
+			function setValue() {
+				ac.setValue("标签A,标签B,标签C");
+			};
+
+			function getValue() {
+				alert(ac.getValue());
+			};
+
+		</script>
+
+		<style type="text/css">
+			.ui-highlight-custom {
+				background-color:#81DB2E !important;
+				font-weight:bold !important;
+				font-style:oblique !important;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div>
+			<h2>多值输入模式 </h2>
+			<br />
+			<div id="example1" style="position:relative;left:10px;">
+				multiple属性指定输入框将接受多个值，此时将开启标签模式。默认为false。（此例为true）
+				<br />
+				若标签总宽度超过输入框的宽度，将自动折叠或隐藏前面的标签。
+				<br />
+				标签的数据格式为：text指定标签显示文本，value指定标签的有效标记值。只指定一个则认为另外一个为同值。
+				<br />
+				默认使用 "制表"、"逗号"、"分号"按键将自动创建新的标签。
+				<br />
+				selectionLimit属性将指定值的限制个数，0表示不受限。（此例为6个）
+				<br />
+			</div>
+		</div>
+		<br />
+		<div>
+			<h2>自定义结果列表渲染</h2>
+			<div id="example2" style="position:relative;left:10px;">
+				itemRenderer属性可定义一个回调函数，使得用户可以自定义渲染结果列表。
+				<br />
+				itemRenderer回调传递二个参数，第一个参数data为当前列表项的数据，数据格式根据数据源的不同而不同，第二个参数keyword为结果列表对应的查询关键字。
+				<br />
+				<span style="color: orange;">注意！iremRenderer回调函数必须返回用户定义的需显示的文本值，否则将按默认显示文本值处理。文本中可以带html标签。</span>
+			</div>
+		</div>
+		<br />
+		<div>
+			<h2>完全自定义结果的渲染（实验性质扩展，或被移除）</h2>
+			<div id="example3" style="position:relative;left:10px;">
+				resultRenderer属性可以定义一个回调函数，使得用户可以完全自定义结果的渲染。
+				<br />
+				注意!该回调的优先级高于itemRenderer回调，即若同时指定了这2个回调，将优先且仅执行resultRenderer回调。
+				<br />
+				该回调传递3个参数，第一个参数ui为结果展现的容器，即提示层，第二个参数data为数据值，第三个参数keyword为关键字。
+				<br />
+				若需要
+				<br />
+				以下以展示一棵树为例子
+				<br />
+			</div>
+		</div>
+		<br />
+		<div>
+			<div id="example4" style="position:relative;left:10px;">
+				禁用、启用、只读
+				<br />
+			</div>
+			<div>
+				<button onclick="enable()">
+					启用控件
+				</button>
+				<button onclick="disable()">
+					禁用控件
+				</button>
+				<button onclick="readonly(true)">
+					设置只读
+				</button>
+				<button onclick="readonly(false)">
+					设置可写
+				</button>
+				<button onclick="setValue()">
+					设置控件值
+				</button>
+				<button onclick="getValue()">
+					获取控件值
+				</button>
+			</div>
+		</div>
+	</body>
+</html>
+

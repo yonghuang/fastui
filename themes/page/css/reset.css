@@ -1,0 +1,108 @@
+﻿/*
+主题名称: 页面初始化
+描述: 初始化页面各类标签的默认样式 
+
+[目录表] 
+
+	0- Reset
+	1- Container 
+	2- Links
+	3- Globa
+	4- Form
+
+*/
+
+/* =0 Reset
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	margin:0;  padding:0; border:0; outline:0; font-size:100%;
+}
+body {
+	font:12px/150% Arial, "宋体"; color:#666; background:#fff; 
+}
+html, body {height:100%;}
+ol, ul, dl {
+	list-style: none;
+	list-style-type: none;
+}
+ul { margin:0;padding:0; }
+ul li { list-style:none; }
+
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+	content: ”;
+	content: none;
+}
+:focus {
+	outline: 0;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
+strong {
+	font-weight: bold;
+}
+em {
+	font-style: italic;
+}
+
+/* =1 Container
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+.clearfix {
+	display: block;display: inline-block;clear: both;line-height: 0; height: 0; font-size:0;
+}
+html[xmlns] .clearfix {
+	display: block;
+}
+* html .clearfix {
+	height: 1%;
+}
+
+
+/* =2 Links
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.f0, a:link, a:visited, a:active { color:#075586; text-decoration: none;}
+a:hover { color:#f30; text-decoration: none;}
+
+
+.f1, a.link1:link, a.link1:active, a.link1:visited {color:#a4a4a4;}
+a.link1:hover {color:#fa0;}
+
+a.linkline:link, a.linkline:active, a.linkline:visited {text-decoration:underline;}
+a.linkline:hover {text-decoration:none;}
+
+/* =3 Global
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+img { vertical-align:middle; border:0; display:inline;}
+
+
+.floatleft {float:left;}
+.floatright {float:right;}
+.textright {text-align:right;}
+.textcenter {text-align:center;}
+
+
+
+/* =4 Form
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+input
+{
+	vertical-align:middle;
+}
+
+

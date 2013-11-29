@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>DomObject.animate方法接收4个参数</li>
+				<li>props：此参数为动画的作用属性,如{width:"150px",hegiht:"150px"}意思是将当前DomObject对象的宽度设置为150像素，高度设置为150像素，以动画展现</li>
+				<li>speed：此参数为动画的持续时间,如1000,单位为毫秒</li>
+				<li>easing：此参数为动画的算法，默认为线性算法"linear",也可指定为其他算法,除线性算法外，其他算法都有分类，参数规则为"quad-easeIn",可用算法参见示例</li>
+				<li>complete：此参数为动画执行完成后的回调函数</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			function runAnimate() {
+				fastDev("#slider").css("left", "0px");
+				var easing = fastDev.getInstance("easingCls").getValue() + "-" + fastDev.getInstance("easing").getValue();
+				fastDev("#slider").animate({
+					left : 500
+				}, +fastDev.getInstance("speed").getValue() || 1000, easing);
+			}
+		</script>
+	</head>
+	<body>
+		<div class="ui-layout-text">动画效果示例</div>
+		<div style="border: 1px solid rgb(0, 0, 0); height: 50px;width: 550px;position: absolute;top:50px;left:50px">
+			<div id="slider" style="border: 0px solid rgb(0, 0, 0); height: 50px;width: 50px;position: absolute;background-color: #654321"></div>
+		</div>
+		<div style="position: absolute;top:150px;left:50px">
+			<table cellspacing="5" cellpadding="5" width="460px">
+				<tr>
+					<td>动画算法：</td>
+					<td>
+					<select itype="Select" width="100px" id="easingCls" saveInstance=true>
+						<option value="linear" text="linear" selected></option>
+						<option value="quad" text="quad"></option>
+						<option value="cubic" text="cubic"></option>
+						<option value="quart" text="quart"></option>
+						<option value="quint" text="quint"></option>
+						<option value="sine" text="sine"></option>
+						<option value="expo" text="expo"></option>
+						<option value="circ" text="circ"></option>
+						<option value="elastic" text="elastic"></option>
+						<option value="back" text="back"></option>
+						<option value="bounce" text="bounce"></option>
+					</select></td>
+					<td>
+					<select itype="Select" width="100px" id="easing" saveInstance=true>
+						<option value="easeIn" text="easeIn" selected></option>
+						<option value="easeOut" text="easeOut"></option>
+						<option value="easeInOut" text="easeInOut"></option>
+					</select></td>
+					<td>动画速度：</td>
+					<td>
+						<input itype="TextBox" value="1000" id="speed" saveInstance=true width="50px">
+					</td>
+					<td>
+					<input itype="Button" text="运行" onclick="runAnimate()">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<dir style="height: 200px"></dir>
+	</body>
+
+</html>
+

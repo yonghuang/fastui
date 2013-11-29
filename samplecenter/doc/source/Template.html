@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Core-Template'>/**
+</span> * @class fastDev.Core.Template
+ * @extends fastDev.Core.Base
+ * @author  袁刚
+ * 控件展现模板实现，负责解析控件内定义的界面规则并生成对应的Element
+ */
+
+<span id='fastDev-Core-Template-method-destroy'>/**
+</span> * @method destroy
+ * @private
+ */
+fastDev.define(&quot;fastDev.Core.Template&quot;, {
+	extend : &quot;fastDev.Core.Base&quot;,
+	alias : &quot;Template&quot;,
+	_options : {
+<span id='fastDev-Core-Template-property-htmlList'>		/**
+</span>		 * @type {Array[String]} 模板语句数组
+		 */
+		htmlList : null,
+<span id='fastDev-Core-Template-property-params'>		/**
+</span>		 * @type {JsonObject} 模板中用到的参数存储对象
+		 */
+		params : null,
+<span id='fastDev-Core-Template-property-parseType'>		/**
+</span>		 * 解析数据类型
+		 * @type {String} dataset{fastDev.Data.DataSet} or normal{Array[JsonObject]}
+		 */
+		parseType : &quot;dataset&quot;
+	},
+	_global : {
+		DNameReg : /name\s*=\s*(.*)/,
+		loopCount : 0
+	},
+<span id='fastDev-Core-Template-method-ready'>	/**
+</span>	 * 模板初始化方法
+	 * @param {JsonObject} options 当前控件配置信息
+	 * @param {JsonObject} global 当前控件全局信息
+	 * @protected
+	 */
+	ready : function(options, global) {
+		// 初始化动态模板存储空间
+		global.dynamicTpl = {};
+		// 模板关键字捕捉正则
+		global.tplKeyReg = /(?:&lt;tpl\s(dynamic|each|if|else\sif|else)\s*([^&gt;]*)\&gt;)|(?:&lt;\/tpl&gt;)/g;
+	},
+<span id='fastDev-Core-Template-method-construct'>	/**
+</span>	 * 模板构造方法
+	 * @param {JsonObject} options 当前控件配置信息
+	 * @param {JsonObject} global 当前控件全局信息
+	 * @protected
+	 */
+	construct : function(options, global) {
+		// 编译生成模板静态标签部分
+		var htmlList = options.htmlList,tplStr;
+		if(fastDev.isArray(htmlList)){
+			htmlList = htmlList.join(&quot;&quot;);
+		}else if(!fastDev.isString(htmlList)){
+			return;
+		}
+		tplStr = this.compile(htmlList.replace(/[\r\t\n]/g, &quot;&quot;));
+		// 静态模板编译不捕捉参数占位符，动态模板编译时则需要
+		global.tplKeyReg = new RegExp(  global.tplKeyReg.source + &quot;|\\{([^\\}]*)\\}&quot;, &quot;g&quot; ),
+		// 替换静态模板中的参数
+		tplStr = this.doParamReplace(tplStr);
+
+		try {
+			// 编译静态模板生成函数
+			global.STHandle = fastDev.Util.ObjectUtil.parseObject(tplStr);
+		} catch(e) {
+			throw options.controlName + &quot; 静态模板解析错误[&quot; + e + &quot;]&quot;;
+		}
+
+	},
+<span id='fastDev-Core-Template-method-compile'>	/**
+</span>	 * 字符串模板编译函数
+	 * @param {String} str 模板字符串
+	 * @param {JsonObject} params 参数存储对象
+	 * @param {Number} index 定义模板检测正则的起始位置
+	 * @param {Boolean} capture 标识当前是否在执行动态模板内容捕获
+	 * @private
+	 */
+	compile : function(str, params, index, capture) {
+		// 初始化模板生成函数内容
+		var body = this.initBody(),
+		// 定义编译过程中需要用到的变量
+		begin, end, len = str.length, level = 0,
+		// 将模板检测正则作用域降至当前函数
+		tplTag = this._global.tplKeyReg,
+		// 数据解析器
+		parseData, tag, eachStart = false;
+		// 没有设置正则起始位置时从下标0开始检测执行
+		index = index || 0;
+
+		parseData = this._options.parseType === &quot;normal&quot; ? this.parseData : this.parseDataSet;
+
+		// 每次正则匹配的字符串结束下标作为下次匹配的起始位置
+		for(; index &lt; len; index = end) {
+			// 开始匹配模板字符串
+			tplTag.lastIndex = index;
+			var m = tplTag.exec(str);//, next = false;
+
+			// 如果匹配不到模板关键词则断定字符串从当前匹配下标至最后都为普通文本
+			if(m === null) {
+				this.parseHTML(body, str.substring(index, len));
+				break;
+			}
+
+			begin = m.index;
+			end = tplTag.lastIndex;
+
+			// 如果是动态模板执行捕获内容时则返回动态模板结束标记下标
+			if(capture === true) {
+				if(m[0] === &quot;&lt;/tpl&gt;&quot;) {
+					if(level === 0) {
+						return end;
+					}
+					level--;
+				}
+				if(m[1] &amp;&amp; !/else/.test(m[1])) {
+					level++;
+				}
+				continue;
+			}
+
+			// 添加上次捕获下标与当前捕获下标中间的非模板文本
+			if(index &lt; begin) {
+				this.parseHTML(body, str.substring(index, begin));
+			}
+
+			if( tag = m[1]) {
+				if(!/else/.test(tag)) {
+					level++;
+				}
+				switch(tag) {
+					case &quot;dynamic&quot;:
+						end = this.parseDynamic(body, str, m[2], end);
+						break;
+					case &quot;each&quot; :
+						eachStart = true;
+						this.parseEach(body, m[2]);
+						break;
+					case &quot;if&quot;:
+						this.parseIf(body, m[2], eachStart);
+						break;
+					case &quot;else if&quot;:
+						this.parseElseIf(body, m[2], eachStart);
+						break;
+					case &quot;else&quot;:
+						this.parseElse(body);
+						break;
+				}
+			} else if(m[3]) {
+				parseData.call(this, body, m[3]);
+			} else if(m[0] === &quot;&lt;/tpl&gt;&quot;) {
+				if(level === 0) {
+					break;
+				}
+				body.push(&quot;}\n&quot;);
+				level--;
+			}
+
+		}
+
+		body.push(&quot;return html.join('');&quot;);
+
+		// 将模板中的参数占位符替换为具体参数值
+		return body.join(&quot;&quot;);
+	},
+<span id='fastDev-Core-Template-method-initBody'>	/**
+</span>	 * 初始化模板闭包内容
+	 */
+	initBody : function() {
+		return [&quot;var html=[],tpl_count=&quot; + (this._options.params.tpl_count || 0) + &quot;;\n&quot;];
+	},
+<span id='fastDev-Core-Template-method-doParamReplace'>	/**
+</span>	 * 执行参数占位符替换
+	 * @param {String} str 待替换字符串
+	 * @param {JsonObject} params 参数对象
+	 */
+	doParamReplace : function(str, params) {
+		params = this._options.params || {};
+		var value;
+		return str.replace(/#\{([^\}]*)\}/g, function() {
+			value = params[arguments[1]];
+			if(fastDev.isString(value) &amp;&amp; value.replace) {
+				value = value.replace(/[\r\n\t]/ig, &quot;&quot;);
+				return value;
+			}else{
+				return value === undefined ? &quot;&quot; : typeof value === &quot;object&quot;  ? !!value : value;
+			}
+		});
+	},
+<span id='fastDev-Core-Template-method-doDataReplace'>	/**
+</span>	 * 执行数据占位符替换
+	 * @param {String} str 待替换字符串
+	 */
+	doDataReplace : function(str) {
+		var m, loopCount = this._global.loopCount - 1, content,parseType=this._options.parseType;
+
+		if( m = /\{(row_id|curr_data)\}/.exec(str)) {
+			switch(m[1]) {
+				case &quot;row_id&quot; :
+					content = &quot;(tpl_count+i&quot; + loopCount + &quot;+1)&quot;;
+					break;
+				case &quot;curr_data&quot;:
+					content = &quot;dataList[i&quot; + loopCount + &quot;]&quot;;
+					break;
+			}
+		}
+		return str.replace(/\{([^\}]*)\}/g, function() {
+			return content || (parseType===&quot;normal&quot;?&quot;data&quot;+loopCount+&quot;.&quot;+arguments[1]:&quot;data&quot; + loopCount + &quot;.get('&quot; + arguments[1] + &quot;')&quot;);
+		});
+	},
+<span id='fastDev-Core-Template-method-parseHTML'>	/**
+</span>	 * 解析HTML字符串
+	 */
+	parseHTML : function(body, str) {
+		body.push(&quot;html.push('&quot; + str + &quot;');\n&quot;);
+	},
+<span id='fastDev-Core-Template-method-parseData'>	/**
+</span>	 * 解析数据
+	 */
+	parseData : function(body, str) {
+		var loopCount = this._global.loopCount - 1,data = &quot;data&quot; + loopCount,content;
+		switch(str) {
+			case &quot;row_id&quot; :
+				content = &quot;(tpl_count+i&quot; + loopCount + &quot;+1)&quot;;
+				break;
+			case &quot;curr_data&quot;:
+				content = &quot;dataList[i&quot; + loopCount + &quot;]&quot;;
+				break;
+		}
+		content = content || data + &quot;.&quot; +str;
+		body.push(&quot;html.push(&quot;+content+ &quot;);\n&quot;);
+	},
+<span id='fastDev-Core-Template-method-parseDataSet'>	/**
+</span>	 * 解析数据集
+	 */
+	parseDataSet : function(body, str) {
+		if(/^(curr_data)$/.test(str)) {
+			str = &quot;{&quot; + str + &quot;}&quot;;
+		} else {
+			str = &quot;html.push({&quot; + str + &quot;});\n&quot;;
+		}
+		str = this.doDataReplace(str);
+		body.push(str);
+
+	},
+<span id='fastDev-Core-Template-method-parseDynamic'>	/**
+</span>	 * 解析动态模板
+	 */
+	parseDynamic : function(body, str, info, index) {
+		var name = this._global.DNameReg.exec(info) ? RegExp.$1 : &quot;tpl&quot; + fastDev.getID(),
+		// 为动态模板建立单独的函数解析
+		end = this.compile(str, null, index, true);
+		// 保存解析函数
+		this._global.dynamicTpl[name] = str.substring(index, end);
+		// 在页面上建立模板占位标签
+		body.push(&quot;html.push('&lt;a name=\&quot;&quot; + name + &quot;\&quot;&gt;&lt;/a&gt;');\n&quot;);
+		// 返回动态模板结束下标
+		return end;
+	},
+<span id='fastDev-Core-Template-method-parseEach'>	/**
+</span>	 * 解析循环语句
+	 */
+	parseEach : function(body) {
+		// 防止解析函数中的循环变量重名
+		var loopCount = this._global.loopCount++,
+		// 定义循环变量
+		i = &quot;i&quot; + loopCount, len = &quot;len&quot; + loopCount, data = &quot;data&quot; + loopCount;
+		body.push(&quot;var &quot; + i + &quot; = 0,&quot; + len + &quot; = dataList.length,&quot; + data + &quot;;\n&quot;);
+		body.push(&quot;for(;&quot; + i + &quot;&lt;&quot; + len + &quot;;&quot; + i + &quot;++){\n&quot;);
+		body.push(data + &quot; = dataList[&quot; + i + &quot;];\n&quot;);
+	},
+<span id='fastDev-Core-Template-method-parseIf'>	/**
+</span>	 * 解析条件判断语句
+	 */
+	parseIf : function(body, info, eachStart) {
+		if(eachStart === true) {
+			info = this.doDataReplace(info, &quot;data&quot; + (this._global.loopCount - 1));
+		}
+		info = info.replace(/&amp;lt;/g, &quot;&lt;&quot;).replace(/&amp;gt;/g, &quot;&gt;&quot;);
+		body.push(&quot;if&quot; + info + &quot;{\n&quot;);
+	},
+<span id='fastDev-Core-Template-method-parseElseIf'>	/**
+</span>	 * 解析条件分支判断语句
+	 */
+	parseElseIf : function(body, info, eachStart) {
+		this.parseIf(body, info, eachStart);
+		var str = body.pop();
+		str = &quot;}else &quot; + str;
+		body.push(str);
+	},
+<span id='fastDev-Core-Template-method-parseElse'>	/**
+</span>	 * 解析条件分支语句
+	 */
+	parseElse : function(body) {
+		body.push(&quot;}else{&quot;);
+	},
+<span id='fastDev-Core-Template-method-createStaticHtml'>	/**
+</span>	 * 创建静态模板Dom元素
+	 */
+	createStaticHtml : function() {
+		try {
+			return fastDev(this._global.STHandle());
+		} catch(e) {
+			throw &quot; * 静态模板生成异常$error&quot; + e;
+		}
+	},
+<span id='fastDev-Core-Template-method-getDynamicTpl'>	/**
+</span>	 * 获取动态模板
+	 * @param {String} [name] 动态模板名称
+	 */
+	getDynamicTpl : function(name) {
+		var dynamicTpl = this._global.dynamicTpl, tplStr;
+		if(fastDev.isValid(name)) {
+			tplStr = (dynamicTpl[name] || []);
+		} else {
+			for(var p in dynamicTpl) {
+				name = p;
+				tplStr = dynamicTpl[name];
+				break;
+			}
+		}
+		return {
+			name : name,
+			tplStr : tplStr
+		};
+	},
+<span id='fastDev-Core-Template-method-initDynamic'>	/**
+</span>	 * 初始化动态模板
+	 * @param {Array[fastDev.Data.Record]} 数据记录数据
+	 * @param {String} [name] 动态模板名称
+	 */
+	initDynamic : function(dataList, name) {
+		var dynamicTpl = this.getDynamicTpl(name), tplStr = dynamicTpl.tplStr;
+		name = dynamicTpl.name;
+
+		if(tplStr) {
+			tplStr = this.doParamReplace(tplStr);
+			var handleStr = this.compile(tplStr);
+			var html = fastDev.Util.ObjectUtil.parseObject(&quot;dataList&quot;,handleStr)(dataList);
+
+			return {
+				name : name,
+				fragment : fastDev(html)
+			};
+		}
+	},
+	setParam : function(params) {
+		fastDev.apply(this._options.params, params);
+	}
+});
+
+</pre>
+</body>
+</html>

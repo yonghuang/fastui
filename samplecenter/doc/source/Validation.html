@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Validation'>/**
+</span> * @class fastDev.Ui.Validation
+ * @extends fastDev.Core.Base
+ * 验证类继承自Base，实现了表单类控件的大部分验证功能，包括非空验证、长度验证、邮箱验证、身份证验证、手机验证等等
+ */
+fastDev.Core.Validation = {
+<span id='fastDev-Ui-Validation-property-doubleByte'>	doubleByte : /[^\x00-\xff]/g,
+</span><span id='fastDev-Ui-Validation-property-number'>	number : /^[\-\+]?\d+\.?\d*$/,
+</span><span id='fastDev-Ui-Validation-property-email'>	email : /^[a-zA-Z0-9_\\.]+@[a-zA-Z0-9\-]+[\\.a-zA-Z]+$/,
+</span><span id='fastDev-Ui-Validation-property-code'>	code : /^[0-9]{6}$/,
+</span><span id='fastDev-Ui-Validation-property-idCard'>	idCard : /^\d{14}(\d{1}|\d{4}|(\d{3}[xX]))$/,
+</span><span id='fastDev-Ui-Validation-property-mobile'>	mobile : /^((\(\d{2,3}\))|(\d{3}\-))?1[3,8,5]\d{9}$/,
+</span><span id='fastDev-Ui-Validation-property-telPhone'>	telPhone : /^((\(0\d{2}\)[\- ]?\d{8})|(0\d{2}[\- ]?\d{8})|(\(0\d{3}\)[\- ]?\d{7,8})|(0\d{3}[\- ]?\d{7,8}))?$/,
+</span><span id='fastDev-Ui-Validation-property-ipAddress'>	ipAddress : /^(([0-9]|([0-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([0-9]|([0-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([0-9]|([0-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/,
+</span><span id='fastDev-Ui-Validation-method-checkRequired'>	/**
+</span>	 * 验证控件值是否为空
+	 * @param {Object} ctrl 控件对象
+	 */
+	checkRequired : function(value) {
+		if(!fastDev.isValid(value) || fastDev.Util.StringUtil.trim(value) === &quot;&quot;) {
+			return &quot;不能为空&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkMaxLength'>	/**
+</span>	 * 控件值最大长度验证
+	 * @param {Object} ctrl 控件对象
+	 * @param {String} rule 验证规则
+	 * @return {Boolean}
+	 */
+	checkMaxLength : function(value, rule) {
+		if(value.replace(this.doubleByte, '..').length &gt; rule) {
+			return &quot;长度只能在&quot; + rule + &quot;以内&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkMinLength'>	/**
+</span>	 * 控件值最小长度验证
+	 * @param {Object} ctrl 控件对象
+	 * @param {String} rule 验证规则
+	 * @return {Boolean}
+	 */
+	checkMinLength : function(value, rule) {
+		if(value.replace(this.doubleByte, '..').length &lt; rule) {
+			return &quot;长度只能在&quot; + rule + &quot;以上&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkLenEqual'>	/**
+</span>	 * 控件值长度验证
+	 * @param {Object} ctrl 控件对象
+	 * @param {String} rule 验证规则
+	 * @return {Boolean}
+	 */
+	checkLenEqual : function(value, rule) {
+		if(value.length !== rule) {
+			return &quot;长度只能是&quot; + rule;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkIsNumber'>	/**
+</span>	 * 数字验证
+	 * @param {Object} ctrl 控件对象
+	 * @return {Boolean}
+	 */
+	checkIsNumber : function(value) {
+		if(!this.number.test(value)) {
+			return &quot;必须是数字&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkMinNumber'>	/**
+</span>	 * 最小数字验证
+	 * @param {Object} ctrl 控件对象
+	 * @param {String} rule 验证规则
+	 * @return {Boolean}
+	 */
+	checkMinNumber : function(value, rule) {
+		if(+value &lt; +rule) {
+			return &quot;数值必须大于&quot; + rule;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkMaxNumber'>	/**
+</span>	 * 最大数字验证
+	 * @param {Object} ctrl 控件对象
+	 * @param {String} rule 验证规则
+	 * @return {Boolean}
+	 */
+	checkMaxNumber : function(value, rule) {
+		if(+value &gt; +rule) {
+			return &quot;数值必须小于&quot; + rule;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkIsEqual'>	/**
+</span>	 * 值相等验证
+	 * @param {Object} ctrl 控件对象
+	 * @param {String} rule 验证规则
+	 * @return {Boolean}
+	 */
+	checkIsEqual : function(value, rule) {
+		if(value !== fastDev(&quot;[name=&quot; + rule + &quot;]&quot;).attr(&quot;value&quot;)) {
+			return &quot;两次输入的值必须相等&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkIsEmail'>	/**
+</span>	 * 邮箱验证
+	 * @param {Object} ctrl 控件对象
+	 * @return {Boolean}
+	 */
+	checkIsEmail : function(value) {
+		if(!this.email.test(value)) {
+			return &quot;必须是邮箱格式&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkIsCode'>	/**
+</span>	 * 邮编验证
+	 * @param {Object} ctrl 控件对象
+	 * @return {Boolean}
+	 */
+	checkIsCode : function(value) {
+		if(!this.code.test(value)) {
+			return &quot;必须是邮编格式&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkIsIdCard'>	/**
+</span>	 * 身份证验证
+	 * @param {Object} ctrl 控件对象
+	 * @return {Boolean}
+	 */
+	checkIsIdCard : function(value) {
+		if(!this.idCard.test(value)) {
+			return &quot;必须是身份证号码格式&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkIsMobile'>	/**
+</span>	 * 手机号码验证
+	 * @param {Object} ctrl 控件对象
+	 * @return {Boolean}
+	 */
+	checkIsMobile : function(value) {
+		if(!this.mobile.test(value)) {
+			return &quot;必须是手机号码格式&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkIsTel'>	/**
+</span>	 * 电话号码验证
+	 * @param {Object} ctrl 控件对象
+	 * @return {Boolean}
+	 */
+	checkIsTel : function(value) {
+		if(!this.telPhone.test(value)) {
+			return &quot;必须是电话号码格式&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkIsIp'>	/**
+</span>	 * Ip地址验证
+	 * @param {Object} ctrl 控件对象
+	 * @return {Boolean}
+	 */
+	checkIsIp : function(value) {
+		if(!this.ipAddress.test(value)) {
+			return &quot;必须是IP格式&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkSelfRegular'>	/**
+</span>	 * 自定义验证
+	 * @param {Object} ctrl 控件对象
+	 * @param {String} rule 验证规则
+	 * @return {Boolean}
+	 */
+	checkSelfRegular : function(value, rule) {
+		rule = rule.split(&quot;,&quot;);
+		if(!RegExp(rule[0]).test(value)) {
+			return rule[1] || &quot;值不合法&quot;;
+		}
+	},
+<span id='fastDev-Ui-Validation-method-checkAjax'>	/**
+</span>	 *
+	 * @param {String} rule
+	 * @param {String} href
+	 * @param {string} model 错误提示模型
+	 */
+	checkAjax : function(value, url, ctrl, handle) {
+		fastDev.Ajax.doGet(url, {
+			data : &quot;value=&quot; + value,
+			success : function() {
+				handle.call(ctrl);
+			},
+			complete : function(result) {
+				var msg = (fastDev.isString(result) ? result : result.text).replace(/[\r\n\t]/g,&quot;&quot;);
+				if(fastDev.isString(msg) &amp;&amp; msg.length &gt; 0){
+					ctrl.initError(msg);
+				}else{
+					ctrl.destroyError();
+				}
+			}
+		});
+	},
+<span id='fastDev-Ui-Validation-method-validate'>	/**
+</span>	 * 验证接口
+	 */
+	validate : function(rule, value, errorConfig) {
+		var me = this, rules = rule.split(&quot;;&quot;), errorList = [];
+
+		while(rules[0]) {
+			rule = rules.shift().split(&quot;:&quot;);
+
+			var msg, method, param = rule[1];
+
+			method = fastDev.Util.StringUtil.capitalize(rule[0]);
+			if(!value &amp;&amp; method !== &quot;Required&quot;){
+				continue;
+			}
+			msg = me[&quot;check&quot;+method](value, param);
+
+			if(fastDev.isString(msg)) {
+				errorList.push( errorConfig ? errorConfig[rule[0]]||msg : msg);
+			}
+		}
+
+		return errorList.join(&quot;;&quot;);
+	}
+};
+</pre>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+	talkweb.BaseControl.Dl = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Dl.Class&quot;,settings);
+	}
+	
+	fastDev.define(&quot;talkweb.BaseControl.Dl.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			requires : false,
+			head : null,
+			body : null,
+			ddClassName : &quot;none&quot;,
+			dtWidth : null,
+			formWidth : 0,
+			fieldset : false
+		},
+		construct : function() {
+			var dl = this.create(&quot;dl&quot;);
+			this.storage(dl);
+		},
+		constructItems : function() {
+			var options = this.getOptions();
+			var dtHeight, ddWidth = parseInt(parseInt(options.formWidth) * (parseInt(options.width) / 100));
+			options.height &amp;&amp; ( dtHeight = options.height.split(&quot;px&quot;)[0] * 1 + 4 + &quot;px&quot;);
+			if(options.head) {
+				options.dtWidth &amp;&amp; (ddWidth -= parseInt(options.dtWidth));
+				talkweb.BaseControl.Dt({
+					container : this,
+					value : options.head,
+					requires : options.requires,
+					height : dtHeight,
+					width : options.dtWidth
+				})
+			};
+			options.body &amp;&amp; talkweb.BaseControl.Dd({
+				container : this,
+				value : options.body,
+				className : options.ddClassName,
+				width : options.head ? (ddWidth - (options.fieldset === true ? 35 : 20)) + &quot;px&quot; : ddWidth + &quot;px&quot;
+			});
+			this.setOptions({
+				height : null
+			});
+		},
+		init : function() {
+			this.constructItems();
+		}
+	});
+
+	talkweb.BaseControl.Dt = function(settings) {
+		return fastDev.create(&quot;talkweb.BaseControl.Dt.Class&quot;, settings);
+	}
+
+	fastDev.define(&quot;talkweb.BaseControl.Dt.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			value : null
+		},
+		construct : function() {
+			var dt = this.create(&quot;dt&quot;);
+			this.storage(dt);
+		},
+		setValue : function(value) {
+			value &amp;&amp; this.setText(value);
+		},
+		init : function(options) {
+			options.requires === true &amp;&amp; this.append(talkweb.BaseControl.Span({
+				className : &quot;redrequires&quot;,
+				value : &quot;*&quot;
+			}));
+		}
+	});
+
+	talkweb.BaseControl.Dd = function(settings) {
+		return fastDev.create(&quot;talkweb.BaseControl.Dd.Class&quot;, settings);
+	}
+
+	fastDev.define(&quot;talkweb.BaseControl.Dd.Class&quot;, {
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			value : null
+		},
+		construct : function() {
+			var dd = this.create(&quot;dd&quot;);
+			this.storage(dd);
+		},
+		setValue : function(value) {
+			this.append(value);
+		}
+	})
+})()</pre>
+</body>
+</html>

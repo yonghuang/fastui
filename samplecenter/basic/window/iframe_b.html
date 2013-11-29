@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title><h4>跨级弹窗</h4> </title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 获取原父页面上的日期值
+			function getStoragedValue() {
+				// 可以通过非实例的方式直接获取存储的数据
+				// 注意，所有数据均共享相同的存储区，同名的键值会被覆盖
+				// 通过 getData(name) 方法可以获取到存储的值
+				var date = fastDev.Ui.Window.getData("date");
+				fastDev.getInstance("datepicker_2").setValue(date);
+			}
+
+			// 关闭弹窗并设回日期值
+			function getParentWindow() {
+				// 重要!!! 跨级弹窗内部iframe子页面上直接通过window.parent将获取不到原来的父页面窗口对象
+				// 如需获取原父窗口对象，须通过fastDev.Ui.Window控件的数据存储接口获取，默认键名为"parent"
+				var parent = fastDev.Ui.Window.getData("parent");
+				parent.fastDev.getInstance("datepicker_1").setValue(fastDev.getInstance("datepicker_2").getValue());
+				parent.fastDev.getInstance("window_2").close();
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div>
+				<input itype="DatePicker" id="datepicker_2" saveInstance="true"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取并设置原父页面上的日期值" onclick="getStoragedValue()"/>
+				<input itype="Button" text="关闭弹窗并设回日期值" onclick="getParentWindow()"/>
+			</div>
+		</div>
+	</body>
+</html>
+

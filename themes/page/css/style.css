@@ -1,0 +1,328 @@
+﻿/*
+
+[目录表] 
+
+	0- topframe headerdiv
+	1- topframe 系统信息
+	2- mainframe
+	3- mainframe 框架打开关闭背 
+	4- rightframe 控件之间的分割
+	5- rightframe 距页面边距 or 背景
+	6- rightframe 左右两部分
+	7- rightframe 标题
+	8- footerframe footerdiv
+	9- button
+	10- a标签的button
+
+*/
+
+/* =0 topframe headerdiv
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#headerdiv {
+	margin:0 auto;
+	width:100%;
+	height:70px;
+	background: url(../images/headbg.gif) repeat-x;
+	border-top:1px solid #82D4FF;
+	border-bottom:1px solid #229CDA;
+}
+.logodiv {background:url(../images/logo.gif) left center no-repeat; width:100%; height:70px;}
+.logo{
+float:left;
+/*background:url(../images/logo.gif) left center no-repeat; */
+height:70px; line-height:70px; width:auto;
+padding-left:20px;
+font-family:"微软雅黑"; font-size:24px; color:/*#E9F5FB*/#f4fbfe; font-weight:lighter;
+text-shadow: -1px 2px 6px #1B8AC0;
+white-space:nowrap;
+letter-spacing:2px;
+}
+
+/* =1 系统信息 (topframe 登录信息)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.messagediv {background:#198BC9 url(../images/messagebg.gif) repeat-x; margin:0; width:auto; height:25px;line-height:25px; overflow:hidden;}
+.messageleft{float:left; color:#3189B1; font-size:12px; height:25px; line-height:25px; margin-left:8px;}
+.messageleft img{margin:0 5px 3px 5px; vertical-align:middle;}
+.messageleft a{ text-decoration:none; color:#3B90B7; font-size:12px;}
+.messageleft a:hover{ text-decoration:underline; color:#ff0000}
+.messageleft span{border-left:1px solid #C5DCE8; border-right:1px solid #FAFCFD; _display:inline-block;}
+.messageright{ float:right;  color:#3B90B7; font-size:12px;}
+.messageright img{margin-bottom:0 2px 2px; vertical-align:middle;}
+.messageright span{margin:0 5px; _display:inline-block}
+.messageright .user{ font-weight:bold;}
+.messageright .password{font-size:12px; color:#3B90B7;}
+.messageright .password a{color:#3B90B7; text-decoration:none;}
+.messageright .password a:hover{ color:#3B90B7; text-decoration:underline;}
+.messageright .esc {font-size:12px; color:#ff0000;}
+.messageright .esc a{color:#ff0000; text-decoration:none;}
+.messageright .esc a:hover{color:#ff0000; text-decoration:underline;}
+
+/* =2 mainframe
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#content{
+	margin: 0 auto;
+	font-family:arial, verdana, sans-serif;
+	width:100%;
+	overflow:hidden;
+}
+#content_body{
+	background:#FFFFFF;
+	margin:0 auto;
+	padding:0;
+	border-left:3px solid #198BC9;
+	border-right:2px solid #198BC9;
+}
+
+/* =3 mainframe 框架打开关闭背景
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.side{ background:#198BC9;}
+.sideleft{border-left:1px solid #A0BCD4; background:#E6F4FA;padding:0; vertical-align:top;}
+#mainframe, #leftframe{background:#fff;  padding:0; border-top:1px solid #198BC9;overflow:hidden;}
+/*主体高度占满整屏*/
+.autoHeight {/*min-height:500px;*/padding:0; margin:0; vertical-align:top; height:100%;}
+/* =4 rightframe 控件之间的分割线
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+hr {height:1px;border:none;border-top:1px solid #d4eaf4; margin:8px 0;*margin:4px 0 8px;_margin:0; *vertical-align:middle;}
+
+/* =5 rightframe 距页面边距 or 背景
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.rightbody {
+	padding:0 8px;overflow:hidden;
+	background:url(../images/content_titlebg.gif) repeat-x;
+}
+/* =6 rightframe
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/*rightframe leftdiv or rightdiv*/
+.maindiv {
+    _padding-left:200px; background:url(../images/content_titlebg.gif) repeat-x left top; /*height:100%;*/
+}
+.rightdiv {
+    padding:0 10px;
+}
+.maindiv>.rightdiv {
+    width:auto; position:absolute; left:201px; right:0;
+    background:url(../images/content_titlebg.gif) repeat-x;
+}
+.leftdiv {
+    width:200px; position:absolute; top:0; left:0; border-right:1px solid #b2ced9; background:#fff; min-height:100%;_height:100%;
+}
+
+.treetitle {
+    border-top:1px solid #afcfdd;border-bottom:1px solid #afcfdd;
+	padding:0 10px; display:block; cursor:pointer; text-decoration:none;
+	background:url(../images/menu_bg.gif) repeat-x;
+	height:27px; line-height:27px; color:#075587; font-weight:bold; font-size:12px;
+}
+
+/* =7 rightframe
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.content_title{height:25px; color:#075587; font-size:14px; font-weight:bold; padding:15px 0;}
+.content_title img{ margin:0 10px 0 0; }
+
+/* =8 footerframe footerdiv(#root)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#footerdiv {
+	width:100%; height:25px; line-height:25px; color:#fff; font-size:12px; text-align:center;
+	margin:0; padding:0 0 0 10px;
+	background:url(../images/rootbg.gif) repeat-x;
+}
+
+/* =9 button
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.btn{
+	border:1px solid #D0E1E6;
+	background: #F2F9FC url(../images/btn/btnbg.gif) repeat-x;
+	margin:0 10px 0 0; padding:0 15px;
+	height:22px !important;height: 22px;
+	color:#0A2A43; text-transform:uppercase; text-decoration:none;
+	font:normal 12px/20px "宋体"; _line-height:22px;
+	cursor:pointer;
+}
+.btn_edit, .btn_search, .btn_add, .btn_save, .btn_ok, .btn_close, .btn_return, .btn_reset, .btn_export, .btn_delete, .btn_usersort, .btn_organization, .btn_organizationsort{
+	border:1px solid #D0E1E6;
+	margin:0 10px 0 0; 
+	padding:1px 5px 0 22px;  
+	*padding:0 0 0 16px;
+	height: 22px;
+	width:auto !important;
+	width:auto;
+	color:#0A2A43; text-transform:uppercase; text-decoration:none;
+	font:normal 12px/20px "宋体";
+	cursor:pointer;
+}
+
+.btn_edit {
+	background: #F2F9FC url(../images/btn/edit.gif) 0 50% no-repeat;
+}
+.btn_search{
+	background: #F2F9FC url(../images/btn/search.gif)  0 50% no-repeat;
+}
+.btn_add{
+	background: #F2F9FC url(../images/btn/btn_add.gif)  0 50% no-repeat;
+}
+.btn_save{
+	background: #F2F9FC url(../images/btn/btn_save.gif)  0 50% no-repeat;
+}
+.btn_ok{
+	background: #F2F9FC url(../images/btn/ok.gif)  0 50% no-repeat;
+}
+.btn_close{
+	background: #F2F9FC url(../images/btn/btn_close1.gif)  0 50% no-repeat;
+}
+.btn_return{
+	background: #F2F9FC url(../images/btn/return.gif)  0 50% no-repeat;
+}
+.btn_reset{
+	background: #F2F9FC url(../images/btn/reset.gif)  0 50% no-repeat;
+}
+.btn_reset:focus{outline-style:none;}
+.btn_export{
+	background: #F2F9FC url(../images/btn/export.gif)  0 50% no-repeat;
+}
+.btn_usersort{
+	background: #F2F9FC url(../images/btn/btn_usersort.gif)  0 50% no-repeat;
+}
+.btn_organization{
+	background: #F2F9FC url(../images/btn/btn_organization.gif)  0 50% no-repeat;
+}
+.btn_organizationsort{
+	background: #F2F9FC url(../images/btn/btn_organizationsort.gif) 0 50% no-repeat;
+}
+.btn_delete{
+	background: #F2F9FC url(../images/btn/btn_delete.gif)  0 50% no-repeat;
+}
+
+/* =10 <a> btn
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+a.btn1:link, a.btn1:visited, a.btn1:active {
+	border:1px solid #D0E1E6;height: 20px  !important;
+	background: #F2F9FC url(../images/btn/btnbg.gif) repeat-x;
+	margin:0 3px; padding:0 8px; display:block; float:left;
+	color:#0A2A43; text-transform:uppercase; text-decoration:none;
+	font:normal 12px/20px "宋体"; _line-height:20px;
+}
+a.btn1:hover{
+	border:1px solid #B8D0D6;
+	color:#0A2A43;
+	text-decoration:none;
+	background: #E0EFF4 url(../images/btn/btnbg_hover.gif) repeat-x;
+}*/
+.btn1 span{
+	color:#0A2A43;font:normal 12px/20px "宋体";
+	text-transform:lowercase;
+	padding:1px 0 1px 22px; margin:0;
+    hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.add{
+background: url(../images/btn/add.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.delete {
+background: url(../images/btn/delete.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.save {
+background: url(../images/btn/save.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.edit {
+background: url(../images/btn/edit.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.export {
+background: url(../images/btn/export.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.import {
+background: url(../images/btn/import.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.return {
+background: url(../images/btn/return.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.sort {
+background: url(../images/btn/sort.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.synchronous {
+background: url(../images/btn/synchronous.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.search {
+background: url(../images/btn/search.gif) no-repeat left center;
+padding-left:22px;
+margin-left:-75px;
+hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.select input{
+	filter:alpha(opacity=0);
+	opacity:0;
+	width:70px; _width:50px;
+	margin:0;_margin-left:-30px;
+	height:14px; _height:18px;
+	cursor:hand;
+	hide-focus:expression(this.hideFocus=true);
+}
+a.btn1 span.select {
+background: url(../images/btn/select.gif) no-repeat left center;
+padding-left:22px;
+margin-left:-75px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.upload {
+background: url(../images/btn/upload.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.task {
+background: url(../images/btn/task.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.history{
+background: url(../images/btn/history.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.artificial{
+background: url(../images/btn/artificial.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.interface {
+background: url(../images/btn/interface.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.empty {
+background: url(../images/btn/empty.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+a.btn1 span.batch {
+background: url(../images/btn/batch.gif) no-repeat left center;
+padding-left:22px;
+hide-focus:expression(this.hideFocus=true);
+}
+
+.text-align {text-align:center;}

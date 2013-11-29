@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>        
+        <li>基本功能</li>
+        <li>表单里的控件不可缺少itype与id属性，否则表单读不到控件</li>
+        <li>requestType默认为get,提交的内容较多时，如用到文本域，富文本框一般设置为post</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+	  <script>
+			//提交
+			var submit=function(){
+				var form=fastDev.getInstance("form1");
+				//获取老数据
+				var olditems=[{"empno": "2212","name": "袁维"}, {"empno": "2320","name": "张琦"}, {"empno": "0143","name": "张鹏楠"}];
+				var txtempno
+				var txtname
+				
+				var tab1=window.top.fastDev.getInstance("tabs1");
+					tab1.setActiveTabByTitle("datagrid页面");
+					alert("成功将修改后的数据"+msg+"提交到后台,本页面将关闭并刷新前页面的datagrid");
+					var datagrid= window.top.window.document.getElementById("datagrid").contentWindow.fastDev.getInstance("datagrid1")
+					datagrid.initRefresh();					
+					tab1.removeTab("修改员工信息");
+				
+			}
+			
+			
+		</script>
+	</head>
+	<body>
+    	
+		 <form itype="Form" action="../../data/form_example_submit.jsp" id="form1" requestType="post" saveInstance="true">
+		<table width="800px" border="0" style="margin:10px;" class="ui-form-list">
+        <tr>
+        <td><div class="ui-layout-text">新增员工信息</div></td> <td></td>
+        </tr>        
+		  <tr>
+		    <td>员工工号:</td>
+		    <td><input itype="TextBox" id="id" ></td>
+	      </tr>
+		  <tr>
+		    <td>姓名:</td>
+		    <td><input itype="TextBox" id="name" ></td>
+	      </tr>		  
+         </table>
+         <div style="width:400px; text-align:center">
+			<div itype="Button" text="提交" onclick="submit()" ></div>
+		</div>
+	</form>   
+   
+	</body>
+</html>

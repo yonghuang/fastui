@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>单选框树</h4>
+        <ul>        
+        <li> treeType属性设置为"radiotree"即为多选树。</li>
+        <li> 多选树有两种类型，一种是整个树只有一个节点能被选中，配置radioType="all"。另一种是同一个父节点下只能有一个节点被选中，配置radioType="level"。默认radioType="level"</li>
+        <li>数据属性radio默认为false：未选中，为true：选中，为part半选中状态。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+	</head>
+	<body><div style="margin:10px;">
+		<div style="float:left" >
+			<div class="ui-layout-text">同级内只能选中一个节点</div>
+			<div itype="Tree"  initSource="../../data/tree_data1.txt" radioType="level" treeType="radiotree" showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true"></div>
+	</div>
+    
+    <div style="float:left" >
+    	<div class="ui-layout-text">整颗树只能选中一个节点</div>
+			<div itype="Tree"  initSource="../../data/tree_data1.txt" radioType="all" treeType="radiotree" showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true"></div>
+	</div>
+</div>
+	</body>
+</html>

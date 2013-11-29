@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-AutoComplete'>/**
+</span> * @class fastDev.Ui.AutoComplete
+ * @extends fastDev.Ui.Box
+ * @author chengwei
+ * &lt;p&gt;AutoComplete控件属检索提示类控件。&lt;/p&gt;
+ * &lt;p&gt;支持对静态数据源和远程数据源的检索，远程检索结果缓存，关键字高亮，多值输入等。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *     
+ *     &lt;input itype=&quot;AutoComplete&quot; initSource=&quot;../../data/autocomplete.jsp&quot; 
+ *            hintText=&quot;输入英文字母查询&quot;/&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.AutoComplete&quot;, {
+    alias: &quot;AutoComplete&quot;,
+    extend: &quot;fastDev.Ui.Box&quot;,
+    _options: {
+<span id='fastDev-Ui-AutoComplete-property-initSource'>        /**
+</span>         * 远程数据检索链接地址
+         * @type {String}
+         */
+        initSource: null,
+<span id='fastDev-Ui-AutoComplete-property-items'>        /**
+</span>         * 静态的数据项，支持以下数据格式：
+         * &lt;p&gt;-String 纯字符串形式，每个值以逗号分隔&lt;/p&gt;
+         * &lt;p&gt;-Array 数组形式，数组元素可为字符串或者对象&lt;/p&gt;
+         * &lt;p&gt;-Object 对象形式，作为一条数据处理&lt;/p&gt;
+         * 注意：若数据格式为纯字符串形式时，逗号会作为单个值的分隔符，若结果串中本身就包含逗号，请使用数组形式的数据格式
+         * 数据格式为对象形式时，可带2个有效属性，分别为：
+         * &lt;p&gt;-text 展现（标签形式）时的文本值&lt;/p&gt;
+         * &lt;p&gt;-value 记录的有效值&lt;/p&gt;
+         * 以上2个对象属性的值若相同，则只需设置一个即可，另外一个属性会以相同值来处理
+         * 数据为远程数据时，同样支持以上3种数据格式
+         * @type {Array} items
+         * @param {Object} items.item 数据项
+         * @param {String} items.item.text 标签名
+         * @param {String} items.item.value 标签值
+         */
+        items: null,
+<span id='fastDev-Ui-AutoComplete-property-width'>        /**
+</span>         * 文本输入框的宽度
+         * @type {String}
+         */
+        width: &quot;150px&quot;,
+<span id='fastDev-Ui-AutoComplete-property-name'>        /**
+</span>         * 文本输入框的名称
+         * @type {String}
+         */
+        name: &quot;&quot;,
+<span id='fastDev-Ui-AutoComplete-property-disabled'>        /**
+</span>         * 是否禁用该控件
+         * @type {Boolean}
+         */
+        disabled: false,
+<span id='fastDev-Ui-AutoComplete-property-readonly'>        /**
+</span>         * 是否只读
+         * @type {Boolean}
+         */
+        readonly: false,
+<span id='fastDev-Ui-AutoComplete-property-queryName'>        /**
+</span>         * 检索结果时使用的查询名
+         * @type {String}
+         */
+        queryName: &quot;q&quot;,
+<span id='fastDev-Ui-AutoComplete-property-zIndex'>        /**
+</span>         * 提示层的索引
+         * @type {Number}
+         */
+        zIndex: 200,
+<span id='fastDev-Ui-AutoComplete-property-minChars'>        /**
+</span>         * 触发关键字查找时的最小输入字符数
+         * @type {Number}
+         */
+        minChars: 1,
+<span id='fastDev-Ui-AutoComplete-property-maxItems'>        /**
+</span>         * 最大显示结果数
+         * 0表示不受限
+         * @type {Number}
+         */
+        maxItems: 0,
+<span id='fastDev-Ui-AutoComplete-property-noResultsText'>        /**
+</span>         * 未查询到结果时的提示信息
+         * 该值有效时才会显示提示信息
+         * @type {String}
+         */
+        noResultsText: &quot;&quot;,
+<span id='fastDev-Ui-AutoComplete-property-searchingText'>        /**
+</span>         * 正在搜索时的提示信息
+         * 该值有效时才会显示提示信息
+         * @type {String}
+         */
+        searchingText: &quot;&quot;,
+<span id='fastDev-Ui-AutoComplete-property-hintText'>        /**
+</span>         * 提示用户输入以便自动检索的提示信息
+         * 该值有效时才会显示提示信息
+         * @type {String}
+         */
+        hintText: &quot;&quot;,
+<span id='fastDev-Ui-AutoComplete-property-hintItems'>        /**
+</span>         * 输入框值为空时的默认提示项
+         * 属性值可以指定需提示的值项，也可以使用布尔值
+         * 为布尔值true时，如果items属性有值，则显示items项
+         * 若为布尔值false或者空值，则应用hintText属性指定的提示信息
+         * @type {Boolean|Array|String}
+         */
+        hintItems: false,
+<span id='fastDev-Ui-AutoComplete-property-keyDelay'>        /**
+</span>         * 使用远程数据时击键后激活查找请求的延迟时间(单位毫秒)
+         * 使用动态数据时，默认为400毫秒
+         * 同一关键字查询不会发送二次请求，而是直接从缓存中读取数据，按键延迟与静态数据相同，为10毫秒
+         * @type {Number}
+         */
+        keyDelay: null,
+<span id='fastDev-Ui-AutoComplete-property-autoFill'>        /**
+</span>         * 是否在用户选择时自动将用户当前鼠标所在的值填入到input框
+         * @type {Boolean}
+         */
+        autoFill: true,
+<span id='fastDev-Ui-AutoComplete-property-matchCase'>        /**
+</span>         * 关键字是否大小写敏感
+         * @type {Boolean}
+         */
+        matchCase: false,
+<span id='fastDev-Ui-AutoComplete-property-keywordHighlight'>        /**
+</span>         * 提示结果中是否 高亮显示关键字
+         * @type {Boolean}
+         */
+        keywordHighlight: true,
+<span id='fastDev-Ui-AutoComplete-property-highlightCls'>        /**
+</span>         * 高亮关键字的样式名
+         * @type {String}
+         */
+        highlightCls: &quot;&quot;,
+<span id='fastDev-Ui-AutoComplete-property-connectTimeout'>        /**
+</span>         * 连接超时时长
+         * 单位毫秒
+         * @type {Number}
+         */
+        connectTimeout: 10000,
+<span id='fastDev-Ui-AutoComplete-property-matchContains'>        /**
+</span>         * 是否检索包含查询关键字的结果，而非仅仅检索以查询关键字开头的结果
+         * @type {Boolean}
+         */
+        matchContains: true,
+<span id='fastDev-Ui-AutoComplete-property-selectFirst'>        /**
+</span>         * 按回车时是否默认选取第一个提示结果项
+         * @type {Boolean}
+         */
+        selectFirst: false,
+<span id='fastDev-Ui-AutoComplete-property-selectionLimit'>        /**
+</span>         * 允许输入多个值时值的限制个数
+         * 0表示不受限
+         * @type {Number}
+         */
+        selectionLimit: 0,
+<span id='fastDev-Ui-AutoComplete-property-multiple'>        /**
+</span>         * 是否允许输入多个值
+         * @type {Boolean}
+         */
+        multiple: false,
+<span id='fastDev-Ui-AutoComplete-property-scrollHeight'>        /**
+</span>         * 结果提示菜单出现滚动条的最大高度
+         * @type {String}
+         */
+        scrollHeight: &quot;180px&quot;,
+<span id='fastDev-Ui-AutoComplete-property-showSearchIcon'>        /**
+</span>         * 是否显示搜索图标
+         * @type {Boolean}
+         */
+        showSearchIcon: false,
+<span id='fastDev-Ui-AutoComplete-property-extraParams'>        /**
+</span>         * 额外添加的查询参数
+         * @type {Object}
+         */
+        extraParams: {},
+<span id='fastDev-Ui-AutoComplete-property-allowAutoCreate'>        /**
+</span>         * 多值输入框模式时，当用户输入 ”逗号“，”分号“，”制表键“时，是否允许控件自动创建标签项
+         * @type {Boolean}
+         */
+        allowAutoCreate: false,
+<span id='fastDev-Ui-AutoComplete-property-allowCache'>        /**
+</span>         * 是否允许缓存远程数据
+         * @type {Boolean}
+         */
+        allowCache: true,
+<span id='fastDev-Ui-AutoComplete-property-fields'>        /**
+</span>         * 自定义数据字段配置
+         * @type {Array}
+         */
+        fields: null,
+<span id='fastDev-Ui-AutoComplete-property-inside'>        /**
+</span>         * 是否在当前页面内展现弹出层
+         * &lt;p&gt;该配置属性为false值时，结果弹出层将尝试跨Iframe定位展现
+         * @type {Boolean} 
+         */
+        inside: true,
+<span id='fastDev-Ui-AutoComplete-property-itemRenderer'>        /**
+</span>         * 检索结果列表项渲染器
+         * 对每个检索值进行自定义处理
+         * this指向本控件实例
+         * @param {Object} data 数据 数据类型与服务器返回的数据结构相关，可能为String或Object
+         * @param {String} keyword 关键字
+         * @type {Function}
+         */
+        itemRenderer: null,
+<span id='fastDev-Ui-AutoComplete-property-resultRenderer'>        /**
+</span>         * 检索结果渲染器
+         * 对整个结果进行渲染而不是逐个渲染
+         * this指向本控件实例
+         * @type {Function}
+         * @param {DomObject} ui 容器
+         * @param {Object} data 服务器返回的数据，若该数据为json格式，则已经转换为json对象，否则为原始数据
+         * @param {String} keyword 关键字
+         */
+        resultRenderer: null,
+<span id='fastDev-Ui-AutoComplete-event-onBeforeRetrieve'>        /**
+</span>         * 检索前的事件回调
+         * 返回false值则不执行检索
+         * this指向本控件实例
+         * @type {Function}
+         * @param {String} keyword 查询关键字
+         * @event
+         */
+        onBeforeRetrieve: function (keyword) {},
+<span id='fastDev-Ui-AutoComplete-event-onAfterRetrieve'>        /**
+</span>         * 检索完成时的事件回调
+         * 返回false值则不处理检索结果
+         * this指向本控件实例
+         * @type {Function}
+         * @param {Object} data 服务器端返回的检索结果
+         * @param {String} keyword 查询关键字
+         * @event
+         */
+        onAfterRetrieve: function (data, keyword) {},
+<span id='fastDev-Ui-AutoComplete-event-onRetrieveError'>        /**
+</span>         * 检索失败时的事件回调
+         * this指向本控件实例
+         * @type {Function}
+         * @param {String} msg 错误消息
+         * @event
+         */
+        onRetrieveError: function (msg) {
+            throw msg;
+        },
+<span id='fastDev-Ui-AutoComplete-event-onAfterChoose'>        /**
+</span>         * 用户点选结果后的事件回调
+         * 返回false值，则放弃此次选取
+         * this指向本控件实例
+         * @type {Function}
+         * @param {Object} item 已选项
+         * @event
+         */
+        onAfterChoose: function (item) {},
+<span id='fastDev-Ui-AutoComplete-event-onEnterKeydown'>        /**
+</span>         * 输入框上回车输入事件
+         * 参数为输入框的当前值
+         * this指向本控件实例
+         * @type {Function}
+         * @event
+         */
+        onEnterKeydown: function (value) {},
+<span id='fastDev-Ui-AutoComplete-event-onSearchIconClick'>        /**
+</span>         * 搜索图标点击事件
+         * 参数为输入框的当前值
+         * this指向本控件实例
+         * @type {Function}
+         * @event
+         */
+        onSearchIconClick: function (value) {},
+<span id='fastDev-Ui-AutoComplete-event-onBeforeRemove'>        /**
+</span>         * 标签被移除前（如delete按键或点击了关闭x按钮）的回调函数
+         * 返回false值，则不会执行移除操作
+         * this指向本控件实例
+         * @type {Function}
+         * @param {Object} item
+         * @event
+         */
+        onBeforeRemove: function (item) {},
+<span id='fastDev-Ui-AutoComplete-property-enableInitProxy'>        /**
+</span>         * @private
+         */
+        enableInitProxy: true,
+<span id='fastDev-Ui-AutoComplete-property-enableDataProxy'>        /**
+</span>         * @private
+         */
+        enableDataProxy: false,
+<span id='fastDev-Ui-AutoComplete-property-enableDataSet'>        /**
+</span>         * @private 
+         */
+        enableDataSet: true
+    },
+<span id='fastDev-Ui-AutoComplete-method-staticTemplate'>    /**
+</span>     * 用于构建静态模板串
+     * @param {Object} params 模板已解析参数对象
+     * @private 
+     */
+    staticTemplate: function (params) {
+        var html = [];
+        html.push('&lt;div style=&quot;width:' + params.width + '&quot; class=&quot;ui-form&quot;&gt;&lt;div elem=&quot;autocomplete-box&quot; class=&quot;ui-form-wrap ui-autocomplete&quot;&gt;');
+        if (params.multiple) {
+            html.push('&lt;ul elem=&quot;autocomplete-selection-items&quot; class=&quot;ui-autocomplete-selection&quot;&gt;&lt;/ul&gt;');
+        }
+        html.push('&lt;span&gt;&lt;input elem=&quot;autocomplete-input&quot; type=&quot;text&quot; autocomplete=&quot;off&quot; class=&quot;ui-form-field ui-form-input&quot;/&gt;&lt;/span&gt;');
+        if (params.showSearchIcon) {
+            html.push('&lt;div class=&quot;ui-form-trigger&quot;&gt;&lt;div elem=&quot;autocomplete-searchicon&quot; class=&quot;ui-search-icon&quot;&gt;&lt;/div&gt;&lt;/div&gt;');
+        }
+        html.push('&lt;input type=&quot;hidden&quot; name=&quot;' + params.name + '&quot; id=&quot;' + params.id + '&quot;/&gt;');
+        html.push('&lt;/div&gt;&lt;/div&gt;');
+        return html.join(&quot;&quot;);
+    },
+<span id='fastDev-Ui-AutoComplete-method-dynamicTemplate'>    /**
+</span>     * 动态模板片段
+     * @param {Object} params 已解析的参数对象
+     * @param {Object} data 数据对象
+     * @private 
+     */
+    dynamicTemplate: function (params, data) {
+        var html = [],
+            i = 0,
+            item;
+        while (item = data[i++]) {
+            html.push('&lt;li class=&quot;ui-list-item&quot; name=&quot;list' + params.sequence + '&quot; text=&quot;' + item.text + '&quot; item=&quot;' + item.item + '&quot; itemVal=&quot;' + item.value + '&quot;&gt;' + item.label + '&lt;/li&gt;');
+        }
+        return html.join(&quot;&quot;);
+    },
+<span id='fastDev-Ui-AutoComplete-method-popupStaticTemplate'>    /**
+</span>     * 弹出层模板
+     * @param {Object} params 模板已解析参数对象
+     * @private 
+     */
+    popupStaticTemplate: function (params) {
+        var html = [];
+        html.push('&lt;div elem=&quot;autocomplete-menu&quot; class=&quot;ui-autocomplete-list ui-layer ui-shadow&quot; style=&quot;height:' + params.menuHeight + ';z-index:' + params.zIndex + ';position:absolute;display:none&quot;&gt;');
+        html.push('&lt;div class=&quot;ui-selectlist-list-ct&quot;&gt;&lt;ul elem=&quot;autocomplete-menu-items&quot;&gt;&lt;/ul&gt;&lt;/div&gt;');
+        html.push('&lt;div elem=&quot;autocomplete-custom&quot;&gt;&lt;/div&gt;&lt;/div&gt;');
+        return html.join(&quot;&quot;);
+    },
+    tplParam: [&quot;width&quot;, &quot;multiple&quot;, &quot;sequence&quot;, &quot;menuHeight&quot;, &quot;zIndex&quot;, &quot;name&quot;, &quot;id&quot;, &quot;showSearchIcon&quot;],
+    fields: [&quot;label&quot;, &quot;value&quot;, &quot;text&quot;, &quot;item&quot;],
+<span id='fastDev-Ui-AutoComplete-method-ready'>    /**
+</span>     * 参数准备
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有参数
+     * @protected
+     */
+    ready: function (options, global) {
+        var width;
+        options.selectionLimit = parseInt(options.selectionLimit, 10);
+        options.keyDelay = parseInt(options.keyDelay, 10);
+        options.maxItems = parseInt(options.maxItems, 10);
+        options.selectionLimit = parseInt(options.selectionLimit, 10);
+        global.initSource = !! options.dataSource ? options.dataSource : options.initSource;
+        if (width = /^(-?\d+\.?\d+|-?\d)(px|%|em|cm)?$/.exec(fastDev.Util.StringUtil.trim(options.width + &quot;&quot;))) {
+            options.width = width[1] + (width[2] || &quot;px&quot;);
+        } else {
+            options.width = &quot;150px&quot;;
+        }
+        fastDev.apply(options, {
+            zIndex: parseInt(options.zIndex, 10) || 200,
+            id: options.id ? options.id : fastDev.getID(),
+            multiple: options.multiple ? true : false,
+            initSource: null,
+            dataSource: null,
+            autoLoad: false,
+            keyDelay: Math.abs(options.keyDelay) || (( !! options.items || !global.initSource) ? 10 : 400),
+            connectTimeout: parseInt(options.connectTimeout, 10) || 10000,
+            minChars: parseInt(options.minChars, 10) || 1,
+            fields: fastDev.isArray(options.fields) ? options.fields : [],
+            showSearchIcon: !! options.showSearchIcon,
+            queryName: (options.queryName &amp;&amp; typeof options.queryName === &quot;string&quot;) ? options.queryName : &quot;q&quot;,
+            extraParams: fastDev.isPlainObject(options.extraParams) ? options.extraParams : {},
+            maxItems: (fastDev.isNumber(options.maxItems) &amp;&amp; options.maxItems !== 0) ? options.maxItems : Infinity,
+            selectionLimit: options.multiple ? !fastDev.isNumber(options.selectionLimit) ? options.selectionLimit === 0 ? Infinity : options.selectionLimit : Infinity : Infinity,
+            items: this.toArray(options.items),
+            inside: fastDev.Util.position.top.fastDev === fastDev || !! options.inside
+        });
+        fastDev.each([&quot;onRetrieveError&quot;, &quot;onBeforeRetrieve&quot;, &quot;onAfterRetrieve&quot;, &quot;onBeforeRemove&quot;, &quot;onAfterChoose&quot;, &quot;itemRenderer&quot;, &quot;onEnterKeydown&quot;, &quot;onSearchIconClick&quot;], function (i, name) {
+            options[name] = typeof options[name] === &quot;function&quot; ? options[name] : fastDev.noop;
+        });
+        fastDev.apply(global, {
+            pageContext: options.inside ? window : fastDev.Util.position.top,
+            sequence: fastDev.getID(),
+            menuHeight: (window.parseInt(options.scrollHeight) || 180) + &quot;px&quot;,
+            selectionCount: 0,
+            requestCount: 0,
+            labelWidth: 0,
+            onBlur: fastDev.noop,
+            cache: {},
+            // 用于保存原始数据
+            items: {},
+            // 用于保存当前值的原始数据
+            values: {}
+        });
+        // 提供给表单使用的方法名
+        this.addItems = this.appendItems;
+    },
+<span id='fastDev-Ui-AutoComplete-method-construct'>    /**
+</span>     * 构造控件
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有参数
+     * @protected
+     */
+    construct: function (options, global) {
+        var context = global.pageContext;
+        this.merge(context.fastDev(this.popupStaticTemplate(global.params)).appendTo(fastDev(context.document.body)));
+        fastDev.apply(global, {
+            win: fastDev(window),
+            docHtml: fastDev(document.documentElement),
+            menu: this.find(&quot;[elem='autocomplete-menu']&quot;),
+            selection: this.find(&quot;[elem='autocomplete-selection-items']&quot;),
+            menuItems: this.find(&quot;[elem='autocomplete-menu-items']&quot;),
+            inputBox: this.find(&quot;[elem='autocomplete-box']&quot;),
+            input: this.find(&quot;[elem='autocomplete-input']&quot;),
+            custom: this.find(&quot;[elem='autocomplete-custom']&quot;),
+            searchIcon: this.find(&quot;[elem='autocomplete-searchicon']&quot;),
+            box: this.find(&quot;[elem='autocomplete-input']&quot;),
+            valueInput: this.find(&quot;[id='&quot; + options.id + &quot;']&quot;),
+            isBlur: true
+        });
+        global.topDocHtml = options.inside ? global.docHtml : fastDev(context.document.documentElement);
+        if (options.showSearchIcon) {
+            global.inputBox.addClass(&quot;ui-search&quot;);
+        }
+        this.elems.splice(1, 0, &quot;none&quot;);
+    },
+<span id='fastDev-Ui-AutoComplete-method-init'>    /**
+</span>     * 控件初始化
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有参数
+     * @protected
+     */
+    init: function (options, global) {
+        var that = this;
+        // 绑定事件
+        // 输入框聚焦事件
+        global.input.bind(&quot;focus&quot;, fastDev.setFnInScope(this, this.inputFocusHandle))
+        // 输入框失焦事件
+        .bind(&quot;blur&quot;, fastDev.setFnInScope(this, this.inputBlurHandle))
+        // 输入框按键事件
+        .bind(&quot;keydown&quot;, global.inputHandle = fastDev.setFnInScope(this, this.inputKeydownHandle));
+        // 文本框值为空时给提示信息
+        if (fastDev.Browser.isFirefox) {
+            // 解决火狐浏览器下开启中文输入法时，事件捕获被丢失的情况（火狐支持input事件）
+            global.input.bind(&quot;input&quot;, global.inputHandle);
+        }
+        if (fastDev.Browser.isIE6) {
+            // IE6下回车事件不能由keydown捕获
+            global.input.bind(&quot;keyup&quot;, function (event) {
+                if (event.keyCode === 13) {
+                    global.inputHandle(event);
+                }
+            });
+        }
+        // 文档点击事件
+        global.docHtml.bind(&quot;click&quot;, global.docClickEvent = fastDev.setFnInScope(this, this.docClickHandle));
+        if (!options.inside) {
+            global.topDocHtml.bind(&quot;click&quot;, global.docClickEvent);
+            global.win.bind(&quot;unload&quot;, function () {
+                global.topDocHtml.unbind(&quot;click&quot;, global.docClickEvent);
+                that.destroy();
+            });
+        }
+        // 提示层鼠标悬浮事件
+        global.menu.bind(&quot;mouseover&quot;, fastDev.setFnInScope(this, this.menuOverHandle))
+        // 提示层鼠标移除事件
+        .bind(&quot;mouseout&quot;, fastDev.setFnInScope(this, this.menuOutHandle));
+        // 输入框值改变事件
+        global.keyChangeHandle = fastDev.setFnInScope(this, this.keyChangeHandle);
+        // 标签鼠标事件
+        global.selection.bind(&quot;mouseover&quot;, fastDev.setFnInScope(this, this.selectionOverHandle))
+        // 鼠标移出
+        .bind(&quot;mouseout&quot;, fastDev.setFnInScope(this, this.selectionOutHandle))
+        // 鼠标点击删除标签
+        .bind(&quot;click&quot;, fastDev.setFnInScope(this, this.selectionClickHandle));
+        global.doRetrieveHandle = fastDev.setFnInScope(this, this.doRetrieve);
+        // 搜索图标点击事件
+        global.searchIcon.bind(&quot;click&quot;, function () {
+            options.onSearchIconClick.call(that, that.getValue());
+        });
+        if (global.initSource) {
+            // 初始数据代理
+            // 目前使用本地数据源时，不处理远程数据源，所以不初始代理
+            this.initProxy.setOptions({
+                onError: fastDev.setFnInScope(this, options.onRetrieveError || fastDev.noop),
+                timeout: options.connectTimeout,
+                url: options.initSource = global.initSource,
+                onAfterLoad: fastDev.setFnInScope(this, function (data) {
+                    if (data &amp;&amp; !this.dataset.select().length) {
+                        // 处理字符串数据
+                        this.constructItems(data);
+                    }
+                }
+            )});
+        }
+        // 初始数据集
+        if (options.value) {
+            this.appendValue(options.value);
+        }
+        if (options.disabled) {
+            options.disabled = false;
+            this.disable();
+        } else if (options.readonly) {
+            this.setReadonly(true);
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-bind'>    /**
+</span>     * 绑定事件
+     * @param {String} type 事件类型
+     * @param {Function} handle 事件句柄 
+     * @private 
+     */
+    bind: function (type, handle) {
+        if (type === &quot;blur&quot;) {
+            this._global.onBlur = handle;
+        } else {
+            this.superClass.bind.apply(this, arguments);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-inputFocusHandle'>    /**
+</span>     * 输入框聚焦事件处理
+     * @private
+     */
+    inputFocusHandle: function () {
+        if (!this._global.input.prop(&quot;value&quot;)) {
+            this.showHint();
+        }
+        this._global.isBlur = false;
+    },
+<span id='fastDev-Ui-AutoComplete-method-inputBlurHandle'>    /**
+</span>     * 输入框失焦事件处理
+     * @private
+     */
+    inputBlurHandle: function () {},
+<span id='fastDev-Ui-AutoComplete-method-menuOverHandle'>    /**
+</span>     * 提示层鼠标悬浮事件处理
+     * @param {Event} event
+     * @private
+     */
+    menuOverHandle: function (event) {
+        var sequence = &quot;list&quot; + this._global.sequence,
+            target = fastDev(event.target),
+            item = target;
+        if (target.attr(&quot;name&quot;) === sequence || !! (item = target.parents(&quot;li[name='&quot; + sequence + &quot;']&quot;)).elems[0]) {
+            item.addClass(&quot;ui-list-selected&quot;);
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-menuOutHandle'>    /**
+</span>     * 提示层鼠标移出事件处理
+     * @private
+     */
+    menuOutHandle: function () {
+        this._global.menu.find(&quot;.ui-list-selected&quot;).removeClass(&quot;ui-list-selected&quot;);
+    },
+<span id='fastDev-Ui-AutoComplete-method-selectionOverHandle'>    /**
+</span>     * 标签层鼠标悬浮事件
+     * @param {Event} event
+     * @private
+     */
+    selectionOverHandle: function (event) {
+        if (this._options.disabled) {
+            return;
+        }
+        var sequence = &quot;label&quot; + this._global.sequence,
+            target = fastDev(event.target),
+            item = target;
+        if (target.attr(&quot;name&quot;) === sequence || !! (item = target.parent(&quot;li[name='&quot; + sequence + &quot;']&quot;)).elems[0]) {
+            item.addClass(&quot;ui-autocomplete-over&quot;);
+            if (!item.prop(&quot;title&quot;)) {
+                item.prop(&quot;title&quot;, item.find(&quot;span&quot;).getText());
+            }
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-selectionOutHandle'>    /**
+</span>     * 标签鼠标移出事件处理
+     * @private
+     */
+    selectionOutHandle: function () {
+        if (this._options.disabled) {
+            return;
+        }
+        this._global.selection.find(&quot;li.ui-autocomplete-over&quot;).removeClass(&quot;ui-autocomplete-over&quot;);
+    },
+<span id='fastDev-Ui-AutoComplete-method-selectionClickHandle'>    /**
+</span>     * 标签单击关闭事件处理
+     * @param {Event} event
+     * @private
+     */
+    selectionClickHandle: function (event) {
+        if (this._options.disabled) {
+            return;
+        }
+        var global = this._global,
+            sequence = &quot;label&quot; + global.sequence,
+            target = fastDev(event.target),
+            item = target;
+        if (target.attr(&quot;name&quot;) === sequence || !! (item = target.parent(&quot;li[name='&quot; + sequence + &quot;']&quot;)).elems[0]) {
+            if (event.target.nodeName.toLowerCase() === &quot;a&quot;) {
+                this.closeLabel(item);
+            } else {
+                global.selection.find(&quot;li.ui-autocomplete-selected&quot;).removeClass(&quot;ui-autocomplete-selected&quot;);
+                item.addClass(&quot;ui-autocomplete-selected&quot;);
+                return fastDev.Event.stopBubble(event);
+            }
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-docClickHandle'>    /**
+</span>     * 文档单击事件处理
+     * @param {Event} event
+     * @private
+     */
+    docClickHandle: function (event) {
+        if (this._options.disabled) {
+            return;
+        }
+        var global = this._global,
+            sequence = &quot;list&quot; + global.sequence,
+            target = fastDev(event.target),
+            item = target;
+        global.selection.find(&quot;li.ui-autocomplete-selected&quot;).removeClass(&quot;ui-autocomplete-selected&quot;);
+        if (event.target === global.input.elems[0]) {
+            // input focus
+        } else if (target.attr(&quot;name&quot;) === sequence || !! (item = target.parents(&quot;li[name='&quot; + sequence + &quot;']&quot;)).elems[0]) {
+            global.input.elems[0].focus();
+            this.appendValue(global.items[item.attr(&quot;item&quot;)]);
+            if (this._options.multiple) {
+                this.showHint();
+            }
+            return fastDev.Event.stopBubble(event);
+        } else if (!target.parents(&quot;#autocomplete-menu-&quot; + global.sequence).elems[0]) {
+            global.menu.hide();
+            global.items = {};
+            if (!global.isBlur) {
+                global.onBlur();
+                global.isBlur = true;
+            }
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-inputKeydownHandle'>    /**
+</span>     * 输入框按键事件处理
+     * @param {Event} event
+     * @private
+     */
+    inputKeydownHandle: function (event) {
+        var options = this._options,
+            global = this._global;
+        global.handling = true;
+        if (options.disabled) {
+            return;
+        }
+        if (options.multiple) {
+            if (global.lastKeypressCode === 8 &amp;&amp; event.keyCode !== 8) {
+                global.selectedLabel = null;
+            }
+            global.selection.find(&quot;li.ui-autocomplete-selected&quot;).removeClass(&quot;ui-autocomplete-selected&quot;);
+        }
+        global.lastKeypressCode = event.keyCode;
+        switch (event.keyCode) {
+            case 38:
+                // up
+                return this.moveItem(&quot;up&quot;, event);
+            case 40:
+                // down
+                return this.moveItem(&quot;down&quot;, event);
+            case 9:
+            case 186:
+            case 188:
+            case 13:
+                // 逗号，分号，制表，回车
+                return this.dealWithEnterKey(event.keyCode, event);
+            case 8:
+                // delete
+                return this.removeLabel(event);
+            default:
+                this.setTimer(global.keyChangeHandle, 10);
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-setTimer'>    /**
+</span>     * 设置检索计时
+     * @param {Function} func
+     * @param {Number} delay
+     * @private
+     */
+    setTimer: function (func, delay) {
+        var global = this._global,
+            options = this._options;
+        if (global.selectionCount &lt; options.selectionLimit) {
+            window.clearTimeout(global.timer);
+            global.timer = window.setTimeout(func, delay);
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-showHint'>    /**
+</span>     * 显示默认的提示信息项
+     * @private
+     */
+    showHint: function () {
+        var options = this._options,
+            global = this._global,
+            items, value, temp;
+        if (options.readonly) {
+            return;
+        }
+        if ( !! options.hintItems) {
+            if (typeof options.hintItems === &quot;boolean&quot; &amp;&amp; !! options.items.length) {
+                items = options.items;
+            } else if ( !! options.hintItems.length) {
+                items = this.toArray(options.hintItems);
+            }
+            if ( !! items) {
+                if (options.multiple) {
+                    value = (&quot; &quot; + global.valueInput.prop(&quot;value&quot;).replace(/[,]/g, &quot; &quot;) + &quot; &quot;);
+                    temp = [];
+                    for (var i = 0; i &lt; items.length; i++) {
+                        if (value.search(new RegExp(&quot; &quot; + this.gainValue(items[i], &quot;value&quot;, true) + &quot; &quot;)) === -1) {
+                            temp.push(items[i]);
+                        }
+                        if (temp.length === options.maxItems) {
+                            break;
+                        }
+                    }
+                    items = temp;
+                }
+                return this.constructItems(items, true);
+            }
+        }
+        if ( !! options.hintText) {
+            this.showTips(options.hintText);
+        } else {
+            global.menu.hide();
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-toArray'>    /**
+</span>     * 将数据转换为数组
+     * @param {Object} data
+     * @return {Array}
+     * @private
+     */
+    toArray: function (data) {
+        return data ? (typeof data === &quot;string&quot; || typeof data === &quot;boolean&quot; || fastDev.isNumber(data)) ? (data + &quot;&quot;).split(&quot;,&quot;) : fastDev.isArray(data) ? data : fastDev.isPlainObject(data) ? [data] : [] : [];
+    },
+<span id='fastDev-Ui-AutoComplete-method-removeLabel'>    /**
+</span>     * 键盘按键移除标签
+     * @param {Event} event
+     * @private
+     */
+    removeLabel: function (event) {
+        var global = this._global,
+            options = this._options;
+        if (!options.readonly) {
+            this.setTimer(global.keyChangeHandle, 10);
+            if (options.multiple &amp;&amp; ( !! global.selectionCount) &amp;&amp; !global.input.prop(&quot;value&quot;)) {
+                if ( !! global.selectedLabel) {
+                    this.closeLabel(global.selectedLabel, true);
+                    global.input.elems[0].focus();
+                    global.selectedLabel = null;
+                } else {
+                    global.selection.find(&quot;li.ui-autocomplete-selected&quot;).removeClass(&quot;ui-autocomplete-selected&quot;);
+                    global.selectedLabel = global.selection.find(&quot;li:last&quot;).addClass(&quot;ui-autocomplete-selected&quot;);
+                }
+                return fastDev.Event.stopBubble(event);
+            }
+        }
+        return true;
+    },
+<span id='fastDev-Ui-AutoComplete-method-moveItem'>    /**
+</span>     * 提示结果菜单上下选取
+     * @param {String} direction 按键方向
+     * @param {Event} event
+     * @private
+     */
+    moveItem: function (direction, event) {
+        var global = this._global,
+            menu = global.menuItems,
+            items, item, start;
+        if (global.menu.isShow() &amp;&amp; !! (items = menu.find(&quot;li&quot;)).elems.length) {
+            start = !! (item = menu.find(&quot;li.ui-list-selected:first&quot;)).elems[0] ? (direction === &quot;up&quot; ? item.prev() : item.next()) : menu.find(&quot;li:&quot; + (direction === &quot;up&quot; ? &quot;last&quot; : &quot;first&quot;));
+            items.removeClass(&quot;ui-list-selected&quot;);
+            start.addClass(&quot;ui-list-selected&quot;);
+            if (this._options.autoFill) {
+                item = start.hasElem() ? start : global.prevInputValue;
+                if (this._options.multiple) {
+                    global.input.prop(&quot;value&quot;, this.gainValue(item, &quot;text&quot;, true));
+                } else {
+                    this.appendValue(fastDev.isString(item) ? item : global.items[item.attr(&quot;item&quot;)], true);
+                }
+                global.input.elems[0].focus();
+            }
+            if (start.hasElem()) {
+                // 处理滚动滚动条
+                menu = global.menu;
+                var top = start.elems[0].offsetTop,
+                    itemHeight = start.outerHeight(),
+                    menuHeight = menu.height(),
+                    scrollTop = menu.scrollTop();
+                if (top + itemHeight &gt; scrollTop + menuHeight) {
+                    menu.scrollTop(top + itemHeight - menuHeight);
+                } else if (top &lt; scrollTop) {
+                    menu.scrollTop(top);
+                }
+            }
+            return fastDev.Event.stopBubble(event);
+        }
+        return true;
+    },
+<span id='fastDev-Ui-AutoComplete-method-dealWithEnterKey'>    /**
+</span>     * 处理键盘输入事件
+     * @param {String} code 键位代码
+     * @private
+     */
+    dealWithEnterKey: function (code, event) {
+        var global = this._global,
+            options = this._options,
+            items = global.menuItems,
+            item, value;
+        if (options.multiple &amp;&amp; (code === 9 || code === 188 || code === 186)) {
+            // 逗号，分号或制表符
+            if ( !! options.allowAutoCreate &amp;&amp; !! (value = fastDev.Util.StringUtil.trim(global.input.prop(&quot;value&quot;).replace(/[,;]/g, &quot;&quot;)))) {
+                item = (&quot; &quot; + global.valueInput.prop(&quot;value&quot;).replace(/[,]/g, &quot; &quot;) + &quot; &quot;);
+                if (item.search(new RegExp(&quot; &quot; + value + &quot; &quot;)) === -1) {
+                    this.appendValue(value);
+                    global.input.elems[0].focus();
+                    global.menu.hide();
+                    return fastDev.Event.stopBubble(event);
+                }
+            }
+        } else if (global.menu.isShow()) {
+            item = !! (item = items.find(&quot;li.ui-list-selected[name='list&quot; + global.sequence + &quot;']&quot;)).elems[0] ? item : options.selectFirst ? items.find(&quot;li:first[name='list&quot; + global.sequence + &quot;']&quot;) : null;
+            if ( !! item &amp;&amp; item.hasElem()) {
+                this.appendValue(global.items[item.attr(&quot;item&quot;)]);
+                global.input.elems[0].focus();
+                if (options.multiple) {
+                    this.showHint();
+                }
+            }
+        }
+        if (!options.multiple) {
+            global.menu.hide();
+            global.items = {};
+        }
+        if (code === 13) {
+            // 回车事件
+            options.onEnterKeydown.call(this, this.getValue());
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-keyChangeHandle'>    /**
+</span>     * 按键改变事件处理
+     * @private
+     */
+    keyChangeHandle: function () {
+        var options = this._options,
+            global = this._global,
+            value = global.input.prop(&quot;value&quot;),
+            // 输入框的当前值
+            keyword = fastDev.Util.StringUtil.ltrim(value || &quot;&quot;),
+            cache;
+        options.onchange.call(this, value);
+        if (!keyword || keyword.length &lt; options.minChars || global.isLoading) {
+            if (!keyword) {
+                this.showHint();
+            }
+            return;
+        }
+        global.keyword = keyword;
+        if (options.allowCache &amp;&amp; !! (cache = !options.initSource ? null : global.cache[keyword])) {
+            this.constructItems(cache, false);
+        } else {
+            this.setTimer(global.doRetrieveHandle, Math.max(options.keyDelay - 10, 0));
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-gainValue'>    /**
+</span>     * 取得元素的值
+     * @param {DomObject|Object|String|Record} item
+     * @param {String} name
+     * @param {Boolean} str
+     * @private
+     */
+    gainValue: function (item, name, str) {
+        if (!item) {
+            return &quot;&quot;;
+        }
+        var res = {};
+        if ( !! item.elems &amp;&amp; !! item.elems.length &amp;&amp; typeof item.attr === &quot;function&quot; &amp;&amp; typeof item.prop === &quot;function&quot;) {
+            res.value = fastDev.Util.StringUtil.trim(this.toStr(item.attr(name || &quot;itemVal&quot;)) || this.toStr(item.prop(name || &quot;value&quot;)) || this.toStr(item.attr(&quot;text&quot;)) || this.toStr(item.prop(&quot;text&quot;)));
+            res.text = fastDev.Util.StringUtil.trim(this.toStr(item.attr(name || &quot;text&quot;)) || this.toStr(item.prop(name || &quot;text&quot;)) || res.value);
+        } else {
+            name = this.getMapping(name || &quot;value&quot;);
+            res = fastDev.Util.StringUtil.trim(this.toStr(item[name || (&quot;expando&quot; + fastDev.getID())]) || this.toStr(item.value) || this.toStr(item.text) || this.toStr(item));
+        }
+        if (str) {
+            res = typeof res === &quot;object&quot; ? name ? res[name] || res.value : res.value || res.text : res;
+        }
+        return res;
+    },
+<span id='fastDev-Ui-AutoComplete-method-toStr'>    /**
+</span>     * 作字符化处理
+     * @param {Object} item
+     * @private
+     */
+    toStr: function (item) {
+        return typeof item === &quot;string&quot; || typeof item === &quot;number&quot; || typeof item === &quot;boolean&quot; ? item + &quot;&quot; : &quot;&quot;;
+    },
+<span id='fastDev-Ui-AutoComplete-method-showTips'>    /**
+</span>     * 显示提示信息
+     * @param {String} tip
+     * @private
+     */
+    showTips: function (tip) {
+        var global = this._global,
+            options = this._options,
+            doc = global.pageContext.document,
+            isLoading = tip === options.searchingText &amp;&amp; !fastDev.Browser.isIE6;
+        if ( !! tip &amp;&amp; global.selectionCount &lt; options.selectionLimit) {
+            this.dataset.clean();
+            global.menuItems.empty();
+            global.menu.css(&quot;height&quot;, 20);
+            fastDev(doc.createElement(&quot;span&quot;)).appendTo(fastDev(doc.createElement(&quot;div&quot;)).addClass(&quot;ui-list-item&quot;).addClass(&quot;ui-list-gray&quot;).css(&quot;overflow&quot;, &quot;hidden&quot;).appendTo(global.custom.empty())).addClass(isLoading ? &quot;ui-loading-indicator&quot; : &quot;&quot;).css(&quot;text-indent&quot;, isLoading ? &quot;20px&quot; : &quot;0px&quot;).elems[0].innerHTML = tip;
+            this.position(global.menu, global.inputBox).show();
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-getMapping'>    /**
+</span>     * 获取字段映射
+     * @param {String} name 需映射的字段名
+     * @private
+     */
+    getMapping: function (name) {
+        var options = this._options,
+            fields = options.fields,
+            length = fields.length;
+        while (length--) {
+            if (fastDev.isPlainObject(fields[length]) &amp;&amp; fields[length].mapping === name) {
+                return fields[length].name;
+            }
+        }
+        return name;
+    },
+<span id='fastDev-Ui-AutoComplete-method-doRetrieve'>    /**
+</span>     * 执行检索
+     * @private
+     */
+    doRetrieve: function () {
+        var options = this._options,
+            global = this._global,
+            keyword = global.keyword,
+            params, len;
+        if (options.onBeforeRetrieve.call(this, keyword) !== false) {
+            if (!options.initSource) {
+                len = options.items.length;
+                // 本地数据源
+                keyword = keyword.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, &quot;\\$&amp;&quot;);
+                var items = [],
+                    igCase = options.matchCase ? &quot;&quot; : &quot;i&quot;,
+                    regx, value;
+                value = (&quot; &quot; + global.valueInput.prop(&quot;value&quot;).replace(/[,]/g, &quot; &quot;) + &quot; &quot;);
+                regx = options.matchContains ? new RegExp(&quot;(?:&quot; + keyword + &quot;)&quot;, &quot;g&quot; + igCase) : new RegExp(&quot;(?:^&quot; + keyword + &quot;)&quot;, igCase);
+                while (len--) {
+                    regx.lastIndex = 0;
+                    if (regx.test(this.gainValue(options.items[len], &quot;text&quot;, true)) &amp;&amp; (options.multiple ? value.search(new RegExp(&quot; &quot; + this.gainValue(options.items[len], &quot;value&quot;, true) + &quot; &quot;)) === -1 : true)) {
+                        items.push(options.items[len]);
+                        if (items.length === options.maxItems) {
+                            break;
+                        }
+                    }
+                }
+                this.constructItems(items);
+            } else {
+                params = {};
+                global.isLoading = true;
+                global.requestCount++;
+                fastDev.apply(params, options.extraParams);
+                params[options.queryName] = keyword;
+                this.initProxy.load(params, null, true);
+                this.showTips(options.searchingText);
+            }
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-constructItems'>    /**
+</span>     * 构造结果列表
+     * @param {Array|String|Object} data
+     * @param {Boolean} hint 是否是提示项构造
+     * @param {Boolean} isCache 是否是缓存数据
+     * @protected
+     */
+    constructItems: function (data, hint, isCache) {
+        var global = this._global,
+            options = this._options,
+            keyword = global.keyword,
+            json;
+        global.prevInputValue = fastDev.Util.StringUtil.ltrim(global.input.prop(&quot;value&quot;));
+        global.menu.css(&quot;height&quot;, &quot;auto&quot;);
+        if (typeof data === &quot;string&quot;) {
+            try {
+                json = fastDev.Util.JsonUtil.parseJson(data = fastDev.Util.StringUtil.trim(data));
+            } catch (e) {} finally {
+                data = !! json ? json : data;
+                data = typeof options.resultRenderer === &quot;function&quot; ? data : this.toArray(data);
+            }
+        }
+        if (hint || ( !! keyword &amp;&amp; keyword === global.prevInputValue &amp;&amp; options.onAfterRetrieve.call(this, (data = data || this.dataset.select() || []).slice(0), keyword) !== false)) {
+            if ( !! data.length) {
+                global.custom.empty();
+                // 渲染结果项
+                this.renderMenu(data, keyword, hint);
+                // 缓存远程数据
+                if (options.allowCache) {
+                    global.cache[keyword] = !options.initSource ? [] : data;
+                }
+            } else if (options.noResultsText) {
+                this.showTips(options.noResultsText);
+                if (options.allowCache) {
+                    global.cache[keyword] = [];
+                }
+            } else {
+                global.menu.hide();
+            }
+        } else {
+            global.menu.hide();
+        }
+        global.isLoading = false;
+    },
+<span id='fastDev-Ui-AutoComplete-method-renderMenu'>    /**
+</span>     * 渲染提示菜单层
+     * @param {Array|String|Object} data
+     * @param {Boolean} hint
+     * @param {String} keyword
+     * @private
+     */
+    renderMenu: function (data, keyword, hint) {
+        var global = this._global,
+            options = this._options,
+            max = options.maxItems,
+            items = [],
+            index = 0,
+            record,
+            label, regx, item, text;
+        if (typeof options.resultRenderer === &quot;function&quot;) {
+            global.custom.empty().append(label = global.pageContext.document.createElement(&quot;div&quot;));
+            options.resultRenderer.call(this, label, data, keyword);
+        } else {
+            if (!hint) {
+                global.items = {};
+            }
+            while ((record = data[index++]) &amp;&amp; index &lt;= max) {
+                items.push({
+                    text: text = this.gainValue(record, &quot;text&quot;, true),
+                    value: this.gainValue(record, &quot;value&quot;, true),
+                    item: item = fastDev.getID(),
+                    label: options.itemRenderer.call(this, record, keyword) || text
+                });
+                global.items[item] = record;
+            }
+            this.dataset.clean();
+            this._renderDynamicHtml(global.menuItems, items, global.pageContext);
+        }
+        if (global.menu.height() &gt; window.parseInt(global.menuHeight)) {
+            global.menu.css(&quot;height&quot;, global.menuHeight);
+        }
+        this.position(global.menu, global.inputBox)[(keyword || hint) ? &quot;show&quot; : &quot;hide&quot;]();
+        if (options.keywordHighlight &amp;&amp; !! keyword &amp;&amp; !hint) {
+            this.highlight(global.menu, keyword);
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-renderLabel'>    /**
+</span>     * 渲染标签元素
+     * @param {Array} items 标签值对象
+     * @private
+     */
+    renderLabel: function (items) {
+        var options = this._options,
+            global = this._global,
+            values = [],
+            doc = document,
+            len = items.length,
+            item, value, uuid;
+        while (len-- &amp;&amp; global.selectionCount &lt; options.selectionLimit) {
+            value = this.gainValue(items[len]);
+            if ( !! value &amp;&amp; options.onAfterChoose.call(this, items[len]) !== false) {
+                item = fastDev(doc.createElement(&quot;li&quot;))
+                // 添加至列表中
+                .appendTo(global.selection)
+                // 添加已选多值结果项样式
+                .addClass(&quot;ui-autocomplete-item&quot;)
+                // 设置名称标记
+                .attr(&quot;name&quot;, &quot;label&quot; + global.sequence)
+                // 当前标签值
+                .attr(&quot;itemVal&quot;, value).attr(&quot;uuid&quot;, uuid = fastDev.getID());
+                fastDev(doc.createElement(&quot;span&quot;))
+                // 添加标签值至子项中
+                .appendTo(item)
+                // 添加文本样式
+                .addClass(&quot;ui-autocomplete-text&quot;)
+                // 设置文本
+                .setText(fastDev.Util.StringUtil.trim(items[len].text) || value);
+                fastDev(doc.createElement(&quot;a&quot;))
+                // 添加标签关闭按钮
+                .appendTo(item)
+                // 添加关闭按钮样式名
+                .addClass(&quot;ui-autocomplete-close&quot;);
+                // 标记新的标签项
+                global.newItem = item;
+                item.hide();
+                // 自适应标签宽度
+                if (!this.adjustWidth(item.outerWidth(true))) {
+                    item.show();
+                }
+                // 保存值
+                values.push(value);
+                global.values[uuid] = items[len];
+                global.selectionCount++;
+            }
+        }
+        if (options.disabled) {
+            global.selection.find(&quot;li&quot;).addClass(&quot;ui-autocomplete-disabled&quot;);
+        }
+        if ( !! (item = global.valueInput.prop(&quot;value&quot;) || &quot;&quot;)) {
+            values.push(item.split(&quot;,&quot;));
+        }
+        global.valueInput.prop(&quot;value&quot;, values.join(&quot;,&quot;));
+    },
+<span id='fastDev-Ui-AutoComplete-method-closeLabel'>    /**
+</span>     * 关闭标签
+     * @param {DomObject} item 标签li
+     * @private
+     */
+    closeLabel: function (item) {
+        var options = this._options,
+            global = this._global;
+        if (!options.readonly &amp;&amp; options.onBeforeRemove.call(this, global.values[item.attr(&quot;uuid&quot;)]) !== false) {
+            var that = this,
+                values = global.valueInput.prop(&quot;value&quot;).split(&quot;,&quot;),
+                value = item.attr(&quot;itemVal&quot;) + &quot;&quot;;
+            fastDev.each(values, function (idx, val) {
+                if (value === (val + &quot;&quot;)) {
+                    values.splice(idx, 1);
+                    return false;
+                }
+            });
+            global.valueInput.prop(&quot;value&quot;, values.join(&quot;,&quot;));
+            delete global.values[item.attr(&quot;uuid&quot;)];
+            item.remove();
+            global.labelWidth = 0;
+            global.input.hide();
+            global.selection.find(&quot;li&quot;).each(function (elem) {
+                (global.newItem = item = fastDev(elem).hide()).find(&quot;span&quot;).show();
+                if (!that.adjustWidth(item.outerWidth(true))) {
+                    item.show();
+                }
+            });
+            global.input.show();
+            if (!(--global.selectionCount)) {
+                global.input.css(&quot;width&quot;, global.inputBox.width());
+            }
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-adjustWidth'>    /**
+</span>     * 自适应调节标签的宽度
+     * @param {Number} width 宽度增量值
+     * @private
+     */
+    adjustWidth: function (width) {
+        var global = this._global,
+            browser = fastDev.Browser,
+            inputWidth = global.inputBox.width() - (browser.isIE6 ? 5 : browser.isIE ? 3 : 1),
+            item;
+        // 输入框以最小宽度为82px来处理
+        if (global.labelWidth + width + 82 &gt; inputWidth) {
+            if ( !! (item = !! (item = global.selection.find(&quot;span:visible:first&quot;)).elems[0] ? item : global.selection.find(&quot;li:visible:first&quot;)).elems[0]) {
+                global.labelWidth -= item.outerWidth(true);
+                item.hide();
+                return this.adjustWidth(width);
+            } else {
+                // 输入框所在容器初始宽度小于82px
+                global.input.css(&quot;width&quot;, inputWidth);
+                return true;
+            }
+        } else {
+            // 减少输入框宽度
+            global.input.css(&quot;width&quot;, Math.max(inputWidth - (global.labelWidth += width), 20));
+        }
+    },
+<span id='fastDev-Ui-AutoComplete-method-position'>    /**
+</span>     * 定位元素
+     * @param {fastDev.Core.DomObject} obj 需定位的对象
+     * @param {fastDev.Core.DomObject} elem 相对其定位的元素
+     * @return {fastDev.Core.DomObject} obj 定位对象
+     * @private
+     */
+    position: function (obj, elem) {
+        return fastDev.Util.position.locate(obj.width(this._global.inputBox.innerWidth()), elem, this._options.inside ? window : fastDev.Util.position.top, 1);
+    },
+<span id='fastDev-Ui-AutoComplete-method-highlight'>    /**
+</span>     * 高亮 显示关键字
+     * @param {String|Element|DomObject|Component} element 需高亮的节点元素、控件或标签选择器
+     * @param {String} keyword 需高亮显示的关键字
+     * @param {String} [className] 高亮样式名，默认使用控件预设或用户配置的样式名
+     * @return {fastDev.Ui.AutoComplte} 本控件实例
+     */
+    highlight: function (element, keyword, className) {
+        if ( !! keyword &amp;&amp; element &amp;&amp; (fastDev.isDomObject(element) || fastDev.isComponent(element) || (element = fastDev(element || (&quot;#e&quot; + fastDev.getID()))).hasElem())) {
+            var that = this,
+                options = this._options,
+                context = this._global.pageContext.fastDev,
+                fx = context.Util.StringUtil.highlight,
+                regx = new RegExp(&quot;(&quot; + (options.matchContains ? &quot;&quot; : &quot;^&quot;) + keyword.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, &quot;\\$&amp;&quot;) + &quot;)&quot;, options.matchCase ? &quot;&quot; : &quot;i&quot;);
+            fastDev.each(element.elems, function (idx, elem) {
+                fx(elem, regx, &quot;em&quot;, className || options.highlightCls);
+            });
+        }
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-setParam'>    /**
+</span>     * 添加查询参数
+     * 会覆盖之前添加的同名的查询参数
+     * @param {Object} params 参数对象，仅接受普通的javascript对象（即使用&quot;{}&quot;声明的对象字面量），对象属性名为查询参数名，属性值为查询参数值
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    setParam: function (params) {
+        if (fastDev.isPlainObject(params)) {
+            fastDev.apply(this._options.extraParams, params);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-setItems'>    /**
+</span>     * 设置静态数据
+     * @param {Array|String|Object} 静态数据值
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    setItems: function (items) {
+        var options = this._options;
+        options.items = this.toArray(items);
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-appendItems'>    /**
+</span>     * 追加静态数据
+     * @param {Array|String|Object} 静态数据值
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    appendItems: function (items) {
+        return this.setItems(this._options.items.concat(this.toArray(items)));
+    },
+<span id='fastDev-Ui-AutoComplete-method-setHintItems'>    /**
+</span>     * 设置输入框为空时的默认的提示项
+     * @param {Array|String|Object} 提示项值
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    setHintItems: function (items) {
+        this._options.hintItems = items;
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-setValue'>    /**
+</span>     * 设置控件值
+     * @param {Object} value 要设置的值
+     * @return {fastDev.Ui.AutoComplete}
+     */
+    setValue: function (value) {
+        this.reset();
+        return this.appendValue(value);
+    },
+<span id='fastDev-Ui-AutoComplete-method-appendValue'>    /**
+</span>     * 单值模式时，等效于setValue，多值模式时，可追加新的值项（创建新的标签）
+     * 多用于多值模式
+     * @param {Object} value 要追加的值
+     * @param {Boolean} noClose 追加值后不自动关闭提示层
+     * @return {fastDev.Ui.AutoComplete}
+     */
+    appendValue: function (value, noClose) {
+        var global = this._global,
+            options = this._options,
+            uuid;
+        value = (value === undefined || value === null || value === &quot;&quot;) ? &quot;&quot; : this.toArray(value);
+        if ( !! value &amp;&amp; !! value.length) {
+            if (options.multiple) {
+                global.input.hide();
+                this.renderLabel(value);
+                global.input.prop(&quot;value&quot;, &quot;&quot;).show();
+                if (global.handling) {
+                    global.input.elems[0].focus();
+                }
+            } else {
+                if (options.onAfterChoose.call(this, value[0]) !== false) {
+                    global.input.prop(&quot;value&quot;, this.gainValue(value[0], &quot;text&quot;, true));
+                    delete global.values[global.valueInput.attr(&quot;uuid&quot;) || &quot;0&quot;];
+                    global.valueInput.prop(&quot;value&quot;, this.gainValue(value[0], &quot;value&quot;, true)).attr(&quot;uuid&quot;, uuid = fastDev.getID());
+                    global.values[uuid] = value[0];
+                }
+            }
+        }
+        if (!noClose) {
+            global.menu.hide();
+            global.items = {};
+        }
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-clean'>    /**
+</span>     * 清理所有静态数据 （同时会重置输入框当前值为空）
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    clean: function () {
+        return this.setHintItems(false).setItems([]).reset();
+    },
+<span id='fastDev-Ui-AutoComplete-method-reset'>    /**
+</span>     * 清理所有已选标签值或者输入框的当前值（重置输入框值为空）
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    reset: function () {
+        var options = this._options,
+            global = this._global;
+        window.clearTimeout(global.timer);
+        global.input.prop(&quot;value&quot;, &quot;&quot;);
+        global.valueInput.prop(&quot;value&quot;, &quot;&quot;);
+        global.labelWidth = 0;
+        global.keyword = &quot;&quot;;
+        global.prevInputValue = &quot;&quot;;
+        if (options.multiple &amp;&amp; !! global.selectionCount) {
+            global.selection.empty();
+            global.selectionCount = 0;
+            global.input.css(&quot;width&quot;, global.inputBox.innerWidth());
+        }
+        global.menu.hide();
+        global.items = {};
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-getItems'>    /**
+</span>     * 获取输入框值的原始数据对象数组
+     * @return {Array}
+     */
+    getItems: function () {
+        var options = this._options,
+            global = this._global,
+            items = [],
+            item;
+        if (options.multiple) {
+            global.selection.find(&quot;li&quot;).each(function (elem) {
+                items.push(global.values[fastDev(elem).attr(&quot;uuid&quot;)]);
+            });
+        } else if (item = global.values[global.valueInput.attr(&quot;uuid&quot;) || &quot;0&quot;]) {
+            items.push(item);
+        }
+        return items;
+    },
+<span id='fastDev-Ui-AutoComplete-method-getValue'>    /**
+</span>     * 获取输入框的值
+     * @return {String}
+     */
+    getValue: function () {
+        return this._global[this._options.multiple ? &quot;valueInput&quot; : &quot;input&quot;].prop(&quot;value&quot;);
+    },
+<span id='fastDev-Ui-AutoComplete-method-disable'>    /**
+</span>     * 禁用本控件
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    disable: function () {
+        var global = this._global,
+            options = this._options;
+        if (!options.disabled) {
+            window.clearTimeout(global.timer);
+            global.inputBox.addClass(&quot;ui-form-disabled&quot;);
+            global.valueInput.prop(&quot;disabled&quot;, &quot;disabled&quot;);
+            if (options.multiple &amp;&amp; !! global.selectionCount) {
+                global.selection.find(&quot;li&quot;).addClass(&quot;ui-autocomplete-disabled&quot;);
+            }
+            this.setReadonly(true);
+            global.menu.hide();
+            options.disabled = true;
+        }
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-enable'>    /**
+</span>     * 启用本控件
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    enable: function () {
+        var global = this._global,
+            options = this._options;
+        if (options.disabled) {
+            options.disabled = false;
+            global.inputBox.removeClass(&quot;ui-form-disabled&quot;);
+            global.valueInput.prop(&quot;disabled&quot;, &quot;&quot;);
+            if (options.multiple &amp;&amp; !! global.selectionCount) {
+                global.selection.find(&quot;li&quot;).removeClass(&quot;ui-autocomplete-disabled&quot;);
+            }
+            this.setReadonly(false);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-AutoComplete-method-setReadonly'>    /**
+</span>     * 设置是否只读
+     * @param {Boolean} [readonly=true] 是否只读
+     * @return {fastDev.Ui.AutoComplete} 本控件实例
+     */
+    setReadonly: function (readonly) {
+        var options = this._options;
+        if (!options.disabled) {
+            options.readonly = readonly === false ? false : true;
+            this._global.input.prop(&quot;readonly&quot;, options.readonly ? &quot;readonly&quot; : &quot;&quot;);
+        }
+        return this;
+    }
+});</pre>
+</body>
+</html>

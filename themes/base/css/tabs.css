@@ -1,0 +1,177 @@
+    @charset "utf-8";
+
+    /*
+     * tab(自适应宽度)控件，此为选项卡菜单样式
+     * */
+    @media projection, screen {
+        .ui-tabs-hide {
+            display: none;
+        }
+    }
+    @media print {
+        .ui-tabs-nav {
+            display: none;
+        }
+    }
+    .ui-tabs-nav, .ui-tabs-panel {
+        font-family: "Trebuchet MS", Trebuchet, Verdana, Helvetica, Arial, sans-serif;
+        font-size: 12px;
+    }
+    .ui-tabs-nav {
+        list-style: none;
+        margin: 10px 5px;
+        padding: 0 0 0 4px;
+    }
+    .ui-tabs-nav:after {
+        clear: both;
+        content: " ";
+        display: block;
+    }
+    .ui-tabs-nav li {
+        float: left;
+        height: 27px;
+        margin: 0 0 0 3px;
+    }
+    .ui-tabs-nav li .explain {
+        clear: both;
+        color: #A3A3A3;
+        float: right;
+        height: 27px;
+        position: fixed;
+        right: 0;
+        text-align: right;
+    }
+	/*
+     * tab菜单背景
+     * */
+    .ui-tabs-nav a, .ui-tabs-nav a span {
+        background: url(../images/tab.png) no-repeat;
+        display: block;
+        font-size: 12px;
+        padding:0 10px;
+    }
+    .ui-tabs-nav a {
+        color: #075587;
+        line-height: 1.2;
+        margin: 1px 0 0;
+        padding-left: 0;
+        outline: 0;
+        text-align: center;
+        text-decoration: none;
+        /* 
+         * IE 6 
+         * */
+        white-space: nowrap; 
+        /* 
+         * Firefox 
+         * */ 
+    }
+	/*
+     * tab当前菜单样式
+     * */
+    .ui-tabs-nav .ui-tabs-selected a {
+        color: #075587;
+        font-weight: bold;
+        margin-top: 0px;
+        margin-bottom: 1px;
+        text-decoration: none;
+        top: 1px;
+    }
+    .ui-tabs-nav a span {
+        height: 26px;
+        line-height: 26px;
+        min-width: 50px;
+        min-height: 26px;
+        padding-right: 0;
+        width: 50px;
+    }
+    * > .ui-tabs-nav a span {
+        height: auto;
+        text-decoration: none;
+        width: auto;
+    }
+	/*
+     * tab当前菜单样式位置
+     * */
+    .ui-tabs-nav .ui-tabs-selected a span {
+        padding-bottom: 1px;
+    }
+	/*
+     * tab当前菜单样式背景右
+     * */
+    .ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active {
+        background-position: 100% -150px;
+        text-decoration: none;
+    }
+	/*
+     * tab菜单样式背景右
+     * */
+    .ui-tabs-nav a, .ui-tabs-nav .ui-tabs-disabled a:hover, .ui-tabs-nav .ui-tabs-disabled a:focus, .ui-tabs-nav .ui-tabs-disabled a:active {
+        background-position: 100% -100px;
+    }
+	/*
+     * tab当前菜单样式背景左
+     * */
+    .ui-tabs-nav .ui-tabs-selected a span, .ui-tabs-nav a:hover span, .ui-tabs-nav a:focus span, .ui-tabs-nav a:active span {
+        background-position: 0 -50px;
+    }
+	/*
+     * tab菜单样式背景左
+     * */
+    .ui-tabs-nav a span, .ui-tabs-nav .ui-tabs-disabled a:hover span, .ui-tabs-nav .ui-tabs-disabled a:focus span, .ui-tabs-nav .ui-tabs-disabled a:active span {
+        background-position: 0 0;
+    }
+	/*
+     * tab当前菜单链接字样式
+     * */
+    .ui-tabs-nav .ui-tabs-selected a:link, .ui-tabs-nav .ui-tabs-selected a:visited, .ui-tabs-nav .ui-tabs-disabled a:link, .ui-tabs-nav .ui-tabs-disabled a:visited {
+        cursor: text;
+    }
+	/*
+     * tab菜单链接字样式
+     * */
+    .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active {
+        cursor: pointer;
+        color: #075587;
+    }
+    .ui-tabs-disabled {
+        filter: alpha(opacity=40);
+        opacity: .4;
+    }
+    .ui-tabs-panel {
+        background: #fff;
+        padding: 0;
+    }
+    .ui-tabs-panel2 {
+        background: #fff;
+        border-bottom: 1px solid #0195C5;
+        padding: 0;
+    }
+    .ui-tabs-loading em {
+        background: url(../images/loading.gif) no-repeat 0 50%;
+        padding: 0 0 0 20px;
+    }
+    .ui-tab-close {
+        cursor: pointer;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    .ui-tab-close-curr {
+        color: #b40000;
+        cursor: pointer;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    * html .ui-tabs-nav {
+        display: inline-block;
+    }
+    *:first-child+ html .ui-tabs-nav {
+        display: inline-block;
+    }
+    .ui-tab-iframe {
+        width: 100%;
+    }
+    .ui-tabs-content {
+        width: 100%;
+    }
+

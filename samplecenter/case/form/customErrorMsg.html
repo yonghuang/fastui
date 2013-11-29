@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>自定义表单验证时的错误提示信息</title>
+		<script src="../../../src/fastDev-import.js"></script> 
+		<script>
+			var error1Config = {
+				"required" : "当前输入框不能为空！（我是使用的自定义验证信息）",
+				"MaxLength" : "输入字符超出规定长度，规定长度为#{MaxLength}！（注：一个英文字母或数字占1，一个汉字或全角字符占2）（我是使用的自定义验证信息）"
+			};
+		</script>
+	</head>
+	<body>
+	<form itype="Form" id="errorForm" errorFile="errorConfig.json">
+		<table class="ui-form-table">
+			<tr>
+				<td class="ui-form-table-dt" style="width:200px">单独配置错误：</td>
+				<!-- 配置错误提示信息的关键属性为errorConfig，此属性值为一个Object对象-->
+				<!--因为在标签中无法定义一个对象格式数据，所以这里使用替代声明符'#{...}'-->
+				<!--替代声明符的内容必须为一个全局作用域下的有效变量值-->
+				<td class="ui-form-table-dd">
+					<input itype="TextBox" id="error1" validateMode="blur" rule="required;MaxLength:4" errorConfig="#{error1Config}"  />
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-form-table-dt">使用表单错误配置的全局配置：</td>
+				<td class="ui-form-table-dd">
+					<input itype="TextBox" id="error2" validateMode="blur" rule="required;MaxLength:4">
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-form-table-dt">使用表单错误配置的自定义配置：</td>
+				<td class="ui-form-table-dd">
+					<input itype="TextBox" id="error3" validateMode="blur" rule="required;MaxLength:4">
+				</td>
+			</tr>
+		</table>
+	</form>
+	</body>
+</html>
+

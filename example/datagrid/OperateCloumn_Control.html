@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>基本功能</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../src/fastDev-import.js"></script>
+		<script>
+			function renderer(){
+				return '<div itype="Button" text="点击" >'+
+					'<div text="横向打印2"></div>' +
+					'<div text="纵向打印2"></div>' +
+					'<div text="双面打印2"></div>' +
+				'</div>';
+			}
+
+		</script>
+	</head>
+	<body>
+		<div id="example" style="margin: 20px">
+			<div itype="DataGrid" initSource="data.json" pagePosition="none" showSeqColumn=true id="grid1" saveInstance=true>
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="10%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="10%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div width="10%" text="操作" renderer="renderer()"></div>
+			</div>
+		</div>
+	</body>
+</html>

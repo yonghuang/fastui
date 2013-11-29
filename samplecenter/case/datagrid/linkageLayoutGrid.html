@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>datagrid-一个页面4个datagrid联动)</h4>
+			<ul>
+				<li>点击主datagrid，另三个datagrid数据刷新，显示主datagrid的相关信息。</li>
+				<li>allowAutoFillRow=false 关闭自动填充空行的功能</li>
+				<li>同时调整布局，每排两个datagrid</li>
+			</ul>
+		</title>
+		
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function onRowClick(event, index, data) {
+				var url = "../../data/griddata1Linkage.json";
+				if(data.empno==="0743") url = "../../data/griddata2Linkage.json";//选的不是袁维是唐岳时
+				fastDev.getInstance("grid1").initRefresh({
+					"url" : url
+				});	
+				fastDev.getInstance("grid2").initRefresh({
+					"url" : url
+				});
+				fastDev.getInstance("grid3").initRefresh({
+					"url" : url
+				});
+				fastDev.getInstance("grid4").initRefresh({
+					"url" : url
+				});
+			};
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">主表：(人员名册）</div>
+			<div itype="DataGrid" allowAutoFillRow=false initSource="../../data/griddataLinkage.jsp" showSeqColumn=true onRowClick="onRowClick()">
+				<div width="50%" name="empno" text="员工工号"></div>
+				<div width="50%" name="name" text="姓名"></div>
+			</div>
+		</div>
+		<div style="margin: 10px">
+			<div  style="width:48%;float:left">
+				<div class="ui-layout-text">联动子表1：(部门信息）</div>
+				<div itype="DataGrid" allowAutoFillRow=false  id="grid1"  saveInstance=true>
+					<div width="20%" name="name" text="姓名"></div>
+					<div width="20%" name="empno" text="员工工号"></div>
+					<div width="20%" name="department" text="所属部门"></div>
+					<div width="20%" name="admin" text="部门负责人"></div>
+					<div width="20%" name="system" text="所在体系"></div>
+				</div>
+			</div>
+			<div  style="width:48%;float:right;">
+				<div class="ui-layout-text">联动子表2：(档案信息）</div>
+				<div itype="DataGrid" allowAutoFillRow=false  id="grid2" saveInstance=true>
+					<div width="20%" name="empno" text="员工工号"></div>
+					<div width="20%" name="sex" text="性别"></div>
+					<div width="20%" name="stature" text="身高"></div>
+					<div width="20%" name="weight" text="体重"></div>
+					<div width="20%" name="city" text="户口所在地"></div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 10px"></div>	
+		<div style="margin: 10px">
+			<div style="width:48%;float:left">
+				<div class="ui-layout-text">联动子表3：(HR信息）：</div>
+				<div itype="DataGrid" allowAutoFillRow=false  id="grid3" saveInstance=true>
+					<div width="20%" name="name" text="姓名"></div>
+					<div width="20%" name="empno" text="员工工号"></div>
+					<div width="20%" name="position" text="职位"></div>
+					<div width="20%" name="pay" text="薪资"></div>
+					<div width="20%" name="datesemployed" text="入职时间"></div>
+				</div>
+			</div>
+			<div style="width:48%;float:right">
+				<div class="ui-layout-text">联动子表4：(其它信息）：</div>
+				<div itype="DataGrid" allowAutoFillRow=false  id="grid4" saveInstance=true>
+					<div width="20%" name="name" text="姓名"></div>
+					<div width="20%" name="empno" text="员工工号"></div>
+					<div width="20%" name="isuse" text="是否可用"></div>
+					<div width="20%" name="birthday" text="分红时间" defaultValue="2001-01-01"></div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 10px"></div>	
+	</body>
+</html>

@@ -1,0 +1,28 @@
+﻿{
+	defaultInfo:{
+		required:"不能为空的哦",
+		email:"邮件地址不合法",
+		code:"邮编不合法",
+		idCard:"不是有效的身份证",
+		ipAddress:"非法IP地址",
+		IsNumber:"不是数字",
+		isEqual:"不等于",
+		selfRegular:"不匹配",
+		telPhone:"不是电话",
+		minLength:"长度只能在#{minLength}以上",
+		maxLength:"长度只能在#{maxLength}以内",
+		lenEqual:"长度只能是#{lengthEqual}"
+	},
+	txt1:{
+		required:"不填东西怎么行呀",
+	},
+	test16:{		
+		required:"必须是html元素格式"
+	},
+	pwd1:{		
+		required:"密码不能为空"
+	},
+	test18:{		
+		required:"必须是中文"
+	},
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>template</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-06 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+
+		<script>
+			$.ready(function() {
+				var htmlList = [
+					'<tpl dynamic(testTpl)>', 
+						'<table>', 
+							'<tpl each({list})>', 
+								'<tr>', 
+									'<tpl if({row_id}%2==1)>', 
+										'<td>{name}</td>', 
+									'</tpl>', 
+									'<td>{age}</td>', 
+									'<td>{phone}</td>', 
+								'</tr>', 
+							'</tpl>', 
+						'</table>', 
+					'</tpl>'
+				];
+				var template = fastDev.create("Template", {
+					htmlList : htmlList
+				});
+				
+				template.buildStaticTpl();
+				var elem = template.createDom();
+				$("#example").append(elem);
+				
+				var dataset = fastDev.create("DataSet", {
+					fields : ["row", "page", "total", "records", {
+						name : "list",
+						type : "dataset",
+						fields : ["name", "age", "phone"]
+					}],
+					autoLoad : true,
+					proxy : {
+						url : "data2.json",
+						onAfterLoad : function() {
+							var tplList = template.getDynamicTpl(1);
+							template.buildHTML(tplList, null, dataset);
+							elem = template.createDom();
+							elem.replace($("dynamic_id=1"));
+						}
+					}
+				});
+			});
+
+		</script>
+	</head>
+	<body>
+		<div id="example"></div>
+	</body>
+</html>
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>选择器基础</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function() {
+				var container = fastDev("#example");
+				function clearCss() {
+					container.find("*").css("border", "1px dashed #fff");
+				}
+
+
+				fastDev("#btn1").bind("click", function() {
+					clearCss();
+					// 查找id等于div1的元素
+					container.find("#div1").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn2").bind("click", function() {
+					clearCss();
+					// 查找div元素
+					container.find("div").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn3").bind("click", function() {
+					clearCss();
+					// 查找样式名包含elemClass的元素
+					container.find(".elemClass").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn4").bind("click", function() {
+					clearCss();
+					// 查找样式名包含elemClass和spanClass的元素
+					container.find(".elemClass.spanClass").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn5").bind("click", function() {
+					clearCss();
+					// 查找所有元素
+					container.find("*").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn6").bind("click", function() {
+					clearCss();
+					// 查找div和span元素
+					container.find("div,span").css("border", "1px dashed #f00");
+				});
+
+			});
+		</script>
+	</head>
+	<body style="height: 600px">
+		<div class="ui-other-content">
+		<p>查找id等于div1的元素：<a id="btn1" href="#">#div1</a>
+		</p>
+		<p>查找div元素：
+		<a id="btn2" href="#">div</a>
+		</p>
+		<p>查找样式名包含elemClass的元素：
+		<a id="btn3" href="#">.elemClass</a>
+		</p>
+		<p>查找样式名包含elemClass和spanClass的元素：
+		<a id="btn4" href="#">.elemClass.spanClass</a>
+		</p>
+		<p>查找所有元素:
+		<a id="btn5" href="#">*</a>
+		</p>
+		<p>查找div和span元素:
+			<a id="btn6" href="#">div,span</a>
+		</p>
+		
+		<p>&nbsp;</p>
+		<!-- HTML元素测试区 -->
+		<div id="example">
+
+			<div id="div1" class="elemClass">
+				<p>&lt;div id="div1" class="elemClass"></p>
+				<p>&nbsp;&nbsp;&lt;p>&lt;/p></p>
+				<p>&lt;/div></p>
+			</div>
+
+			<div id="div2"><p>&lt;div id="div2">&lt;/div></p></div>
+
+			<p><span class="elemClass spanClass">&lt;span class="elemClass spanClass">&lt;/span></span></p>
+			<p class="pClass">&lt;p class="pClass">&lt;/p>
+		</div>
+	</div>
+	</body>
+</html>
+

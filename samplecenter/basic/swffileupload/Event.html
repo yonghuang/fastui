@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>
+					SWFFileUpload控件兼容FileUpload控件的所有事件和方法。
+				</li>
+			</ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/component/thirdparty/swffileupload/swfupload.js"></script>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			var uploader;
+			fastDev(function() {
+				uploader = fastDev.getInstance("uploader");
+			});
+
+			function onFileChoose(file) {
+				fastDev.tips("onFileChoose");
+			}
+
+			function onChooseError(file, code, msg) {
+				fastDev.tips("onChooseError(" + msg + ")");
+			}
+
+			function onUploadStart(file) {
+				// getRequestAction方法为私有方法，此处示例需要使用而已
+				fastDev.tips("onUploadStart(" + this.getRequestAction() + ")");
+			}
+
+			function onUploadSuccess(file, response) {
+				fastDev.tips("onUploadSuccess");
+			}
+
+			function onUploadFail(file, response) {
+				fastDev.tips("onUploadFail");
+			}
+
+			function onUploadCancel(file) {
+				fastDev.tips("onUploadCancel");
+			}
+
+			// 添加查询参数
+			function addParams() {
+				uploader.addParams({
+					type : "attach",
+					name : "name"
+				});
+				fastDev.tips("已添加");
+			}
+
+			// 开始上传
+			function startUpload() {
+				// 可传递一个需上传文件的ID
+				// 不传参则默认上传文件队列中的所有文件
+				uploader.startUpload();
+			}
+
+			// 取消当前上传
+			function cancelUpload() {
+				// 若上传队列中存在其他待上传的文件，仍会继续上传下一个文件
+				// 若要取消整个上传进程，请调用stopUpload方法
+				uploader.cancelUpload();
+			}
+
+			// 停止所有上传
+			function stopUpload() {
+				// 立即取消当前上传进程并停止整个上传队列
+				uploader.stopUpload();
+			}
+
+			// 获取文件队列
+			function getFileQueue() {
+				// 获取当前上传队列的一份快照
+				var queue = uploader.getFileQueue();
+				fastDev.tips(queue.toString());
+			}
+
+			// 清空文件队列
+			function cleanFileQueue() {
+				// 清空并返回当前上传文件队列
+				var queue = uploader.cleanFileQueue();
+				fastDev.tips("文件队列已清空");
+			}
+
+			// 移除文件
+			function removeFile() {
+				// 从文件上传队列中移除文件
+				var queue = uploader.getFileQueue();
+				var file = uploader.removeFile(!!queue.length ? queue[0].id : "");
+				fastDev.tips("文件已被移除(" + (!!file ? file.name : "") + ")");
+			}
+
+			// 清空文本输入框的值
+			function cleanTextInput() {
+				// 当传递参数true时，同时会移除文件队列中的当前文件，否则，只清除文本框的值
+				uploader.cleanTextInput(true);
+				fastDev.tips("已清除");
+			}
+
+			// 获取统计信息
+			function getStats() {
+				var stats = uploader.getStats(), html = "";
+				fastDev.each(stats, function(name, value) {
+					html += (name + " : " + value + "<br/>");
+				});
+				fastDev.create("Window", {
+					content : html,
+					title : "文件上传统计"
+				});
+			}
+
+			// 启用文件上传
+			function enable() {
+				uploader.enable();
+				fastDev.tips("已启用");
+			}
+
+			// 禁用文件上传
+			function disable() {
+				uploader.disable();
+				fastDev.tips("已禁用");
+			}
+
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				Flash文件上传
+			</div>
+			<div>
+				<input itype="SWFFileUpload" flashUrl="../../data/swfupload.swf" id="uploader" saveInstance="true" sizeLimit="-1" action="../../data/fileupload.jsp" onFileChoose="onFileChoose()" onChooseError="onChooseError()" onUploadStart="onUploadStart()" onUploadSuccess="onUploadSuccess()" onUploadFail="onUploadFail()" onUploadCancel="onUploadCancel()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="添加查询参数" onclick="addParams()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="开始上传" onclick="startUpload()"/>
+				<input itype="Button" text="取消当前上传" onclick="cancelUpload()"/>
+				<input itype="Button" text="停止所有上传" onclick="stopUpload()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取文件队列" onclick="getFileQueue()"/>
+				<input itype="Button" text="清空文件队列" onclick="cleanFileQueue()"/>
+				<input itype="Button" text="移除文件" onclick="removeFile()"/>
+				<input itype="Button" text="清空文本输入框值" onclick="cleanTextInput()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取统计信息" onclick="getStats()"/>
+				<input itype="Button" text="启用文件上传" onclick="enable()"/>
+				<input itype="Button" text="禁用文件上传" onclick="disable()"/>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">var host = /(.*twdpe-ui\/)/.exec(window.location.href)[1]+&quot;library/&quot;;
+document.write(&quot;&lt;link href='&quot;+host+&quot;themes/default/css/ui-main.css' rel='stylesheet' type='text/css' &gt;&lt;\/link&gt;&quot;);
+// library
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/FastDev.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/Ajax.js'&gt;&lt;\/script&gt;&quot;); 
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/Browser.js'&gt;&lt;\/script&gt;&quot;); 
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/Dom.js'&gt;&lt;\/script&gt;&quot;); 
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/Event.js'&gt;&lt;\/script&gt;&quot;); 
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/Query.js'&gt;&lt;\/script&gt;&quot;); 
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/Queue.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/Tools.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/library/Animate.js'&gt;&lt;\/script&gt;&quot;);
+// core
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/core/ClassManager.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/core/EventManager.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/core/Base.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/core/ControlBus.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/core/DataBus.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/core/DomObject.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/core/Template.js'&gt;&lt;\/script&gt;&quot;);
+// data
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/data/Proxy.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/data/Reader.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/data/DataSet.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/data/Record.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/data/Field.js'&gt;&lt;\/script&gt;&quot;);
+
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/Component.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/Toolbar.js'&gt;&lt;\/script&gt;&quot;);
+// component-form
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/Box.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/AutoComplete.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/Button.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/CheckBoxGroup.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/DatePicker.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/Form.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/RadioGroup.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/Select.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/SelectTree.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/TextBox.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/form/Editor.js'&gt;&lt;\/script&gt;&quot;);
+// component-interaction
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/interaction/Draggable.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/interaction/Resizable.js'&gt;&lt;\/script&gt;&quot;);
+// component-layout
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/layout/Accordion.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/layout/Panel.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/layout/Window.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/layout/Tabs.js'&gt;&lt;\/script&gt;&quot;);
+// component-list
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/list/datagrid/DataGrid.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/list/datagrid/Column.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/list/datagrid/Pagination.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/list/datagrid/Summary.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/list/datagrid/Thead.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/list/datagrid/RowDetail.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/list/Tree.js'&gt;&lt;\/script&gt;&quot;);
+
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/BreadCrumb.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/ChooseList.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/Dialog.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/FileUpload.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/MessageBox.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/Navigation.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/ProgressBar.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/swffileupload/swfupload.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/swffileupload/SWFFileUpload.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/Validation.js'&gt;&lt;\/script&gt;&quot;);
+document.write(&quot;&lt;script src='&quot;+host+&quot;src/component/business/chooseusers.js'&gt;&lt;\/script&gt;&quot;);
+
+document.write(&quot;&lt;script src='&quot;+host+&quot;example/common.js'&gt;&lt;\/script&gt;&quot;);
+
+
+</pre>
+</body>
+</html>

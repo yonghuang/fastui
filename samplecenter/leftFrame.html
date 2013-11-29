@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="../src/fastDev-import.js"></script>
+<script type="text/javascript" src="tabs.js"></script>
+<title>无标题文档</title>
+
+<script type="text/javascript">
+	
+	function openTabs(event, id) {
+		var map = this.getItemById(id);
+		var url = map["url"] || "";
+		if (url.indexOf("?") >= 0)
+			url += "&time=" + (+new Date);
+		else
+			url += "?time=" + (+new Date);
+		var text = map["text"] || "";
+		if (!tabs) {
+			tabs = fastDev.create("Tabs", {
+				container : "tabBox",
+				id : "indexTabs",
+				height : (fastDev(window).height() - 96) + "px",
+				width : (parseInt(fastDev(window).width()) * 81.5 / 100 - 11)
+						+ "px"
+			});
+		}
+		if (url != "") {
+			var tabsId = tabs.getTabById(id);
+			if (tabsId != []) {
+				tabsId = tabsId[0];
+			}
+			if (!!tabsId && tabsId.id === id) {
+				setActiveTabByTitle.apply(tabs, [ id ]);
+			} else {
+				addTab.apply(tabs, [ {
+					title : text,
+					id : id,
+					url : url,
+					iconCls : "icon-add",
+					showCloseBtn : true
+				} ]);
+			}
+
+		}
+		return false;
+	}
+	
+	function btnsetNumberByid() {
+
+	}
+	
+</script>
+</head>
+
+<body>
+	<div style="height: 120px">
+		<div itype="Navigation" id="nav1" saveInstance="true" width="200px"
+			initSource="navigationdata2.txt" onItemClick="openTabs()"
+			onAfterInitRender="afterInitRender()"></div>
+		<div itype="Button" text="设置id为11的菜单数字为7" onclick="btnsetNumberByid()"></div>
+	</div>
+	<div id="tabBox"></div>
+
+
+</body>
+</html>

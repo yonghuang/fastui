@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Box'>/**
+</span> * @class fastDev.Ui.Box
+ * @extends fastDev.Ui.Component
+ * Box类继承自component,所有输入类控件的基础类控件，其子类包括输入框、密码框、文本域、下拉框等
+ */
+fastDev.define(&quot;fastDev.Ui.Box&quot;, {
+    extend: &quot;fastDev.Ui.Component&quot;,
+    alias: &quot;Box&quot;,
+    _options: {
+<span id='fastDev-Ui-Box-property-rule'>        /**
+</span>         * 校验的规则
+         * @type {String}
+         */
+        rule: &quot;&quot;,
+<span id='fastDev-Ui-Box-property-readonly'>        /**
+</span>         * 是否只读
+         * @type {Boolean}
+         */
+        readonly: false,
+<span id='fastDev-Ui-Box-property-iwidth'>        /**
+</span>         * 输入框的宽度值（HTML模式时在IE6、7下使用input标签声明输入框宽度时的兼容属性）
+         * @type {String}
+         */
+        iwidth: &quot;&quot;,
+<span id='fastDev-Ui-Box-property-disabled'>        /**
+</span>         * 是否禁用控件
+         * @type {Boolean}
+         */
+        disabled: false,
+
+<span id='fastDev-Ui-Box-property-errorMode'>        /**
+</span>         * 错误提示方式
+         * @type {String}
+         */
+        errorMode: &quot;float&quot;,
+<span id='fastDev-Ui-Box-property-validateMode'>        /**
+</span>         * 验证模式: blur(失去焦点验证),ajax:url(Ajax远程验证),none(无验证)
+         * @type {String}
+         */
+        validateMode: &quot;none&quot;,
+<span id='fastDev-Ui-Box-property-errorConfig'>        /**
+</span>         * 验证错误的提示消息配置
+         * @type {String}
+         */
+        errorConfig: null,
+<span id='fastDev-Ui-Box-property-emptyText'>        /**
+</span>         * 值为空时显示的提示文字
+         * @type {String}
+         */
+        emptyText: null,
+        enableDataSet : false,
+        enableInitProxy: false,
+        enableDataProxy: false,
+<span id='fastDev-Ui-Box-event-onfocus'>        /**
+</span>         * 当元素获得焦点时触发
+         * @event 
+         */
+        onfocus: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onblur'>        /**
+</span>         * 当元素失去焦点时触发
+         * @event 
+         */
+        onblur: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onselect'>        /**
+</span>         * 当元素被选取时触发
+         * @event
+         */
+        onselect: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onchange'>        /**
+</span>         * 当元素改变时触发
+         * @event
+         */
+        onchange: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onclick'>        /**
+</span>         * 当鼠标被单击时触发
+         * @event
+         */
+        onclick: fastDev.noop,
+<span id='fastDev-Ui-Box-event-ondblclick'>        /**
+</span>         * 当鼠标被双击时触发
+         * @event
+         */
+        ondblclick: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onmousedown'>        /**
+</span>         * 当鼠标按钮被按下时触发
+         * @event
+         */
+        onmousedown: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onmouseup'>        /**
+</span>         * 当鼠标按钮被按下时触发
+         * @event
+         */
+        onmouseup: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onmouseover'>        /**
+</span>         * 当鼠标指针悬停于某元素之上时触发
+         * @event
+         */
+        onmouseover: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onmousemove'>        /**
+</span>         * 当鼠标指针移动时触发
+         * @event
+         */
+        onmousemove: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onmouseout'>        /**
+</span>         * 当鼠标指针移出某元素时触发
+         * @event
+         */
+        onmouseout: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onkeypress'>        /**
+</span>         * 当键盘被按下后又松开时触发
+         * @event
+         */
+        onkeypress: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onkeydown'>        /**
+</span>         * 当键盘被按下时触发
+         * @event
+         */
+        onkeydown: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onkeyup'>        /**
+</span>         * 当键盘被松开时触发
+         * @event
+         */
+        onkeyup: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onBeforeValidation'>        /**
+</span>         * 验证前发生触发
+         * @event
+         */
+        onBeforeValidation: fastDev.noop,
+<span id='fastDev-Ui-Box-event-onAfterValidation'>        /**
+</span>         * 验证后发生触发
+         * @event
+         */
+        onAfterValidation: fastDev.noop
+    },
+    _global: {
+        clearEmptyText: false
+    },
+<span id='fastDev-Ui-Box-property-errorTemplate'>    /**
+</span>     * 错误提示信息模板
+     * @private
+     */
+    errorTemplate: ['&lt;div class=&quot;ui-tips-text ui-radius ui-shadow&quot; style=&quot;z-index:9999999&quot;&gt;&lt;/div&gt;'],
+<span id='fastDev-Ui-Box-property-tplParam'>    /**
+</span>     * 模板中使用的参数
+     * @private
+     */
+    tplParam: [&quot;readOnly&quot;, &quot;disabled&quot;],
+<span id='fastDev-Ui-Box-method-clean'>    /**
+</span>     * 清除输入的值
+     */
+    clean: function () {
+        this.reset();
+    },
+<span id='fastDev-Ui-Box-method-reset'>    /**
+</span>     * 重置输入框的值为空
+     */
+    reset: function () {
+        this.setValue(&quot;&quot;);
+    },
+<span id='fastDev-Ui-Box-method-ready'>    /**
+</span>     * 组件参数准备方法
+     * @protected
+     */
+    ready: function (options, global) {
+        if (!fastDev.isString(options.id) || options.id.length === 0) {
+            options.id = fastDev.getID() + &quot;&quot;;
+        }
+        var fx = fastDev.Util.StringUtil.trim;
+        for (var fx = fastDev.Util.StringUtil.trim, elems = [&quot;width&quot;, &quot;height&quot;], elem, ielem; elem = elems.shift();) {
+            ielem = &quot;i&quot; + elem;
+            if (options[ielem] = fx(options[ielem] || &quot;&quot;)) {
+                options[elem] = options[ielem];
+            } else if (fastDev.isPlainObject(options.style)) {
+                options[elem] = options.style[elem] === undefined ? options[elem] : options.style[elem];
+            }
+        }
+        options.value = fastDev.isValid(options.value) ? options.value : &quot;&quot;;
+        if (fastDev.isString(options.errorConfig)) {
+            options.errorConfig = fastDev.Util.JsonUtil.parseJson(&quot;{&quot; + options.errorConfig + &quot;}&quot;);
+        }
+        options.readonly = !! options.readonly;
+        this.setReadOnly = this.setReadonly;
+    },
+<span id='fastDev-Ui-Box-method-construct'>    /**
+</span>     * 组件构造方法
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    construct: function (options, global) {
+        global.box = this.find(&quot;[id='&quot; + options.id + &quot;']&quot;);
+        global.wrapper = this.find(&quot;.ui-form-wrap&quot;);
+    },
+<span id='fastDev-Ui-Box-method-init'>    /**
+</span>     * 组件初始化方法
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    init: function (options, global) {
+        var box = this._global.box;
+
+        if (options.value === &quot;&quot;) {
+            this.initEmptyText(options.emptyText);
+        } else {
+            //if(options.enabledDataProxy === false){
+            //this.setValue(options.value);
+            //}
+            global.clearEmptyText = true;
+        }
+
+        if (options.validateMode !== &quot;none&quot;) {
+            this.bind(&quot;blur&quot;, fastDev.setFnInScope(this, this.validate));
+        }
+        // 初始化事件
+        this.initEvent(options);
+        if (options.readonly) {
+            this.setReadonly(true);
+        }
+    },
+<span id='fastDev-Ui-Box-method-initEvent'>    /**
+</span>     * 初始化事件
+     * @private 
+     */
+    initEvent: function (options) {
+        fastDev.each([&quot;onfocus&quot;, &quot;onblur&quot;, &quot;onselect&quot;, &quot;onchange&quot;, &quot;onclick&quot;, &quot;ondblclick&quot;, &quot;onmousedown&quot;, &quot;onmouseup&quot;, &quot;onmouseover&quot;, &quot;onmousemove&quot;, &quot;onmouseout&quot;, &quot;onkeypress&quot;, &quot;onkeydown&quot;, &quot;onkeyup&quot;], function (index, eventname) {
+            if (!fastDev.isNoop(options[eventname]) &amp;&amp; fastDev.isFunction(options[eventname])) {
+                this.bind(eventname.replace(&quot;on&quot;, &quot;&quot;), options[eventname], false);
+            }
+        }, this);
+    },
+<span id='fastDev-Ui-Box-method-validate'>    /**
+</span>     * 调用配置中的验证规则对输入值进行验证
+     * @return {Boolean}
+     */
+    validate: function () {
+        var options = this._options,
+            value = this.getValue(),
+            validation = fastDev.Core.Validation,
+            validateMode = options.validateMode;
+        options.onBeforeValidation.call(this);
+
+        if (validateMode.indexOf(&quot;ajax:&quot;) !== -1) {
+            validation.checkAjax(value, validateMode.replace(&quot;ajax:&quot;, &quot;&quot;), this, options.onAfterValidation);
+
+        } else {
+            var errorMsg = validation.validate(options.rule, value, options.errorConfig);
+            if (errorMsg) {
+
+                this.initError(errorMsg);
+
+            } else {
+
+                this.destroyError();
+            }
+
+            options.onAfterValidation.call(this);
+
+            return errorMsg;
+        }
+    },
+<span id='fastDev-Ui-Box-method-getMsg'>    /**
+</span>     * 获取验证之后的提示信息
+     * @return {String}
+     */
+    getMsg: function () {
+        return this._options.msg;
+    },
+<span id='fastDev-Ui-Box-method-getValue'>    /**
+</span>     * 取得控件的值
+     */
+    getValue: function () {
+        if (this._global.clearEmptyText === true) {
+            return this._global.box.prop(&quot;value&quot;);
+        } else {
+            return &quot;&quot;;
+        }
+
+    },
+<span id='fastDev-Ui-Box-method-setValue'>    /**
+</span>     * 设置控件的值
+     * @param {String} value
+     */
+    setValue: function (value, only) {
+        if (!only &amp;&amp; this._global.clearEmptyText === false) {
+            this.destroyEmptyText();
+        }
+        this._global.box.prop(&quot;value&quot;, value);
+        return this;
+    },
+<span id='fastDev-Ui-Box-method-initEmptyText'>    /**
+</span>     * 初始化空值提示
+     * @private
+     */
+    initEmptyText: function (value) {
+
+        var me = this,
+            global = this._global;
+
+        if (!value || !fastDev.isString(value)) {
+            this._global.clearEmptyText = true;
+            return me;
+        }
+        var box = global.box,
+            //
+            destroyEmptyText = global.destroyEmptyText;
+
+        if (!destroyEmptyText) {
+            destroyEmptyText = global.destroyEmptyText = fastDev.setFnInScope(me, this.destroyEmptyText);
+        }
+
+        box.addClass(&quot;ui-form-text-default&quot;);
+
+        this.bind(&quot;focus&quot;, destroyEmptyText);
+
+        return me.setValue(value, true);
+    },
+<span id='fastDev-Ui-Box-method-destroyEmptyText'>    /**
+</span>     *  销毁空值提示
+     * @private
+     */
+    destroyEmptyText: function () {
+        var me = this,
+            global = this._global,
+            box = global.box,
+            destroyEmptyText = global.destroyEmptyText;
+
+        box.prop(&quot;value&quot;, &quot;&quot;);
+
+        me._global.clearEmptyText = true;
+
+        box.removeClass(&quot;ui-form-text-default&quot;);
+
+        this.unbind(&quot;focus&quot;, destroyEmptyText);
+    },
+<span id='fastDev-Ui-Box-method-setReadonly'>    /**
+</span>     * 设置是否只读
+     * @param {Boolean} [readonly=true] 是否只读
+     */
+    setReadonly: function (readonly) {
+        if (readonly === false) {
+            this._global.box.removeProp(&quot;readOnly&quot;);
+        } else {
+            this._global.box.prop(&quot;readOnly&quot;, true);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Box-method-enable'>    /**
+</span>     * 启用控件
+     */
+    enable: function () {
+        var global = this._global;
+        global.box.removeProp(&quot;disabled&quot;);
+        global.wrapper.removeClass(&quot;ui-form-disabled&quot;);
+        return this;
+    },
+<span id='fastDev-Ui-Box-method-disable'>    /**
+</span>     * 禁用控件
+     */
+    disable: function () {
+        var global = this._global;
+        global.box.prop(&quot;disabled&quot;, true);
+        global.wrapper.addClass(&quot;ui-form-disabled&quot;);
+        return this;
+    },
+<span id='fastDev-Ui-Box-method-initError'>    /**
+</span>     *  初始化错误提示
+     * @param {Object} errorMsg 错误信息
+     * @private
+     */
+    initError: function (errorMsg) {
+        if (!fastDev.isString(errorMsg) || errorMsg.length &lt;= 0) {
+            return;
+        }
+        var global = this._global,
+            // 输入框
+            box = global.box,
+            wrapper = global.wrapper,
+            // 错误提示框
+            errorDiv = global.errorDiv || (global.errorDiv = fastDev(this.errorTemplate.join(&quot;&quot;))),
+            // 鼠标滑入输入框事件
+            boxMouseoverHandle = global.boxMouseoverHandle,
+            // 鼠标滑出输入框事件
+            boxMouseoutHandle = global.boxMouseoutHandle;
+
+        if (!boxMouseoverHandle) {
+            boxMouseoverHandle = global.boxMouseoverHandle = function (event) {
+                if (wrapper.hasClass(&quot;ui-tips-text-err&quot;)) {
+                    //ajax验证移除错误后再调用此方法时errorDiv为空。
+                    if (errorDiv.elems.length === 0) {
+                        errorDiv = global.errorDiv;
+                    }
+                    errorDiv.css({
+                        left: event.pageX + 10 + &quot;px&quot;,
+                        top: event.pageY + 10 + &quot;px&quot;
+                    }).show();
+                }
+            };
+
+            boxMouseoutHandle = global.boxMouseoutHandle = function () {
+                errorDiv.hide();
+            };
+        }
+
+        // 渲染错误提示框并隐藏
+        errorDiv.setText(errorMsg).css({
+            position: &quot;absolute&quot;
+        }).hide().appendTo(document.body);
+
+        wrapper.addClass(&quot;ui-tips-text-err&quot;);
+
+        box.bind(&quot;mouseover&quot;, boxMouseoverHandle).bind(&quot;mouseout&quot;, boxMouseoutHandle);
+    },
+<span id='fastDev-Ui-Box-method-destroyError'>    /**
+</span>     * 销毁错误提示
+     * @private
+     */
+    destroyError: function () {
+        var global = this._global,
+            errorDiv = global.errorDiv;
+        if (!errorDiv) {
+            return;
+        }
+
+        var box = global.box,
+            textMouseoverHandle = global.textMouseoverHandle,
+            textMouseoutHandle = global.textMouseoutHandle;
+        global.wrapper.removeClass(&quot;ui-tips-text-err&quot;);
+        box.unbind(&quot;mouseover&quot;, textMouseoverHandle).unbind(&quot;mouseout&quot;, textMouseoutHandle);
+        errorDiv.remove();
+        global.errorDiv = null;
+    },
+<span id='fastDev-Ui-Box-method-bind'>    /**
+</span>     * 绑定控件事件 
+     * @param {String} type 事件类型
+     * @param {Function} handle 事件句柄
+     */
+    bind: function (type, handle) {
+        this._global.box.bind(type, handle);
+        return this;
+    },
+<span id='fastDev-Ui-Box-method-unbind'>    /**
+</span>     * 解除绑定控件事件 
+     * @param {String} type 事件类型
+     * @param {Function} handle 事件句柄
+     */
+    unbind: function (type, handle) {
+        this._global.box.unbind(type, handle);
+        return this;
+    },
+<span id='fastDev-Ui-Box-method-fire'>    /**
+</span>     * 触发控件指定事件 
+     * @param {String} type 事件类型
+     */
+    fire: function (type) {
+        this._global.box.fire(type);
+        return this;
+    },
+<span id='fastDev-Ui-Box-method-hasError'>    /**
+</span>     * 当前控件是否验证出错 
+     */
+    hasError: function () {
+        return fastDev.isValid(this._global.errorDiv);
+    }
+});</pre>
+</body>
+</html>

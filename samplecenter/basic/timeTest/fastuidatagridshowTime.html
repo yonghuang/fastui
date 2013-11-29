@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		  <link rel="stylesheet" type="text/css" href="../../../themes/default/css/ui-main.css"/>	
+		<script src="../../../history/fastui-1.5.0.5.js"></script>
+        <script src="../../../example/common.js"></script>
+        <script>
+		var time_to_page_start = new Date()*1;
+/*<![CDATA[*/
+(function(){
+	function handleRender(){
+		window.pmc_start_render_time = new Date()*1 - time_to_page_start;
+		var h = document.createElement('h3');
+		h.innerHTML = 'Time To Start show: ' + window.pmc_start_render_time + ' ms tr的长度'+fastDev('tr').elems.length ;
+			document.body.appendChild(h);
+	}
+	//if($('table').find('tr').eq(500).length > 0){  //grid查找方法
+	//if($('ul li').length == 110){  //easy-tree,liger-tree,om-tree查找方法
+	//if($('table tr').length == 111){   //extjs-tree查找方法
+	if(fastDev('tr').elems.length >=100){
+		handleRender();
+		return;
+	}
+	setTimeout(arguments.callee,30);
+})();
+	//http://www.iteye.com/topic/1121953
+		</script>
+	</head>
+	<body>
+     <div><div itype="DataGrid" initSource="griddata.json" pagePosition="none" showSeqColumn=true height="200px">
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+					<div value="50" text="50条"></div>
+					<div value="100" text="100条"></div>
+				</div>
+			</div></div>
+	</body>
+</html>

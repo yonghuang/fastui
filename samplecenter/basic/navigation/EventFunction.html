@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>事件接口和方法</h4>
+        <ul>        
+        <li>包括添加，删除，重新加载，得到当前选中id，设置某个id为选中项，得到项数据等方法</li>
+        <li>以及删除前，添加后，删除后，收缩，展开，点击事件</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+        <script>
+		//添加成功后事件
+		function add(item){
+			fastDev.tips("添加"+item.text+"成功");
+		}
+		//删除前事件，返回false不执行删除
+		function beforeRemove(id){
+			if(id==="a211"){
+				fastDev.tips("删除"+id+"前方法，返回false不执行删除，删除失败");
+				return false;
+			}else{
+				return true;
+			}
+		}
+		//删除成功后事件
+		function remove(id){
+			fastDev.tips("删除"+id+"成功");
+		}
+		//节点展开事件
+		function	expand(id){
+			fastDev.tips("展开"+id);
+		}
+		//收缩事件
+		function collect(id){
+			fastDev.tips("收缩"+id);
+		}
+		//点击事件
+		function itemClick(id){
+			fastDev.tips("点击"+id);
+		}
+		//添加方法			
+        function btnclickAdd(){
+			var obj=fastDev.getInstance("nav1");
+			try{
+			obj.addItem({id:"accordionNew",text:"新菜单",pid:"a21",url:"http://www.126.com",target:"main"});		
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		//删除方法，演示删除被阻止
+		function btnclickDel(){
+			var obj=fastDev.getInstance("nav1");
+			try{
+			obj.removeItem("a211");
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		//删除方法
+		function btnclickDel2(){
+			var obj=fastDev.getInstance("nav1");
+			try{
+			obj.removeItem("a212");
+			}catch(e){
+				fastDev.tips(e);
+			}
+		}
+		//重新加载方法
+		function btnclickEdit(){
+			var obj=fastDev.getInstance("nav1");
+			obj.reLoad();
+		}
+		//得到当前id方法
+		function btnclickSearch(){
+			var obj=fastDev.getInstance("nav1");
+			fastDev.tips("当前id为"+ obj.getSelected());					
+		}
+		//据ID设置当期活动的Item
+		function btnsetActiveItem(){
+			var obj=fastDev.getInstance("nav1");
+			obj.setActiveItem("a112");
+			}
+		//得到节点数据byid
+		function btngetItemById(){
+			var obj=fastDev.getInstance("nav1");
+			item=obj.getItemById("a112");
+			fastDev.tips("id="+item.id+",pid="+item.pid+",text="+item.text+",url="+item.url);
+			}
+		//得到某个id的父id
+		function btngetPidById(){
+			var obj=fastDev.getInstance("nav1");
+			fastDev.tips(obj.getPidById("a112"));
+			}
+		//得到当前节点的父级节点
+		function btngetCurrParentItem(){
+			var obj=fastDev.getInstance("nav1");
+			item=obj.getCurrParentItem();
+			fastDev.tips("id="+item.id+",pid="+item.pid+",text="+item.text);
+		}
+        </script> 
+	</head>
+	<body><div style="margin:10px;" class="ui-layout-text">事件接口和方法集</div>
+	  <div style="width:260px;height:300px; float:left;margin:10px;">
+			<div itype="Navigation" width="260px"  activeIndex=4 initSource="../../data/navigationdata1.txt"  id="nav1" saveInstance="true" onAdd="add()" onBeforeRemove="beforeRemove()" onRemove="remove()" onExpand="expand()" onCollect="collect()" onItemClick="itemClick()"  target="main"></div>
+		</div>
+         
+        <div class="ui-clear"></div>
+         <div style="margin:10px 0 10px 10px">
+			<div itype="Button" text="添加" iconCls="icon-add" onclick="btnclickAdd()" ></div>
+		<div itype="Button" text="删除211被阻止" iconCls="icon-delete" onclick="btnclickDel()" ></div>
+            <div itype="Button"  text="正常删除212" iconCls="icon-delete" onclick="btnclickDel2()" ></div>
+			<div itype="Button" text="刷新" iconCls="icon-edit" onclick="btnclickEdit()" ></div>
+<div itype="Button"  text="查询当前展开节点" onclick="btnclickSearch()" ></div>
+		</div>
+        <div style="margin:10px 0 10px 10px">
+      <div itype="Button"  text="设置当前活动项" onclick="btnsetActiveItem()" ></div>
+<div itype="Button"  text="通过id得到节点数据" onclick="btngetItemById()" ></div>
+<div itype="Button" text="通过id得到父id" onclick="btngetPidById()" ></div>
+<div itype="Button"  text="得到当前节点的父级节点" onclick="btngetCurrParentItem()" ></div>
+
+        </div><iframe name="main"  height="600" width="600" frameborder="0"></iframe>
+	</body>
+</html>

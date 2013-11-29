@@ -1,0 +1,50 @@
+{                                                 //   联动数据---1 
+	"data": [
+		{
+			"empno": "2212",
+			"name": "袁维",
+			"department": "产品研发部",
+			"position ": "前端工程师",
+			"pay": 4632,
+			"datesemployed": "2012-05-17",
+			"admin":"David",
+			"system":"软件体系",
+			"sex":"男",
+			"stature":"171cm",
+			"weight":"73kg",
+			"city":"长沙",
+			"isuse": true
+		}
+	],
+	"info": {
+		"pageSize": 1,
+		"records": 1,
+		"page": 1,
+		"total": 1
+	}
+},
+{												  //   联动数据---2
+	"data": [
+		{
+			"empno": "0743",
+			"name": "唐岳",
+			"department": "平台研发部",
+			"position ": "技术经理",
+			"pay": 6300,
+			"datesemployed": "2012-01-31",
+			"admin":"Andy",
+			"system":"软件体系",
+			"sex":"女",
+			"stature":"165",
+			"weight":"55",
+			"city":"湘潭",
+			"isuse": false
+		}
+	],
+	"info": {
+		"pageSize": 1,
+		"records": 1,
+		"page": 1,
+		"total": 1
+	}
+}

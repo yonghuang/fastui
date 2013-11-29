@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>格式化不同类型列</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function renderer1(value) {
+				return '<div>' + value + '</div>'
+			}
+
+			function renderer2(value) {
+				if(value) {
+					fastDev(this).css("background-color", "#f00");
+				}
+			}
+
+			function renderer3(value) {
+				if(value) {
+					fastDev(this).css("background-color", "#f99");
+				}
+			}
+
+			function renderer4(value) {
+				if(value) {
+					fastDev(this).css("background-color", "#f77");
+				}
+			}
+
+			function renderer5(value) {
+				if(value) {
+					fastDev(this).css("background-color", "#f77");
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id="example" style="margin: 20px">
+			<div itype="DataGrid" initSource="data.jsp" showSeqColumn=true id="grid1" saveInstance=true showCheckColumn=true>
+				<div width="10%" name="empno" text="员工工号" itype="template" tpl="<tpl if(/2$/.test({empno}))><span>来自模板</span></tpl>{empno}" renderer="renderer1()"></div>
+				<div width="20%" name="name" text="姓名" itype="control" controlType="TextBox"></div>
+				<div width="12%" name="department" text="所属部门" renderer="renderer2()"></div>
+				<div width="8%" name="isuse" text="是否可用" itype="boolean" trueText="是" falseText="否" renderer="renderer3()"></div>
+				<div width="15%" name="position" text="职位" itype="control" controlType="Select">
+					<div name="controlCfg">
+						<div text="前端工程师" value="position1"></div>
+						<div text="后台工程师" value="position2"></div>
+						<div text="技术经理" value="position3"></div>
+						<div text="项目经理" value="position4"></div>
+					</div>
+				</div>
+				<div width="10%" name="pay" text="薪资" itype="number" format="0,0.00" renderer="renderer4()"></div>
+				<div width="10%" name="datesemployed" text="入职时间" itype="control" controlType = "DatePicker"></div>
+				<div width="15%" name="birthday" text="生日" itype="date" format="yyyy年MM月dd日" defaultValue="1985-01-01" renderer="renderer5()"></div>
+			</div>
+		</div>
+	</body>
+</html>

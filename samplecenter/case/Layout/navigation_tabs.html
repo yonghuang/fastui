@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title><h4>主框架布局Navigation+Tabs</h4> 
+			<u><li>主框架布局-主框架布局Navigation，右边为tabs。点击左边导航节点，在右边新增对应标签页。</li></ul>
+			</title>
+<meta name="author" content="admin" />
+<!-- Date: 2012-07-18 -->
+<script src="../../../src/fastDev-import.js"></script>
+<script>
+	function openTabs(e,id) {
+		
+		var map =this.getItemById(id);
+		var tabs = fastDev.getInstance("tabs");
+		var taburl=map["tabUrl"]||"";
+		var title=map["title"]||"";
+		var showCloseBtnFlag = Boolean(map["showCloseBtnFlag"]||"");
+		if (taburl!=""){
+			
+				if( tabs.exists(title)== true)
+				{
+					tabs.setActiveTabByTitle(title);
+				}else{
+			tabs.addTab({
+				title: title,
+				url: taburl,
+				iconCls: "icon-add",
+				showCloseBtn:showCloseBtnFlag
+			});
+			}
+			
+		}
+		return;
+	}
+	
+	var btnclick1=function(){
+		fastDev.alert("----功能");
+	}
+	function btnclick2(){
+		fastDev.alert("++++功能");
+	}
+	var tooldata = [{
+		iconCls: "icon-delete",
+		onclick: btnclick1
+	}, {
+		iconCls: "icon-add",
+		onclick: btnclick2
+	}];
+</script>
+</head>
+<body class="ui-layout-body ui-layout-body-bg">
+
+
+<div class="ui-layout" style="width:98%; margin: 10px; height: 560px;">
+  <div class="ui-layout-left" style="width:18%; top:0; height:560px;">
+    <div id="example1" style="width:250px" >
+      <div itype="Navigation" currentNode="111" container="example1" id="nav"  saveInstance="true"  initSource="../../data/navigation_tabs_data.json"  width="250px" customFields="tabUrl,showCloseBtnFlag,title" onItemClick="openTabs()"></div>
+    </div>
+  </div>
+  <div class="ui-layout-center" style="width:80.5%;  height:560px; top:0; left:18.5%; ">
+    <div  id="example">
+      <div itype="Tabs" container="example" id="tabs" saveInstance="true" width="700px" height="500px">
+        <div title="单选框" url="../../../example/Tabs/bb.html" ></div>
+      </div>
+    </div>
+  </div>
+  <div class="ui-layout-right" style="display:none"></div>
+  <div class="ui-layout-handle-left ui-resizable-handle-c" style="display: block; left: 200px; height: 450px; top: 0px;"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///commands 修复chrome下图片不能点击的问题
+///commandsName  FixImgClick
+///commandsTitle  修复chrome下图片不能点击的问题
+//修复chrome下图片不能点击的问题
+//todo 可以改大小
+UE.plugins['fiximgclick'] = function() {
+    var me = this;
+    if ( browser.webkit ) {
+        me.addListener( 'click', function( type, e ) {
+            if ( e.target.tagName == 'IMG' ) {
+                var range = new dom.Range( me.document );
+                range.selectNode( e.target ).select();
+
+            }
+        } )
+    }
+};</pre>
+</body>
+</html>

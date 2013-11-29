@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>
+					事件回调示例。
+				</li>
+			</ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 以下事件回调，作用域（this）均指向本控件实例
+			function onBeforeRetrieve(keyword) {
+				// 参数为当前检索的关键字
+				// 返回false值则不执行检索
+				fastDev.tips("onBeforeRetrieve(" + keyword + ")");
+			}
+
+			function onAfterRetrieve(data, keyword) {
+				// 参数为检索到的数据和对应的关键字
+				// 返回false值则不处理检索结果
+				fastDev.tips("onAfterRetrieve(" + data.length + "条记录)");
+			}
+
+			function onAfterChoose(item) {
+				// 参数为列表项对象，其格式与数据源使用的格式对应
+				// 返回false值，则放弃此次选取
+				fastDev.tips("onAfterChoose(" + item + ")");
+			}
+
+			function onchange(value) {
+				// 参数为输入框当前值
+				fastDev.tips("onchange(" + value + ")");
+			}
+
+			function onEnterKeydown(value) {
+				// 参数为输入框当前值
+				fastDev.tips("onEnterKeydown(" + value + ")");
+			}
+
+			function onSearchIconClick(value) {
+				// 参数为输入框当前值
+				fastDev.tips("onSearchIconClick(" + value + ")");
+			}
+
+			// 适用于多值输入框
+			function onBeforeRemove(item) {
+				// 参数为列表项对象，其格式与数据源使用的格式对应
+				// 返回false值，则不会执行移除操作
+				fastDev.tips("onBeforeRemove(" + item + ")");
+			}
+		</script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				多值模式
+			</div>
+			<div>
+				<input itype="AutoComplete" multiple="true" iwidth="400px" onBeforeRetrieve="onBeforeRetrieve()" onAfterRetrieve="onAfterRetrieve()" onAfterChoose="onAfterChoose()" onBeforeRemove="onBeforeRemove()" hintText="输入英文字母查询" searchingText="正在搜索中"  noResultsText="未找到相关结果" initSource="../../data/autocomplete.jsp"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				单值模式
+			</div>
+			<div>
+				<input itype="AutoComplete" iwidth="200px" onchange="onchange()" onEnterKeydown="onEnterKeydown()" onSearchIconClick="onSearchIconClick()" onBeforeRetrieve="onBeforeRetrieve()" onAfterRetrieve="onAfterRetrieve()" onAfterChoose="onAfterChoose()" showSearchIcon="true" hintText="输入英文字母查询" searchingText="正在搜索中"  noResultsText="未找到相关结果" initSource="../../data/autocomplete.jsp"/>
+			</div>
+		</div>
+	</body>
+</html>

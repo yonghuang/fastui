@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-BreadCrumb'>/**
+</span> * @class fastDev.Ui.BreadCrumb
+ * @extends fastDev.Ui.Component
+ * @author chengwei
+ * &lt;p&gt;面包屑控件。&lt;/p&gt;
+ * &lt;p&gt;导航类控件，支持静态定义和远程数据定义，样式自定义等。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *      
+ *      &lt;div itype=&quot;BreadCrumb&quot; width=&quot;60%&quot;&gt;
+ *           &lt;div href=&quot;http://www.163.com&quot; value=&quot;网易&quot; target=&quot;_blank&quot;&gt;&lt;/div&gt;
+ *           &lt;div href=&quot;http://www.baidu.com&quot; value=&quot;百度&quot; target=&quot;_blank&quot;&gt;&lt;/div&gt;
+ *           &lt;div href=&quot;http://www.sina.com.cn&quot; value=&quot;新浪&quot; current=&quot;true&quot;&gt;&lt;/div&gt;
+ *      &lt;/div&gt; 
+ */
+fastDev.define(&quot;fastDev.Ui.BreadCrumb&quot;, {
+    alias: &quot;BreadCrumb&quot;,
+    extend: &quot;fastDev.Ui.Component&quot;,
+    _options: {
+<span id='fastDev-Ui-BreadCrumb-property-width'>        /**
+</span>         * 宽度
+         * @type {String}
+         */
+        width: &quot;auto&quot;,
+<span id='fastDev-Ui-BreadCrumb-property-symbolsCls'>        /**
+</span>         * 连接符号样式名
+         * @type {String}
+         */
+        symbolsCls: &quot;&quot;,
+<span id='fastDev-Ui-BreadCrumb-property-headerCls'>        /**
+</span>         * 头部样式名
+         * @type {String}
+         */
+        headerCls: &quot;&quot;,
+<span id='fastDev-Ui-BreadCrumb-property-backgroundCls'>        /**
+</span>         * 面包屑栏的背景样式名
+         * @type {String}
+         */
+        backgroundCls: &quot;&quot;,
+<span id='fastDev-Ui-BreadCrumb-property-items'>        /**
+</span>         * 静态数据项
+         * @type {Array}
+         * @param {Object} item 超链接配置
+         * @param {String} item.href 链接地址
+         * @param {String} item.value 链接名称
+         * @param {String} [item.target=_self] 链接的目标 URL
+         * @param {String} [item.current=false] 是否是当前页面链接
+         * @param {Number} [item.sortValue=0] 排序值
+         */
+        items: null
+    },
+<span id='fastDev-Ui-BreadCrumb-method-staticTemplate'>    /**
+</span>     * 静态模板
+     * @param {Object} params 模板参数
+     * @private 
+     */
+    staticTemplate: function (params) {
+        return '&lt;div name=&quot;bread&quot; class=&quot;ui-bread ' + params.backgroundCls + '&quot; style=&quot;width:' + params.width + '&quot;&gt;&lt;/div&gt;';
+    },
+<span id='fastDev-Ui-BreadCrumb-method-dynamicTemplate'>    /**
+</span>     * 动态模板片段
+     * @param {Object} params 已解析的参数对象
+     * @param {Object} data 数据对象
+     * @private 
+     */
+    dynamicTemplate: function (params, data) {
+        var html = ['&lt;div class=&quot;ui-bread-ico ' + params.headerCls + '&quot;&gt;&lt;/div&gt;'];
+        for (var i = 0, item; item = data[i]; i++) {
+            if (i &gt; 0) {
+                html.push('&lt;span class=&quot;ui-bread-symbols ' + params.symbolsCls + '&quot;&gt;&lt;/span&gt;');
+            }
+            html.push('&lt;a href=&quot;' + item.href + '&quot; target=&quot;' + item.target + '&quot; ');
+            if (data.current) {
+                html.push('class=&quot;current&quot;');
+            }
+            html.push('&gt;' + item.value + '&lt;/a&gt;');
+        }
+        return html.join(&quot;&quot;);
+    },
+    tplParam: [&quot;symbolsCls&quot;, &quot;headerCls&quot;, &quot;backgroundCls&quot;, &quot;width&quot;],
+    fields: [{
+        name: &quot;href&quot;,
+        defaultValue: &quot;#&quot;
+    }, {
+        name: &quot;value&quot;,
+        defaultValue: &quot;&quot;
+    }, {
+        name: &quot;target&quot;,
+        defaultValue: &quot;_self&quot;
+    }, {
+        name: &quot;current&quot;,
+        defaultValue: false
+    }, {
+        name: &quot;sortValue&quot;, //排序值，用于动态数据时显示顺序指定
+        type: &quot;Int&quot;,
+        defaultValue: 0
+    }],
+<span id='fastDev-Ui-BreadCrumb-method-ready'>    /**
+</span>     * 面包屑参数准备
+     * @param {Object} options 用户配置项
+     * @param {Object} global 全局私有变量
+     */
+    ready: function (options, global) {
+        if (fastDev.isNumber(options.width)) {
+            options.width += &quot;px&quot;;
+        }
+        if (!options.backgroundCls) {
+            options.backgroundCls = &quot;ui-bread-bg&quot;;
+        }
+    },
+<span id='fastDev-Ui-BreadCrumb-method-constructItems'>    /**
+</span>     * 初始数据项
+     * @protected
+     */
+    constructItems: function () {
+        this.dataset.sort(&quot;sortValue&quot;);
+        this._renderDynamicHtml(this.find(&quot;[name='bread']&quot;));
+        // 如果子项可能过多建议使用事件代理
+        this.find(&quot;.ui-bread&quot;).bind(&quot;click&quot;, fastDev.setFnInScope(this, function (event) {
+            if (event.target.nodeName === &quot;A&quot;) {
+                this.find(&quot;A&quot;).removeClass(&quot;current&quot;);
+                fastDev(event.target).addClass(&quot;current&quot;);
+            }
+        }));
+    }
+});</pre>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>控件使用基础事例</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../src/fastDev-import.js"></script>
+
+		<script type="text/javascript">
+			function select1_getValue() {
+				alert(fastDev.getInstance("select1").getValue());
+			}
+
+			function select2_getValue() {
+				alert(fastDev.getInstance("select2").getValue());
+			}
+
+			function select3_getValue() {
+				alert(fastDev.getInstance("select3").getValue());
+			}
+			
+			function select1_setValue() {
+				fastDev.getInstance("select1").setValue("data1");
+			}
+
+			function select2_setValue() {
+				fastDev.getInstance("select2").setValue("data1");
+			}
+
+			function select3_setValue() {
+				fastDev.getInstance("select3").setValue("data1");
+			}
+
+			function select1_getText() {
+				alert(fastDev.getInstance("select1").getText());
+			}
+
+			function select2_getText() {
+				alert(fastDev.getInstance("select2").getText());
+			}
+
+			function select3_getText() {
+				alert(fastDev.getInstance("select3").getText());
+			}
+			
+			function select1_enable() {
+				fastDev.getInstance("select1").enable();
+			}
+
+			function select2_enable() {
+				fastDev.getInstance("select2").enable();
+			}
+
+			function select3_enable() {
+				fastDev.getInstance("select3").enable();
+			}
+			
+			function select1_disable() {
+				fastDev.getInstance("select1").disable();
+			}
+
+			function select2_disable() {
+				fastDev.getInstance("select2").disable();
+			}
+
+			function select3_disable() {
+				fastDev.getInstance("select3").disable();
+			}
+			
+			function select1_disable() {
+				fastDev.getInstance("select1").disable();
+			}
+
+			function select2_disable() {
+				fastDev.getInstance("select2").disable();
+			}
+
+			function select3_disable() {
+				fastDev.getInstance("select3").disable();
+			}
+			
+			function select1_readonly() {
+				fastDev.getInstance("select1").setReadonly(true);
+			}
+
+			function select2_readonly() {
+				fastDev.getInstance("select2").setReadonly(true);
+			}
+
+			function select3_readonly() {
+				fastDev.getInstance("select3").setReadonly(true);
+			}
+			
+			function select1_cancelReadonly() {
+				fastDev.getInstance("select1").setReadonly(false);
+			}
+
+			function select2_cancelReadonly() {
+				fastDev.getInstance("select2").setReadonly(false);
+			}
+
+			function select3_cancelReadonly() {
+				fastDev.getInstance("select3").setReadonly(false);
+			}
+			
+			function select1_disableItems() {
+				fastDev.getInstance("select1").disableItems("remoteData2");
+			}
+
+			function select2_disableItems() {
+				fastDev.getInstance("select2").disableItems("remoteData2");
+			}
+
+			function select3_disableItems() {
+				fastDev.getInstance("select3").disableItems("remoteData2");
+			}
+			
+			function select1_enableItems() {
+				fastDev.getInstance("select1").enableItems("remoteData2");
+			}
+
+			function select2_enableItems() {
+				fastDev.getInstance("select2").enableItems("remoteData2");
+			}
+
+			function select3_enableItems() {
+				fastDev.getInstance("select3").enableItems("remoteData2");
+			}
+			
+			function select1_addItems() {
+				fastDev.getInstance("select1").addItems({value:"data2",text:"本地数据2"});
+			}
+
+			function select2_addItems() {
+				fastDev.getInstance("select2").addItems({value:"data2",text:"本地数据2"});
+			}
+
+			function select3_addItems() {
+				fastDev.getInstance("select3").addItems({value:"data2",text:"本地数据2"});
+			}
+			
+			function select1_removeItems() {
+				fastDev.getInstance("select1").removeItems("data2");
+			}
+
+			function select2_removeItems() {
+				fastDev.getInstance("select2").removeItems("data2");
+			}
+
+			function select3_removeItems() {
+				fastDev.getInstance("select3").removeItems("data2");
+			}
+			
+			function select1_getItems() {
+				var items = fastDev.getInstance("select1").getItems();
+				fastDev.each(items,function(index,item){
+					alert("text:"+item.text+";value:"+item.value);
+				});
+			}
+
+			function select2_getItems() {
+				var items = fastDev.getInstance("select2").getItems();
+				fastDev.each(items,function(index,item){
+					alert("text:"+item.text+";value:"+item.value);
+				});
+			}
+
+			function select3_getItems() {
+				var items = fastDev.getInstance("select3").getItems();
+				fastDev.each(items,function(index,item){
+					alert("text:"+item.text+";value:"+item.value);
+				});
+			}
+			
+			function select1_getSelectedItem() {
+				var items = fastDev.getInstance("select1").getSelectedItem();
+				fastDev.each(items,function(index,item){
+					alert("text:"+item.text+";value:"+item.value);
+				});
+			}
+
+			function select2_getSelectedItem() {
+				var items = fastDev.getInstance("select2").getSelectedItem();
+				fastDev.each(items,function(index,item){
+					alert("text:"+item.text+";value:"+item.value);
+				});
+			}
+
+			function select3_getSelectedItem() {
+				var items = fastDev.getInstance("select3").getSelectedItem();
+				fastDev.each(items,function(index,item){
+					alert("text:"+item.text+";value:"+item.value);
+				});
+			}
+			
+			function select1_moveUp() {
+				fastDev.getInstance("select1").moveUp();
+			}
+
+			function select2_moveUp() {
+				fastDev.getInstance("select2").moveUp();
+			}
+
+			function select3_moveUp() {
+				fastDev.getInstance("select3").moveUp();
+			}
+			
+			function select1_moveDown() {
+				fastDev.getInstance("select1").moveDown();
+			}
+
+			function select2_moveDown() {
+				fastDev.getInstance("select2").moveDown();
+			}
+
+			function select3_moveDown() {
+				fastDev.getInstance("select3").moveDown();
+			}
+			
+			function select1_reset() {
+				fastDev.getInstance("select1").reset();
+			}
+
+			function select2_reset() {
+				fastDev.getInstance("select2").reset();
+			}
+
+			function select3_reset() {
+				fastDev.getInstance("select3").reset();
+			}
+			
+			function select1_clean() {
+				fastDev.getInstance("select1").clean();
+			}
+
+			function select2_clean() {
+				fastDev.getInstance("select2").clean();
+			}
+
+			function select3_clean() {
+				fastDev.getInstance("select3").clean();
+			}
+			
+		</script>
+	</head>
+	<body>
+		<table style="margin: 10px">
+			<tr>
+				<td>普通下拉框</td>
+				<td style="width: 50px"></td>
+				<td>展开下拉框</td>
+				<td style="width: 50px"></td>
+				<td>多选下拉框</td>
+			</tr>
+			<tr>
+				<td>
+				<select itype="Select" id="select1" saveInstance=true initSource="select.json" panelWidth="300px">
+					<option value="-1">---请选择---</option>
+				</select></td>
+				<td style="width: 50px"></td>
+				<td>
+				<select itype="Select" id="select2" saveInstance=true initSource="select.json" size=4 >
+					<option value="data1" text="本地数据1" ></option>
+				</select></td>
+				<td style="width: 50px"></td>
+				<td>
+				<select itype="Select"  id="select3" saveInstance=true initSource="select.json" size=4  multiple=true>
+					<option value="data1" text="本地数据1"></option>
+				</select></td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="getValue" onBtnClick="select1_getValue()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="getValue" onBtnClick="select2_getValue()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="getValue" onBtnClick="select3_getValue()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="setValue(本地数据1)" onBtnClick="select1_setValue()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="setValue(本地数据1)" onBtnClick="select2_setValue()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="setValue(本地数据1)" onBtnClick="select3_setValue()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="getText" onBtnClick="select1_getText()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="getText" onBtnClick="select2_getText()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="getText" onBtnClick="select3_getText()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="enable" onBtnClick="select1_enable()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="enable" onBtnClick="select2_enable()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="enable" onBtnClick="select3_enable()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="disable" onBtnClick="select1_disable()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="disable" onBtnClick="select2_disable()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="disable" onBtnClick="select3_disable()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="readonly(true)" onBtnClick="select1_readonly()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="readonly(true)" onBtnClick="select2_readonly()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="readonly(true)" onBtnClick="select3_readonly()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="readonly(false)" onBtnClick="select1_cancelReadonly()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="readonly(false)" onBtnClick="select2_cancelReadonly()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="readonly(false)" onBtnClick="select3_cancelReadonly()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="disableItems(remoteData2)" onBtnClick="select1_disableItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="disableItems(remoteData2)" onBtnClick="select2_disableItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="disableItems(remoteData2)" onBtnClick="select3_disableItems()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="enableItems(remoteData2)" onBtnClick="select1_enableItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="enableItems(remoteData2)" onBtnClick="select2_enableItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="enableItems(remoteData2)" onBtnClick="select3_enableItems()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="addItems(本地数据2)" onBtnClick="select1_addItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="addItems(本地数据2)" onBtnClick="select2_addItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="addItems(本地数据2)" onBtnClick="select3_addItems()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="removeItems(本地数据2)" onBtnClick="select1_removeItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="removeItems(本地数据2)" onBtnClick="select2_removeItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="removeItems(本地数据2)" onBtnClick="select3_removeItems()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="getItems" onBtnClick="select1_getItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="getItems" onBtnClick="select2_getItems()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="getItems" onBtnClick="select3_getItems()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="getSelectedItem" onBtnClick="select1_getSelectedItem()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="getSelectedItem" onBtnClick="select2_getSelectedItem()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="getSelectedItem" onBtnClick="select3_getSelectedItem()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="reset" onBtnClick="select1_reset()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="reset" onBtnClick="select2_reset()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="reset" onBtnClick="select3_reset()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="clean" onBtnClick="select1_clean()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="clean" onBtnClick="select2_clean()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="clean" onBtnClick="select3_clean()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="moveUp" onBtnClick="select1_moveUp()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="moveUp" onBtnClick="select2_moveUp()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="moveUp" onBtnClick="select3_moveUp()">
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input itype="Button" text="moveDown" onBtnClick="select1_moveDown()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="moveDown" onBtnClick="select2_moveDown()">
+				</td>
+				<td style="width: 50px"></td>
+				<td>
+				<input itype="Button" text="moveDown" onBtnClick="select3_moveDown()">
+				</td>
+			</tr>
+		</table>
+
+	</body>
+</html>

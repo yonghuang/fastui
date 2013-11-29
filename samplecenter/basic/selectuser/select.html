@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title><h4>基本功能</h4>
+        <ul>
+        <li>选人组件，适合按部门和按角色选人的场景</li>
+	<li>搜索框的使用:搜索框中会剔除一个人身兼双职情况下重复人名的情况,并且会显示所属部门,需要后台传相应的值,若没有则不显示</li>
+        <li>注:此组件是基于fastui现有的控件开发,不存在于fastui控件库中,使用时需要下载组件的相关页面、js和css文件(下载地址:http://sip.talkweb.com.cn:8090/pages/viewpage.action?pageId=11078022)</li>
+        <li>无法下载或者使用时有问题，请联系禄铭。</li>
+        </ul></title>
+<script type="text/javascript" src="fastui/fastDev-import.js"></script>
+<script type="text/javascript">
+//底部按钮（居中）
+function showDialog() {
+	//判断展示选人的textbox是否有数据，如果没有则将存储已选数据的对象清空
+	//注:此窗口若为弹出的二级窗口，则需要使用以下方法。否则反选时数据依旧存在，不会被内存回收
+	var isNull= fastDev.getInstance("text").getValue();
+	var isHideData= fastDev.getInstance("isHideData").getValue();
+	if(!isNull){
+		fastDev.Ui.Window.setData("selectList","");
+		fastDev.Ui.Window.setData("selectData","");
+		fastDev.Ui.Window.setData("selectDataList","");
+	}
+	if(isHideData){
+		var jsonData = fastDev.Util.JsonUtil.parseJson(isHideData);
+		fastDev.Ui.Window.setData("selectDataList",jsonData);
+		var selectList=[];
+		for(var i=0,len=jsonData.length;i<len;i++){
+			selectList.push(jsonData[i].id);
+		}
+		fastDev.Ui.Window.setData("selectList",selectList);
+	}
+	
+	fastDev.create("Dialog", {
+		height : "400px",
+		width : "630px",
+		minHeight : "400px",
+		minWidth : "630px",
+		src : "basic/selectuser/selectuser.html",
+		inside : false,
+		onAfterResize : changeSize,
+		onAfterMaximize : changeSize,
+		onAfterReset : changeSize,
+		buttons : [{
+			text : "保存",
+			align : "center",
+			iconCls : "icon-save",
+			onclick : function(event, that, win, fast) {
+				fastDev.tips("你点击了保存按钮");
+				// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+				// 参数that为当前对话框控件实例
+				var selectDataList=[];
+				//获取窗口保存的已选数据并保存
+				fastDev.Ui.Window.setData("selectList",win.selectList);
+				fastDev.Ui.Window.setData("selectData",win.selectData);
+				//获取的selectTemp为跨域变量,不要直接操作改变其中的数据,操作后会改变反选时的数据,引发错误
+				var selectTemp = fastDev.Ui.Window.getData("selectData");
+				var i;
+				for(i=0,len=selectTemp.length;i<len;i++){
+					for(var j=0,le=selectTemp[i].data.length;j<le;j++){
+						selectDataList.push(selectTemp[i].data[j]);
+					}
+				}
+				fastDev.Ui.Window.setData("selectDataList",selectDataList);
+				
+				//添加到显示的textbox
+				var dataStr="";
+				for(i=0,len=selectDataList.length;i<len;i++){
+					dataStr+=selectDataList[i].name+",";
+				}
+				dataStr = dataStr.substring(0,dataStr.length-1);
+				fastDev.getInstance("text").setValue(dataStr);
+				
+				fastDev.getInstance("isHideData").setValue("");
+				that.close();
+			}
+		}, {
+			text : "关闭",
+			align : "center",
+			iconCls : "icon-close",
+			onclick : function(event, that, win, fast) {
+				// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+				// 参数that为当前对话框控件实例
+				that.close();
+			}
+		}]
+	});
+}
+
+//改变窗口大小时，改变里面的元素。(暂未实现)
+function changeSize(){
+	var that = this;
+	var iFrameFastDev = that.find(".ui-window-iframe").elems[0].contentWindow.fastDev;
+	if(!iFrameFastDev){
+		return;
+	}
+	var iFrameWindow = that.find(".ui-window-iframe").elems[0].contentWindow;
+	var left = iFrameWindow.fastDev("#left");
+	var right = iFrameWindow.fastDev("#right");
+	//获得窗口边缘宽高
+	var haw = that.getContentBounding();
+	var wHeight = that._options.height;
+	var wWidth = that._options.width;
+	//左侧窗口的高度
+	var leftHeight = wHeight-80;
+	left.css("height",leftHeight+"px");
+	//设置tabs高度
+	var tabHeight = leftHeight-43;
+	var ta = iFrameFastDev.getInstance("tabs");
+	ta.setOptions({
+		height : tabHeight + "px"
+		});
+	ta.setHeightWidth(ta.getOptions());
+	//右侧窗口的高度
+	var rightHeight = wHeight-80;
+	var rightWidth = wWidth-250;
+	right.css("height",rightHeight+"px").css("width",rightWidth+"px");
+	//右侧下部分高度
+	var rightContent = rightHeight-45;
+	var contentLeft = rightHeight-40;
+	var s = iFrameWindow.fastDev(".right-content").css("height",rightContent+"px");
+	iFrameWindow.fastDev(".content-left").css("height",contentLeft+"px");
+	var contentRightSelected = rightHeight-80;
+	iFrameWindow.fastDev(".content-right-selected").css("height",contentRightSelected+"px");
+	
+}
+
+</script>
+</head>
+<body>
+	<div class="ui-layout-text">基本用法</div>
+	<textarea saveInstance="true" itype="TextBox" id="text" type="textarea" height="200px" width="400px"></textarea>
+	<input itype="Button" text="弹出窗口" onclick="showDialog()">
+	<input type="hidden" itype="TextBox" saveInstance="true" id="isHideData" />
+</body>
+</html>

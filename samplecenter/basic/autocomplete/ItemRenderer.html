@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>
+			<ul>
+				<li>
+					itemRender回调函数，可用于对检索结果进行自定义渲染展现。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 列表项渲染
+			function itemRender(data, keyword) {
+				// 第一个参数为当前列表项的值对象，格式与使用的数据源格式对应，第二个参数为查询关键字
+				// 可返回一个HTML片段。若未返回值，则按默认形式渲染（纯文本值）。
+				return "<img src='img.gif' width='20px' height='20px' align='middle'/><span style='padding:4px;'>" + data.text + "</span>";
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin:10px;">
+			<div class="ui-layout-text">
+				列表项渲染
+			</div>
+			<div>
+				<input itype="AutoComplete" iwidth="200px" itemRenderer="itemRender()" initSource="../../data/autocomplete.jsp" hintText="输入英文字母查询" searchingText="搜索中.." noResultsText="未找到相关结果"/>
+			</div>
+		</div>
+	</body>
+</html>

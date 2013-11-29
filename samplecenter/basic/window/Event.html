@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					控件事件回调示例。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 创建弹窗
+			// 所有事件回调中，this均指向当前的窗口控件实例
+			var win;
+			function create() {
+				if (!!win) {
+					win.show();
+				} else {
+					win = fastDev.create("Window", {
+						onBeforeOpen : function() {
+							fastDev.tips("onBeforeOpen");
+						},
+						onAfterOpen : function() {
+							fastDev.tips("onAfterOpen");
+						},
+						onBeforeClose : function() {
+							fastDev.tips("onBeforeClose");
+						},
+						onAfterClose : function() {
+							fastDev.tips("onAfterClose");
+							win = null;
+						},
+						onBeforeCollapse : function() {
+							fastDev.tips("onBeforeCollapse");
+						},
+						onAfterCollapse : function() {
+							fastDev.tips("onAfterCollapse");
+						},
+						onBeforeExpand : function() {
+							fastDev.tips("onBeforeExpand");
+						},
+						onAfterExpand : function() {
+							fastDev.tips("onAfterExpand");
+						},
+						onAfterResize : function() {
+							fastDev.tips("onAfterResize");
+						},
+						onAfterMove : function() {
+							fastDev.tips("onAfterMove");
+						},
+						onAfterMaximize : function() {
+							fastDev.tips("onAfterMaximize");
+						},
+						onAfterReset : function() {
+							fastDev.tips("onAfterReset");
+						},
+						onAfterMinimize : function() {
+							fastDev.tips("onAfterMinimize");
+						}
+					});
+				}
+			}
+
+			// 显示弹窗
+			function show() {
+				if (!!win) {
+					win.show();
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				事件回调
+			</div>
+			<div>
+				<input itype="Button" text="创建弹窗" onclick="create()" />
+				<input itype="Button" text="显示弹窗" onclick="show()" />
+			</div>
+		</div>
+	</body>
+</html>
+

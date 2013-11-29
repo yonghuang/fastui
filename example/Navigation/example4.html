@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Navigation</title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+         <script src="../../src/component/layout/Accordion.js"></script>
+     <script src="../../src/component/Navigation.js"></script>
+     <script>
+			$(function() {
+				var data=[{id:"1","pid":"-1","text":"1级菜单"},
+				{id:"2","pid":"-1","text":"2级菜单"},
+				{id:"3","pid":"-1","text":"3级菜单"},
+				{id:"11","pid":"1","text":"11级菜单"},
+				{id:"12","pid":"1","text":"12级菜单"},
+				{id:"21","pid":"2","text":"21级菜单"},
+				{id:"22","pid":"2","text":"22级菜单"},
+				{id:"31","pid":"3","text":"31级菜单"},
+				{id:"111","pid":"11","text":"111级菜单","url":"http://www.baidu.com","target":"_blank"},//0
+				{id:"112","pid":"11","text":"112级菜单","url":"http://www.baidu.com","target":"_blank"},//1
+				{id:"121","pid":"12","text":"121级菜单","url":"http://www.baidu.com","target":"_blank"},//2
+				{id:"122","pid":"12","text":"122级菜单","url":"http://www.baidu.com","target":"_blank"},//3
+				{id:"211","pid":"21","text":"211级菜单","url":"http://www.baidu.com","target":"_blank"},//4
+				{id:"212","pid":"21","text":"212级菜单","url":"http://www.baidu.com","target":"_blank"},//5
+				{id:"221","pid":"22","text":"221级菜单"},
+				{id:"2211","pid":"221","text":"2211级菜单"},
+				{id:"22111","pid":"2211","text":"22111级菜单","url":"http://www.baidu.com","target":"_blank"},
+				{id:"22112","pid":"2211","text":"22112级菜单","url":"http://www.baidu.com","target":"_blank"},
+				{id:"311","pid":"31","text":"311级菜单"},
+				{id:"3111","pid":"311","text":"3111级菜单","url":"http://www.baidu.com","target":"_blank"},
+				{id:"3112","pid":"311","text":"3112级菜单","url":"http://www.baidu.com","target":"_blank"}];
+				
+				$.create("Navigation", {
+					container : "example",
+					items : data,
+					activeIndex:5//从0开始，第6个链接
+				});
+			});
+		
+	
+		
+	</script>
+</head>
+<body>
+	<div id="example" style="width:260px"></div>
+</body>
+</html>
+

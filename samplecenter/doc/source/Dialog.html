@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Dialog'>/**
+</span> * @class fastDev.Ui.Dialog
+ * @extends fastDev.Ui.Window
+ * @author chengwei
+ * &lt;p&gt;对话框控件。&lt;/p&gt;
+ * &lt;p&gt;属弹窗类控件，继承自Window。&lt;/p&gt;
+ * &lt;p&gt;可定义工具栏。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *     
+ *     fastDev.create(&quot;Dialog&quot;, {
+ *          title : &quot;标题&quot;,
+ *          src : &quot;iframe.html&quot;
+ *     });
+ */
+fastDev.define(&quot;fastDev.Ui.Dialog&quot;, {
+    extend: &quot;fastDev.Ui.Window&quot;,
+    alias: &quot;Dialog&quot;,
+    _options: {
+<span id='fastDev-Ui-Dialog-property-toolbar'>        /**
+</span>         * 定义顶部的工具栏
+         * @type {Object}
+         */
+        toolbar: null
+    },
+<span id='fastDev-Ui-Dialog-method-staticTemplate'>    /**
+</span>     * 用于构建静态模板串
+     * @param {Object} params 模板已解析参数对象
+     * @private 
+     */
+    staticTemplate: function (params) {
+        var html = [];
+        if (params.inside) {
+            html.push('&lt;div name=&quot;box&quot; class=&quot;ui-window ui-dialog ui-window-plain ui-window-radius ui-window-shadow ' + params.cls + '&quot; style=&quot;display:none;z-index:' + params.zIndex + '&quot;&gt;');
+            if (params.showHeader) {
+                html.push([
+                    '&lt;div class=&quot;ui-window-tl&quot;&gt;',
+                    '&lt;div class=&quot;ui-window-tr&quot;&gt;',
+                    '&lt;div name=&quot;header&quot; class=&quot;ui-window-tc&quot;&gt;',
+                    '&lt;div class=&quot;ui-window-header ui-window-header-noborder&quot;&gt;',
+                    '&lt;div name=&quot;title&quot; class=&quot;ui-window-header-text  ' + params.iconCls + ' ' + params.headerCls + '&quot; style=&quot;height:16px&quot;&gt;' + params.title + '&lt;/div&gt;',
+                    '&lt;div name=&quot;tool&quot; class=&quot;ui-window-tool&quot;&gt;',
+                    '&lt;span class=&quot;ui-window-tool-show&quot; name=&quot;Expand&quot; handler=&quot;expand&quot; title=&quot;展开&quot;&gt;&lt;/span&gt;',
+                    '&lt;span class=&quot;ui-window-tool-hidden&quot; name=&quot;Collapse&quot; handler=&quot;collapse&quot; title=&quot;折叠&quot;&gt;&lt;/span&gt;',
+                    '&lt;span class=&quot;ui-window-tool-min&quot; name=&quot;Min&quot; handler=&quot;minimize&quot; title=&quot;最小化&quot;&gt;&lt;/span&gt;',
+                    '&lt;span class=&quot;ui-window-tool-restore&quot; name=&quot;Restore&quot; handler=&quot;reset&quot; title=&quot;还原&quot;&gt;&lt;/span&gt;',
+                    '&lt;span class=&quot;ui-window-tool-max&quot; name=&quot;Max&quot; handler=&quot;maximize&quot; title=&quot;最大化&quot;&gt;&lt;/span&gt;',
+                    '&lt;span class=&quot;ui-window-tool-close&quot; name=&quot;Close&quot; handler=&quot;close&quot; title=&quot;关闭&quot;&gt;&lt;/span&gt;',
+                    '&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;'].join(''));
+            }
+            html.push('&lt;div class=&quot;ui-window-bg&quot;&gt;&lt;div name=&quot;body&quot; class=&quot;ui-window-content-bg ui-window-body&quot;&gt;');
+            if ( !! params.toolbar) {
+                html.push('&lt;div name=&quot;toolbar&quot; style=&quot;width:100%&quot;&gt;&lt;/div&gt;');
+            }
+            html.push('&lt;div name=&quot;content&quot; class=&quot;ui-window-content ' + params.bodyCls + '&quot; style=&quot;' + params.bodyStyle + '&quot;&gt;&lt;/div&gt;');
+            if ( !! params.buttons) {
+                html.push([
+                    '&lt;div name=&quot;buttons&quot; class=&quot;ui-window-button-panel&quot;&gt;',
+                    '&lt;span name=&quot;left&quot; class=&quot;ui-left&quot; style=&quot;display:none;margin-left:' + params.btnPanelMarginLeft + '&quot;&gt;&lt;/span&gt;',
+                    '&lt;span name=&quot;center&quot; class=&quot;ui-center&quot; style=&quot;display:none;overflow:hidden&quot;&gt;&lt;/span&gt;',
+                    '&lt;span name=&quot;right&quot; class=&quot;ui-right&quot; style=&quot;display:none;margin-right:' + params.btnPanelMarginRight + '&quot;&gt;&lt;/span&gt;',
+                    '&lt;/div&gt;'].join(''));
+            }
+            html.push('&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ui-window-bl&quot;&gt;&lt;div class=&quot;ui-window-br&quot;&gt;&lt;div class=&quot;ui-window-bc&quot;&gt;&lt;div class=&quot;ui-window-footer&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;');
+            if ( !! params.showShadow) {
+                html.push([
+                    '&lt;div name=&quot;shadow&quot; class=&quot;ui-window-shadow-bg&quot; style=&quot;display:none&quot;&gt;',
+                    '&lt;div class=&quot;shadow-st&quot;&gt;',
+                    '&lt;div class=&quot;shadow-stl&quot;&gt;&lt;/div&gt;',
+                    '&lt;div class=&quot;shadow-stc&quot;&gt;&lt;/div&gt;',
+                    '&lt;div class=&quot;shadow-str&quot;&gt;&lt;/div&gt;',
+                    '&lt;/div&gt;',
+                    '&lt;div class=&quot;shadow-sc&quot;&gt;',
+                    '&lt;div class=&quot;shadow-sml&quot;&gt;&lt;/div&gt;',
+                    '&lt;div class=&quot;shadow-smc&quot;&gt;&lt;/div&gt;',
+                    '&lt;div class=&quot;shadow-smr&quot;&gt;&lt;/div&gt;',
+                    '&lt;/div&gt;',
+                    '&lt;div class=&quot;shadow-sb&quot;&gt;',
+                    '&lt;div class=&quot;shadow-sbl&quot;&gt;&lt;/div&gt;',
+                    '&lt;div class=&quot;shadow-sbc&quot;&gt;&lt;/div&gt;',
+                    '&lt;div class=&quot;shadow-sbr&quot;&gt;&lt;/div&gt;',
+                    '&lt;/div&gt;&lt;/div&gt;'].join(''));
+            }
+            if ( !! params.modal) {
+                html.push('&lt;div name=&quot;mask&quot; class=&quot;ui-mask&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;');
+            }
+        }
+        return html.join('');
+    },
+    tplParam: [&quot;inside&quot;, &quot;zIndex&quot;, &quot;showHeader&quot;, &quot;cls&quot;, &quot;iconCls&quot;, &quot;toolbar&quot;, &quot;headerCls&quot;, &quot;title&quot;, &quot;bodyCls&quot;, &quot;bodyStyle&quot;, &quot;buttons&quot;, &quot;showShadow&quot;, &quot;modal&quot;, &quot;btnPanelMarginLeft&quot;, &quot;btnPanelMarginRight&quot;],
+<span id='fastDev-Ui-Dialog-method-ready'>    /**
+</span>     * 对话框参数准备
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    ready: function (options, global) {
+        if (!fastDev.isPlainObject(options.toolbar)) {
+            options.toolbar = null;
+        }
+        options.showBorder = true;
+        // 底部按钮面板与边线的距离
+        global.btnPanelMarginLeft = (fastDev.Browser.isIE6 || fastDev.Browser.isIE7) ? &quot;10px&quot; : &quot;5px&quot;;
+        global.btnPanelMarginRight = (fastDev.Browser.isIE6 || fastDev.Browser.isIE7) ? &quot;0px&quot; : &quot;5px&quot;;
+    },
+<span id='fastDev-Ui-Dialog-method-construct'>    /**
+</span>     * 构造对话框
+     * @param {Object} options 当前控件配置信息
+     * @param {Object} global 当前控件全局信息
+     * @protected
+     */
+    construct: function (options, global) {
+        if (options.inside) {
+            var that = this;
+            global.toolbar = this.find(&quot;[name='toolbar']&quot;);
+            if (fastDev.isPlainObject(options.toolbar)) {
+                options.toolbar.container = global.toolbar;
+                fastDev.each(options.toolbar.items = [].concat(options.toolbar.items), function (index, item) {
+                    if (fastDev.isPlainObject(item)) {
+                        item.onclick = that.getBtnCallback(item.onclick);
+                    }
+                });
+                global.toolbarInstance = fastDev.create(&quot;Toolbar&quot;, options.toolbar);
+                global.hasToolbar = true;
+                global.onDragStart = function () {
+                    global.toolbar.hide();
+                };
+                global.onDragStop = function () {
+                    if (global.hasToolbar) {
+                        global.toolbar.show();
+                    }
+                };
+            }
+        }
+    },
+<span id='fastDev-Ui-Dialog-method-initAnimation'>    /**
+</span>     * 初始动画设置
+     * @param {String} type
+     * @param {DomObject} target
+     * @param {Object|Boolean} animation
+     * @return {Object}
+     * @protected
+     */
+    initAnimation: function (type, target, animation) {
+        var options = this._options,
+            global = this._global,
+            duration = 0,
+            startHeight, stopHeight, height;
+        animation = fastDev.Ui.Window.initAnimation.call(this, type, target, animation);
+        for (var i = 0; i &lt; animation.length; i++) {
+            duration += animation[i].duration;
+        }
+        if (!(duration === 0 || type === &quot;collapse&quot; || type === &quot;expand&quot; || options.collapsed)) {
+            height = global.box.height();
+            startHeight = animation[0].start.height;
+            stopHeight = animation[animation.length - 1].stop.height;
+            global.body.css(&quot;height&quot;, this.getBodyHeight(isNaN(startHeight) ? height : startHeight)).show().animate({
+                height: this.getBodyHeight(isNaN(stopHeight) ? height : stopHeight)
+            }, duration, options.animateEasing || animation.easing);
+        }
+        return animation;
+    },
+<span id='fastDev-Ui-Dialog-method-startAnimation'>    /**
+</span>     * 开始动画前的回调
+     * @param {DomObject} target 动画目标
+     * @param {Object} animation 动画队列配置
+     * @private 
+     */
+    startAnimation: function (target, animation) {
+        var res = fastDev.Ui.Window.startAnimation.apply(this, arguments);
+        this._global.body.removeCss(&quot;borderColor&quot;);
+        return res;
+    },
+<span id='fastDev-Ui-Dialog-method-getContentHeight'>    /**
+</span>     * 获取内容部分高度值
+     * @param {Number} bodyHeight 当前body高度
+     * @return {Number}
+     * @protected
+     */
+    getContentHeight: function (bodyHeight) {
+        var global = this._global,
+            content = global.content;
+        return Math.max(bodyHeight - (content.outerHeight(true) - content.height()) - (global.hasButton ? Math.max(global.buttons.outerHeight(true), 32) : 0) - (global.hasToolbar ? Math.max(global.toolbar.outerHeight(true), 28) : 0), 0);
+    },
+<span id='fastDev-Ui-Dialog-method-getBodyHeight'>    /**
+</span>     * 获取对话框主体部分的高度值
+     * @param {Number} height 总高度
+     * @return {Number}
+     * @protected
+     */
+    getBodyHeight: function (height) {
+        var options = this._options;
+        return Math.max(parseInt(height, 10) - (options.showHeader ? Math.max(this._global.header.outerHeight(true), 27) : 0) - 9, 0);
+    },
+<span id='fastDev-Ui-Dialog-method-getContentBounding'>    /**
+</span>     * 获取内容区域以外部分的宽高值
+     * @return {Number} width、height
+     * @protected 
+     */
+    getContentBounding: function () {
+        var options = this._options,
+            global = this._global;
+        return {
+            // 2pxbody-bg边框，10px body外边距，2px body边框
+            width: Math.abs(global.content.outerWidth(true) - global.content.width() + 2 + 10 + 2),
+            height: Math.abs(9 + (global.content.outerHeight(true) - global.content.height()) + (global.hasButton ? Math.max(global.buttons.outerHeight(true), 32) : 0) + (global.hasToolbar ? Math.max(global.toolbar.outerHeight(true), 28) : 0) + (options.showHeader ? Math.max(global.header.outerHeight(true), 27) : 0))
+        };
+    },
+<span id='fastDev-Ui-Dialog-method-getToolbar'>    /**
+</span>     * 获取工具栏 
+     * @return {fastDev.Ui.Toobar}
+     */
+    getToolbar: function () {
+        return this._global.toolbarInstance;
+    },
+<span id='fastDev-Ui-Dialog-method-hideToolbar'>    /**
+</span>     * 隐藏工具栏
+     * @return {fastDev.Ui.Dialog} 当前对话框控件实例
+     */
+    hideToolbar: function () {
+        var global = this._global;
+        if (global.toolbarInstance) {
+            global.toolbar.hide();
+            global.hasToolbar = false;
+            this.resize({
+                height: global.box.height()
+            });
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Dialog-method-showToolbar'>    /**
+</span>     * 显示工具栏
+     * @return {fastDev.Ui.Dialog} 当前对话框控件实例
+     */
+    showToolbar: function () {
+        var global = this._global;
+        if (global.toolbarInstance) {
+            global.toolbar.show();
+            global.hasToolbar = true;
+            this.resize({
+                height: global.box.height()
+            });
+        }
+        return this;
+    }
+});</pre>
+</body>
+</html>

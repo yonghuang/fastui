@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>图标与连接线、展开层数</h4>
+        <ul>        
+        <li>showIco指的是显示节点小图标,默认为false。如果想不同节点有不同的图标，请参照个性化节点图标例子。如果想统一改掉默认图标，可以直接换图片文件或改css样式</li>
+        <li>showLine指是否显示节点间的连接线，默认为true。</li>
+        <li>openFloor指的是默认展开层数，默认是1。初始状态下，没有展开的节点是没有构建的。故此数值设置过大，可能引起页面加载的性能问题</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+	</head>
+	<body><div style="margin:10px;">	
+    <table>
+           <tr>
+           <td><div >
+            	<div class="ui-layout-text">显示小图标</div>            
+			<div itype="Tree"  initSource="../../data/tree_data.txt" showIco="true" topParentid="0" openFloor=2  id="tree2" ></div></div>
+           </td>
+           <td>  <div >
+            	<div class="ui-layout-text">无连接线</div>            
+            <div itype="Tree"  initSource="../../data/tree_data.txt" showLine="false" showIco="true" topParentid="0" openFloor=2 id="tree3"></div></div>
+           </td>
+           <td>   <div >
+            	<div class="ui-layout-text">展开层数设置</div>            
+			<div itype="Tree"  initSource="../../data/tree_data.txt" showIco="true" topParentid="0" openFloor=5  id="tree4" ></div>
+		</div>
+           </td>
+           </tr>
+           </table>
+            
+          
+         
+        </div>
+	</body>
+</html>

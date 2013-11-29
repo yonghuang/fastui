@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>
+        </ul><h4>基本功能</h4></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+	  <script>
+			var data = [{
+				id : "1",
+				"pid" : "-1",
+				"text" : "1级菜单"
+			}, {
+				id : "2",
+				"pid" : "-1",
+				"num":"10",
+				"text" : "2级菜单"
+			}, {
+				id : "3",
+				"pid" : "-1",
+				"text" : "3级菜单",
+				"num":"0",
+				"url":"http://www.baidu.com"
+			}, {
+				id : "11",
+				"pid" : "1",
+				"text" : "11级菜单",
+				"num":"5",
+				"url":"http://www.baidu.com"
+			}, {
+				id : "12",
+				"pid" : "1",
+				"text" : "12级菜单",
+				"num":"2",
+				"url":"http://www.126.com"
+			}, {
+				id : "21",
+				"pid" : "2",
+				"text" : "21级菜单",
+				"num":"3",
+				"url":"http://www.baidu.com"
+			}, {
+				id : "22",
+				"pid" : "2",
+				"text" : "22级菜单",
+				"num":"7",
+				"url":"http://www.baidu.com"
+			}];
+			
+			function openTabs(e,id) {
+				//alert(id);
+				
+				 var map =this.getItemById(id);
+var url=map["taburl"]||"";
+var text=map["text"]||""; 
+				return false;
+			}
+			function afterInitRender(){
+			//	debugger;
+				var selectid=this.getSelected();
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div style="width:260px; margin:10px; float:left">
+			<div class="ui-layout-text">基本功能</div>
+			<div itype="Navigation" width="200px" items="#{data}" target="main"  onItemClick="openTabs()" activeIndex="0" onAfterInitRender="afterInitRender()"></div>
+		</div>
+          <iframe name="main"  height="600" width="600" frameborder="0"></iframe>
+	</body>
+</html>

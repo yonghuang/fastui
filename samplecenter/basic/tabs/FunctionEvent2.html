@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>方法事件集</h4>
+        <ul>     
+        <li>包括添加，删除，修改，得到tab数据</li>   
+        <li>删除前，添加后，修改后，删除后，点击事件等</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+				//点击事件
+      			var tabClick=function(e,title){
+					fastDev.tips("点击了"+title+"选项卡");
+				}
+				//关闭前事件，返回false,不执行关闭事件
+				var beforeClose=function(title){
+					//if(title==="baidu"){
+					//	fastDev.tips("关闭前事件对应的关闭方法返回false,不执行关闭事件！");
+					//	return false;
+					//}
+					return true;					
+				}
+				//关闭成功后事件
+				var close=function(title){
+					fastDev.tips("关闭"+title+"成功！");
+				}
+				//添加成功后事件
+				var add=function(title){
+					fastDev.tips("添加"+title+"成功");
+				}
+				//修改完成后事件
+				var update=function(title){
+					fastDev.tips("修改"+title+"成功");
+				}
+				//添加方法
+				var btnaddtab=function(){					
+					var tab1=fastDev.getInstance("tabs1");
+					try{
+						tab1.addTab({title:"新加的",url:"http://www.126.com"});
+					}catch(e){
+						fastDev.tips(e);
+					}
+				}
+				//修改方法
+			 	var btnupdatatab=function(){
+					var tab1=fastDev.getInstance("tabs1");
+					try{
+						tab1.updateTab("新加的",{title:"新修改的",url:"http://www.126.com"});
+					}catch(e){
+						fastDev.tips(e);
+					}
+				}
+				//删除方法
+				var btndeltab=function(){
+					var tab1=fastDev.getInstance("tabs1");
+					try{
+						tab1.removeTab("Ajax");
+					}catch(e){
+						fastDev.tips(e);
+					}
+				}
+				//删除方法
+				var btndeltab2=function(){
+					var tab1=fastDev.getInstance("tabs1");
+					try{
+						tab1.removeTab("baidu");
+					}catch(e){
+						fastDev.tips(e);
+					}
+				}
+			//得到当前title
+			var btngetCurrentTitle=function(){
+				var tab1=fastDev.getInstance("tabs1");
+				fastDev.tips(tab1.getCurrentTitle());
+			}
+			//设置某个title的tab为选中项
+            var btnsetActiveTabByTitle=function(){
+				var tab1=fastDev.getInstance("tabs1");
+				tab1.setActiveTabByTitle("Iframe");
+			}
+			//根据title得到tab的数据
+            var btngetTabByTitle=function(){
+				var tab1=fastDev.getInstance("tabs1");
+				var item=tab1.getTabByTitle("baidu");
+				fastDev.tips("title="+item.title+",url="+item.url);
+			}
+			//除了某个标题的tab外全部关闭
+            var btnremoveAllBut=function(){
+				var tab1=fastDev.getInstance("tabs1");
+				debugger;
+				tab1.removeAllBut("baidu");
+			}
+			//关闭全部
+            var btnremoveAll=function(){
+				var tab1=fastDev.getInstance("tabs1");
+				tab1.removeAll();
+			}
+			//重新设置tabs的高宽
+            var btnresize=function(){
+				var tab1=fastDev.getInstance("tabs1");
+				tab1.resize("600px","600px");
+			}
+			//是否存在某个title的tab项
+            var btnexists=function(){
+				var tab1=fastDev.getInstance("tabs1");
+				fastDev.tips("选项卡baidu是否存在，值为："+ tab1.exists("baidu"));
+			}
+			//设置某个tab的链接（iframe类型的有效）
+			var btnsetUrlByTitle=function(){
+				var tab1=fastDev.getInstance("tabs1");
+				tab1.setUrlByTitle("baidu","http://www.126.com");
+			}
+			//设置某个tab的内容(div类型的有效)
+			var btnsetContentByTitle=function(){
+				var tab1=fastDev.getInstance("tabs1");				
+				tab1.setContentByTitle("div","dafdfdafdsf");
+			}
+			//清空某个tab的内容
+			var btncleanContentByTitle = function(){
+				var tab1=fastDev.getInstance("tabs1");
+				tab1.cleanContentByTitle("div");
+			}
+			//追加某个tab的内容(div类型的有效)
+			var btnaddContentByTitle=function(){
+				var tab1=fastDev.getInstance("tabs1");				
+				tab1.addContentByTitle("div","aaaaaddddd");
+			}
+			
+        </script>
+	</head>
+	<body>	<div style="margin:10px;">
+<div class="ui-layout-text">方法事件集</div>
+    	<div>
+		<div itype="Tabs" id="tabs1" ie6Mode="tabs" width="900px" saveInstance="true" height="300px" onTabClick="tabClick()" onBeforeClose="beforeClose()" onClose="close()" onUpdate="update()" onAdd="add()">       
+         <div title="baidu" url="http://www.baidu.com" showCloseBtn=true></div>
+         <div title="Ajax" url="aa.html" type="ajax" showCloseBtn=true></div>
+         <div title="Iframe" url="bb.html" showCloseBtn=true></div>
+         <div title="div" showCloseBtn=true type="div"  >
+            <div>腐干地方萨嘎发疯似发呆四个第三个豆腐干地方</div>
+         </div>
+        </div>
+        </div>
+          <div style="padding-top:10px;" >
+			<div itype="Button" text="添加选项卡" onclick="btnaddtab()" ></div>
+            <div itype="Button" text="删除选项卡" onclick="btndeltab()" ></div>
+            <div itype="Button" text="删除选项卡2" onclick="btndeltab2()" ></div>
+            <div itype="Button" text="重新设置指定tab的url" onclick="btnsetUrlByTitle()" ></div>
+              <div itype="Button" text="重新设置指定tab的内容" onclick="btnsetContentByTitle()" ></div>
+              <div itype="Button" text="清空指定tab的内容" onclick="btncleanContentByTitle()" ></div>
+              <div itype="Button" text="追加指定tab的内容" onclick="btnaddContentByTitle()" ></div>
+            
+            <div itype="Button" text="重新设置高宽" onclick="btnresize()" ></div>
+            <div itype="Button" text="是否存在某个选项卡" onclick="btnexists()" ></div>
+            <div itype="Button" text="得到当前选项卡" onclick="btngetCurrentTitle()" ></div>
+            <div itype="Button" text="设置某个选项卡为当前选项卡" onclick="btnsetActiveTabByTitle()" ></div>
+            <div itype="Button" text="得到选项卡的数据" onclick="btngetTabByTitle()" ></div>
+            <div itype="Button" text="除了某个选项卡关闭全部" onclick="btnremoveAllBut()" ></div>
+            <div itype="Button" text="全部关闭" onclick="btnremoveAll()" ></div>
+            
+          </div></div>
+	</body>
+</html>

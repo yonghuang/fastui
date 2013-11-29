@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>
+        <li>表单验证</li>
+        <li>这个版本的验证都是由控件的自身实现，不在表单中同样可以使用</li>
+        <li>主要配置验证模式和验证规则两个属性，如 validateMode="blur" rule="required"</li>
+        <li>相关验证提示消息自定义设置具体请参照errorConfig.txt文件</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+		<style>
+			.ui-form-table .ui-form-table-dt {width: 300px}
+			.ui-form-table .dt-left{text-align: left}
+		</style>
+	  <script>			
+			var submit=function(){
+				var form=fastDev.getInstance("form1");
+				form.submit();
+			}
+			var submitSuccess=function(data){				
+				fastDev.tips("成功将数据"+fastDev.Util.JsonUtil.parseString(data.msg)+"提交到后台");	
+			}				
+			var clear=function(){
+				var form=fastDev.getInstance("form1");
+				form.cleanData();
+			}
+			var usernamepass=function(msg){
+				fastDev("#diverrmsg").setText(msg);
+			}
+		</script>
+	</head>
+	<body style="width:820px;"><div style="margin:10px;"><div class="ui-layout-text">表单验证</div>
+		 <form itype="Form" action="../../data/form_example_submit.jsp" id="form1"  errorFile="../../data/form_errorConfig.txt"  initSource="../../data/form_init.txt" requestType="get" saveInstance="true" onSubmitSuccess="submitSuccess()">
+		<table width="776px" border="0" cellspacing="0" cellpadding="0"  class="ui-form-table">
+		  <tr>
+		    <td class="ui-form-table-dt">不能为空：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt1" validateMode="blur" rule="Required" errorConfig="Required:'请输入值喔'"></td>
+		    <td class="ui-form-table-dt dt-left">rule="Required"</td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">必须是数字：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt2" validateMode="blur" rule="IsNumber"></td>
+		    <td class="ui-form-table-dt dt-left">rule="IsNumber"</td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">必须是邮箱格式：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt3" validateMode="blur" rule="IsEmail"></td>
+		    <td class="ui-form-table-dt dt-left">rule="IsEmail"</td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">必须是邮编格式：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt4" validateMode="blur" rule="IsCode"></td>
+		    <td class="ui-form-table-dt dt-left">rule="IsCode"</td>
+	      </tr>
+	      <tr>
+		    <td class="ui-form-table-dt">必须是身份证号码格式：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt5" validateMode="blur" rule="IsIdCard"></td>
+		    <td class="ui-form-table-dt dt-left">rule="IsIdCard"</td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">必须是手机号码格式：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt6" validateMode="blur" rule="IsMobile"></td>
+		    <td class="ui-form-table-dt dt-left">rule="IsMobile"</td>
+	      </tr>
+	      <tr>
+		    <td class="ui-form-table-dt">必须是电话号码格式：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt7" validateMode="blur" rule="IsTel"></td>
+		    <td class="ui-form-table-dt dt-left">rule="IsTel"</td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">必须是IP格式：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt8" validateMode="blur" rule="IsIp"></td>
+		    <td class="ui-form-table-dt dt-left">rule="IsIp"</td>
+	      </tr>
+	      <tr>
+		    <td class="ui-form-table-dt">长度只能在5以内：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt9" validateMode="blur" rule="MaxLength:5"></td>
+		    <td class="ui-form-table-dt dt-left">rule="MaxLength:5"</td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">长度只能在5以上：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt10" validateMode="blur" rule="MinLength:5"></td>
+		    <td class="ui-form-table-dt dt-left">rule="MinLength:5"</td>
+	      </tr>
+	      <tr>
+		    <td class="ui-form-table-dt">长度只能是5：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt11" validateMode="blur" rule="LenEqual:5"></td>
+		    <td class="ui-form-table-dt dt-left">rule="LenEqual:5"</td>
+	      </tr>
+	      <tr>
+		    <td class="ui-form-table-dt">数值必须大于100：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt12" validateMode="blur" rule="MinNumber:100" ></td>
+		    <td class="ui-form-table-dt dt-left">rule="MinNumber:100"</td>
+	      </tr>  
+	      <tr>
+		    <td class="ui-form-table-dt">数值必须小于100：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt13" validateMode="blur" rule="MaxNumber:100"></td>
+		    <td class="ui-form-table-dt dt-left">rule="MaxNumber:100"</td>
+	      </tr>  
+	      <tr>
+		    <td class="ui-form-table-dt">数值必须小于100并且大于60：两个验证组合演示</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt14" validateMode="blur" rule="MaxNumber:100;MinNumber:60"></td>
+		    <td class="ui-form-table-dt dt-left">rule="MaxNumber:100;MinNumber:60"</td>
+	      </tr>  
+	      <tr>
+		    <td class="ui-form-table-dt">两次输入的值必须相等：第一个值：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt15" validateMode="blur" rule="required"></td>
+		    <td class="ui-form-table-dt dt-left">rule="required"</td>
+	      </tr>  
+	      <tr>
+		    <td class="ui-form-table-dt">两次输入的值必须相等：第二个值：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt16" validateMode="blur" rule="IsEqual:txt15"></td>
+		    <td class="ui-form-table-dt dt-left">rule="IsEqual:txt15"</td>
+	      </tr>  
+	      <tr>
+		    <td class="ui-form-table-dt">正则表达式验证:只能输3位英文大写：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt17" validateMode="blur" rule="SelfRegular:^[A-Z]{3}$"></td>
+		    <td class="ui-form-table-dt dt-left">SelfRegular:^[A-Z]{3}$</td>
+	      </tr>  
+	      <tr>
+		    <td class="ui-form-table-dt">正则表达式验证:只能输6位英文小写：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt18" validateMode="blur" rule="SelfRegular:^[a-z]{1,6}$"></td>
+		    <td class="ui-form-table-dt dt-left">SelfRegular:^[a-z]{1,6}$</td>
+	      </tr> 
+	      <tr>
+		    <td class="ui-form-table-dt">ajax验证用户名是否重复：admin验证不通过</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt19" validateMode="ajax:../../data/ajaxValidate.jsp"></td>
+		    <td class="ui-form-table-dt dt-left">validateMode="ajax:../../data/ajaxValidate.jsp"<div id="diverrmsg"></div></td>
+	      </tr>
+         </table>
+         <div style="width:800px; text-align:center">
+			<div itype="Button" text="提交" onclick="submit()" ></div>
+			<div itype="Button" text="清空" onclick="clear()" ></div>
+		</div>
+	</form>   
+    </div>
+	</body>
+</html>

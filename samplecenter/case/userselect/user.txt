@@ -1,0 +1,16 @@
+[
+	{
+		"text": "李政",
+		"value": "lizheng"
+	}, {
+		"text": "谢春远",
+		"value": "xiechunyuan"
+	}, {
+		"text": "宋晓松",
+		"value": "songxiaosong",
+		"selected" : true
+	}, {
+		"text": "苏宁",
+		"value": "suning"
+	}
+]

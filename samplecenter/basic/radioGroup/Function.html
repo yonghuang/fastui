@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul><li>功能方法集</li>
+        <li>包括禁用、启用，全选、反选，清空，设置值、得到值方法</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+        <script>
+		//设置值
+         function btnsetValue(){
+			var obj=fastDev.getInstance("check2");
+			obj.setValue(6);
+		 }
+		  //得到值
+		 function btngetValue(){
+			var obj=fastDev.getInstance("check2");
+			fastDev.tips(obj.getValue());
+		 }
+		 //禁用
+		 function btnDisabled(){
+			var obj=fastDev.getInstance("check2");
+			obj.disabled();
+		 }
+		  //启用，enable方法是同样的
+		 function btnunDisabled(){
+			var obj=fastDev.getInstance("check2");
+			obj.unDisabled();
+		 }		
+		  //清空
+		 function btnClean(){
+			var obj=fastDev.getInstance("check2");
+			obj.unCheck();
+		 }
+		
+        </script>
+	</head>
+	<body>
+	<div id="example" style="width:260px; margin:10px">
+	<div class="ui-layout-text">方法集</div>
+    <div itype="RadioGroup" name="check2" id="check2"  saveInstance="true">
+    	<div value="1" text="足球" ></div>			
+		<div value="2" text="排球" checked=true></div>
+        <div value="3" text="羽毛球" ></div>
+         <div value="4" text="乒乓球" ></div>
+         <div value="5" text="蓝球"></div>			
+		<div value="6" text="橄榄球"></div>
+        <div value="7" text="高尔夫球"></div>
+         <div value="8" text="保龄球"></div>
+    </div>
+	</div>
+    <div class="ui-clear"></div>
+     <div id="example1"  style="margin:10px">
+			<div itype="Button" container="example1" text="设置值" onclick="btnsetValue()" ></div>
+            <div itype="Button" container="example1" text="得到值" onclick="btngetValue()" ></div>
+			<div itype="Button" container="example1" text="禁用"  onclick="btnDisabled()" ></div>
+            <div itype="Button" container="example1" text="启用"  onclick="btnunDisabled()" ></div>
+			<div itype="Button" container="example1" text="清空"  onclick="btnClean()" ></div>
+		</div>
+    
+    
+	</body>
+</html>

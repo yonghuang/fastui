@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					控件默认将以列表形式展现待选数据和已选数据。
+				</li>
+				<li>
+					通过leftWidget和rightWidget配置属性，可自定义数据展现所使用的控件。
+				</li>
+				<li>
+					直接使用列表控件、DataGrid表格控件以及Tree树控件作为数据展现容器时，直接使用相关API操作即可（这3类常用数据展现控件的操作定义已经内置于ChooseList控件中）。
+				</li>
+				<li>
+					记录的主键字段名非value时，必须通过primaryKey属性定义记录的主键字段名。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function getValue1() {
+				var value = fastDev.getInstance("list1").getValue();
+				fastDev.tips(value.toString());
+			}
+
+			function getValue2() {
+				var value = fastDev.getInstance("list2").getValue();
+				fastDev.tips(value.toString());
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				左边表格，右边列表（移动记录）
+			</div>
+			<div itype="ChooseList" id="list1" saveInstance="true" primaryKey="empno" leftWidth="380px"  rightWidth="200px" height="273px">
+				<!-- 自定义左部区域展现控件 -->
+				<!-- 如果控件为DataGrid，isCopy自定义属性声明至左边控件上时，则只拷贝数据而不会对表格的记录进行删除和插入操作，默认为false  -->
+				<div name="leftWidget" isCopy="false">
+					<!-- 以下声明为DataGrid控件的HTML模式声明 -->
+					<div itype="DataGrid" initSource="../../data/chooselist_grid.jsp" showSeqColumn="true">
+						<div width="50%" name="empno" text="员工工号"></div>
+						<div width="50%" name="name" text="姓名"></div>
+						<div name="pageSizeList">
+							<div value="5" text="5条"></div>
+							<div value="10" text="10条"></div>
+						</div>
+					</div>
+				</div>
+				<!-- 自定义右部区域展现控件 -->
+				<div name="rightWidget" textField="name" valueField="empno">
+					<!-- 使用默认的内置列表控件 ，并同时配置字段映射 -->
+				</div>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取选择结果" onclick="getValue1()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				左右均表格（复制记录）
+			</div>
+			<div itype="ChooseList" id="list2" saveInstance="true" primaryKey="empno" leftWidth="380px"  rightWidth="228px" height="273px">
+				<!-- isCopy为true，则不对待选数据展现表格进行增删操作，只复制记录至已选数据展现表格 -->
+				<div name="leftWidget" isCopy="true">
+					<div itype="DataGrid" initSource="../../data/chooselist_grid.jsp" showSeqColumn="true">
+						<div width="50%" name="empno" text="员工工号"></div>
+						<div width="50%" name="name" text="姓名"></div>
+						<div name="pageSizeList">
+							<div value="5" text="5条"></div>
+							<div value="10" text="10条"></div>
+						</div>
+					</div>
+				</div>
+				<div name="rightWidget">
+					<div itype="DataGrid" keyword="empno" showSeqColumn="true">
+						<div width="50%" name="empno" text="员工工号"></div>
+						<div width="50%" name="name" text="姓名"></div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取选择结果" onclick="getValue2()"/>
+			</div>
+		</div>
+	</body>
+</html>

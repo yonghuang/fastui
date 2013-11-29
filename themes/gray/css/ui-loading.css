@@ -1,0 +1,66 @@
+.ui-progressbar {
+	border:1px solid #6594CF;
+	background:#EFF4FF;
+	width:100%;
+	height: 18px;
+	position:relative;
+}
+.ui-dialog-body .ui-progressbar {
+	border:none;
+	border-top:1px solid #99BCE8;
+}
+.ui-progressbar-gradient {
+	width:auto;
+	height:18px;
+	position:absolute;
+	background-color: #73A3E0;
+	background:url(../images/loading/progressbar-bg.gif) repeat-x!important;
+    background:linear-gradient(#b2ccee, #5e96db)!important;
+	background:-webkit-gradient(linear, 0 0, 0 bottom, from(#b2ccee), to(#5e96db)) !important;
+    background:-moz-linear-gradient(#b2ccee, #5e96db) !important;
+}
+.ui-progressbar-text {
+	color:#075587;
+	font: bold 12px/18px Verdana,Arial,sans-serif,"宋体";
+	text-align: center;
+	overflow: hidden;
+	position:absolute;
+	width:auto;
+}
+.ui-progressbar-ico {
+	position:absolute;
+	z-index:999901;
+	background:url(../images/loading/loading.gif) 0 50% no-repeat;
+	width:16px;
+	height:16px;
+}
+.ui-progressbar-ico-text {
+	padding-left:20px;
+	color:#BDBDBD;
+	line-height:16px;
+	white-space: nowrap;
+}
+.ui-loading-indicator {
+	display:inline-block;
+	text-indent:-2000px;
+	padding:0 1px;
+	width: 16px;
+	height: 16px;
+	background: url('../images/loading/loading-indicator.gif') no-repeat center center;
+}
+.ui-pagebar .ui-loading-indicator {
+	position:relative;
+	vertical-align:middle;
+}
+.ui-loading-indicator-stoped {
+	display:inline-block;
+	text-indent:-2000px;
+	padding:0 1px;
+	width: 16px;
+	height: 16px;
+	background: url('../images/loading/loading-indicator-stop.gif') no-repeat center center;
+}
+.ui-datagrid-toolbar-footer .ui-loading-indicator-stoped, .ui-datagrid-toolbar-footer .ui-loading-indicator {
+	height:20px;
+	height:16px\0;
+}

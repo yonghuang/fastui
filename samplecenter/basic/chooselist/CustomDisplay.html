@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					界面布局上，可沿用控件默认的布局方式，也可以由用户自定义布局。
+				</li>
+				<li>
+					此示例综合AutoComplete、Tree、List等控件，自定义界面布局，并实现了对树数据的智能搜索过滤操作。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function onAfterChooseListInit() {
+				this.createWidget({
+					textField : "val",
+					valueField : "id",
+					options : {
+						id : "resultlist",
+						saveInstance : true
+					}
+				});
+			}
+
+			function onBeforeAutoCompleteRetrieve(keyword) {
+				if (fastDev.getInstance("tree").isShow()) {
+					this.setItems(fastDev.getInstance("chooselist").getData());
+				}
+			}
+
+			function onAfterAutoCompleteRetrieve(data, keyword) {
+				var chooseList = fastDev.getInstance("chooselist");
+				if (!!data.length) {
+					var resultList = fastDev.getInstance("resultlist");
+					resultList.setValue(data);
+					chooseList.setWidget(resultList);
+					this.highlight(resultList, keyword);
+					return false;
+				} else {
+					chooseList.setWidget(fastDev.getInstance("tree"));
+				}
+			}
+
+			function onAutoCompleteValueChange(value) {
+				if (!value) {
+					fastDev.getInstance("chooselist").setWidget(fastDev.getInstance("tree"));
+				}
+			}
+
+			function onAfterChooseListSelect(items) {
+				var tree = fastDev.getInstance("tree");
+				if (!this.getData().length) {
+					this.setWidget(tree);
+				} else {
+					fastDev.getInstance("autocomplete").setItems(this.getData(tree));
+				}
+			}
+
+			function onAfterChooseListDeselect(items) {
+				fastDev.getInstance("autocomplete").appendItems(items);
+			}
+
+			function getValue() {
+				var value = fastDev.getInstance("chooselist").getValue();
+				fastDev.tips(value);
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<!-- primaryKey属性声明记录的主键字段 -->
+			<div itype="ChooseList" id="chooselist" primaryKey="id" onAfterInit="onAfterChooseListInit()" onAfterSelect="onAfterChooseListSelect()" onAfterDeselect="onAfterChooseListDeselect()" saveInstance="true" leftWidth="240px" centerWidth="130px" buttonWidth="80px" rightWidth="200px" height="298px">
+				<!-- leftTop属性自定义左顶部区域 -->
+				<!-- 标签的height属性可定义控件的leftTopHeight属性值，也可以通过style行内样式定义 -->
+				<div name="leftTop" height="44px">
+					<div style="height: 19px">
+						待选项
+					</div>
+					<!-- 可声明其他控件 -->
+					<div itype="AutoComplete" id="autocomplete" onchange="onAutoCompleteValueChange()" onBeforeRetrieve="onBeforeAutoCompleteRetrieve()"  onAfterRetrieve="onAfterAutoCompleteRetrieve()" autoFill="false" hintText="输入字符查询" noResultsText="没有相关项" saveInstance="true" width="100%" showSearchIcon="true">
+						<!-- 配置字段映射，使得AutoComplete控件能够搜索树控件的数据 -->
+						<div name="fields">
+							<div name="val" mapping="text"></div>
+						</div>
+					</div>
+				</div>
+				<!-- 声明待选数据展现控件 -->
+				<div name="leftWidget">
+					<div id="tree" saveInstance="true" itype="Tree" initSource="../../data/chooselist_tree.json" showIco="true"></div>
+				</div>
+				<!-- 声明已选数据展现控件 -->
+				<!-- 使用默认的列表控件时，需对数据字段作映射（用textField，valueField属性指明） -->
+				<div name="rightWidget" textField="val" valueField="id"></div>
+				<!-- 自定义左底部区域 -->
+				<div name="leftBottom">
+					<!-- <span style="color:orange;">左边底部区域</span> -->
+				</div>
+				<!-- buttons属性，自定义按钮配置  -->
+				<div name="buttons">
+					<!-- 定义的name属性值等于select、selectAll、deselect、deselectAll、moveUp、moveDown时，自动绑定相应的点击事件  -->
+					<!-- 也可以通过定义onclick回调事件来自定义点击事件（自定义回调里面需自行调用相关的选值或移除值等API方法，按钮点击回调的作用域为当前按钮控件） -->
+					<div text="选取" name="select" iconCls="icon-add" onclick=""></div>
+					<div text="全选" name="selectAll" iconCls="icon-add"></div>
+					<div text="移除" name="deselect" iconCls="icon-delete"></div>
+					<div text="清空" name="deselectAll" iconCls="icon-delete"></div>
+				</div>
+				<!-- 自定义右顶部区域 -->
+				<div name="rightTop" style="height:20px;">
+					<div>
+						已选项
+					</div>
+				</div>
+				<!-- 自定义右底部区域 -->
+				<div name="rightBottom">
+					<!-- <span style="color:orange;">右边底部区域</span> -->
+				</div>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="获取选择结果" onclick="getValue()"/>
+			</div>
+		</div>
+	</body>
+</html>
+

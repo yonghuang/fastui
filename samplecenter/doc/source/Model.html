@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.define(&quot;fastDev.Data.Model&quot;, {
+	alias : &quot;Model&quot;,
+	ready : function() {
+		this.fields = {};
+	},
+	construct : function(options) {
+		var fields = options.fields, mapper = options.mapper || {};
+		for(var i = 0, field; field = fields[i]; i++) {
+			this.addField(field, mapper);
+		}
+	},
+	addField : function(config, mapper) {
+		config = fastDev.isString(config) ? {
+			name : config
+		} : config;
+
+		config.type = /String|Int|Float|Boolean|S_Array|S_Map|S_Tree/.test(config.type) ? config.type : &quot;Object&quot;;
+
+		switch(config.type) {
+			case &quot;Object&quot;:
+			case &quot;String&quot; :
+				config.defaultValue = this.convertString(config.defaultValue);
+				break;
+			case &quot;Int&quot; :
+			case &quot;Float&quot; :
+				config.defaultValue = /^(?:\d*\.|)\d+$/.test(config.defaultValue) ? config.defaultValue * 1 : 0;
+				break;
+			case &quot;Boolean&quot;:
+				config.defaultValue = config.defaultValue === true;
+				break;
+			case &quot;S_Array&quot;:
+			case &quot;S_Map&quot;:
+			case &quot;S_Tree&quot;:
+				config.structure = config.type;
+				config.type = &quot;Structure&quot;;
+				break;
+		}
+
+		config.mapping = mapper[config.name] || config.mapping || &quot;&quot;;
+		config.convert = fastDev.isFunction(config.convert) ? config.convert : null;
+
+		this.fields[config.name] = config;
+	},
+	objectify : function(data) {
+		var fields = this.fields, option, value, type, convert, model;
+		for(var name in fields) {
+			option = fields[name];
+			convert = option.convert || this[&quot;convert&quot; + option.type];
+			value = data[option.mapping];
+			value = value === undefined ? data[name] : value;
+			// if(option.structure &amp;&amp; option.fields) {
+			// data[name] = convert(value, option.structure, option.fields &amp;&amp; fastDev.create(&quot;Model&quot;, {
+			// fields : option.fields
+			// }));
+			// } else {
+			data[name] = (value === null || value === undefined) ? option.defaultValue : convert(value);
+			// }
+		}
+		return data;
+	},
+	convertString : function(value) {
+		return value ? value + &quot;&quot; : &quot;&quot;;
+	},
+	convertInt : function(value) {
+		var m = /\d+/.exec(value);
+		return m ? +m[0] : 0;
+	},
+	convertFloat : function(value) {
+		var m = /(?:\d*\.|)\d+/.exec(value);
+		return m ? +m[0] : 0;
+	},
+	convertBoolean : function(value) {
+		return !!value;
+	},
+	convertObject : function(value) {
+		return value;
+	},
+	convertStructure : function(value, type, model) {
+		return fastDev.create(type, {
+			data : value,
+			model : model
+		});
+	}
+});
+</pre>
+</body>
+</html>

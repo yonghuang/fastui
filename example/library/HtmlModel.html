@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>HtmlModel</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-07-26 -->
+		<script>
+			function clickHandle(){
+				
+			};
+			
+			function rowRenderer(){
+				
+			};
+			
+			function columnRenderer(){
+				
+			};
+		</script>
+	</head>
+	<body>
+		<!--AutoComplete-->
+		<input itype="AutoComponent" />
+		<!--CheckBox-->
+		<div itype="CheckBoxGroup" name="interest">
+			<div value="basketball" text="篮球" />
+			<div value="football" text="足球" />
+		</div>
+		<!--Datepicker-->
+		<input itype="DatePicker"/>
+		<!--Radio-->
+		<div itype="RadioGroup" name="sex">
+			<div  value="man" text="男" />
+			<div  value="woman" text="女" />
+		</div>
+		<!--Select-->
+		<input itype="Select" />
+		<!--Text-->
+		<input itype="Text" />
+		<!--Accordion-->
+		<div type="Accordion">
+			<li title="1">
+				<ul>
+					<li title="1-1">文本</li>
+					<li title="1-2">文本</li>
+				</ul>
+			</li>
+			<li title="2">
+				文本
+			</li>
+		</div>
+		<!--Tabs-->
+		<div itype="tabs">
+			<div title="panel1">文本</div>
+			<div title="panel1" src="http://www.baidu.com"/>
+			<div title="panel1" src="http://www.google.com"></div>
+		</div>
+		<!--Panel-->
+		<div type="panel" title="panel" />
+		<!--BreadCrumb-->
+		<div type="breadcrumb">
+			<a href="http://www.baidu.com" />
+			<a href="http://www.google.com.com" />
+			<a href="http://www.sina.com" />
+		</div>
+		<!--Dialog-->
+		<div type="dialog" src="http://www.baidu">
+			
+		</div>
+		<div type="dialog">
+			<form>
+				...
+			</form>
+		</div>
+		<!--FileUpload-->
+		<div type="fileupload" action="fileupload.jsp"/>
+		<!--Menubar-->
+		<ul type="menubar">
+			<li title="1">
+				<ul>
+					<li title="1-1" />
+					<li title="1-2" />
+					<li title="1-3" />
+					<li title="1-4" />
+				</ul>
+			</li>
+			<li title="2" />
+			<li title="3" />
+			<li title="4" />
+		</ul>
+		<!--MessageBox-->
+		<div type="messagebox" model="alert" msg="文本"/>
+		<!--layout-->
+		<div type="layout" model="left-right">
+			<div>
+				<div type="tree" initSource="tree.jsp"/>
+			</div>
+			<div model="top-bottom">
+				<div>
+					<form>
+						...
+					</form>
+				</div>
+				<div>
+					<div type="datagrid">
+						...
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Form-->
+		<form initSource="initSource.jsp" dataSource="dataSource.jsp" action="submit.jsp">
+			<table>
+				<tr>
+					<td>
+						<input type="text" name="name" rule="required"/>
+					</td>
+					<td>
+						<input type="radio" name="sex" value="man">男</input>
+						<input type="radio" name="sex" value="woman">女</input>
+					</td>
+					<td>
+						<input type="text" name="age" rule="number"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" name="mail" rule="required;mail;minLength:6;maxLength:20;"></ctrl>
+					</td>
+					<td>
+						<input type="datepicker" name="birthday" rule="required" />
+					</td>
+					<td>
+						<input type="selecttree" name="birthland" initSource="tree.jsp" rule="required"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<!--Tree-->
+		<ul type="tree" id="tree1"  initSource="tree.jsp" style="width:300px;padding:5px;" />        
+		<!--DataGrid-->
+		<div type="datagrid" initSource="initSource.jsp" dataSource="dataSource">
+			<!--可自定义HTML-->
+			<div type="header">
+				<div type="toolbar">
+					<input type="button" value="新增" click="insert" />
+					<input type="button" value="删除" click="delete" />
+					<input type="button" value="修改" click="update" />
+				</div>
+				<div type="pagination" />
+			</ctrl>
+			<div type="row" renderer="rowRenderer">
+				<div type="column" renderer="columnRenderer" name="name" width="20%"/>
+				<div type="column" renderer="columnRenderer" name="sex" width="10%"/>
+				<div type="column" renderer="columnRenderer" name="age" width="10%"/>
+				<div type="column" renderer="columnRenderer" name="mail" width="20%"/>
+				<div type="column" renderer="columnRenderer" name="birthday" width="20%"/>
+				<div type="column" renderer="columnRenderer" name="birthland" width="20%"/>
+			</div>
+			<div type="foot">
+				<!--可自定义HTML-->
+			</div>
+		</div>
+	</body>
+</html>
+

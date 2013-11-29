@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>
+					上面例子中这个俩个表单是个很常见的场景，表单的InitSource中有多选框的数据源，dataSource中有5个输入项的当前值，下拉框的数据源是单独请求的
+				</li>
+				<li>
+					正常情况下，这个示例不会出什么问题，但这个场景存在一个隐患就是既然下拉框的数据时单独请求的，怎么保证表单初始化时能够为下拉框设置值
+				</li>
+				<li>
+					比如在这里例子我特意将在下拉框的数据源中将返回数据延后的一秒，就导致了表单1中的下拉框没有被正确的设置值
+				</li>
+				<li>
+					然而在表单2中我们通过设置队列属性修复了这一问题
+				</li>
+				<li>
+					解决方法：将表单saveQueue属性设置为true,这样表单构建时所创建的私有队列就会被共享出来，这个队列的ID会默认使用当前表单的ID，然后设置下拉框的queue属性为表单的ID，这样的话，表单与下拉框的请求就被强制合并到同一个队列中，他们就会按照顺序进行加载数据了
+				</li>
+			</ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			function onAfterDataRender(){
+				fastDev.getInstance("grid").initRefresh({
+					url : "../../../data/griddata.json",
+					urlParam : this.getValues()
+				});
+			}
+		</script>
+	</head>
+	<body>
+			<div style="margin: 20px 20px 0">
+			<form itype="Form" id="successform" initSource="Form_InitSource1.jsp" dataSource="Form_DataSource.jsp" saveQueue=true onAfterDataRender="onAfterDataRender()">
+				<table class="ui-form-table">
+					<tr>
+						<td class="ui-form-table-dt">姓名:</td>
+						<td class="ui-form-table-dd">
+							<input itype="TextBox" id="name" width="100%">
+						</td>
+						<td class="ui-form-table-dt">住址:</td>
+						<td class="ui-form-table-dd">
+							<input itype="TextBox" id="address" width="100%">
+						</td>
+					</tr>
+					<tr>
+						<td class="ui-form-table-dt">民族:</td>
+						<td class="ui-form-table-dd">
+							<div itype="Select" id="nation" width="100%" initSource="Select_InitSource.jsp" queue="successform">
+								<div>请选择</div>
+							</div>
+						</td>
+						<td class="ui-form-table-dt">爱好:</td>
+						<td class="ui-form-table-dd">
+							<div itype="CheckBoxGroup" id="hobby"></div>
+						</td>
+					</tr>
+					<tr>
+						<td class="ui-form-table-dt">备注:</td>
+						<td colspan="3" class="ui-form-table-dd">
+							<textarea itype="TextBox" id="remark" type="textarea" height="50px" width="100%"></textarea>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div itype="DataGrid" showSeqColumn=true id="grid" saveInstance=true queue="successform">
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+			</div>
+	</body>
+</html>

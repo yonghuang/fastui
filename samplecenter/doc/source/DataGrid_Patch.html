@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">// datagrid兼容子类
+fastDev.define(&quot;fastDev.Patch.DataGrid&quot;, {
+	extend : &quot;fastDev.Ui.DataGrid&quot;,
+	alias : &quot;Patch.DataGrid&quot;,
+	mapping : {
+		&quot;rows&quot; : &quot;pageSize&quot;,
+		&quot;fields&quot; : &quot;columns&quot;,
+	},
+	// datagrid兼容属性属性解析
+	parseAttr : function(config) {
+		var config = fastDev.parseMapping(config, this.mapping);
+
+		// 自带复选框或单选框配置兼容
+		if(config.multiple != null) {
+			if(config.multiple === true) {
+				config.showCheckColumn = true;
+			} else {
+				config.showRadioColumn = true;
+			}
+			config.multiple = null;
+			delete config.multiple;
+		}
+		//
+		if(config.checkboxCallBack) {
+			config.onRowClick = function(event, index, data) {
+				if(event.target.name === &quot;dg_choose&quot;) {
+					this._options.checkboxCallBack.call(this, data);
+				}
+			};
+		}
+
+		if(config.buttons) {
+			config.toolBar = {
+				items : this.buildToolBar(config.buttons)
+			}
+		}
+		
+		if(config.sort != null){
+			if(config.sort === true){
+				config.sort = &quot;server&quot;;
+			}else{
+				config.sort = &quot;client&quot;;
+			}
+		}
+
+		fastDev.create(&quot;Patch.DataGrid&quot;, config);
+	},
+	construct : function(options) {
+		// 处理rows与pageSize兼容(提交时)
+		this.initProxy.setParam({
+			rows : options.pageSize
+		});
+	},
+	// 处理rows与pageSize兼容(获取时)
+	initPageBar : function(info) {
+		var records = info.total;
+		info.total = info.records;
+		info.records = records;
+		info.pageSize = info.rows;
+		this.superClass.initPageBar.call(this, info);
+	},
+	changePageSize : function(value) {
+		var pageBar = this._global.pageBar, page = pageBar.getItem(&quot;page&quot;).getValue(page);
+		this.dataset.setPageSize(value);
+		this.initProxy.setParam({
+			page : page,
+			pageSize : value,
+			rows : value
+		});
+		this.initRefresh();
+	},
+	buildToolBar : function(buttons) {
+		var button,items=[];
+		while( button = buttons.shift()) {
+			switch(button) {
+				case &quot;new&quot; :
+					items.push({plain:true,text:&quot;新增&quot;,iconCls:&quot;icon-add&quot;});
+					break;
+				case &quot;del&quot; :
+					items.push({plain:true,text:&quot;删除&quot;,iconCls:&quot;icon-delete&quot;});
+					break;
+				case &quot;save&quot; :
+					items.push({plain:true,text:&quot;保存&quot;,iconCls:&quot;icon-save&quot;});
+					break;
+				case &quot;cancel&quot; :
+					items.push({plain:true,text:&quot;取消&quot;});
+					break;
+				case &quot;refresh&quot; :
+					items.push({plain:true,text:&quot;保存&quot;,iconCls:&quot;icon-refresh&quot;});
+					break;
+				case &quot;moveup-down&quot; :
+					items.push({plain:true,text:&quot;上移&quot;});
+					items.push({plain:true,text:&quot;下移&quot;});
+					break;
+			}
+		}
+		return items;
+	}
+});
+</pre>
+</body>
+</html>

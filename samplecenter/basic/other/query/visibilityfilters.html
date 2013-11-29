@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>可见性选择器</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function(){
+				var container = fastDev("#example");
+				fastDev("#btn1").bind("click", function() {
+					// 查找隐藏的 tr
+					container.find("tr:hidden").show();
+				});
+				
+				
+				
+				fastDev("#btn2").bind("click", function() {
+					// 匹配type为hidden的元素
+					fastDev.tips(container.find("input:hidden").prop("value"));
+				});
+				
+				fastDev("#btn3").bind("click", function() {
+					// 匹配所有的可见元素
+					container.find("tr:visible").hide();
+				});
+				
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div class="ui-other-content">
+		<p>显示隐藏的tr元素:
+		<a id="btn1" href="#">tr:hidden</a></p>
+		<p>获取隐藏框的值:
+		<a id="btn2" href="#">input:hidden</a></p>
+		<p>隐藏可见的 tr:
+		<a id="btn3" href="#">tr:visible</a></p>
+		
+		<p>&nbsp;</p>
+		<div id="example">
+		<!-- HTML元素测试区 -->
+		<table>
+			<tr style="display:none"><td>&lt;td>display:none&lt;/td></td></tr>
+			<tr><td>&lt;td>&lt;/td></td></tr>
+		</table>
+		
+		<form>
+			<input type="hidden" name="id" value="这是隐藏框的值" />
+		</form>
+		</div>
+		</div>
+	</body>
+</html>
+

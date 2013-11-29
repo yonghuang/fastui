@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Panel'>/**
+</span> * @class fastDev.Ui.Panel
+ * @extends fastDev.Ui.Component
+ * @author 程伟
+ * &lt;p&gt;面板控件，继承自component。布局类控件。&lt;/p&gt;
+ * &lt;p&gt;可定义标题图标，折叠，最大最小，关闭按钮等。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *      
+ *      &lt;div itype=&quot;Panel&quot; width=&quot;100px&quot; height=&quot;100px&quot;&gt;
+ *           面板内容
+ *      &lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.Panel&quot;, {
+    extend: &quot;fastDev.Ui.Component&quot;,
+    alias: &quot;Panel&quot;,
+    _options: {
+<span id='fastDev-Ui-Panel-property-title'>        /**
+</span>         * 标题内容
+         * @type {String}
+         */
+        title: &quot;&quot;,
+<span id='fastDev-Ui-Panel-property-headerCls'>        /**
+</span>         * 标题内容自定义样式名
+         * @type {String}
+         */
+        headerCls: &quot;&quot;,
+<span id='fastDev-Ui-Panel-property-iconCls'>        /**
+</span>         * 标题栏图标样式名
+         * @type {String}
+         */
+        iconCls: &quot;&quot;,
+<span id='fastDev-Ui-Panel-property-bodyCls'>        /**
+</span>         * 面板内容区域自定义样式名
+         * @type {String}
+         */
+        bodyCls: &quot;&quot;,
+<span id='fastDev-Ui-Panel-property-bodyStyle'>        /**
+</span>         * 面板内容区域自定义行内样式
+         * &lt;p&gt;值格式如：margin:10px;padding:10px;
+         * @type {String} 
+         */
+        bodyStyle: &quot;&quot;,
+<span id='fastDev-Ui-Panel-property-showBorder'>        /**
+</span>         * 是否显示面板内容区域的边框
+         * @type {Boolean}
+         */
+        showBorder: true,
+<span id='fastDev-Ui-Panel-property-showHeader'>        /**
+</span>         * 是否显示标题栏
+         * @type {Boolean}
+         */
+        showHeader: true,
+<span id='fastDev-Ui-Panel-property-content'>        /**
+</span>         * 面板内容
+         * @type {String}
+         */
+        content: &quot;&quot;,
+<span id='fastDev-Ui-Panel-property-showCollapseBtn'>        /**
+</span>         * 是否显示折叠面板按钮
+         * @type {Boolean}
+         */
+        showCollapseBtn: false,
+<span id='fastDev-Ui-Panel-property-showMinBtn'>        /**
+</span>         * 是否显示最小化面板按钮
+         * @type {Boolean}
+         */
+        showMinBtn: false,
+<span id='fastDev-Ui-Panel-property-showMaxBtn'>        /**
+</span>         * 是否显示最大化面板按钮
+         * @type {Boolean}
+         */
+        showMaxBtn: false,
+<span id='fastDev-Ui-Panel-property-showCloseBtn'>        /**
+</span>         * 是否显示关闭面板按钮
+         * @type {Boolean}
+         */
+        showCloseBtn: false,
+<span id='fastDev-Ui-Panel-property-collapsed'>        /**
+</span>         * 面板初始是否折叠
+         * @type {Boolean}
+         */
+        collapsed: false,
+<span id='fastDev-Ui-Panel-property-minimized'>        /**
+</span>         * 面板初始是否最小化
+         * @type {Boolean}
+         */
+        minimized: false,
+<span id='fastDev-Ui-Panel-property-maximized'>        /**
+</span>         * 面板初始是否最大化
+         * @type {Boolean}
+         */
+        maximized: false,
+<span id='fastDev-Ui-Panel-property-loadingMsg'>        /**
+</span>         * 加载图标附带的提示消息内容
+         * @type {String}
+         */
+        loadingMsg: &quot;&quot;,
+<span id='fastDev-Ui-Panel-property-showLoading'>        /**
+</span>         * 加载面板内容时是否显示加载图标
+         * @type {Boolean}
+         */
+        showLoading: true,
+<span id='fastDev-Ui-Panel-property-width'>        /**
+</span>         * 面板的宽度
+         * @type {String}
+         */
+        width: &quot;300px&quot;,
+<span id='fastDev-Ui-Panel-property-height'>        /**
+</span>         * 面板的高度
+         * @type {String}
+         */
+        height: &quot;185px&quot;,
+<span id='fastDev-Ui-Panel-property-src'>        /**
+</span>         * 面板内部子页面链接地址
+         * @type {String}
+         */
+        src: &quot;&quot;,
+<span id='fastDev-Ui-Panel-property-animateSpeed'>        /**
+</span>         * 动画执行的速度值
+         * &lt;p&gt;单位为毫秒
+         * &lt;p&gt;0表示没有动画效果
+         * &lt;p&gt;也可使用以下预定义速度枚举值：
+         * &lt;p&gt;-slow 400毫秒 
+         * &lt;p&gt;-fast 150毫秒 
+         * &lt;p&gt;-default 260毫秒  
+         * @type {Number|String}
+         */
+        animateSpeed: 260,
+<span id='fastDev-Ui-Panel-property-animateEasing'>        /**
+</span>         * 重置动画执行算法
+         * &lt;p&gt;默认情况下不同的窗口动画类型，使用的算法并不一致 
+         * &lt;p&gt;该属性可将所有动画效果的算法重置为某一算法类型（如:liner）
+         * @type {String}
+         */
+        animateEasing: &quot;liner&quot;,
+<span id='fastDev-Ui-Panel-event-onBeforeOpen'>        /**
+</span>         * 面板显示之前事件
+         * &lt;p&gt;回调函数返回布尔值false可阻止面板显示
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onBeforeOpen: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterOpen'>        /**
+</span>         * 面板显示之后事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterOpen: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onBeforeClose'>        /**
+</span>         * 面板关闭之前事件
+         * &lt;p&gt;回调函数返回布尔值false可阻止面板关闭
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onBeforeClose: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterClose'>        /**
+</span>         * 面板关闭之后事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterClose: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onBeforeCollapse'>        /**
+</span>         * 面板内容折叠之前事件
+         * &lt;p&gt;回调函数返回布尔值false可阻止面板内容折叠
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onBeforeCollapse: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterCollapse'>        /**
+</span>         * 面板内容折叠之后事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterCollapse: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onBeforeExpand'>        /**
+</span>         * 面板内容展开之前事件
+         * &lt;p&gt;回调函数返回布尔值false可阻止面板内容展开
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onBeforeExpand: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterExpand'>        /**
+</span>         * 面板内容展开之后事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterExpand: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterResize'>        /**
+</span>         * 面板大小被改变事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterResize: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterMove'>        /**
+</span>         * 面板位置被改变事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterMove: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onBeforeMaximize'>        /**
+</span>         * 面板最大化前事件
+         * &lt;p&gt;回调函数返回布尔值false可阻止面板最大化
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onBeforeMaximize: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterMaximize'>        /**
+</span>         * 面板最大化后事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterMaximize: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onBeforeReset'>        /**
+</span>         * 面板还原前事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onBeforeReset: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterReset'>        /**
+</span>         * 面板还原后事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterReset: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onBeforeMinimize'>        /**
+</span>         * 面板最小化（隐藏）前事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onBeforeMinimize: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAfterMinimize'>        /**
+</span>         * 面板最小化（隐藏）后事件
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event
+         */
+        onAfterMinimize: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAnimateStart'>        /**
+</span>         * 动画开始前的回调函数
+         * &lt;p&gt;返回false值则终止动画的执行
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event 
+         */
+        onAnimateStart: fastDev.noop,
+<span id='fastDev-Ui-Panel-event-onAnimateStop'>        /**
+</span>         * 动画结束时的回调函数
+         * &lt;p&gt;this指向当前面板控件
+         * @type {Function}
+         * @event 
+         */
+        onAnimateStop: fastDev.noop,
+<span id='fastDev-Ui-Panel-property-enableInitProxy'>        /**
+</span>         * @private
+         */
+        enableInitProxy: false,
+<span id='fastDev-Ui-Panel-property-enableDataProxy'>        /**
+</span>         * @private
+         */
+        enableDataProxy: false,
+        enableDataSet: false
+    },
+<span id='fastDev-Ui-Panel-method-staticTemplate'>    /**
+</span>     * 静态模板
+     * @param {Object} params 已解析模板参数
+     * @private 
+     */
+    staticTemplate: function (params) {
+        var html = ['&lt;div name=&quot;box&quot; class=&quot;ui-window ui-panel ui-panel-box ' + params.cls + '&quot;&gt;'];
+        if (params.showHeader) {
+            html.push([
+                '&lt;div name=&quot;header&quot; class=&quot;ui-panel-header&quot;&gt;',
+                '&lt;div name=&quot;title&quot; class=&quot;ui-window-header-text ' + params.iconCls + ' ' + params.headerCls + '&quot;&gt;' + params.title + '&lt;/div&gt;',
+                '&lt;div name=&quot;tool&quot; class=&quot;ui-window-tool&quot;&gt;',
+                '&lt;span class=&quot;ui-window-tool-show&quot; name=&quot;Expand&quot; handler=&quot;expand&quot; title=&quot;展开&quot;&gt;&lt;/span&gt;',
+                '&lt;span class=&quot;ui-window-tool-hidden&quot; name=&quot;Collapse&quot; handler=&quot;collapse&quot; title=&quot;折叠&quot;&gt;&lt;/span&gt;',
+                '&lt;span class=&quot;ui-window-tool-min&quot; name=&quot;Min&quot; handler=&quot;minimize&quot; title=&quot;最小化&quot;&gt;&lt;/span&gt;',
+                '&lt;span class=&quot;ui-window-tool-restore&quot; name=&quot;Restore&quot; handler=&quot;reset&quot; title=&quot;还原&quot;&gt;&lt;/span&gt;',
+                '&lt;span class=&quot;ui-window-tool-max&quot; name=&quot;Max&quot; handler=&quot;maximize&quot; title=&quot;最大化&quot;&gt;&lt;/span&gt;',
+                '&lt;span class=&quot;ui-window-tool-close&quot; name=&quot;Close&quot; handler=&quot;close&quot; title=&quot;关闭&quot;&gt;&lt;/span&gt;',
+                '&lt;/div&gt;',
+                '&lt;/div&gt;'].join(&quot;&quot;));
+        }
+        html.push('&lt;div name=&quot;body&quot; class=&quot;ui-panel-body ' + params.borderCls + '&quot;&gt;');
+        html.push('&lt;div name=&quot;content&quot; class=&quot;ui-panel-content ' + params.bodyCls + '&quot; style=&quot;' + params.bodyStyle + '&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;');
+        return html.join(&quot;&quot;);
+    },
+    tplParam: [&quot;title&quot;, &quot;showHeader&quot;, &quot;cls&quot;, &quot;iconCls&quot;, &quot;headerCls&quot;, &quot;borderCls&quot;, &quot;bodyCls&quot;, &quot;bodyStyle&quot;],
+<span id='fastDev-Ui-Panel-method-ready'>    /**
+</span>     * 准备参数
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    ready: function (options, global) {
+        options.showHeader = !! options.showHeader;
+        // 初始内容边框样式
+        global.borderCls = !(options.showBorder = !! options.showBorder) ? &quot;ui-noborder&quot; : &quot;&quot;;
+        // body的水平方向（top、bottom）的边框的高度和
+        global.hBodyBorderWidth = options.showBorder ? options.showHeader ? 1 : 2 : 0;
+        // 初始标题图标样式
+        if (options.iconCls &amp;&amp; fastDev.isString(options.iconCls)) {
+            global.iconClsName = options.iconCls;
+            options.iconCls += &quot; ui-window-header-ico&quot;;
+        } else {
+            options.iconCls = &quot;&quot;;
+        }
+        if (!fastDev.isString(options.src) || !(options.src = fastDev.Util.StringUtil.trim(options.src))) {
+            options.src = &quot;&quot;;
+        }
+        // 初始动画参数
+        var speed = options.animateSpeed;
+        speed = fastDev.Ui.Panel.launchAnimation ? speed === &quot;fast&quot; ? 150 : speed === &quot;slow&quot; ? 400 : speed === &quot;default&quot; ? 260 : speed : 0;
+        options.animateSpeed = Math.max(parseInt(speed, 10) || 0, 0);
+    },
+<span id='fastDev-Ui-Panel-method-construct'>    /**
+</span>     * 构造结构
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    construct: function (options, global) {
+        // 保存结构对象
+        var elems = [&quot;header&quot;, &quot;title&quot;, &quot;tool&quot;, &quot;box&quot;, &quot;body&quot;, &quot;content&quot;, &quot;iframe&quot;],
+            elem;
+        while (elem = elems.shift()) {
+            global[elem] = this.find(&quot;[name='&quot; + elem + &quot;']&quot;);
+        }
+        // 处理标题栏按钮
+        elems = [&quot;Min&quot;, &quot;Max&quot;, &quot;Collapse&quot;, &quot;Close&quot;, &quot;Expand&quot;, &quot;Restore&quot;];
+        while (elem = elems.shift()) {
+            if (options.showHeader) {
+                global[elem] = global.header.find(&quot;[name='&quot; + elem + &quot;']&quot;)[!options[&quot;show&quot; + elem + &quot;Btn&quot;] ? &quot;hide&quot; : &quot;show&quot;]();
+            } else {
+                options[&quot;show&quot; + elem + &quot;Btn&quot;] = false;
+            }
+        }
+        if (!options.showHeader &amp;&amp; options.showBorder) {
+            global.body.addClass(&quot;ui-border-top&quot;);
+        }
+        global.body.css(&quot;overflow&quot;, &quot;hidden&quot;);
+        global.content.css(&quot;position&quot;, &quot;relative&quot;);
+    },
+<span id='fastDev-Ui-Panel-method-init'>    /**
+</span>     * 初始化
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    init: function (options, global) {
+        var that = this;
+        // 绑定标题栏按钮事件
+        if (options.showHeader) {
+            global.tool.bind(&quot;mouseover&quot;, function (event) {
+                that.toolBtnEventHandle(&quot;mouseover&quot;, fastDev(event.target), event);
+            }).bind(&quot;mouseout&quot;, function (event) {
+                that.toolBtnEventHandle(&quot;mouseout&quot;, fastDev(event.target), event);
+            }).bind(&quot;mouseup&quot;, function (event) {
+                that.toolBtnEventHandle(&quot;click&quot;, fastDev(event.target), event);
+            }).bind(&quot;mousedown&quot;, fastDev.Event.stopBubble).bind(&quot;dblclick&quot;, fastDev.Event.stopBubble);
+        }
+        if (!options.src) {
+            // 追加HTML模式定义的面板内容
+            if (options.htmlContent) {
+                this.append(options.htmlContent);
+            } else if (fastDev.isValid(options.content)) {
+                this.setContent(options.content);
+            }
+        } else if (!options.minimized &amp;&amp; !options.collapsed) {
+            // 加载iframe子页面
+            this.load(options.src, true);
+        }
+        this.toOriginalPanel({
+            width: options.width,
+            height: options.height,
+            left: options.left || 0,
+            top: options.top || 0
+        }, true);
+        fastDev.apply(global, {
+            offsetLeft: parseInt(global.box.css(&quot;left&quot;), 10) || 0,
+            offsetTop: parseInt(global.box.css(&quot;top&quot;), 10) || 0,
+            offsetWidth: parseInt(global.box.css(&quot;width&quot;), 10),
+            offsetHeight: parseInt(global.box.css(&quot;height&quot;), 10)
+        });
+        if (!options.display || options.display === &quot;none&quot; || options.minimized) {
+            this.minimize(true, options.minimized = false);
+        } else {
+            options.display = true;
+        }
+        fastDev.each([&quot;maximize&quot;, &quot;collapse&quot;], function (index, handle) {
+            if (options[handle + &quot;d&quot;]) {
+                that[handle](true, options[handle + &quot;d&quot;] = false);
+            }
+        });
+        global.initialized = true;
+    },
+<span id='fastDev-Ui-Panel-method-toolBtnEventHandle'>    /**
+</span>     * 标题栏按钮事件处理
+     * @param {String} type 事件类型
+     * @param {DomObject} target 事件目标
+     * @param {Event} event 事件对象
+     * @private
+     */
+    toolBtnEventHandle: function (type, target, event) {
+        var global = this._global,
+            handle;
+        if (target.elems[0] !== global.tool.elems[0]) {
+            if (type === &quot;mouseover&quot;) {
+                target.setClass(target.getClass().replace(&quot;-over&quot;, &quot;&quot;) + &quot;-over&quot;);
+            } else if (type === &quot;mouseout&quot;) {
+                target.setClass(target.getClass().replace(&quot;-over&quot;, &quot;&quot;));
+            } else if ((handle = target.attr(&quot;handler&quot;)) &amp;&amp; (this._options[&quot;on&quot; + target.attr(&quot;name&quot;) + &quot;BtnClick&quot;] || fastDev.noop).call(this, event) !== false) {
+                this[handle](false, true);
+            }
+        }
+        fastDev.Event.stopBubble(event);
+        return false;
+    },
+<span id='fastDev-Ui-Panel-method-refreshToolBtn'>    /**
+</span>     * 刷新标题栏的工具按钮
+     * @return {fastDev.Ui.Panel}
+     * @private
+     */
+    refreshToolBtn: function () {
+        var options = this._options,
+            global = this._global;
+        if (options.showHeader) {
+            if (options.showMaxBtn) {
+                global.Max.css(&quot;display&quot;, options.maximized ? &quot;none&quot; : &quot;inline&quot;);
+                global.Restore.css(&quot;display&quot;, options.maximized ? &quot;inline&quot; : &quot;none&quot;);
+            }
+            if (options.showCollapseBtn) {
+                global.Collapse.css(&quot;display&quot;, options.collapsed ? &quot;none&quot; : &quot;inline&quot;);
+                global.Expand.css(&quot;display&quot;, options.collapsed ? &quot;inline&quot; : &quot;none&quot;);
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-loadIframe'>    /**
+</span>     * 加载Iframe内容
+     * @return {fastDev.Ui.Panel}
+     * @protected
+     */
+    loadIframe: function () {
+        var options = this._options,
+            global = this._global;
+        if (options.src &amp;&amp; !global.loading &amp;&amp; !global.loaded &amp;&amp; !options.collapsed) {
+            this.load(options.src);
+        } else {
+            this.showLoading();
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-readyForLoading'>    /**
+</span>     * 加载Iframe子页前的回调函数
+     * &lt;p&gt;子类可实现此回调来作相应的加载前的准备
+     * &lt;p&gt;返回false可中断Iframe的加载准备
+     * @param {DomObject} iframe
+     * @protected 
+     */
+    readyForLoading: fastDev.noop,
+<span id='fastDev-Ui-Panel-method-showLoading'>    /**
+</span>     * 显示加载图标 
+     * @return {fastDev.Ui.Panel}
+     * @param {Boolean} show 为false时隐藏Loading，为null时销毁Loading
+     * @protected
+     */
+    showLoading: function (show) {
+        var options = this._options,
+            global = this._global;
+        if (fastDev.isComponent(global.loading)) {
+            if (!(options.minimized || options.collapsed || options.closed || global.loaded)) {
+                global.loading[show === null ? &quot;close&quot; : show === false ? &quot;hide&quot; : &quot;show&quot;]();
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-getContentHeight'>    /**
+</span>     * 获取内容部分高度值
+     * @param {Number} bodyHeight 当前body高度
+     * @return {Number}
+     * @protected
+     */
+    getContentHeight: function (bodyHeight) {
+        var content = this._global.content;
+        return Math.max(bodyHeight - (content.outerHeight(true) - content.height()), 0);
+    },
+<span id='fastDev-Ui-Panel-method-getBodyHeight'>    /**
+</span>     * 获取面板主体部分的高度值
+     * @param {Number} height 面板总高度
+     * @return {Number}
+     * @protected
+     */
+    getBodyHeight: function (height) {
+        var global = this._global;
+        // 27px的标题栏
+        return Math.max(parseInt(height, 10) - (this._options.showHeader ? global.header.outerHeight(true) || 27 : 0) - global.hBodyBorderWidth, 0);
+    },
+<span id='fastDev-Ui-Panel-method-exec'>    /**
+</span>     * 执行动画
+     * @param {DomObject} target 目标
+     * @param {Array} queue 动画队列配置
+     * @param {Function} callback 动画结束时的回调
+     * @param {String} type 动画操作类型
+     * @return {fastDev.Ui.Panel}
+     * @private
+     */
+    exec: function (target, queue, callback, type) {
+        var animation = fastDev.isArray(queue) ? queue : [queue || {}],
+            stop = (animation[animation.length - 1] || {}).stop || {}, frame, frames;
+        if (this.startAnimation(target, animation, type) === false) {
+            this.stopAnimation(target, animation, type);
+            return this;
+        }
+        for (queue = animation.slice(0); frame = queue.shift();) {
+            if (!frame || !frame.duration) {
+                target.css((frame = frame || {}).stop || {}).show();
+                if (!queue.length) {
+                    callback.call(this);
+                    this.stopAnimation(target, animation, type);
+                    (frame.callback || fastDev.noop).call(this, stop);
+                    this.finishAction(target, stop);
+                    callback.call(this, true);
+                } else {
+                    (frame.callback || fastDev.noop).call(this, stop);
+                }
+            } else {
+                this.draw(frames = (frames || target.css(frame.start).show()), type, animation, frame, (queue[0] || {}).start, stop, callback);
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-draw'>    /**
+</span>     * 执行动画队列中的一帧动画
+     * @param {DomObject} target 动画目标
+     * @param {String} type 动画类型
+     * @param {Array[Object]} animation 动画队列
+     * @param {Object} frame 动画队列中的当前帧
+     * @param {Object} next 下一帧动画的起始样式
+     * @param {Object} end 动画队列最终样式
+     * @param {Function} callback 动画队列结束后的回调
+     * @private
+     */
+    draw: function (target, type, animation, frame, next, end, callback) {
+        var that = this,
+            options = this._options,
+            global = this._global,
+            fn;
+        global.drawing = true;
+        target.animate(frame.stop, frame.duration, options.animateEasing || frame.easing, fn = function () {
+            if (!options.destroyed) {
+                target.css(next || {});
+                if (frame.stop === end) {
+                    global.drawing = false;
+                    callback.call(that);
+                    that.stopAnimation(target, animation, type);
+                    (frame.callback || fastDev.noop).call(that, end);
+                    that.finishAction(target, end);
+                    callback.call(that, true);
+                }
+            }
+            fn = null;
+        });
+    },
+<span id='fastDev-Ui-Panel-method-startAnimation'>    /**
+</span>     * 动画开始前的回调函数
+     * 返回false则中断动画
+     * @param {DomObject} target 动画目标
+     * @param {Array[Object]} animation 动画配置队列 
+     * @param {String} type 动画类型 
+     * @protected 
+     */
+    startAnimation: function (target, animation, type) {
+        var global = this._global,
+            isBox;
+        global.body.css(&quot;borderColor&quot;, isBox = target.elems[0] === global.box.elems[0] ? &quot;white&quot; : &quot;&quot;);
+        global.content.css({
+            display: isBox ? &quot;none&quot; : &quot;block&quot;,
+            overflow: &quot;hidden&quot;
+        });
+        return (this._options.onAnimateStart || fastDev.noop).apply(this, arguments);
+    },
+<span id='fastDev-Ui-Panel-method-stopAnimation'>    /**
+</span>     * 动画结束时的回调函数
+     * @param {DomObject} target 动画目标
+     * @param {Array[Object]} animation 动画配置队列 
+     * @param {String} type 动画类型 
+     * @protected
+     */
+    stopAnimation: function (target, animation, type) {
+        var options = this._options;
+        if (!options.closed) {
+            var global = this._global;
+            global.body.removeCss(&quot;borderColor&quot;);
+            global.content.css(&quot;overflow&quot;, &quot;auto&quot;).show();
+            global.box.removeCss(&quot;opacity&quot;);
+        }
+        (options.onAnimateStop || fastDev.noop).apply(this, arguments);
+    },
+<span id='fastDev-Ui-Panel-method-toAnimationQueue'>    /**
+</span>     * 初始动画配置队列
+     * @param {DomObject} target 动画目标对象
+     * @param {Object|Array} animation
+     * @return {Array} 动画队列
+     * @protected
+     */
+    toAnimationQueue: function (target, animation) {
+        var that = this,
+            options = this._options,
+            speed = options.animateSpeed,
+            cWidth = options.container.width(),
+            cHeight = options.container.height(),
+            plain;
+        fastDev.each(animation = fastDev.isArray(animation) ? animation : [animation], function (index, frame) {
+            plain = !frame || frame.duration === 0;
+            animation[index] = frame = fastDev.isPlainObject(frame) ? frame : {};
+            fastDev.each([&quot;start&quot;, &quot;stop&quot;], function (i, name) {
+                frame[name] = fastDev.isFunction(frame[name]) ? frame[name].call(that, target, cWidth, cHeight) : frame[name];
+                frame[name] = fastDev.isPlainObject(frame[name]) ? frame[name] : {};
+            });
+            frame.duration = plain ? 0 : Math.max(parseInt(frame.duration, 10) || 0, 0) || speed;
+        });
+        return animation;
+    },
+<span id='fastDev-Ui-Panel-method-initAnimation'>    /**
+</span>     * 初始动画设置
+     * @param {String} type
+     * @param {DomObject} target
+     * @param {Object|Boolean} animation
+     * @return {Object}
+     * @protected
+     */
+    initAnimation: function (type, target, animation) {
+        var options = this._options,
+            global = this._global;
+        switch (type) {
+            case &quot;expand&quot;:
+                animation = this.toAnimationQueue(target, animation)[0];
+                animation.easing = animation.easing || &quot;expo-easeIn&quot;;
+                animation.start.height = 0;
+                animation.stop.height = global.bodyHeight;
+                return animation;
+            case &quot;collapse&quot;:
+                animation = this.toAnimationQueue(target, animation)[0];
+                animation.easing = animation.easing || &quot;quart-easeOut&quot;;
+                animation.stop.height = 0;
+                return animation;
+            case &quot;maximize&quot;:
+                this.toOriginalPanel({
+                    left: 0,
+                    top: 0,
+                    width: options.container.width(),
+                    height: options.container.height()
+                });
+                break;
+            case &quot;reset&quot;:
+                this.toOriginalPanel({
+                    left: global.offsetLeft,
+                    top: global.offsetTop,
+                    width: global.offsetWidth,
+                    height: global.offsetHeight
+                });
+        }
+    },
+<span id='fastDev-Ui-Panel-method-isDrawing'>    /**
+</span>     * 判断动画是否正在进行中
+     * @return {Boolean} 
+     */
+    isDrawing: function () {
+        return this._global.drawing;
+    },
+<span id='fastDev-Ui-Panel-method-finishAction'>    /**
+</span>     * 对面板的每一次操作结束时，必将执行的一次回调
+     * &lt;p&gt;可供子类实现使用
+     * @param {DomObject} target 动画目标
+     * @param {Object} stop 结束时的状态
+     * @protected 
+     */
+    finishAction: function (target, stop) {
+        this.loadIframe().refreshToolBtn();
+    },
+<span id='fastDev-Ui-Panel-method-toOriginalPanel'>    /**
+</span>     * 还原面板至常态
+     * @param {Object} rect
+     * @param {Boolean} noShow
+     * @return {fastDev.Ui.Panel}
+     * @protected
+     */
+    toOriginalPanel: function (rect, noShow) {
+        var global = this._global;
+        if (!noShow) {
+            global.box.show();
+            global.body.show();
+            global.content.show();
+        }
+        return this.resize(rect).move(rect);
+    },
+<span id='fastDev-Ui-Panel-method-execuable'>    /**
+</span>     * 根据事件回调判断方法是否需要执行
+     * @param {Boolean} only
+     * @param {String} type
+     * @return {Boolean}
+     * @private
+     */
+    execuable: function (only, type) {
+        var options = this._options,
+            global = this._global;
+        if (options.closed || (!only &amp;&amp; options[&quot;onBefore&quot; + type].call(this) === false)) {
+            return false;
+        }
+        this.showLoading(false);
+        return true;
+    },
+<span id='fastDev-Ui-Panel-method-expand'>    /**
+</span>     * 展开面板内容
+     * @param {Boolean} [only=false] 为true时，不触发展开面板事件
+     * @param {Boolean} [animation=false] 是否使用动画效果。同时需指定animateSpeed参数
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    expand: function (only, animation) {
+        var options = this._options,
+            global = this._global;
+        if (!options.collapsed || !this.execuable(only, &quot;Expand&quot;)) {
+            return this;
+        }
+        global.box.removeCss(&quot;height&quot;);
+        return this.exec(global.body, this.initAnimation(&quot;expand&quot;, global.body, animation), function () {
+            options.collapsed = false;
+            if (!only &amp;&amp; arguments[0]) {
+                options.onAfterExpand.call(this);
+            }
+        }, &quot;expand&quot;);
+    },
+<span id='fastDev-Ui-Panel-method-collapse'>    /**
+</span>     * 折叠面板内容
+     * @param {Boolean} [only=false] 为true时，不触发折叠面板事件
+     * @param {Boolean} [animation=false] 是否使用动画效果。同时需指定animateSpeed参数
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    collapse: function (only, animation) {
+        var options = this._options,
+            global = this._global;
+        if (options.collapsed || !this.execuable(only, &quot;Collapse&quot;)) {
+            return this;
+        }
+        global.expandedBodyHeight = global.bodyHeight || (global.bodyHeight = this.getBodyHeight(options.height));
+        global.box.removeCss(&quot;height&quot;);
+        return this.exec(global.body, this.initAnimation(&quot;collapse&quot;, global.body, animation), function () {
+            options.collapsed = true;
+            global.body.hide();
+            if (!only &amp;&amp; arguments[0]) {
+                options.onAfterCollapse.call(this);
+            }
+        }, &quot;collapse&quot;);
+    },
+<span id='fastDev-Ui-Panel-method-maximize'>    /**
+</span>     * 最大化面板
+     * @param {Boolean} [only=false] 为true时，不触发面板最大化事件
+     * @param {Boolean|Object} [animation=false] 是否使用动画效果。同时需指定animateSpeed参数
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    maximize: function (only, animation) {
+        var options = this._options;
+        if ((options.maximized &amp;&amp; !options.collapsed &amp;&amp; !options.minimized) || !this.execuable(only, &quot;Maximize&quot;)) {
+            return this;
+        }
+        var global = this._global,
+            original = !(options.minimized || options.collapsed);
+        fastDev.apply(global, {
+            offsetLeft: !original ? global.offsetLeft : options.left,
+            offsetTop: !original ? global.offsetTop : options.top,
+            offsetWidth: !original ? global.offsetWidth : options.width,
+            offsetHeight: !original ? global.offsetHeight : options.height
+        });
+        return this.exec(global.box, this.initAnimation(&quot;maximize&quot;, global.box, animation), function () {
+            options.maximized = options.display = !(options.minimized = options.collapsed = false);
+            global.body.show();
+            if (!only &amp;&amp; arguments[0]) {
+                options.onAfterMaximize.call(this);
+            }
+        }, &quot;maximize&quot;);
+    },
+<span id='fastDev-Ui-Panel-method-open'>    /**
+</span>     * 显示面板
+     * @param {Boolean} [only=false] 为true时，不触发面板显示事件
+     * @param {Boolean|Object} [animation=false] 是否使用动画效果。同时需指定animateSpeed参数
+     * @return {fastDev.Ui.Panel}
+     */
+    open: function (only, animation) {
+        var options = this._options,
+            global = this._global;
+        if (!options.minimized || !this.execuable(only, &quot;Open&quot;)) {
+            return this;
+        }
+        return this.exec(global.box, this.initAnimation(&quot;open&quot;, global.box, animation), function () {
+            options.display = !(options.minimized = false);
+            global.box.show();
+            if (!only &amp;&amp; arguments[0]) {
+                options.onAfterOpen.call(this);
+            }
+        }, &quot;open&quot;);
+    },
+<span id='fastDev-Ui-Panel-method-minimize'>    /**
+</span>     * 最小化面板
+     * @param {Boolean} [only=false] 为true时，不触发面板最小化事件
+     * @param {Boolean|Object} [animation=false] 是否使用动画效果。同时需指定animateSpeed参数
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    minimize: function (only, animation) {
+        var options = this._options,
+            global = this._global;
+        if (options.minimized || !this.execuable(only, &quot;Minimize&quot;)) {
+            return this;
+        }
+        return this.exec(global.box, global.initialized ? this.initAnimation(&quot;minimize&quot;, global.box, animation) : {}, function () {
+            options.display = !(options.minimized = true);
+            global.box.hide();
+            if (!only &amp;&amp; arguments[0]) {
+                options.onAfterMinimize.call(this);
+            }
+        }, &quot;minimize&quot;);
+    },
+<span id='fastDev-Ui-Panel-method-reset'>    /**
+</span>     * 将已最大化、已折叠或已隐藏的面板还原至一般状态
+     * @param {Boolean} [only=false] 为true时，不触发面板还原事件
+     * @param {Boolean|Object} [animation=false] 是否使用动画效果。同时需指定animateSpeed参数
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    reset: function (only, animation) {
+        var options = this._options,
+            global = this._global;
+        if (!(options.collapsed || options.maximized || options.minimized) || !this.execuable(only, &quot;Reset&quot;)) {
+            return this;
+        }
+        return this.exec(global.box, this.initAnimation(&quot;reset&quot;, global.box, animation), function () {
+            options.display = !(options.collapsed = options.minimized = options.maximized = false);
+            global.body.show();
+            if (!only &amp;&amp; arguments[0]) {
+                options.onAfterReset.call(this);
+            }
+        }, &quot;reset&quot;);
+    },
+<span id='fastDev-Ui-Panel-method-close'>    /**
+</span>     * 关闭面板
+     * @param {Boolean} [only=false] 为true时，不触发相关事件
+     * @param {Boolean|Object} [animation=false] 是否使用动画效果。同时需指定animateSpeed参数
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    close: function (only, animation) {
+        var options = this._options,
+            global = this._global;
+        if (!this.execuable(only, &quot;Close&quot;)) {
+            return this;
+        }
+        // persisted标记为实例重用，用以提升性能
+        options.closed = !options.persisted;
+        options.display = !(options.minimized = true);
+        return this.exec(global.box, this.initAnimation(&quot;close&quot;, global.box, animation), function () {
+            if (!arguments[0]) {
+                this.showLoading(null);
+                global.box.hide();
+            } else {
+                if (!options.persisted) {
+                    options.onBeforeDestroy.call(this);
+                    if (!global.iframe.isEmpty()) {
+                        global.iframe.prop(&quot;src&quot;, &quot;&quot;);
+                    }
+                    this.destroy();
+                }
+                if (!only) {
+                    options.onAfterClose.call(this);
+                }
+                if (!options.persisted) {
+                    var prop;
+                    for (prop in global) {
+                        global[prop] = null;
+                    }
+                    for (prop in options) {
+                        options[prop] = null;
+                    }
+                    options.destroyed = true;
+                }
+            }
+        }, &quot;close&quot;);
+    },
+<span id='fastDev-Ui-Panel-method-isShow'>    /**
+</span>     * 判断面板是否可见
+     * @return {Boolean} true时可见，false时不可见
+     */
+    isShow: function () {
+        return this._options.display;
+    },
+<span id='fastDev-Ui-Panel-method-resize'>    /**
+</span>     * 重新定义面板大小
+     * @param {Object} size 尺寸参数对象
+     * @param {String} size.width 宽度
+     * @param {String} size.height 高度
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    resize: function (size) {
+        var options = this._options,
+            global = this._global,
+            container = options.container,
+            tmp;
+        if (fastDev.isPlainObject(size)) {
+            fastDev.each([&quot;width&quot;, &quot;height&quot;], function (index, name) {
+                if (!isNaN(tmp = fastDev.Util.StringUtil.stripUnits(size[name],
+                //
+                options.container[name]()))) {
+                    options[name] = Math.round(tmp);
+                }
+            });
+            global.box.width(options.width = options.width || 0);
+            options.height = options.height || 0;
+            if (!options.collapsed) {
+                global.box.height(options.height);
+            }
+            global.body.height(global.bodyHeight = this.getBodyHeight(options.height));
+            global.content.height(this.getContentHeight(global.bodyHeight));
+            options.onAfterResize.call(this.showLoading());
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-move'>    /**
+</span>     * 移动面板至指定坐标
+     * @param {Object} position 坐标参数对象
+     * @param {String} position.left X轴坐标值
+     * @param {String} position.top Y轴坐标值
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    move: function (position) {
+        var options = this._options,
+            global = this._global,
+            container = options.container,
+            tmp;
+        if (fastDev.isPlainObject(position)) {
+            fastDev.each([&quot;left&quot;, &quot;top&quot;], function (index, name) {
+                if (!isNaN(tmp = fastDev.Util.StringUtil.stripUnits(position[name],
+                // 
+                options.container[index === 0 ? &quot;width&quot; : &quot;height&quot;]()))) {
+                    options[name] = Math.round(tmp);
+                }
+            });
+            global.box.css({
+                left: options.left = options.left || 0,
+                top: options.top = options.top || 0
+            });
+            options.onAfterMove.call(this.showLoading());
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-setTitle'>    /**
+</span>     * 重设标题内容及标题栏图标
+     * @param {String} title 标题内容，可带HTML标签文本
+     * @param {String} [iconCls] 标题图标样式名，值为空字符串时将去除标题图标
+     * @return {fastDev.Ui.Panel}
+     */
+    setTitle: function (title, iconCls) {
+        var global = this._global,
+            elem;
+        if (this._options.showHeader) {
+            (elem = global.title).elems[0].innerHTML = title + &quot;&quot;;
+            if (typeof iconCls === &quot;string&quot;) {
+                elem.removeClass(&quot;ui-window-header-ico&quot;).removeClass(global.iconClsName);
+                if (iconCls) {
+                    elem.addClass(&quot;ui-window-header-ico&quot;).addClass(global.iconClsName = iconCls);
+                }
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-setContent'>    /**
+</span>     * 设置窗体内容（可包含HTML标签以及复合控件声明字符串）
+     * &lt;p&gt;若使用了src配置属性声明了内部子页面，将默认禁止设置新的内容
+     * &lt;p&gt;可先调用empty方法清空窗体内容后（内部子页面同样也会被清理掉）再设置新的内容
+     * &lt;p&gt;该方法会清空之前的窗体内容
+     * @param {String} content 内容文本
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    setContent: function (content) {
+        var global = this._global;
+        if (fastDev.isValid(content) &amp;&amp; global.iframe.isEmpty()) {
+            global.content.empty().removeClass(&quot;ui-window-nopadding&quot;).elems[0].innerHTML = content + &quot;&quot;;
+            fastDev.Core.ControlBus.compile(null, global.content.elems);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-empty'>    /**
+</span>     * 清空内容区域
+     * @return {fastDev.Ui.Panel} 当前控件实例 
+     */
+    empty: function () {
+        var options = this._options,
+            global = this._global;
+        (global.iframeLoadHandle || fastDev.noop)();
+        global.content.empty().removeClass(&quot;ui-window-nopadding&quot;);
+        global.iframe = fastDev();
+        options.src = &quot;&quot;;
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-append'>    /**
+</span>     * 追加窗体内容（可包含文本、标签、控件等）
+     * &lt;p&gt;若使用了src配置属性声明了内部子页面，将默认禁止往内容区域追加内容
+     * &lt;p&gt;可先调用empty方法清空窗体内容后（内部子页面同样也会被清理掉）再追加新的内容
+     * &lt;p&gt;该方法不会清空之前的窗体内容
+     * @param {String|Element|Component|DomObject} content 需追加的内容
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    append: function (content) {
+        var global = this._global,
+            elem;
+        if (fastDev.isValid(content) &amp;&amp; global.iframe.isEmpty()) {
+            global.content.append(elem = (fastDev.isComponent(content) || fastDev.isDomObject(content)) ? content : fastDev(typeof content === &quot;string&quot; ? &quot;&lt;div&gt;&quot; + content + &quot;&lt;/div&gt;&quot; : content));
+            if (elem !== content) {
+                fastDev.Core.ControlBus.compile(null, elem.elems);
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-load'>    /**
+</span>     * 加载新的面板内部Iframe子页面
+     * @param {String} src 子页面链接地址
+     * @return {fastDev.Ui.Panel}
+     */
+    load: function (src) {
+        var options = this._options,
+            global = this._global;
+        if (fastDev.isString(src) &amp;&amp; (src = fastDev.Util.StringUtil.trim(src)) &amp;&amp; !options.closed) {
+            var that = this,
+                time = new Date().getTime();
+            options.src = src;
+            if (global.iframe.isEmpty()) {
+                global.iframe = fastDev(&quot;&lt;iframe frameborder='0' width='100%' height='100%' style='position:absolute;top:0'&gt;&lt;/iframe&gt;&quot;)
+                //
+                .addClass(&quot;ui-window-iframe&quot;).appendTo(global.content.empty().addClass(&quot;ui-window-nopadding&quot;));
+                if (!arguments[1]) {
+                    this.resize({
+                        width: options.width,
+                        height: options.height
+                    });
+                }
+            }
+            if (this.readyForLoading(global.iframe) !== false) {
+                (global.iframeLoadHandle || fastDev.noop)();
+                global.loading = options.showLoading ? fastDev.create(&quot;ProgressBar&quot;, {
+                    container: global.content,
+                    text: options.loadingMsg,
+                    zIndex: options.zIndex + 3,
+                    opacity: 0.025,
+                    onOverlayClick: function () {
+                        if (new Date().getTime() - time &gt; 5000) {
+                            this.close();
+                        }
+                    }
+                }) : true;
+                global.loaded = false;
+                global.iframe.bind(&quot;load&quot;, global.iframeLoadHandle = function () {
+                    if (fastDev.isComponent(global.loading)) {
+                        global.loading.close();
+                    }
+                    global.iframe.unbind(&quot;load&quot;, global.iframeLoadHandle);
+                    global.loaded = !(global.loading = false);
+                }).prop(&quot;src&quot;, src);
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Panel-method-show'>    /**
+</span>     * 显示面板
+     * @return {fastDev.Ui.Panel}
+     */
+    show: function () {
+        return this._global.initialized ? this.open.apply(this, arguments) : this;
+    },
+<span id='fastDev-Ui-Panel-method-hide'>    /**
+</span>     * 最小化（隐藏）面板
+     * @return {fastDev.Ui.Panel}
+     */
+    hide: function () {
+        return this._global.initialized ? this.minimize.apply(this, arguments) : this;
+    },
+<span id='fastDev-Ui-Panel-property-launchAnimation'>    /**
+</span>     * 窗体类控件动画全局开关 
+     * &lt;p&gt;出于浏览器性能考虑，在IE6和IE7下将默认禁用窗体动画（用户可通过此属性再次开启）
+     * @type {Boolean}
+     */
+    launchAnimation: (fastDev.Browser.isIE6 || fastDev.Browser.isIE7) ? false : true
+});</pre>
+</body>
+</html>

@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Window'>/**
+</span> * @class fastDev.Ui.Window
+ * @extends fastDev.Ui.Panel
+ * @author chengwei
+ * &lt;p&gt;弹出窗控件。&lt;/p&gt;
+ * &lt;p&gt;支持窗口折叠，最大最小化，拖拽定位，调节尺寸，跨级交互等。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *     
+ *     fastDev.create(&quot;Window&quot;, {
+ *          title : &quot;标题&quot;,
+ *          content : &quot;弹窗内容&quot;
+ *     });
+ */
+fastDev.define(&quot;fastDev.Ui.Window&quot;, {
+    extend: &quot;fastDev.Ui.Panel&quot;,
+    alias: &quot;Window&quot;,
+    _options: {
+<span id='fastDev-Ui-Window-property-zIndex'>        /**
+</span>         * 浮动层级
+         * @type {String|Number}
+         */
+        zIndex: &quot;auto&quot;,
+<span id='fastDev-Ui-Window-property-showMaxBtn'>        /**
+</span>         * 是否显示最大化按钮
+         * @type {Boolean}
+         */
+        showMaxBtn: true,
+<span id='fastDev-Ui-Window-property-showCloseBtn'>        /**
+</span>         * 是否显示关闭窗体按钮
+         * @type {Boolean}
+         */
+        showCloseBtn: true,
+<span id='fastDev-Ui-Window-property-showCollapseBtn'>        /**
+</span>         * 是否显示折叠按钮
+         * @type {Boolean}
+         */
+        showCollapseBtn: true,
+<span id='fastDev-Ui-Window-property-icon'>        /**
+</span>         * 内容图标名
+         * &lt;p&gt;在内容区域显示
+         * @type {String} 
+         */
+        icon: &quot;&quot;,
+<span id='fastDev-Ui-Window-property-allowDrag'>        /**
+</span>         * 是否可拖动
+         * @type {Boolean}
+         */
+        allowDrag: true,
+<span id='fastDev-Ui-Window-property-allowResize'>        /**
+</span>         * 是否可拖拽调节尺寸
+         * @type {Boolean}
+         */
+        allowResize: true,
+<span id='fastDev-Ui-Window-property-showShadow'>        /**
+</span>         * 是否显示阴影
+         * &lt;p&gt;出于浏览器性能考虑，IE6下将默认禁用窗体阴影（用户可通过此属性再次开启）
+         * @type {Boolean}
+         */
+        showShadow: fastDev.Browser.isIE6 ? false : true,
+<span id='fastDev-Ui-Window-property-width'>        /**
+</span>         * 窗体宽度值
+         * @type {String} 
+         */
+        width: &quot;auto&quot;,
+<span id='fastDev-Ui-Window-property-height'>        /**
+</span>         * 窗体高度值
+         * @type {String} 
+         */
+        height: &quot;auto&quot;,
+<span id='fastDev-Ui-Window-property-animateTarget'>        /**
+</span>         * 动画执行的参照对象
+         * &lt;p&gt;使用组件对象时，将取组件对象中的第一个元素作为目标元素
+         * &lt;p&gt;控件将优先从原父页面寻找该目标元素，若找不到该目标元素则从当前页面找（在跨级展现的情况下）
+         * @type {String|Element|DomObject|Component}
+         */
+        animateTarget: &quot;&quot;,
+<span id='fastDev-Ui-Window-property-inside'>        /**
+</span>         * 是否限制在父容器中，即是否需要窗口跨级(跨iframe)显示。
+         * 此属性指定为false时，窗口将跨级创建并展示（有权访问的顶层窗口需引入该控件js）。
+         * 跨窗口显示即指弹窗从当前窗口（一般是一个iframe页面）跨级至有权访问的最顶层窗口（一般是框架集的最顶层框架）创建并展现。
+         * 跨级弹窗的作用域（window）将不再是原窗口对象，而是原窗口对象的顶层父页面对象（top），此时若弹窗需与原父页面交互，则需通过指定的接口来存储和传递数据。
+         * 可通过实例的setData(name, value)、getData(name)方法和fastDev.Ui.Window.setData(name, value)、fastDev.Ui.Window.getData(name)方法存取数据。
+         * &lt;frameset/&gt;定义的框架集由于浏览器限制而不能够跨级访问，但iframe可以。
+         * 由于浏览器安全限制，跨域访问将受到限制，若需跨域访问则需做其他特殊处理。
+         * 此控件目前对跨域问题不作支持。
+         * @type {Boolean}
+         */
+        inside: true,
+<span id='fastDev-Ui-Window-property-visible'>        /**
+</span>         * 窗口是否总是可见
+         * 此属性为真时，则窗口仅能在当前可视区域内拖动
+         * @type {Boolean}
+         */
+        visible: true,
+<span id='fastDev-Ui-Window-property-modal'>        /**
+</span>         * 是否为模态窗体（锁屏）
+         * @type {Boolean}
+         */
+        modal: true,
+<span id='fastDev-Ui-Window-property-overlayOpacity'>        /**
+</span>         * 锁屏时遮罩层的透明度
+         * @type {Number} 
+         */
+        overlayOpacity: 0.08,
+<span id='fastDev-Ui-Window-property-fixed'>        /**
+</span>         * 是否使用固定定位
+         * 固定定位的窗口，其位置不受滚动条滚动影响
+         * 兼容IE6
+         * @type {Boolean}
+         */
+        fixed: false,
+<span id='fastDev-Ui-Window-property-buttons'>        /**
+</span>         * 定义底部的buttons
+         * 各个按钮的配置中align属性可指定按钮的摆放位置（left、right、center）
+         * 按钮点击事件回调中，作用域为当前按钮控件，参数为：
+         * &lt;p&gt;-event 点击事件对象&lt;/p&gt;
+         * &lt;p&gt;-win 当前弹窗实例&lt;/p&gt;
+         * &lt;p&gt;-window 内部子页的window对象（仅当存在且有权访问此变量时）&lt;/p&gt;
+         * &lt;p&gt;-fastDev 内部子页面的fastDev对象（仅当存在此变量时）&lt;/p&gt;
+         * @type {Array}
+         */
+        buttons: null,
+<span id='fastDev-Ui-Window-property-maxWidth'>        /**
+</span>         * 最大宽度限制，可带单位px、em、%
+         * @type {String|Number}
+         */
+        maxWidth: Infinity,
+<span id='fastDev-Ui-Window-property-minWidth'>        /**
+</span>         * 最小宽度限制，可带单位px、em、%
+         * @type {String|Number}
+         */
+        minWidth: 199,
+<span id='fastDev-Ui-Window-property-maxHeight'>        /**
+</span>         * 最大高度限制，可带单位px、em、%
+         * @type {String|Number}
+         */
+        maxHeight: Infinity,
+<span id='fastDev-Ui-Window-property-minHeight'>        /**
+</span>         * 最小高度限制，可带单位px、em、%
+         * @type {String|Number}
+         */
+        minHeight: 122,
+<span id='fastDev-Ui-Window-property-resizeDirection'>        /**
+</span>         * 调节大小时的可调方向
+         * @type {String}
+         */
+        resizeDirection: &quot;s,e,se&quot;,
+<span id='fastDev-Ui-Window-property-resizeRatio'>        /**
+</span>         * 调节大小时的宽高比例
+         * &lt;p&gt;指定此比例后，窗口的宽高比将始终保持此值（包括初始窗口及最大化窗口时）
+         * @type {Number}
+         */
+        resizeRatio: null,
+<span id='fastDev-Ui-Window-property-showSizeTips'>        /**
+</span>         * 调节窗口尺寸时是否显示窗口大小提示标签
+         * &lt;p&gt;开发阶段，需对窗口固定大小时开启此属性可帮助开发人员确定窗口合适的尺寸大小
+         * @type {Boolean}
+         */
+        showSizeTips: false
+    },
+<span id='fastDev-Ui-Window-method-staticTemplate'>    /**
+</span>     * 用于构建静态模板串
+     * @param {Object} params 模板已解析参数对象
+     * @private 
+     */
+    staticTemplate: function (params) {
+        var html = [];
+        if (params.inside) {
+            html.push('&lt;div name=&quot;box&quot; class=&quot;ui-window ui-panel ui-panel-box ' + params.cls + '&quot; style=&quot;display:none;z-index:' + params.zIndex + '&quot;&gt;');
+            if (params.showHeader) {
+                html.push([
+                        '&lt;div name=&quot;header&quot; class=&quot;ui-panel-header&quot;&gt;',
+                        '&lt;div name=&quot;title&quot; class=&quot;ui-window-header-text ' + params.iconCls + ' ' + params.headerCls + '&quot; style=&quot;height:16px&quot;&gt;' + params.title + '&lt;/div&gt;',
+                        '&lt;div name=&quot;tool&quot; class=&quot;ui-window-tool&quot;&gt;',
+                        '&lt;span class=&quot;ui-window-tool-show&quot; name=&quot;Expand&quot; handler=&quot;expand&quot; title=&quot;展开&quot;&gt;&lt;/span&gt;',
+                        '&lt;span class=&quot;ui-window-tool-hidden&quot; name=&quot;Collapse&quot; handler=&quot;collapse&quot; title=&quot;折叠&quot;&gt;&lt;/span&gt;',
+                        '&lt;span class=&quot;ui-window-tool-min&quot; name=&quot;Min&quot; handler=&quot;minimize&quot; title=&quot;最小化&quot;&gt;&lt;/span&gt;',
+                        '&lt;span class=&quot;ui-window-tool-restore&quot; name=&quot;Restore&quot; handler=&quot;reset&quot; title=&quot;还原&quot;&gt;&lt;/span&gt;',
+                        '&lt;span class=&quot;ui-window-tool-max&quot; name=&quot;Max&quot; handler=&quot;maximize&quot; title=&quot;最大化&quot;&gt;&lt;/span&gt;',
+                        '&lt;span class=&quot;ui-window-tool-close&quot; name=&quot;Close&quot; handler=&quot;close&quot; title=&quot;关闭&quot;&gt;&lt;/span&gt;',
+                        '&lt;/div&gt;&lt;/div&gt;'
+                ].join(''));
+            }
+            html.push('&lt;div name=&quot;body&quot; class=&quot;ui-panel-body ' + params.borderCls + '&quot;&gt;');
+            html.push('&lt;div name=&quot;content&quot; class=&quot;ui-panel-content ' + params.bodyCls + '&quot; style=&quot;' + params.bodyStyle + '&quot;&gt;&lt;/div&gt;');
+            if ( !! params.buttons) {
+                html.push([
+                        '&lt;div name=&quot;buttons&quot; class=&quot;ui-window-button-panel&quot;&gt;',
+                        '&lt;span name=&quot;left&quot; class=&quot;ui-left&quot; style=&quot;display:none;margin-left:' + params.btnPanelMarginLeft + '&quot;&gt;&lt;/span&gt;',
+                        '&lt;span name=&quot;center&quot; class=&quot;ui-center&quot; style=&quot;display:none;overflow:hidden&quot;&gt;&lt;/span&gt;',
+                        '&lt;span name=&quot;right&quot; class=&quot;ui-right&quot; style=&quot;display:none;margin-right:' + params.btnPanelMarginRight + '&quot;&gt;&lt;/span&gt;',
+                        '&lt;/div&gt;'
+                ].join(''));
+            }
+            html.push('&lt;/div&gt;&lt;/div&gt;');
+            if ( !! params.showShadow) {
+                html.push([
+                        '&lt;div name=&quot;shadow&quot; class=&quot;ui-window-shadow-bg&quot; style=&quot;display:none&quot;&gt;',
+                        '&lt;div class=&quot;shadow-st&quot;&gt;',
+                        '&lt;div class=&quot;shadow-stl&quot;&gt;&lt;/div&gt;',
+                        '&lt;div class=&quot;shadow-stc&quot;&gt;&lt;/div&gt;',
+                        '&lt;div class=&quot;shadow-str&quot;&gt;&lt;/div&gt;',
+                        '&lt;/div&gt;',
+                        '&lt;div class=&quot;shadow-sc&quot;&gt;',
+                        '&lt;div class=&quot;shadow-sml&quot;&gt;&lt;/div&gt;',
+                        '&lt;div class=&quot;shadow-smc&quot;&gt;&lt;/div&gt;',
+                        '&lt;div class=&quot;shadow-smr&quot;&gt;&lt;/div&gt;',
+                        '&lt;/div&gt;',
+                        '&lt;div class=&quot;shadow-sb&quot;&gt;',
+                        '&lt;div class=&quot;shadow-sbl&quot;&gt;&lt;/div&gt;',
+                        '&lt;div class=&quot;shadow-sbc&quot;&gt;&lt;/div&gt;',
+                        '&lt;div class=&quot;shadow-sbr&quot;&gt;&lt;/div&gt;',
+                        '&lt;/div&gt;&lt;/div&gt;'
+                ].join(''));
+            }
+            if ( !! params.modal) {
+                html.push('&lt;div name=&quot;mask&quot; class=&quot;ui-mask&quot; style=&quot;display:none&quot;&gt;&lt;/div&gt;');
+            }
+        }
+        return html.join('');
+    },
+    tplParam: [&quot;inside&quot;, &quot;zIndex&quot;, &quot;showHeader&quot;, &quot;cls&quot;, &quot;iconCls&quot;, &quot;headerCls&quot;, &quot;title&quot;, &quot;borderCls&quot;, &quot;bodyCls&quot;, &quot;bodyStyle&quot;, &quot;buttons&quot;, &quot;showShadow&quot;, &quot;modal&quot;, &quot;btnPanelMarginLeft&quot;, &quot;btnPanelMarginRight&quot;],
+<span id='fastDev-Ui-Window-method-ready'>    /**
+</span>     * 准备参数
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    ready: function (options, global) {
+        var target = options.container,
+            counter;
+        if (!(options.inside = !! options.inside) &amp;&amp; !this.equals(fastDev.Ui.Window.top, window) &amp;&amp; (!target.hasElem() || fastDev.isWindow(target.elems[0]))) {
+            // 窗口跨级
+            global.instance = this.cross(options, global);
+            if (options.saveInstance &amp;&amp; options.id) {
+                fastDev.Core.ControlBus.saveInstance(options.id, global.instance);
+            }
+            return false;
+        } else {
+            if (!fastDev.isValid(document) || !fastDev.isValid(document.body)) {
+                options.alias = this.alias;
+                fastDev(function () {
+                    fastDev.create(options.alias, options);
+                });
+                return false;
+            }
+            global.instance = this;
+            counter = ++fastDev.Util.position.top.fastDev.Ui.Window.count;
+            fastDev.apply(global, {
+                uuid: fastDev.getID().toString(),
+                windowResizeHandles: {},
+                btnPanelMarginLeft: (fastDev.Browser.isIE6 || fastDev.Browser.isIE7) ? &quot;10px&quot; : &quot;5px&quot;,
+                btnPanelMarginRight: (fastDev.Browser.isIE6 || fastDev.Browser.isIE7) ? &quot;0px&quot; : &quot;6px&quot;,
+                container: (target.hasElem() &amp;&amp; !fastDev.isWindow(target.elems[0])) ? target : null,
+                buttonInstances: []
+            });
+            options.left = parseInt(options.left, 10) ? options.left + &quot;&quot; : 0;
+            options.top = parseInt(options.top, 10) ? options.top + &quot;&quot; : 0;
+            fastDev.apply(options, {
+                inside: true,
+                content: (fastDev.Browser.isIE &amp;&amp; !options.content) ? options.content + &quot; &quot; : options.content,
+                left: global.container ? options.left : options.left || &quot;50%&quot;,
+                top: global.container ? options.top : options.top || &quot;38.2%&quot;,
+                buttons: [].concat(options.buttons),
+                showShadow: !! options.showShadow &amp;&amp; !global.container,
+                animateTarget: this.toDomObject(options.animateTarget),
+                showMaxBtn: options.allowResize &amp;&amp; options.showMaxBtn,
+                container: global.container || fastDev(document.body),
+                zIndex: (parseInt(options.zIndex, 10) || (100 + counter * 3)) + 2,
+                resizeRatio: parseFloat(options.resizeRatio) || 0,
+                modal: !! options.modal &amp;&amp; !global.container
+            });
+            global.btnPanelMargin = (fastDev.Browser.isIE6 || fastDev.Browser.isIE7) ? &quot;5px&quot; : &quot;10px&quot;;
+        }
+    },
+<span id='fastDev-Ui-Window-method-construct'>    /**
+</span>     * 构造结构
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    construct: function (options, global) {
+        if (options.inside) {
+            var elems = [&quot;buttons&quot;, &quot;shadow&quot;, &quot;mask&quot;, &quot;left&quot;, &quot;right&quot;, &quot;center&quot;],
+                elem;
+            global.doc = fastDev(document);
+            global.win = fastDev(window);
+            while (elem = elems.shift()) {
+                global[elem] = this.find(&quot;[name='&quot; + elem + &quot;']&quot;);
+            }
+            options.container = global.container || global.win;
+            if (global.container) {
+                global.box.css(&quot;position&quot;, &quot;relative&quot;);
+            } else if (options.fixed) {
+                this.fixed(global.box);
+            } else {
+                global.box.css(&quot;position&quot;, &quot;absolute&quot;);
+                global.shadow.css(&quot;position&quot;, &quot;absolute&quot;);
+            }
+            global.maskOpacity = parseFloat(options.overlayOpacity) || 0.021;
+            this.addButtons(options.buttons).setButtons(false);
+            if (options.modal) {
+                this.elems.splice(this.elems.length - 1, 1);
+            }
+            global.constructed = true;
+        }
+    },
+<span id='fastDev-Ui-Window-method-init'>    /**
+</span>     * 初始控件
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @protected
+     */
+    init: function (options, global) {
+        if (options.inside) {
+            global.initialized = false;
+            if (options.display) {
+                this.open(!(options.minimized = true));
+                options.height = global.offsetHeight;
+            } else {
+                this.setShadow(false);
+            }
+            this.setDragger();
+            if (options.showMaxBtn) {
+                global.header.bind(&quot;dblclick&quot;, function () {
+                    this[options.maximized ? &quot;reset&quot; : &quot;maximize&quot;]();
+                }, this);
+            }
+        }
+    },
+<span id='fastDev-Ui-Window-method-getContentHeight'>    /**
+</span>     * 获取内容部分高度值
+     * @param {Number} bodyHeight 当前body高度
+     * @return {Number}
+     * @protected
+     */
+    getContentHeight: function (bodyHeight) {
+        var global = this._global,
+            content = global.content;
+        // 底部按钮栏有37px的高度
+        return Math.max(bodyHeight - (content.outerHeight(true) - content.height()) - (global.hasButton ? Math.max(global.buttons.outerHeight(true), 37) : 0), 0);
+    },
+<span id='fastDev-Ui-Window-method-getContentBounding'>    /**
+</span>     * 获取内容区域以外部分的宽高值
+     * @return {Number} width、height
+     * @protected 
+     */
+    getContentBounding: function () {
+        var options = this._options,
+            global = this._global;
+        return {
+            width: Math.abs(global.content.outerWidth(true) - global.content.width() + (options.showBorder ? 2 : 0)),
+            // 增加10px的冗余高度，使得内容显示更美观
+            height: Math.abs(10 + (options.showBorder ? 1 : 0) + (global.content.outerHeight(true) - global.content.height()) + (global.hasButton ? Math.max(global.buttons.outerHeight(true), 37) : 0) + (options.showHeader ? Math.max(global.header.outerHeight(true), 27) : 1))
+        };
+    },
+<span id='fastDev-Ui-Window-method-toDomObject'>    /**
+</span>     * 将目标对象转换为DomObject对象
+     * @param {Object} target 目标对象
+     * @param {fastDev} fast 命名空间
+     * @return {DomObject}
+     * @private
+     */
+    toDomObject: function (target, fast) {
+        var options = this._options,
+            element;
+        if (options.crossed === &quot;crossed&quot; &amp;&amp; !fast) {
+            return this.toDomObject(target, options.parent.fastDev);
+        } else {
+            fast = (fast || fastDev);
+            if ((element = ((fast.isComponent(target) || fast.isDomObject(target)) ? fast(target.elems) : fast((fast.isString(target) &amp;&amp; target) ? &quot;#&quot; + target : target) || fast())).isEmpty() &amp;&amp; fast !== fastDev) {
+                return this.toDomObject(target, fastDev);
+            }
+            return element;
+        }
+    },
+<span id='fastDev-Ui-Window-method-initAnimation'>    /**
+</span>     * 初始动画设置
+     * @param {String} type
+     * @param {DomObject} target
+     * @param {Object|Boolean|Array} queue
+     * @return {Object}
+     * @protected
+     */
+    initAnimation: function (type, target, animation) {
+        var that = this,
+            options = this._options,
+            global = this._global,
+            container = options.container,
+            box = global.box,
+            queue, index;
+        this.clearTimer().setShadow(false).setButtons();
+        for (index in (queue = this.toAnimationQueue(target, animation === false ? false : animation || true))) {
+            queue[index].start = this.limit(queue[index].start);
+            queue[index].stop = this.limit(queue[index].stop);
+        }
+        animation = queue[queue.length - 1];
+        switch (type) {
+            case &quot;expand&quot;:
+            case &quot;collapse&quot;:
+                this.setResizer(false).setButtons(false);
+                animation.callback = this.getAnimationParam(animation.callback, function () {
+                    options.height = box.height();
+                    this.setResizer(type === &quot;expand&quot;).setButtons(type === &quot;expand&quot;);
+                });
+                return fastDev.Ui.Panel.initAnimation.call(this, type, target, queue);
+            case &quot;maximize&quot;:
+                if (!fastDev.Browser.isIE6 || global.container) {
+                    // 保存转换为fixed定位后的元素坐标值
+                    var offset = options.fixed ? {
+                        left: box.elems[0].offsetLeft,
+                        top: box.elems[0].offsetTop
+                    } : global.container ? {
+                        left: parseInt(box.css(&quot;left&quot;), 10),
+                        top: parseInt(box.css(&quot;top&quot;), 10)
+                    } : box.offset();
+                    global.offsetLeft = offset.left - ((options.fixed || global.container) ? 0 : global.doc.scrollLeft());
+                    global.offsetTop = offset.top - ((options.fixed || global.container) ? 0 : global.doc.scrollTop());
+                }
+                this.setResizer(false);
+                animation.easing = animation.easing || &quot;expo-easeIn&quot;;
+                animation.start.opacity = animation.start.opacity || (options.minimized ? 0.1 : 0.8);
+                animation.stop = this.getAnimationParam(animation.stop, this.limit({
+                    left: &quot;50%&quot;,
+                    top: &quot;38.2%&quot;,
+                    width: container.width(),
+                    height: container.height(),
+                    opacity: 1
+                }));
+                animation.callback = this.getAnimationParam(animation.callback, function (stop) {
+                    this.fixed(box).fill(box, function (size) {
+                        that.resize(size);
+                    });
+                });
+                break;
+            case &quot;reset&quot;:
+                animation.easing = animation.easing || &quot;expo-easeIn&quot;;
+                if (options.minimized) {
+                    this.getBoundingRect(animation.start, animation.target);
+                }
+                animation.start.opacity = animation.start.opacity || (options.minimized ? 0.1 : 0.8);
+                animation.stop = this.getAnimationParam(animation.stop, {
+                    top: global.offsetTop,
+                    left: global.offsetLeft,
+                    width: global.offsetWidth,
+                    height: global.offsetHeight,
+                    opacity: 1
+                });
+                animation.callback = this.getAnimationParam(animation.callback, function (stop) {
+                    this.fixed(box, false).fill(box, false).setResizer().lock();
+                });
+                break;
+            case &quot;minimize&quot;:
+                this.fill(box, false).lock(false);
+                animation.easing = animation.easing || &quot;quad-easeOut&quot;;
+                if (fastDev.isEmptyObject(this.getBoundingRect(animation.stop, animation.target))) {
+                    fastDev.apply(animation.stop, {
+                        top: 0,
+                        left: 0,
+                        width: 80,
+                        height: 30,
+                        opacity: 0.1
+                    });
+                }
+                break;
+            case &quot;open&quot;:
+                this.lock().setButtons(false);
+                animation.easing = animation.easing || &quot;expo-easeIn&quot;;
+                var max = (options.maximized &amp;&amp; !options.collapsed),
+                    rect = this.limit({
+                        left: max ? &quot;50%&quot; : options.left,
+                        top: max ? &quot;38.2%&quot; : options.top,
+                        width: options.maximized ? container.width() : options.width,
+                        height: max ? container.height() : options.height
+                    });
+                rect.height = options.collapsed ? options.height : rect.height;
+                if (!options.collapsed &amp;&amp; fastDev.isEmptyObject(this.getBoundingRect(animation.start, animation.target))) {
+                    fastDev.apply(animation.start, {
+                        left: rect.left + (rect.width &lt; 8 ? rect.width / 2 : 4),
+                        top: rect.top + (rect.height &lt; 8 ? rect.height / 2 : 4),
+                        height: Math.max(rect.height - 8, 0),
+                        width: Math.max(rect.width - 8, 0),
+                        opacity: 0.1
+                    });
+                }
+                fastDev.apply(animation.stop, this.getAnimationParam(animation.stop, {
+                    top: rect.top,
+                    left: rect.left,
+                    width: rect.width,
+                    height: rect.height,
+                    opacity: 1
+                }));
+                animation.callback = this.getAnimationParam(animation.callback, function (stop) {
+                    global.initialized = true;
+                    if (options.maximized) {
+                        this.fixed(box).fill(box, function (size) {
+                            that.resize(size);
+                        });
+                    }
+                    this.setResizer().setButtons(!options.collapsed);
+                });
+                break;
+            case &quot;close&quot;:
+                window.clearInterval(global.windowCloseTimer);
+                window.clearTimeout(global.windowResizeTimer);
+                window.clearTimeout(global.windowCloseTimer);
+                this.lock(options.persisted ? false : null);
+                animation.easing = animation.easing || &quot;liner-easeOut&quot;;
+                if (fastDev.isEmptyObject(this.getBoundingRect(animation.stop, animation.target))) {
+                    var width = options.width,
+                        height = parseInt(box.css(&quot;height&quot;), 10);
+                    fastDev.apply(animation.stop, {
+                        left: parseInt(box.css(&quot;left&quot;), 10) + (width &lt; 8 ? width / 2 : 4),
+                        top: parseInt(box.css(&quot;top&quot;), 10) + (height &lt; 8 ? height / 2 : 4),
+                        height: Math.max(height - 8, 0),
+                        width: Math.max(width - 8, 0)
+                    });
+                }
+                animation.stop.opacity = animation.stop.opacity || 0;
+                animation.callback = this.getAnimationParam(animation.callback, function (stop) {
+                    this.fill(box, false);
+                    if (!options.persisted) {
+                        this.setResizer(null).setDragger(null).setButtons(null);
+                        delete(this.getData(&quot;@fastDev&quot; + global.uuid) || fastDev).Ui.Window.windows[global.uuid];
+                        this.setData(&quot;@fastDev&quot; + global.uuid, null);
+                        fastDev.Util.position.top.fastDev.Ui.Window.count--;
+                    }
+                });
+        }
+        for (var i = 0, j, k, limit, name = [&quot;start&quot;, &quot;stop&quot;]; i &lt; queue.length; i++) {
+            for (j = 0; j &lt; 2; j++) {
+                for (k in (limit = queue[i][name[j]])) {
+                    if (isNaN(limit[k])) {
+                        delete limit[k];
+                    }
+                }
+            }
+        }
+        return queue;
+    },
+<span id='fastDev-Ui-Window-method-stopAnimation'>    /**
+</span>     * 动画结束时的回调函数
+     * @param {DomObject} target 动画目标
+     * @param {Object} animation 动画配置对象 
+     * @param {String} type 动画类型 
+     * @protected
+     */
+    stopAnimation: function (target, animation, type) {
+        var options = this._options,
+            box = this._global.box;
+        if (!options.collapsed &amp;&amp; !options.closed &amp;&amp; options.display &amp;&amp; target.elems[0] === box.elems[0]) {
+            fastDev.Ui.Panel.resize.call(this, {
+                width: parseInt(box.css(&quot;width&quot;), 10),
+                height: parseInt(box.css(&quot;height&quot;), 10)
+            });
+        }
+        return fastDev.Ui.Panel.stopAnimation.apply(this, arguments);
+    },
+<span id='fastDev-Ui-Window-method-getAnimationParam'>    /**
+</span>     * 获取动画配置参数
+     * @param {Object} param 参数配置值
+     * @param {Object} defaults 默认配置值
+     * @return {Object}
+     * @private
+     */
+    getAnimationParam: function (param, defaults) {
+        if (fastDev.isFunction(param)) {
+            var that = this;
+            return function () {
+                if (param.apply(that, arguments) !== false) {
+                    (defaults || fastDev.noop).apply(that, arguments);
+                }
+            };
+        }
+        return (!param || fastDev.isEmptyObject(param)) ? defaults : param;
+    },
+<span id='fastDev-Ui-Window-method-finishAction'>    /**
+</span>     * 每一次动画操作结束时，必将执行的一次回调
+     * @param {DomObject} target 动画目标
+     * @param {Object} stop 结束时的状态
+     * @protected 
+     */
+    finishAction: function (target, stop) {
+        var global = this._global;
+        if (global.initialized &amp;&amp; this.isShow()) {
+            if (this._options.fixed) {
+                this.fixed(global.box);
+            }
+            fastDev.Ui.Panel.finishAction.apply(this, arguments);
+            this.setShadow();
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-getBoundingRect'>    /**
+</span>     * 获取元素的边界信息
+     * @param {Object} rect
+     * @param {DomObject} [target]
+     * @return {Object} left、top、width、height
+     * @private
+     */
+    getBoundingRect: function (rect, target) {
+        if (fastDev.isEmptyObject(rect) &amp;&amp; (target = this.toDomObject(target || this._options.animateTarget)).hasElem()) {
+            var global = this._global,
+                offset = this.getOffset(target),
+                doc = global.doc,
+                fixed = global.box.css(&quot;position&quot;) === &quot;fixed&quot;;
+            fastDev.apply(rect, {
+                left: offset.left - (fixed ? doc.scrollLeft() : 0),
+                top: offset.top - (fixed ? doc.scrollTop() : 0),
+                width: target.innerWidth(),
+                height: target.innerHeight()
+            });
+        }
+        return rect;
+    },
+<span id='fastDev-Ui-Window-method-equals'>    /**
+</span>     * 判断2个窗口对象是否属同一个对象
+     * &lt;p&gt;解决IE某些浏览器中不能通过运算符直接判断的问题
+     * @param {Window} a
+     * @param {Window} b
+     * @private 
+     */
+    equals: function (a, b) {
+        var equal;
+        try {
+            equal = a.fastDev.Ui.Window.id === b.fastDev.Ui.Window.id;
+        } catch (e) {} finally {
+            return equal;
+        }
+    },
+<span id='fastDev-Ui-Window-method-getOffset'>    /**
+</span>     * 获取目标元素的坐标值
+     * @param {DomObject} [target] 不传target参数，则获取原父页面的偏移量
+     * @return {Object} left、top
+     * @private
+     */
+    getOffset: function (target) {
+        var options = this._options;
+        if (options.crossed === &quot;crossed&quot;) {
+            var that = this,
+                parent = options.parent,
+                id = parent.fastDev.Ui.Window.id,
+                iframes = this.getData(&quot;@iframes&quot; + id) || fastDev.Util.position.getIframePath(function () {
+                    return that.equals(this, parent);
+                });
+            this.setData(&quot;@iframes&quot; + id, iframes);
+            return fastDev.Util.position.getBoundingRect(target, iframes);
+        } else {
+            return (target &amp;&amp; !fastDev.isWindow(target)) ? target.offset() : {
+                left: 0,
+                top: 0
+            };
+        }
+    },
+<span id='fastDev-Ui-Window-method-clearTimer'>    /**
+</span>     * 清理计时器
+     * @return {fastDev.Ui.Window}
+     * @private
+     */
+    clearTimer: function () {
+        if (!this._options.destroyed) {
+            var global = this._global;
+            window.clearInterval(global.shadowFlickTimer);
+            window.clearInterval(global.windowShakeTimer);
+            global.box.removeCss(&quot;marginLeft&quot;).removeCss(&quot;opacity&quot;);
+            global.shadow.removeCss(&quot;marginLeft&quot;);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-setShadow'>    /**
+</span>     * 设置阴影
+     * @param {Boolean} [show] 是否显示阴影
+     * @return {fastDev.Ui.Window}
+     * @private
+     */
+    setShadow: function (show) {
+        var options = this._options;
+        if (options.showShadow) {
+            var global = this._global;
+            if (show === false || !global.initialized || options.minimized || options.closed || this.isDrawing()) {
+                global.shadow.css(&quot;display&quot;, &quot;none&quot;);
+            } else {
+                var box = global.box,
+                    height = box.height(),
+                    width = box.width(),
+                    shadow = global.shadow,
+                    fixed = global.box.css(&quot;position&quot;) === &quot;fixed&quot;,
+                    offset = {
+                        left: fixed ? box.elems[0].offsetLeft : parseInt(box.css(&quot;left&quot;), 10) || 0,
+                        top: fixed ? box.elems[0].offsetTop : parseInt(box.css(&quot;top&quot;), 10) || 0
+                    },
+                    body = fastDev(document.body),
+                    win = global.win,
+                    docLeft = global.doc.scrollLeft(),
+                    docTop = global.doc.scrollTop();
+                width = offset.left + width &gt;= Math.max(body.width(), docLeft + win.width()) ? width - 5 : width;
+                height = offset.top + height &gt;= Math.max(body.height(), docTop + win.height()) ? height - 4 : height;
+                shadow.css({
+                    position: fixed ? &quot;fixed&quot; : &quot;absolute&quot;,
+                    zIndex: options.zIndex - 1,
+                    left: offset.left - 5,
+                    top: offset.top - 4,
+                    height: height + 8,
+                    width: width + 10,
+                    display: &quot;block&quot;
+                }).find(&quot;.shadow-sc&quot;).css(&quot;height&quot;, height - 4);
+                shadow.children(&quot;div&quot;).find(&quot;div[class$='c']&quot;).css(&quot;width&quot;, width - 2);
+                this.fixed(shadow, !! global.boxFixed, docLeft, docTop);
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-lock'>    /**
+</span>     * 锁屏
+     * @param {Boolean} enable 为布尔值false时解除锁屏，为null时销毁遮罩
+     * @return {fastDev.Ui.Window}
+     * @private
+     */
+    lock: function (enable) {
+        var that = this,
+            options = this._options,
+            global = this._global;
+        if (options.modal &amp;&amp; (!global.locked || enable === false || enable === null) &amp;&amp; fastDev.isWindow(options.container.elems[0])) {
+            var docLeft = global.doc.scrollLeft(),
+                docTop = global.doc.scrollTop(),
+                mask = global.mask;
+            global.mask.css(global.locked ? {} : {
+                position: fastDev.Browser.isIE6 ? &quot;absolute&quot; : &quot;fixed&quot;,
+                opacity: 0,
+                height: global.win.height() + docTop,
+                width: global.win.width() + docLeft,
+                zIndex: options.zIndex - 2,
+                display: &quot;block&quot;,
+                left: 0,
+                top: 0
+            }).animate({
+                opacity: (enable !== false &amp;&amp; enable !== null) ? global.maskOpacity : 0
+            }, fastDev.Ui.Panel.launchAnimation ? Math.min(1.5 * options.animateSpeed, 1000) : 0, &quot;expo-easeIn&quot;, function () {
+                mask[enable === null ? &quot;remove&quot; : enable === false ? &quot;hide&quot; : &quot;show&quot;]();
+                if (enable !== false &amp;&amp; enable !== null &amp;&amp; !global.maskClickHandle &amp;&amp; options.showShadow) {
+                    global.mask.bind(&quot;click&quot;, global.maskClickHandle = function () {
+                        if (that.isDrawing()) {
+                            return;
+                        }
+                        var times = 10;
+                        that.clearTimer();
+                        global.box.css(&quot;opacity&quot;, 0.85);
+                        global.shadowFlickTimer = window.setInterval(function () {
+                            if (times % 2 === 0) {
+                                global.shadow.hide();
+                            } else {
+                                global.shadow.show();
+                            }
+                            if (--times === 0) {
+                                window.clearInterval(global.shadowFlickTimer);
+                                global.box.removeCss(&quot;opacity&quot;);
+                                global.shadow.show();
+                            }
+                        }, 80);
+                    });
+                }
+            });
+            global.locked = enable !== false;
+            this.fixed(global.mask, enable === null ? false : enable, docLeft, docTop).fill(global.mask, enable === null ? false : enable);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-shake'>    /**
+</span>     * 摇晃效果
+     * @param {Number} frequency 摇晃的频率
+     * @return {fastDev.Ui.Window}
+     */
+    shake: function (frequency) {
+        var options = this._options;
+        if (!options.minimized) {
+            this.clearTimer();
+            var global = this._global,
+                box = global.box,
+                shadow = global.shadow,
+                margin, p = [4, 8, 4, 0, -4, -8, -4, 0],
+                fx = function () {
+                    box.css(&quot;marginLeft&quot;, margin = p.shift());
+                    shadow.css(&quot;marginLeft&quot;, margin);
+                    shadow[p.length % 4 === 0 ? &quot;hide&quot; : &quot;show&quot;]();
+                    if (!p.length) {
+                        window.clearInterval(global.windowShakeTimer);
+                        box.removeCss(&quot;marginLeft&quot;);
+                        if ( !! shadow) {
+                            shadow.removeCss(&quot;marginLeft&quot;).show();
+                        }
+                    }
+                };
+            p = p.concat(p.concat(p));
+            global.windowShakeTimer = window.setInterval(fx, Math.abs(parseInt(frequency, 10)) || 20);
+        }
+    },
+<span id='fastDev-Ui-Window-method-closeTimeout'>    /**
+</span>     * 设置超时关闭
+     * @param {Number} time 超时关闭等待时长，单位为秒（默认为3秒）
+     * @param {Object|Boolean} animation 动画配置
+     * @return {fastDev.Ui.Window}
+     */
+    closeTimeout: function (time, animation) {
+        var that = this,
+            global = this._global;
+        clearTimeout(global.windowCloseTimer);
+        global.windowCloseTimer = setTimeout(function () {
+            that.close(false, animation);
+        }, Math.abs(parseFloat(time) || 3) * 1000);
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-fill'>    /**
+</span>     * 绑定浏览器窗口事件，自适应窗口大小
+     * @param {DomObject} elem 与绑定事件相关的元素
+     * @param {Boolean|Function} handle 为布尔值false时，解绑与元素对应的事件。为函数时在事件发生时回调该函数
+     * @return {fastDev.Ui.Window}
+     * @private
+     */
+    fill: function (elem, handle) {
+        if (fastDev.isWindow(this._options.container.elems[0]) &amp;&amp; fastDev.isDomObject(elem)) {
+            var global = this._global,
+                id;
+            elem.attr(&quot;winResizeEventId&quot;, (id = elem.attr(&quot;winResizeEventId&quot;) || fastDev.getID()));
+            global.win.unbind(&quot;resize&quot;, (global.windowResizeHandles[id] || &quot;&quot;).bind || fastDev.noop);
+            if (handle === false) {
+                delete global.windowResizeHandles[id];
+                return this;
+            }
+            global.windowResizeHandles[id] = {
+                target: elem,
+                handle: handle,
+                bind: function () {
+                    clearTimeout(global.windowResizeTimer);
+                    global.windowResizeTimer = setTimeout(function () {
+                        var handles = global.windowResizeHandles,
+                            handle, target, id;
+                        for (id in handles) {
+                            (fastDev.isFunction(handle = handles[id].handle) ? handle : (target = handles[id].target).css).call(target, {
+                                width: global.win.width(),
+                                height: global.win.height()
+                            });
+                        }
+                    }, 120);
+                }
+            };
+            global.win.bind(&quot;resize&quot;, global.windowResizeHandles[id].bind);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-fixed'>    /**
+</span>     * 将指定的元素模拟为固定定位（IE6下）
+     * @param {DomObject} elem
+     * @param {Boolean} enable 为布尔值false时取消固定定位
+     * @param {Number} docLeft
+     * @param {Number} docTop
+     * @return {fastDev.Ui.Window}
+     * @private
+     */
+    fixed: function (elem, enable, docLeft, docTop) {
+        var options = this._options;
+        if (elem.hasElem() &amp;&amp; fastDev.isWindow(options.container.elems[0])) {
+            var global = this._global,
+                isBox = elem.elems[0] === global.box.elems[0],
+                position;
+            if (isNaN(docLeft)) {
+                docLeft = global.doc.scrollLeft();
+                docTop = global.doc.scrollTop();
+            }
+            if (fastDev.Browser.isIE6) {
+                var html = fastDev(document.documentElement),
+                    offset = elem.css(&quot;position&quot;, &quot;absolute&quot;).show().offset(),
+                    style;
+                position = &quot;backgroundAttachment&quot;;
+                if (html.css(position) !== &quot;fixed&quot; &amp;&amp; fastDev(document.body).css(position) !== &quot;fixed&quot;) {
+                    var backgroundImage = html.css(&quot;backgroundImage&quot;);
+                    html.css({
+                        backgroundImage: (backgroundImage &amp;&amp; backgroundImage !== &quot;none&quot;) ? backgroundImage : &quot;url(about:blank)&quot;,
+                        backgroundAttachment: &quot;fixed&quot;,
+                        zoom: 1
+                    });
+                }
+                style = elem.elems[0].style;
+                html = &quot;(document.documentElement)&quot;;
+                style.removeExpression(&quot;left&quot;);
+                style.removeExpression(&quot;top&quot;);
+                if (options.fixed || enable !== false) {
+                    style.setExpression(&quot;left&quot;, 'eval(' + html + '.scrollLeft + ' + (offset.left - docLeft) + ') + &quot;px&quot;');
+                    style.setExpression(&quot;top&quot;, 'eval(' + html + '.scrollTop + ' + (offset.top - docTop) + ') + &quot;px&quot;');
+                }
+            } else if (isBox) {
+                var prev = elem.css(&quot;position&quot;),
+                    next = (options.fixed || enable !== false) ? &quot;fixed&quot; : &quot;absolute&quot;;
+                position = {
+                    left: prev === &quot;fixed&quot; ? elem.elems[0].offsetLeft : parseInt(elem.css(&quot;left&quot;), 10) || 0,
+                    top: prev === &quot;fixed&quot; ? elem.elems[0].offsetTop : parseInt(elem.css(&quot;top&quot;), 10) || 0
+                };
+                position.left += (prev === &quot;absolute&quot; &amp;&amp; next === &quot;fixed&quot;) ? -docLeft : (prev === &quot;fixed&quot; &amp;&amp; next === &quot;absolute&quot;) ? docLeft : 0;
+                position.top += (prev === &quot;absolute&quot; &amp;&amp; next === &quot;fixed&quot;) ? -docTop : (prev === &quot;fixed&quot; &amp;&amp; next === &quot;absolute&quot;) ? docTop : 0;
+                elem.css({
+                    position: next,
+                    left: position.left,
+                    top: position.top
+                });
+            }
+            if (isBox) {
+                global.boxFixed = options.fixed || enable !== false;
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-toOriginalPanel'>    /**
+</span>     * 还原面板至常态
+     * @param {Object} rect
+     * @param {Boolean} noShow
+     * @return {fastDev.Ui.Window}
+     * @protected
+     */
+    toOriginalPanel: function (rect, noShow) {
+        var global = this._global;
+        if (!noShow) {
+            global.box.show();
+            global.body.show();
+            global.content.show();
+        }
+        if (!global.resized) {
+            this.resize(rect);
+        } else {
+            this.limit(rect);
+        }
+        global.resized = false;
+        return fastDev.Ui.Panel.move.call(this, rect);
+    },
+<span id='fastDev-Ui-Window-method-limit'>    /**
+</span>     * 计算宽高限制处理后的size以及offset信息
+     * @param {Object} rect left、top、width、height
+     * @return {Object} left、top、width、height（无值则为NaN）
+     * @private
+     */
+    limit: function (rect) {
+        if (!fastDev.isEmptyObject(rect = fastDev.isPlainObject(rect) ? rect : {})) {
+            var options = this._options,
+                global = this._global,
+                container = options.container,
+                cWidth = container.width(),
+                cHeight = container.height(),
+                fx = fastDev.Util.StringUtil.stripUnits,
+                inWindow = fastDev.isWindow(options.container.elems[0]),
+                fixed = global.box.css(&quot;position&quot;) === &quot;fixed&quot;,
+                ie6Fixed = fastDev.Browser.isIE6 &amp;&amp; options.fixed,
+                regx = /^\d+\.?\d+%$/,
+                leftPercent = regx.test(rect.left),
+                topPercent = regx.test(rect.top),
+                docLeft = global.doc.scrollLeft(),
+                docTop = global.doc.scrollTop(),
+                sWidth = fx(rect.width, cWidth),
+                sHeight = fx(rect.height, cHeight),
+                pMinWidth, pMinHeight, pMaxWidth, pMaxHeight, val, b = {
+                    minWidth: (val = fx(rect.minWidth || options.minWidth, cWidth)) ? val : 2,
+                    maxWidth: (val = fx(rect.maxWidth || options.maxWidth, cWidth)) ? val : Infinity,
+                    minHeight: (val = fx(rect.minHeight || options.minHeight, cHeight)) ? val : 2,
+                    maxHeight: (val = fx(rect.maxHeight || options.maxHeight, cHeight)) ? val : Infinity
+                }, left, top, width, height, ratio;
+            if (ratio = options.resizeRatio || rect.ratio) {
+                pMinWidth = b.minHeight * ratio;
+                pMinHeight = b.minWidth / ratio;
+                pMaxWidth = b.maxHeight * ratio;
+                pMaxHeight = b.maxWidth / ratio;
+                if (pMinWidth &gt; b.minWidth) b.minWidth = pMinWidth;
+                if (pMinHeight &gt; b.minHeight) b.minHeight = pMinHeight;
+                if (pMaxWidth &lt; b.maxWidth) b.maxWidth = pMaxWidth;
+                if (pMaxHeight &lt; b.maxHeight) b.maxHeight = pMaxHeight;
+            }
+            rect.width = isNaN(sWidth) ? NaN : Math.floor(Math.max(b.minWidth, Math.min(b.maxWidth, sWidth)));
+            rect.height = isNaN(sHeight) ? NaN : ratio ? Math.min(Math.floor(rect.width / ratio), sHeight) : Math.floor(Math.max(b.minHeight, Math.min(b.maxHeight, sHeight)));
+            rect.width = (!isNaN(sWidth) &amp;&amp; !isNaN(rect.height) &amp;&amp; ratio) ? Math.floor(rect.height * ratio) : rect.width;
+            rect.width = width = rect.width || Math.max(global.box.width(), b.minWidth);
+            rect.height = height = rect.height || Math.max(global.box.height(), b.minHeight);
+            fastDev.apply(b, this.coordinateLimit(width, height, rect.visible, docLeft, docTop));
+            left = fx(rect.left, inWindow ? cWidth - width : cWidth) + ((leftPercent &amp;&amp; inWindow) ? ie6Fixed ? docLeft : fixed ? 0 : docLeft : 0);
+            top = fx(rect.top, inWindow ? cHeight - height : cHeight) + ((topPercent &amp;&amp; inWindow) ? ie6Fixed ? docTop : fixed ? 0 : docTop : 0);
+            rect.left = isNaN(left) ? NaN : Math.floor(Math.max(b.minX, Math.min(b.maxX, left)));
+            rect.top = isNaN(top) ? NaN : Math.floor(Math.max(b.minY, Math.min(b.maxY, top)));
+            fastDev.apply(rect, {
+                left: rect.left,
+                top: rect.top,
+                width: rect.width,
+                height: rect.height
+            });
+        }
+        return rect;
+    },
+<span id='fastDev-Ui-Window-method-coordinateLimit'>    /**
+</span>     * 计算坐标范围
+     * @param {Number} width 元素宽
+     * @param {Number} height 元素高
+     * @param {Boolean} visible 是否在可视区域内定位
+     * @param {Number} docLeft
+     * @param {Number} docTop
+     * @return {Object} minX、minY、maxX、maxY
+     * @private
+     */
+    coordinateLimit: function (width, height, visible, docLeft, docTop) {
+        var options = this._options,
+            global = this._global,
+            container = options.container,
+            positionCss = global.box.css(&quot;position&quot;),
+            fixed = positionCss === &quot;fixed&quot;,
+            maxX = Infinity,
+            pMaxX = Infinity,
+            minX = -Infinity,
+            pMinX = -Infinity,
+            maxY = Infinity,
+            pMaxY = Infinity,
+            minY = -Infinity,
+            pMinY = -Infinity;
+        visible = visible === undefined ? options.visible : visible;
+        if (options.inside &amp;&amp; !fastDev.isWindow(container.elems[0])) {
+            var parent = global.box.parent(),
+                pWidth = parent.width(),
+                pHeight = parent.height();
+            if (positionCss === &quot;relative&quot;) {
+                var fx = fastDev.Util.StringUtil.stripUnits,
+                    position = global.box.show().offset(),
+                    grandparent = parent.parent(),
+                    gWidth = grandparent.width(),
+                    gHeight = grandparent.height(),
+                    pOffset = parent.offset(),
+                    offset = {
+                        left: fx(global.box.css(&quot;left&quot;), pWidth) || 0,
+                        top: fx(global.box.css(&quot;top&quot;), pHeight) || 0
+                    };
+                pMinX = -(position.left - pOffset.left - offset.left - (parseInt(parent.css(&quot;borderLeftWidth&quot;), 10) || 0) + (fx(parent.css(&quot;paddingLeft&quot;), gWidth) || 0) + (fx(parent.css(&quot;marginLeft&quot;), gWidth) || 0));
+                pMinY = -(position.top - pOffset.top - offset.top - (parseInt(parent.css(&quot;borderTopWidth&quot;), 10) || 0) + (fx(parent.css(&quot;paddingTop&quot;), gHeight) || 0) + (fx(parent.css(&quot;marginTop&quot;), gHeight) || 0));
+            } else {
+                pMinX = pMinY = 0;
+            }
+            pMaxY = pMinY + pWidth - height;
+            pMaxX = pMinX + pHeight - width;
+        }
+        if (visible &amp;&amp; fastDev.isWindow(container.elems[0])) {
+            minX = docLeft = fixed ? 0 : docLeft;
+            minY = docTop = fixed ? 0 : docTop;
+            maxX = container.width() - width + docLeft;
+            maxY = container.height() - height + docTop;
+        }
+        return {
+            minX: Math.max(pMinX, minX),
+            minY: Math.max(pMinY, minY),
+            maxX: Math.min(pMaxX, maxX),
+            maxY: Math.min(pMaxY, maxY)
+        };
+    },
+<span id='fastDev-Ui-Window-method-setResizer'>    /**
+</span>     * 设置拖拽调节大小
+     * @param {Boolean} enable 是否启用Resizer
+     * @return {fastDev.Ui.Window} 当前控件实例
+     * @private
+     */
+    setResizer: function (enable) {
+        var options = this._options;
+        if (options.allowResize) {
+            var that = this,
+                global = this._global;
+            global.resizer = global.resizer || fastDev.create(&quot;Resizable&quot;, {
+                container: options.container,
+                element: global.box,
+                maxHeight: options.maxHeight,
+                maxWidth: options.maxWidth,
+                minHeight: options.minHeight,
+                minWidth: options.minWidth,
+                ratio: options.resizeRatio,
+                handles: options.resizeDirection,
+                showTips: options.showSizeTips,
+                zIndex: options.zIndex + 3,
+                onstart: function () {
+                    if (that.isDrawing()) {
+                        return false;
+                    }
+                    global.resizing = true;
+                    that.clearTimer().setShadow(false);
+                },
+                onresize: function () {
+                    if (!options.display) {
+                        return false;
+                    }
+                },
+                onstop: function (event, width, height, offset) {
+                    that.resize({
+                        width: width,
+                        height: height
+                    });
+                    if (options.allowDrag) {
+                        that.move(offset);
+                    }
+                    global.offsetWidth = width;
+                    global.offsetHeight = height;
+                    global.resizing = false;
+                    return false;
+                },
+                oncreate: function () {
+                    global.box.css(&quot;overflow&quot;, &quot;hidden&quot;);
+                }
+            });
+            global.resizer[enable === null ? &quot;destroy&quot; : (enable !== false &amp;&amp; !options.maximized &amp;&amp; !options.collapsed) ? &quot;enable&quot; : &quot;disable&quot;]();
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-setDragger'>    /**
+</span>     * 设置拖拽
+     * @param {Boolean} enable 是否启用拖拽
+     * @return {fastDev.Ui.Window} 当前控件实例
+     * @private
+     */
+    setDragger: function (enable) {
+        var options = this._options;
+        if (options.allowDrag) {
+            var that = this,
+                global = this._global;
+            global.dragger = global.dragger || fastDev.create(&quot;Draggable&quot;, global.dragSettings = {
+                ghost: false,
+                element: global.box,
+                handle: global.header,
+                zIndex: options.zIndex + 3,
+                visible: options.visible,
+                inside: global.container &amp;&amp; options.inside,
+                onstart: function () {
+                    if (that.isDrawing() || global.resizing) {
+                        return false;
+                    }
+                    global.readyForDragging = true;
+                },
+                ondrag: function (event, offsetX, offsetY) {
+                    if (!options.display || global.resizing) {
+                        return false;
+                    }
+                    if (options.maximized &amp;&amp; (offsetX !== 0 || offsetY !== 0)) {
+                        var clientX = event.clientX,
+                            clientY = event.clientY;
+                        options.left = parseInt(global.box.css(&quot;left&quot;), 10) || 0;
+                        options.top = parseInt(global.box.css(&quot;top&quot;), 10) || 0;
+                        global.offsetLeft = Math.max(Math.floor(clientX - (clientX - options.top) * global.offsetWidth / options.width), 0);
+                        global.offsetLeft = clientX - global.offsetWidth + Math.min(global.offsetWidth - 40, Math.max(global.offsetWidth - (clientX - global.offsetLeft), 90));
+                        global.offsetTop = Math.max(options.top + offsetY, 0);
+                        that.reset(false, false);
+                        global.dragger.resetBoundingRect(global.box);
+                    }
+                    if (global.readyForDragging) {
+                        global.readyForDragging = false;
+                        that.clearTimer().showLoading(false).setButtons(false).setResizer(false);
+                        global.box.css(&quot;opacity&quot;, 0.6);
+                        if (!global.contentHidden) {
+                            global.content.css(&quot;visibility&quot;, &quot;hidden&quot;);
+                        }
+                        if (global.onDragStart) {
+                            global.onDragStart.apply(that, arguments);
+                        }
+                    }
+                    that.setShadow(false);
+                },
+                onstop: function (event, left, top) {
+                    if (!options.maximized) {
+                        if (!global.contentHidden) {
+                            global.content.removeCss(&quot;visibility&quot;);
+                        }
+                        that.move({
+                            left: left,
+                            top: top
+                        }).setButtons().setResizer();
+                        global.box.removeCss(&quot;opacity&quot;);
+                        if (global.onDragStop) {
+                            global.onDragStop.apply(that, arguments);
+                        }
+                        if ((event.clientY &lt;= 0) &amp;&amp; options.showMaxBtn &amp;&amp; !options.collapsed &amp;&amp; fastDev.isWindow(options.container.elems[0])) {
+                            left = global.offsetLeft;
+                            top = global.offsetTop;
+                            that.maximize();
+                        }
+                        global.offsetLeft = left;
+                        global.offsetTop = top;
+                    }
+                    return false;
+                },
+                oncreate: function () {
+                    global.title.css(&quot;cursor&quot;, &quot;default&quot;);
+                }
+            });
+            if (enable === null) {
+                global.dragger.destroy();
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-setButtons'>    /**
+</span>     * 构建窗体底部按钮
+     * @param {Boolean} [show] 是否显示按钮栏
+     * @return {fastDev.Ui.Window} 前控件实例
+     * @private
+     */
+    setButtons: function (show) {
+        var global = this._global;
+        if (this._options.closed) {
+            global.buttons.remove();
+        } else if (!global.hasButton || show === false) {
+            global.buttons.css(&quot;display&quot;, &quot;none&quot;);
+        } else {
+            global.buttons.removeCss(&quot;display&quot;);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-move'>    /**
+</span>     * 移动窗体至指定坐标
+     * @param {Object} position 坐标参数对象
+     * @param {String} position.left X轴坐标值
+     * @param {String} position.top Y轴坐标值
+     * @param {Boolean} [animation=false] 是否启用动画效果
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    move: function (position, animation) {
+        var options = this._options;
+        if (fastDev.isPlainObject(position) &amp;&amp; options.inside) {
+            var that = this,
+                global = this._global;
+            this.limit(position);
+            if (animation === true &amp;&amp; !options.minimized &amp;&amp; options.animateSpeed) {
+                this.clearTimer().setShadow(false);
+                global.box.animate(position = {
+                    left: position.left || global.box.css(&quot;left&quot;),
+                    top: position.top || global.box.css(&quot;top&quot;)
+                }, options.animateSpeed, &quot;liner&quot;, function () {
+                    fastDev.Ui.Panel.move.call(that, position).finishAction();
+                });
+            } else {
+                fastDev.Ui.Panel.move.call(this, position).finishAction();
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-resize'>    /**
+</span>     * 重新定义窗体大小
+     * @param {Object} size 尺寸参数对象
+     * @param {String} size.width 宽度，未指定则窗体宽度保持原来值不变，使用auto则适应内容宽度（非内部子页面模式时） 
+     * @param {String} size.height 高度，未指定则窗体高度保持原来值不变，使用auto则适应内容高度（非内部子页面模式时）
+     * @param {Boolean} [animation=false] 是否启用动画效果
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    resize: function (size, animation) {
+        var options = this._options;
+        if (fastDev.isPlainObject(size) &amp;&amp; options.inside) {
+            var global = this._global,
+                container = options.container,
+                fx = fastDev.Util.StringUtil.stripUnits,
+                width, height;
+            if (options.src) {
+                size.width = (!size.width || size.width === &quot;auto&quot;) ? &quot;71.3402%&quot; : size.width;
+                size.height = (!size.height || size.height === &quot;auto&quot;) ? &quot;89.8061%&quot; : size.height;
+                size.ratio = (size.width === &quot;71.3402%&quot; || size.height === &quot;89.8061%&quot; ? 1.618 : 0);
+            } else if (size.width === &quot;auto&quot; || size.height === &quot;auto&quot;) {
+                var sWidth = fx(size.width, container.width()),
+                    sHeight = fx(size.height, container.height()),
+                    bounding = this.getContentBounding(),
+                    elem = fastDev(&quot;&lt;div style='width:&quot; + (sWidth ? Math.max(sWidth - bounding.width, 1) + &quot;px&quot; : &quot;auto&quot;) + &quot;;height:&quot; + (sHeight ? Math.max(sHeight - bounding.height, 1) + &quot;px&quot; : &quot;auto&quot;) + &quot;'/&gt;&quot;).append(global.content.children()).appendTo(global.content),
+                    contentWidth = elem.outerWidth(true),
+                    contentHeight = elem.outerHeight(true);
+                size.width = size.width === &quot;auto&quot; ? contentWidth + bounding.width : size.width;
+                size.height = size.height === &quot;auto&quot; ? contentHeight + bounding.height : size.height;
+            }
+            this.limit(size);
+            if (animation === true &amp;&amp; !options.minimized &amp;&amp; !options.collapsed &amp;&amp; options.animateSpeed &amp;&amp; !(size.width === (width = global.box.width()) &amp;&amp; size.height === (height = global.box.height()))) {
+                var that = this;
+                this.clearTimer().setShadow(false);
+                global.content.hide();
+                global.box.animate(size = {
+                    width: size.width || width,
+                    height: size.height || height
+                }, options.animateSpeed, &quot;liner&quot;, function () {
+                    fastDev.Ui.Panel.resize.call(that, size).finishAction().showContent();
+                });
+                global.body.animate({
+                    height: this.getBodyHeight(size.height)
+                }, options.animateSpeed, &quot;liner&quot;);
+            } else {
+                fastDev.Ui.Panel.resize.call(this, size).finishAction();
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-addButtons'>    /**
+</span>     * 新增底部按钮控件
+     * &lt;p&gt;按钮配置对象中，属性align可指定按钮的摆放位置，可选值为：left、center、right，默认为right。
+     * @param {Object|Array} buttons 按钮控件配置对象，可使用数组传递多个按钮配置对象
+     * @return {fastDev.Ui.Window} 当前弹窗控件实例
+     */
+    addButtons: function (buttons) {
+        var options = this._options,
+            global = this._global,
+            left = global.left,
+            right = global.right,
+            center = global.center,
+            button, i = 0;
+        buttons = fastDev.isArray(buttons) ? buttons : [buttons];
+        while (button = buttons[i++]) {
+            if (!fastDev.isPlainObject(button)) {
+                continue;
+            }
+            button.onclick = this.getBtnCallback(button.onclick, button.name);
+            switch (button.align) {
+                case &quot;left&quot;:
+                    button.container = global.left.removeCss(&quot;display&quot;);
+                    break;
+                case &quot;center&quot;:
+                    button.container = global.center.removeCss(&quot;display&quot;);
+                    break;
+                default:
+                    button.container = global.right.removeCss(&quot;display&quot;);
+            }
+            global.buttonInstances.push(fastDev.create(&quot;Button&quot;, button));
+            global.hasButton = true;
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-getBtnCallback'>    /**
+</span>     * @param {Function} callback 按钮点击回调
+     * @param {String} [name] 按钮名
+     * @return {Function}
+     * @protected 
+     */
+    getBtnCallback: function (callback, name) {
+        var that = this,
+            fn;
+        return fn = function (event) {
+            var iframe = that.find(&quot;iframe&quot;),
+                win;
+            try {
+                if (iframe.hasElem()) {
+                    win = iframe.elems[0].contentWindow;
+                }
+            } catch (e) {
+                win = undefined;
+            } finally {
+                (callback || fastDev.noop).call(this, event, that, win, win ? win.fastDev : undefined);
+            }
+            fn = null;
+        };
+    },
+<span id='fastDev-Ui-Window-method-getFooter'>    /**
+</span>     * 获取底部按钮栏Dom对象
+     * &lt;p&gt;可调用Window控件的addButtons方法动态添加按钮
+     * @param {String} [position] 按钮栏的子区域，可为以下值：
+     * &lt;p&gt;-left 左边区域 &lt;/p&gt; 
+     * &lt;p&gt;-center 中部区域 &lt;/p&gt; 
+     * &lt;p&gt;-right 右部区域&lt;/p&gt;
+     * &lt;p&gt;未指定position时将获取整个底部按钮栏的DOM对象
+     * @return {fastDev.Core.DomObject} 底部按钮栏的fastDev.Core.DomObject对象
+     */
+    getFooter: function (position) {
+        var global = this._global,
+            footer = /^(left|center|right)$/i.test(position) ? global[RegExp.$1].show() : global.buttons;
+        return footer;
+    },
+<span id='fastDev-Ui-Window-method-showFooter'>    /**
+</span>     * 显示底部按钮栏
+     * @return {fastDev.Ui.Window} 当前弹窗控件实例
+     */
+    showFooter: function () {
+        var global = this._global;
+        if (global.hasButton = !! global.buttonInstances.length) {
+            global.buttons.show();
+            this.resize({
+                height: global.box.height()
+            });
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-hideFooter'>    /**
+</span>     * 隐藏底部按钮栏 
+     * @return {fastDev.Ui.Window} 当前弹窗控件实例
+     */
+    hideFooter: function () {
+        var global = this._global;
+        global.hasButton = false;
+        global.buttons.hide();
+        if (global.buttonInstances.length) {
+            this.resize({
+                height: global.box.height()
+            });
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-showContent'>    /**
+</span>     * 显示窗体内容
+     * @return {fastDev.Ui.Window} 当前弹窗控件实例
+     */
+    showContent: function () {
+        var global = this._global;
+        global.content.css({
+            display: &quot;block&quot;,
+            overflow: &quot;auto&quot;,
+            visibility: &quot;visible&quot;
+        });
+        global.body.removeCss(&quot;display&quot;);
+        global.contentHidden = false;
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-hideContent'>    /**
+</span>     * 隐藏窗体内容
+     * @return {fastDev.Ui.Window} 
+     */
+    hideContent: function () {
+        var global = this._global;
+        global.content.css(&quot;visibility&quot;, &quot;hidden&quot;);
+        global.contentHidden = true;
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-append'>    /**
+</span>     * 追加窗体内容（可包含文本、标签、控件等）
+     * &lt;p&gt;若内容文本包含了fastui控件声明标签时，请通过当前弹窗控件实例的getInstance方法获取被创建控件的实例（需声明了ID和saveInstance=true才能拿到实例）。详情请参见getInstance方法说明。
+     * &lt;p&gt;若使用了src配置属性声明了内部子页面，将默认禁止往内容区域追加内容
+     * &lt;p&gt;可先调用empty方法清空窗体内容后（内部子页面同样也会被清理掉）再追加新的内容
+     * &lt;p&gt;该方法不会清空之前的窗体内容
+     * @param {String|Element|Component|DomObject|Array} content 需追加的内容，可以使用数组一次性追加多个元素
+     * @return {fastDev.Ui.Panel} 当前控件实例
+     */
+    append: function (content) {
+        var global = this._global;
+        if (global.iframe.isEmpty()) {
+            var options = this._options,
+                elements = [].concat(content),
+                html = fastDev(),
+                doc = document,
+                body = doc.body;
+            while (fastDev.isValid(content = elements.shift())) {
+                if (!fastDev.isString(content)) {
+                    content = this.toDomObject(content);
+                } else {
+                    (html = fastDev(doc.createElement(&quot;div&quot;)).appendTo(body).hide()).elems[0].innerHTML = content;
+                    fastDev.Core.ControlBus.compile(null, html.elems);
+                    content = html.children();
+                }
+                try {
+                    global.content.append(content);
+                } catch (e) {
+                    fastDev.error(&quot;Window&quot;, &quot;append&quot;, &quot;当前弹窗已&lt;span style='color:red'&gt;从子页面跨往父页面&lt;/span&gt;创建并展现。&lt;br/&gt;&lt;span style='color:red'&gt;IE6浏览器&lt;/span&gt;不支持从子页面往父页面追加在&lt;span style='color:red'&gt;子页面上创建的DOM对象&lt;/span&gt;。&lt;br/&gt;若追加的内容为控件对象，可使用标签声明方式来创建控件实例，或者使用形如以下的方式创建控件实例：&lt;br/&gt;&lt;hr/&gt;fastDev.Ui.Window.top.fastDev.create(\&quot;Button\&quot;,{text:\&quot;按钮\&quot;});&quot;);
+                    break;
+                }
+                html.remove();
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-method-getInstance'>    /**
+</span>     * 获取控件实例
+     * &lt;p&gt;当弹窗跨级时，若弹窗的内容文本包含形如:&lt;div itype=&quot;DataGrid&quot; id=&quot;datagrid&quot; saveInstance=&quot;true&quot; /&gt;的控件声明时，该控件仍会被创建出来。
+     * &lt;p&gt;此时在声明创建弹窗的页面上，若通过fastDev.getInstance(&quot;datagrid&quot;)来取得DataGrid控件实例，则会行不通。这是因为跨级弹窗将在其真实展现页面内创建，其window作用域已经不是原来的那个弹窗声明页面了。
+     * &lt;p&gt;跨级时，可通过弹窗实例的getInstance方法获取已跨级的控件实例。弹窗会根据当前是否跨级判定实例保存的命名空间，因此，弹窗未跨级时，通过该方法也是能正确获取到指定ID的控件实例的（前提是确实保存了该ID的控件实例）。
+     * @param {String} id 控件ID值
+     * @return {fastDev.Ui.Component} fastui 控件 
+     */
+    getInstance: function (id) {
+        var options = this._options;
+        return (options.crossed === &quot;crossed&quot; || !fastDev.isWindow(options.parent)) ? fastDev.getInstance(id) : options.parent.fastDev.getInstance(id);
+    },
+<span id='fastDev-Ui-Window-method-setContent'>    /**
+</span>     * 设置窗体内容（可包含HTML标签以及复合控件声明字符串）
+     * &lt;p&gt;若内容文本包含了fastui控件声明标签时，请通过当前弹窗控件实例的getInstance方法获取被创建控件的实例（需声明了ID和saveInstance=true才能拿到实例）。详情请参见getInstance方法说明。
+     * &lt;p&gt;若使用了src配置参数声明了内部子页面，将默认禁止设置新的内容
+     * &lt;p&gt;可先调用empty方法清空窗体内容后（内部子页面同样也会被清理掉）再设置新的内容
+     * &lt;p&gt;该方法会清空之前的窗体内容
+     * &lt;p&gt;追内容请使用append方法
+     * &lt;p&gt;setContent与append方法的主要区别在于，append方法直接追加内容（如Element对象、控件对象、字符串等，使用src声明了子页面时则追加无效）至内容区域，追加完成后若需要重新调整窗体大小，可调用resize方法来调整窗体大小。&lt;/p&gt;
+     * &lt;p&gt;setContent方法仅接受字符串形式的内容（包含字符串形式的标签声明，复合控件声明），且会根据配置属性icon添加内容消息图标，以及默认添加字体行高样式等。&lt;/p&gt;
+     * &lt;p&gt;设置新的内容后，窗体默认将根据新的内容自适应调整窗体尺寸，也可以通过参数指定是否自动调节尺寸以及如何调节尺寸。&lt;/p&gt;
+     * @param {String} content
+     * @param {Object|Boolean} [resize] 指定更新内容后窗体的新尺寸，为布尔值false时则不自动调整窗体尺寸，未传值或传值为非对象字面量时则根据内容自适应调整大小，为对象字面量值时则根据指定的宽高来调整大小
+     * @param {Number} [resize.width] 窗体宽度，未指定则窗体保持原宽度不变，可以使用auto、数值、百分比等，百分比计算基数为当前可视区域大小，下同
+     * @param {Number} [resize.height] 窗体高度，未指定则保持原值不变
+     * @param {Boolean} [animation=false] 调整窗体尺寸时是否使用动画效果 
+     * @return {fastDev.Ui.Window} 
+     */
+    setContent: function (content, resize, animation) {
+        var options = this._options,
+            global = this._global,
+            doc = document,
+            body = doc.body;
+        if (!fastDev.isValid(content) &amp;&amp; !global.iframe.isEmpty()) {
+            return this;
+        }
+        resize = global.initialized ? resize === false ? false : fastDev.isPlainObject(resize) ? resize : {
+            width: &quot;auto&quot;,
+            height: &quot;auto&quot;
+        } : false;
+        resize = {
+            width: resize === false ? options.width : resize.width === undefined ? global.box.width() : resize.width,
+            height: resize === false ? options.height : resize.height === undefined ? global.box.height() : resize.height
+        };
+        var fx = fastDev.Util.StringUtil.stripUnits,
+            cWidth = options.container.width(),
+            cHeight = options.container.height(),
+            width = fx(resize.width, cWidth),
+            height = fx(resize.height, cHeight),
+            text, rect = {
+                width: width,
+                height: height
+            }, tag = &quot;main&quot; + fastDev.getID(),
+            html;
+        text = '&lt;div name=&quot;' + tag + '&quot; class=&quot;' + ((options.icon &amp;&amp; fastDev.isString(options.icon)) ? &quot;ui-window-content-icon ui-window-content-&quot; + options.icon : &quot;&quot;) + ' ui-window-content-text&quot;&gt;';
+        content += &quot;&lt;/div&gt;&quot;;
+        if (resize.width === &quot;auto&quot; || resize.height === &quot;auto&quot;) {
+            var bounding = this.getContentBounding(),
+                element, elementWidth, elementHeight;
+            html = [&quot;&lt;span style='display:none'&gt;&lt;table width='&quot; + (Math.max(width ? width - bounding.width : 0, 0) || Math.max((Math.round((options.icon ? 184 : 162) * global.win.width() / global.win.height())), options.icon ? 368 : 325)) + &quot;px' height='1px'&gt;&quot;];
+            html.push(&quot;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&quot; + text + content + &quot;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/span&gt;&quot;);
+            (element = fastDev(doc.createElement(&quot;div&quot;)).appendTo(body)).elems[0].innerHTML = html.join(&quot;&quot;);
+            tag = element.find(&quot;div[name='&quot; + tag + &quot;']&quot;);
+            fastDev.Core.ControlBus.compile(null, element.elems);
+            if ((element = element.children(&quot;span:first&quot;)).width() &gt; (width || 800)) {
+                tag.css({
+                    &quot;word-wrap&quot;: &quot;break-word&quot;,
+                    &quot;word-break&quot;: &quot;break-all&quot;
+                });
+                element.children(&quot;table:first&quot;).css(&quot;width&quot;, width || 800);
+            }
+            elementWidth = element.width();
+            elementHeight = element.height();
+            (html = fastDev(doc.createElement(&quot;span&quot;)).css({
+                &quot;max-width&quot;: &quot;800px&quot;,
+                display: &quot;none&quot;
+            }).appendTo(body)).append(element.children(&quot;table:first&quot;).find(&quot;td:first&quot;).children());
+            rect = {
+                width: width || (Math.min(html.width(), elementWidth) + bounding.width),
+                height: height || (Math.max(html.height(), elementHeight) + bounding.height),
+                maxWidth: fastDev.isFunction(options.maxWidth) ? options.maxWidth.call(this, cWidth) : isFinite(parseInt(options.maxWidth, 10)) ? options.maxWidth : resize.width === &quot;auto&quot; ? cWidth - 10 : Infinity,
+                maxHeight: fastDev.isFunction(options.maxHeight) ? options.maxHeight.call(this, cHeight) : isFinite(parseInt(options.maxHeight, 10)) ? options.maxHeight : resize.height === &quot;auto&quot; ? cHeight - 10 : Infinity
+            };
+            element.parent().remove();
+        } else {
+            (html = fastDev(doc.createElement(&quot;div&quot;)).appendTo(body).hide()).elems[0].innerHTML = text + content;
+            fastDev.Core.ControlBus.compile(null, html.elems);
+        }
+        this.empty();
+        global.content.append(html.children());
+        html.remove();
+        global.resized = true;
+        return this.resize(rect, animation);
+    },
+<span id='fastDev-Ui-Window-method-readyForLoading'>    /**
+</span>     * 父类回调实现，用于延迟加载Iframe前的准备工作
+     * @param {DomObject} iframe
+     * @private
+     */
+    readyForLoading: function (iframe) {
+        var that = this,
+            global = this._global,
+            now = new Date().getTime(),
+            grandparent = this._options.parent;
+        if (!global.initialized) {
+            return false;
+        }
+        if (fastDev.isWindow(grandparent)) {
+            iframe.unbind(&quot;load&quot;, global.loadParentHandle || fastDev.noop).bind(&quot;load&quot;, global.loadParentHandle = function () {
+                try {
+                    if (global.maskClickHandle &amp;&amp; (new Date().getTime() - now &gt; 5000)) {
+                        global.maskClickHandle.call(that);
+                    }
+                    // 未加载fastDev.Ui.Window将引发异常
+                    iframe.elems[0].contentWindow.fastDev.Ui.Window.parent = grandparent;
+                } catch (e) {} finally {
+                    now = Infinity;
+                }
+            });
+        }
+    },
+<span id='fastDev-Ui-Window-method-cross'>    /**
+</span>     * 窗口跨级
+     * @param {Object} options 参数配置对象
+     * @param {Object} global 控件私有变量域
+     * @return {fastDev.Ui.Window} 跨级窗口对象实例
+     * @private
+     */
+    cross: function (options, global) {
+        var that = this,
+            top = fastDev.Ui.Window.top,
+            // 顶层窗口类型的序列值
+            id = top.fastDev.Ui.Window.id,
+            instance;
+        // 已跨级的弹窗需在其所在窗口域里面构建
+        options.inside = true;
+        // 清除原容器设置
+        options.container = &quot;&quot;;
+        // 该回调已在原实例构建前调用
+        options.onBeforeReady = fastDev.noop;
+        // 设置坐标值
+        options.left = parseInt(options.left, 10) ? options.left : &quot;50%&quot;;
+        options.top = parseInt(options.top, 10) ? options.top : &quot;38.2%&quot;;
+        // 标记为已跨级
+        options.crossed = &quot;crossed&quot;;
+        // 绑定跨级窗口的原父页面窗口对象
+        options.parent = window;
+        // 创建跨级弹窗实例
+        instance = top.fastDev.create(this.alias, options);
+        // 跨级弹窗的唯一标识值
+        id = instance._global.uuid;
+        // 保存原弹窗实例，以便在页面卸载时销毁未被关闭的跨级弹窗
+        fastDev.Ui.Window.windows[id] = instance;
+        // 保存原弹窗实例的构建上下文
+        this.setData(&quot;@fastDev&quot; + id, fastDev);
+        this._options = instance._options;
+        this._global = instance._global;
+        this.elems = instance.elems;
+        // 绑定页面卸载事件，销毁未被关闭的跨级弹窗
+        fastDev(window).unbind(&quot;unload&quot;, global.windowUnloadHandle = global.windowUnloadHandle || function () {
+            fastDev.each(fastDev.Ui.Window.windows, function (name, win) {
+                win[win._options.persisted ? &quot;hide&quot; : &quot;close&quot;](true, false);
+            });
+            fastDev.Ui.Window.setData(&quot;@iframes&quot; + fastDev.Ui.Window.id, null);
+            fastDev.Ui.Window.parent = null;
+        }).bind(&quot;unload&quot;, global.windowUnloadHandle);
+        return instance;
+    },
+<span id='fastDev-Ui-Window-method-getData'>    /**
+</span>     * 获取跨级储存的数据
+     * @param {String} name 与数据绑定的键名
+     * @return {Object} 数据对象
+     */
+    getData: function (name) {
+        if (name === &quot;parent&quot;) {
+            return fastDev.Ui.Window.parent;
+        }
+        return fastDev.Ui.Window.top.fastDev.Ui.Window.cache[name];
+    },
+<span id='fastDev-Ui-Window-method-setData'>    /**
+</span>     * 存储跨级数据
+     * &lt;p&gt;会覆盖之前保存的同名数据（共享存储区）
+     * &lt;p&gt;也可使用一个普通对象一次性保存多项数据（属性名为数据的绑定键名，属性值即为相应的数据值）
+     * @param {String|Object} name 与数据绑定的键名或者一个键值映射的数据集对象（一次性存储多项数据）
+     * @param {Object} value 与键名对应的数据值
+     */
+    setData: function (name, value) {
+        var fast = fastDev.Ui.Window.top.fastDev;
+        if (fastDev.isPlainObject(name)) {
+            fast.apply(fast.Ui.Window.cache, name);
+        } else {
+            fast.Ui.Window.cache[name] = value;
+        }
+        return this;
+    },
+<span id='fastDev-Ui-Window-property-top'>    /**
+</span>     * 当前iframe页所归属的顶层window对象
+     * &lt;p&gt;若inside配置属性为false时，弹窗将从原页面跨级至此页面创建并展现。
+     * @type {Window}
+     */
+    top: fastDev.Util.position.top,
+<span id='fastDev-Ui-Window-property-id'>    /**
+</span>     * 当前页面弹窗类型的唯一标识序列
+     * @type {String}
+     * @private
+     */
+    id: fastDev.getID().toString(),
+<span id='fastDev-Ui-Window-property-cache'>    /**
+</span>     * 跨级数据存储对象
+     * @type {Object}
+     * @private
+     */
+    cache: {},
+<span id='fastDev-Ui-Window-property-windows'>    /**
+</span>     * 当前页面已跨级展现的弹窗实例存储对象
+     * @type {Object}
+     * @private
+     */
+    windows: {},
+<span id='fastDev-Ui-Window-property-count'>    /**
+</span>     * 当前页面的未关闭弹窗数
+     * @type {Number}
+     * @private
+     */
+    count: 0,
+<span id='fastDev-Ui-Window-property-parent'>    /**
+</span>     * 当前页面的原父页面窗口对象
+     * @type {Window}
+     */
+    parent: window.parent
+});</pre>
+</body>
+</html>

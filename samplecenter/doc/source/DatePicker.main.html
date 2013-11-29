@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-DatePicker'>/**
+</span> * 日历控件（主体）
+ * @class fastDev.Ui.DatePicker
+ * @extends fastDev.Ui.Box
+ * @author chengwei
+ */
+fastDev.define(&quot;fastDev.Ui.DatePicker&quot;, {
+    alias: &quot;DatePicker&quot;,
+    extend: &quot;fastDev.Ui.Box&quot;,
+    _options: {
+        /*
+         * 控件宽度
+         * @type {String}
+         */
+        width: &quot;150px&quot;,
+        /*
+         * 索引重置
+         * @type {Number}
+         */
+        zIndex: 200,
+        /*
+         * 设定日期值
+         * @type {String}
+         */
+        value: &quot;&quot;,
+        /*
+         * 输入框名称
+         * @type {String}
+         */
+        name: &quot;&quot;,
+        /*
+         * 日期选择的触发方式
+         * &lt;p&gt;- button: 仅仅在点击图标按钮时触发日期选择&lt;/p&gt;
+         * &lt;p&gt; -click: 输入框或图标上发生点击事件时触发&lt;/p&gt;
+         * &lt;p&gt; -mouseover: 鼠标悬浮至输入框或图标上时触发&lt;/p&gt;
+         * &lt;p&gt; -[eventType] :其他任何有效事件类型&lt;/p&gt;
+         * @type {String}
+         */
+        trigger: &quot;click&quot;,
+        /*
+         * 日期时间格式
+         * &lt;p&gt;格式表达式，变量含义:&lt;/p&gt;
+         * &lt;p&gt;-yyyy: 带 0 补齐的四位年表示&lt;/p&gt;
+         * &lt;p&gt;-yy: 带 0 补齐的两位年表示&lt;/p&gt;
+         * &lt;p&gt;-MM: 带 0 补齐的两位月表示&lt;/p&gt;
+         * &lt;p&gt;-M: 不带 0 补齐的月表示&lt;/p&gt;
+         * &lt;p&gt;-dd: 带 0 补齐的两位日表示&lt;/p&gt;
+         * &lt;p&gt;-d: 不带 0 补齐的日表示&lt;/p&gt;
+         * &lt;p&gt;-hh: 带 0 补齐的两位 12 进制时表示&lt;/p&gt;
+         * &lt;p&gt;-h: 不带 0 补齐的 12 进制时表示&lt;/p&gt;
+         * &lt;p&gt;-HH: 带 0 补齐的两位 24 进制时表示&lt;/p&gt;
+         * &lt;p&gt;-H: 不带 0 补齐的 24 进制时表示&lt;/p&gt;
+         * &lt;p&gt;-mm: 带 0 补齐两位分表示&lt;/p&gt;
+         * &lt;p&gt;-m: 不带 0 补齐分表示&lt;/p&gt;
+         * &lt;p&gt;-ss: 带 0 补齐两位秒表示&lt;/p&gt;
+         * &lt;p&gt;-s: 不带 0 补齐秒表示&lt;/p&gt;
+         * @type {String}
+         */
+        format: &quot;yyyy-MM-dd&quot;,
+        /*
+         * 定义星期的第一天，可选值0~6
+         * 星期日为0、星期一为1、星期六为6
+         * @type {Number}
+         */
+        firstDayOfWeek: 0,
+        /*
+         * 最小日期限制（默认会取1900年1月1日0时0分0秒）
+         * @type {String|Date}
+         */
+        minDate: null,
+        /*
+         * 最大日期限制（默认会取2099年12月31日23时59分59秒）
+         * @type {String|Date}
+         */
+        maxDate: null,
+        /*
+         * 可选择的日期时间值表达式组
+         * 开启该功能需加载DatePicker.expression.js扩展文件
+         * 此表达式为cron日期表达式，其格式为用空格分隔的7个子表达式域，如：
+         *  0 15 10 ? * 6L 2002-2005
+         * [秒   分     时] 日  月   周   年
+         * 可以不声明   ”秒“ “分” “时”子表达式，表达式长度等于3或等于4时，会默认&quot;秒 分 时&quot;为 &quot;?&quot;值
+         * 上述表达式表示：在 2002, 2003, 2004和 2005 年中的每月最后一个周五（星期日为1，星期一为2，依此类推）的 10:15 AM
+         * 更多有关于cron日期表达式的信息，请参考相关资料或在线示例
+         * @type {String|Array}
+         */
+        includes: [],
+        /*
+         * 被禁用的日期时间值表达式组
+         * 开启该功能需加载DatePicker.expression.js扩展文件
+         * includes属性中指明的可选值也会在excludes声明中被排除
+         * 此表达式为cron表达式
+         * 可以不声明   ”秒“ “分” “时”子表达式，表达式长度等于3或等于4时，会默认&quot;秒 分 时&quot;为 &quot;?&quot;值
+         * 更多有关于cron日期表达式的信息，请参考相关资料或在线示例
+         * @type {String|Array}
+         */
+        excludes: [],
+        /*
+         * 是否显示时间选择器
+         * 控件默认会根据日期时间格式来判定是否需要显示时间选择器
+         * 也可以通过该属性强制开启或关闭时间选择器，但最终日期时间值仍受限于format属性指定的格式
+         * @type {Boolean}
+         */
+        showTimePicker: null,
+        /*
+         * 是否显示农历日期值提示
+         * 开启该功能需加载DatePicker.lunar.js扩展文件
+         * @type {Boolean}
+         */
+        showLunarTips: false,
+        /*
+         * 指定可选时间必须在另外一个DatePicker控件已选日期值之前
+         * 即设置当前控件的最大日期值为该属性所指定日期控件的已选日期值
+         * 另外也可以通过onPick事件回调来动态设置本控件的最大最小日期值限制
+         * 可传控件ID或者fastDev.Ui.DatePicker对象
+         * @type {String|fastDev.Ui.DatePicker}
+         */
+        timeBefore: null,
+        /*
+         * 指定可选时间必须在另外一个DatePicker控件已选日期值之后
+         * 即设置当前控件的最小日期值为该属性所指定的日期控件的已选日期值
+         * 另外也可以通过onPick事件回调来动态设置本控件的最大最小日期值限制
+         * 可传控件ID或者fastDev.Ui.DatePicker对象
+         * @type {String|fastDev.Ui.DatePicker}
+         */
+        timeAfter: null,
+        /*
+         * 是否只读
+         * @type {Boolean}
+         */
+        readonly: false,
+        /*
+         * 日历面板展现类型，为以下枚举值：
+         * &lt;p&gt;-block: 以弹出层形式展现，默认方式 &lt;/p&gt;
+         * &lt;p&gt;-inline: 以行内块形式展现，即平面模式 &lt;/p&gt;
+         * @type {String}
+         */
+        display: &quot;block&quot;,
+<span id='fastDev-Ui-DatePicker-property-inside'>        /**
+</span>         * 是否在当前页面展现
+         * &lt;p&gt;此属性为false值时，日历面板将尝试跨出当前子页面展现
+         * @type {Boolean}
+         */
+        inside: true,
+        /*
+         * 选择日期值后的回调事件，传递参数为当前拟选的日期对象(Date对象)和根据格式参数格式化后的日期时间值(字符串值)
+         * 若回调函数返回false，则不会选择当前拟选的日期值
+         * this指向当前日历控件
+         * @type {Function}
+         * @event
+         */
+        onPick: fastDev.noop,
+        enableDataProxy: false,
+        enableInitProxy: false
+    },
+<span id='fastDev-Ui-DatePicker-method-staticTemplate'>    /**
+</span>     * 用于构建静态模板串
+     * @param {Object} params 模板已解析参数对象
+     * @private 
+     */
+    staticTemplate: function (params) {
+        if (params.display !== &quot;inline&quot;) {
+            return '&lt;div style=&quot;width:' + params.width + '&quot; class=&quot;ui-form&quot;&gt;&lt;div class=&quot;ui-form-wrap ui-date&quot;&gt;&lt;input id=&quot;' + params.id + '&quot; type=&quot;text&quot; name=&quot;' + params.name + '&quot; autocomplete=&quot;off&quot; readonly=&quot;readonly&quot; class=&quot;ui-form-field ui-form-input&quot; value=&quot;' + params.value + '&quot;/&gt;&lt;div class=&quot;ui-form-trigger&quot;&gt;&lt;div elem=&quot;datepicker-trigger&quot; class=&quot;ui-date-icon&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;';
+        }
+        return &quot;&quot;;
+    },
+<span id='fastDev-Ui-DatePicker-method-popupStaticTemplate'>    /**
+</span>     * 日历面板弹出层静态模板
+     * @param {Object} params 模板已解析参数对象
+     * @private 
+     */
+    popupStaticTemplate: function (params) {
+        var html = [];
+        html.push('&lt;div elem=&quot;datepicker-popup&quot; class=&quot;ui-datepicker ' + params.shadowCls + '&quot; style=&quot;display:none;z-index:' + params.zIndex + '&quot;&gt;');
+
+        html.push('&lt;div elem=&quot;datepicker-header&quot; class=&quot;ui-datepicker-header&quot;&gt;');
+
+        html.push('&lt;div&gt;&lt;span name=&quot;prevYearBtn&quot; elem=&quot;datepicker-prevyear&quot; title=&quot;上一年&quot; class=&quot;ui-datepicker-header-page ui-datepicker-header-prevyear&quot;&gt;&lt;/span&gt;&lt;/div&gt;');
+        html.push('&lt;div&gt;&lt;span name=&quot;prevMonthBtn&quot; elem=&quot;datepicker-prevmonth&quot; title=&quot;上一月&quot; class=&quot;ui-datepicker-header-page ui-datepicker-header-prevmonth&quot;&gt;&lt;/span&gt;&lt;/div&gt;');
+
+        html.push('&lt;div class=&quot;ui-datepicker-header-text&quot;&gt;');
+        html.push('&lt;input name=&quot;monthInput&quot; title=&quot;点击输入月份&quot; elem=&quot;datepicker-input-month&quot; class=&quot;ui-datepicker-header-input ui-datepicker-header-month&quot;/&gt;');
+        html.push('&lt;input name=&quot;yearInput&quot; title=&quot;点击输入年份&quot; elem=&quot;datepicker-input-year&quot; class=&quot;ui-datepicker-header-input ui-datepicker-header-year&quot;/&gt;');
+        html.push('&lt;/div&gt;');
+
+        html.push('&lt;div&gt;&lt;span name=&quot;nextMonthBtn&quot; elem=&quot;datepicker-nextmonth&quot; title=&quot;下一月&quot; class=&quot;ui-datepicker-header-page ui-datepicker-header-nextmonth&quot;&gt;&lt;/span&gt;&lt;/div&gt;');
+        html.push('&lt;div&gt;&lt;span name=&quot;nextYearBtn&quot; elem=&quot;datepicker-nextyear&quot; title=&quot;下一年&quot; class=&quot;ui-datepicker-header-page ui-datepicker-header-nextyear&quot;&gt;&lt;/span&gt;&lt;/div&gt;');
+
+        html.push('&lt;/div&gt;');
+
+        html.push('&lt;div class=&quot;ui-datepicker-body&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; class=&quot;ui-datepicker-weekday&quot;&gt;&lt;thead&gt;');
+        html.push('&lt;tr elem=&quot;datepicker-weekday-title&quot; class=&quot;ui-datepicker-weekday-title&quot;&gt;&lt;td&gt;');
+
+        for (var i = params.firstDayOfWeek, j = 0, title = [&quot;日&quot;, &quot;一&quot;, &quot;二&quot;, &quot;三&quot;, &quot;四&quot;, &quot;五&quot;, &quot;六&quot;]; j &lt; 7; j++, i++) {
+            i = i &gt; 6 ? 0 : i;
+            if (j &gt; 0) {
+                html.push('&lt;/td&gt;&lt;td&gt;');
+            }
+            html.push(title[i]);
+        }
+
+        html.push('&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody elem=&quot;datepicker-body&quot;&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;');
+
+        if (params.display !== &quot;inline&quot;) {
+            html.push('&lt;div elem=&quot;datepicker-toolbar&quot; class=&quot;ui-datepicker-toolbar&quot;&gt;');
+
+            if (params.showTimePicker) {
+                html.push(['&lt;div class=&quot;ui-datepicker-time&quot; style=&quot;display:block;&quot;&gt;',
+                    '&lt;div elem=&quot;timepicker-numberbox&quot; class=&quot;ui-form ui-form-wrap ui-numberbox&quot; style=&quot;width:80px;left:0px;top:0px&quot;&gt;',
+                    '&lt;input name=&quot;timePickerHours&quot; elem=&quot;timepicker-hours&quot; title=&quot;时&quot; type=&quot;text&quot; autocomplete=&quot;off&quot; class=&quot;ui-form-field ui-form-input&quot; style=&quot;width:16px&quot;/&gt;:',
+                    '&lt;input name=&quot;timePickerMinutes&quot; elem=&quot;timepicker-minutes&quot; title=&quot;分&quot; type=&quot;text&quot; autocomplete=&quot;off&quot; class=&quot;ui-form-field ui-form-input&quot; style=&quot;width:16px&quot;/&gt;:',
+                    '&lt;input name=&quot;timePickerSeconds&quot; elem=&quot;timepicker-seconds&quot; title=&quot;秒&quot; type=&quot;text&quot; autocomplete=&quot;off&quot; class=&quot;ui-form-field ui-form-input&quot; style=&quot;width:16px&quot;/&gt;',
+                    '&lt;div elem=&quot;datepicker-timepicker-trigger&quot; class=&quot;ui-form-trigger&quot;&gt;',
+                    '&lt;div class=&quot;ui-numberbox-up&quot;&gt;',
+                    '&lt;div name=&quot;timePickerUpBtn&quot; title=&quot;递增时间&quot; elem=&quot;timepicker-up&quot; class=&quot;ui-numberbox-icon&quot;&gt;&lt;/div&gt;',
+                    '&lt;/div&gt;',
+                    '&lt;div class=&quot;ui-numberbox-split&quot;&gt;&lt;/div&gt;',
+                    '&lt;div class=&quot;ui-numberbox-down&quot;&gt;',
+                    '&lt;div name=&quot;timePickerDownBtn&quot; title=&quot;递减时间&quot; elem=&quot;timepicker-down&quot; class=&quot;ui-numberbox-icon&quot;&gt;&lt;/div&gt;',
+                    '&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;'].join(&quot;&quot;));
+            }
+            html.push('&lt;div class=&quot;ui-datepicker-button&quot;&gt;');
+
+            html.push('&lt;a class=&quot;ui-button ui-button-bg&quot;&gt;&lt;em class=&quot;ui-button-em&quot;&gt;');
+            if (params.showTimePicker) {
+                html.push('&lt;span name=&quot;confirmBtn&quot; elem=&quot;datepicker-button-confirm&quot; class=&quot;ui-button-text&quot;&gt;确定&lt;/span&gt;');
+            } else {
+                html.push('&lt;span name=&quot;todayBtn&quot; elem=&quot;datepicker-button-today&quot; class=&quot;ui-button-text&quot;&gt;今天&lt;/span&gt;');
+            }
+            html.push('&lt;/em&gt;&lt;/a&gt;');
+
+            html.push('&lt;a class=&quot;ui-button ui-button-bg&quot;&gt;&lt;em class=&quot;ui-button-em&quot;&gt;&lt;span name=&quot;cleanBtn&quot; elem=&quot;datepicker-button-clean&quot; class=&quot;ui-button-text&quot;&gt;清除&lt;/span&gt;&lt;/em&gt;&lt;/a&gt;');
+
+            html.push('&lt;/div&gt;&lt;div class=&quot;ui-clear&quot;&gt;&lt;/div&gt;&lt;/div&gt;');
+        }
+
+        html.push('&lt;div class=&quot;ui-clear&quot;&gt;&lt;/div&gt;&lt;/div&gt;');
+
+        html.push(['&lt;div elem=&quot;datepicker-menu-month&quot; class=&quot;ui-datepicker-menu-month ui-shadow&quot; style=&quot;display:none;z-index:' + params.menuZIndex + '&quot;&gt;&lt;/div&gt;',
+            '&lt;div elem=&quot;datepicker-menu-year&quot; class=&quot;ui-datepicker-menu-year ui-shadow&quot; style=&quot;display:none;z-index:' + params.menuZIndex + '&quot;&gt;',
+            '&lt;div elem=&quot;datepicker-menu-year-placeholder&quot;&gt;&lt;/div&gt;',
+            '&lt;div class=&quot;ui-clear&quot;&gt;&lt;/div&gt;',
+            '&lt;div class=&quot;ui-datepicker-menu-year-page&quot;&gt;',
+            '&lt;a elem=&quot;datepicker-menu-year-prev&quot; title=&quot;上翻页&quot; name=&quot;prev&quot; class=&quot;ui-datepicker-menu-year-prev&quot;&gt;&amp;nbsp;&amp;laquo;&amp;nbsp;&lt;/a&gt;',
+            '&lt;span elem=&quot;datepicker-menu-year-line&quot; class=&quot;ui-datepicker-menu-year-line&quot;&gt;-----&lt;/span&gt;',
+            '&lt;a elem=&quot;datepicker-menu-year-next&quot; title=&quot;下翻页&quot; name=&quot;next&quot; class=&quot;ui-datepicker-menu-year-next&quot;&gt;&amp;nbsp;&amp;raquo;&amp;nbsp;&lt;/a&gt;',
+            '&lt;/div&gt;&lt;/div&gt;'].join(&quot;&quot;));
+
+        return html.join(&quot;&quot;);
+    },
+    tplParam: [&quot;width&quot;, &quot;name&quot;, &quot;value&quot;, &quot;zIndex&quot;, &quot;menuZIndex&quot;, &quot;id&quot;, &quot;showTimePicker&quot;, &quot;display&quot;, &quot;shadowCls&quot;, &quot;firstDayOfWeek&quot;],
+<span id='fastDev-Ui-DatePicker-method-ready'>    /**
+</span>     * 准备参数
+     * @param {Object} options
+     * @param {Object} global
+     * @protected
+     */
+    ready: function (options, global) {
+        var width;
+        fastDev.apply(global, {
+            sequence: fastDev.getID(),
+            minYear: 1900,
+            maxYear: 2099,
+            minDate: new Date(0, 0, 1),
+            maxDate: new Date(2099, 11, 31, 23, 59, 59)
+        });
+        if (width = /^(-?\d+\.?\d+|-?\d)(px|%|em|cm)?$/.exec(fastDev.Util.StringUtil.trim(options.width + &quot;&quot;))) {
+            options.width = width[1] + (width[2] || &quot;px&quot;);
+        } else {
+            options.width = &quot;150px&quot;;
+        }
+        fastDev.apply(options, {
+            firstDayOfWeek: parseInt(options.firstDayOfWeek, 10) || 0,
+            format: fastDev.Util.StringUtil.trim(options.format),
+            minDate: options.minDate ? this.toValidDate(options.minDate) : global.minDate,
+            maxDate: options.maxDate ? this.toValidDate(options.maxDate) : global.maxDate,
+            display: options.display === &quot;inline&quot; ? &quot;inline&quot; : &quot;block&quot;,
+            zIndex: parseInt(options.zIndex, 10) || 200,
+            timeAfter: !! options.timeAfter ? options.timeAfter : &quot;&quot;,
+            timeBefore: !! options.timeBefore ? options.timeBefore : &quot;&quot;,
+            saveInstance: !! options.saveInstance || !! options.timeAfter || !! options.timeBefore,
+            onPick: typeof options.onPick === &quot;function&quot; ? options.onPick : fastDev.noop,
+            inside: options.display === &quot;inline&quot; || fastDev.Util.position.top.fastDev === fastDev || !! options.inside
+        });
+        options.showTimePicker = this.isShowTimePicker();
+        options.firstDayOfWeek = options.firstDayOfWeek &gt; -1 &amp;&amp; options.firstDayOfWeek &lt; 7 ? options.firstDayOfWeek : 0;
+        global.shadowCls = options.display === &quot;inline&quot; ? &quot;&quot; : &quot;ui-shadow&quot;;
+        global.menuZIndex = options.zIndex + 1;
+        global.onBlur = fastDev.noop;
+        if (!options.id || !fastDev.Util.StringUtil.trim(options.id)) {
+            options.id = fastDev.getID();
+        }
+        // 页面上下文
+        global.pageContext = options.inside ? window : fastDev.Util.position.top;
+    },
+    /*
+     * 构造控件
+     * @param {Object} options
+     * @param {Object} global
+     * @protected
+     */
+    construct: function (options, global) {
+        var context = global.pageContext,
+            popup = context.fastDev(this.popupStaticTemplate(global.params)).appendTo(options.display === &quot;inline&quot; ? options.container : fastDev(context.document.body));
+        this.merge(popup);
+        fastDev.apply(global, {
+            input: global.box,
+            docHtml: fastDev(document.documentElement),
+            picker: this.find(&quot;[elem='datepicker-popup']&quot;),
+            yearMenu: this.find(&quot;[elem='datepicker-menu-year']&quot;),
+            monthMenu: this.find(&quot;[elem='datepicker-menu-month']&quot;),
+            trigger: this.find(&quot;[elem='datepicker-trigger']&quot;),
+            yearMenuPlaceHolder: this.find(&quot;[elem='datepicker-menu-year-placeholder']&quot;),
+            yearMenuPrevBtn: this.find(&quot;[elem='datepicker-menu-year-prev']&quot;),
+            yearMenuNextBtn: this.find(&quot;[elem='datepicker-menu-year-next']&quot;),
+            yearMenuLine: this.find(&quot;[elem='datepicker-menu-year-line']&quot;),
+            header: this.find(&quot;[elem='datepicker-header']&quot;),
+            weekdayTitle: this.find(&quot;[elem='datepicker-weekday-title']&quot;),
+            body: this.find(&quot;[elem='datepicker-body']&quot;),
+            toolbar: this.find(&quot;[elem='datepicker-toolbar']&quot;),
+            todayBtn: this.find(&quot;[elem='datepicker-button-today']&quot;),
+            confirmBtn: this.find(&quot;[elem='datepicker-button-confirm']&quot;),
+            cleanBtn: this.find(&quot;[elem='datepicker-button-clean']&quot;),
+            monthInput: this.find(&quot;[elem='datepicker-input-month']&quot;),
+            yearInput: this.find(&quot;[elem='datepicker-input-year']&quot;),
+            prevYearBtn: this.find(&quot;[elem='datepicker-prevyear']&quot;),
+            prevMonthBtn: this.find(&quot;[elem='datepicker-prevmonth']&quot;),
+            nextYearBtn: this.find(&quot;[elem='datepicker-nextyear']&quot;),
+            nextMonthBtn: this.find(&quot;[elem='datepicker-nextmonth']&quot;)
+        });
+        if (options.showTimePicker) {
+            fastDev.apply(global, {
+                timePicker: this.find(&quot;[elem='timepicker-numberbox']&quot;),
+                timePickerUpBtn: this.find(&quot;[elem='timepicker-up']&quot;),
+                timePickerDownBtn: this.find(&quot;[elem='timepicker-down']&quot;),
+                timePickerHours: this.find(&quot;[elem='timepicker-hours']&quot;),
+                timePickerMinutes: this.find(&quot;[elem='timepicker-minutes']&quot;),
+                timePickerSeconds: this.find(&quot;[elem='timepicker-seconds']&quot;),
+                timePickerTrigger: this.find(&quot;[elem='datepicker-timepicker-trigger']&quot;)
+            });
+        }
+        global.topDocHtml = options.inside ? global.docHtml : fastDev(context.document.documentElement);
+        this.elems.splice(1, 0, &quot;none&quot;);
+    },
+    /*
+     * 初始控件
+     * @param {Object} options
+     * @param {Object} global
+     * @protected
+     */
+    init: function (options, global) {
+        // 初始化日期时间最值设定
+        this.setMinDate(options.minDate);
+        this.setMaxDate(options.maxDate);
+        if ( !! this.cronParser) {
+            // 初始化时间表达式
+            this.parseCronExpression();
+        }
+        // 初始化日期选择值
+        this.setValue(options.value);
+        // 绑定相关事件
+        this.bindEventHandle();
+        // 阻止文本选择
+        this.preventTextSelect();
+        // 刷新界面
+        this.freshUI();
+        if (!options.inside) {
+            var that = this;
+            fastDev(window).bind(&quot;unload&quot;, function () {
+                that.destroy();
+            });
+        }
+        // 注册事件
+        if (options.display === &quot;inline&quot;) {
+            // 初始行内模式的日历
+            this.initInlinePicker();
+        }
+        if ( !! options.disabled) {
+            this.disable();
+        }
+        // 标记为初始完毕，用于被其他日历控件引用时
+        global.initialized = true;
+    },
+<span id='fastDev-Ui-DatePicker-method-bind'>    /**
+</span>     * 绑定事件
+     * @param {String} type 事件类型
+     * @param {Function} handle 事件句柄 
+     * @private 
+     */
+    bind: function (type, handle) {
+        if (type === &quot;blur&quot;) {
+            var global = this._global;
+            global.onBlur = handle;
+            global.isBlur = true;
+        } else {
+            this.superClass.bind.apply(this, arguments);
+        }
+        return this;
+    },
+    /*
+     * 初始化行内模式的日历控件
+     * @private
+     */
+    initInlinePicker: function () {
+        this._global.picker.css(&quot;position&quot;, &quot;relative&quot;);
+        this._options.readonly = false;
+        this.show();
+    },
+    /*
+     * 对按钮或输入框作禁用处理
+     * @param {Boolean} onlyBtn 为true时则只刷新&quot;今天&quot;按钮
+     * @private
+     */
+    freshUI: function (onlyBtn) {
+        var options = this._options;
+        if (options.display !== &quot;inline&quot;) {
+            var global = this._global,
+                today = new Date();
+            // 如果&quot;今天&quot;不可用，则禁用&quot;今天按钮&quot;
+            if (!options.showTimePicker) {
+                if (this.isDisabled(today.getFullYear(), today.getMonth(), today.getDate())) {
+                    global.todayBtn.parent().parent().addClass(&quot;ui-button-disabled&quot;);
+                    global.todayBtn.attr(&quot;forbidden&quot;, &quot;forbidden&quot;);
+                } else {
+                    global.todayBtn.parent().parent().removeClass(&quot;ui-button-disabled&quot;);
+                    global.todayBtn.attr(&quot;forbidden&quot;, &quot;&quot;);
+                }
+            } else if (!onlyBtn) {
+                fastDev.each([&quot;Hours&quot;, &quot;Minutes&quot;, &quot;Seconds&quot;], function (idx, val) {
+                    if (!global[&quot;show&quot; + val]) {
+                        global[&quot;timePicker&quot; + val].prop(&quot;disabled&quot;, &quot;disabled&quot;).addClass(&quot;ui-datepicker-disabled&quot;);
+                    }
+                });
+            }
+        }
+    },
+    /*
+     * 绑定事件处理器
+     * @private
+     */
+    bindEventHandle: function () {
+        var that = this,
+            options = this._options,
+            global = this._global;
+        if (options.display !== &quot;inline&quot;) {
+            if (options.trigger === &quot;button&quot;) {
+                // 仅点击button时触发
+                global.trigger.bind(&quot;click&quot;, fastDev.setFnInScope(this, this.triggerEvent));
+            } else {
+                // 发生指定事件时触发
+                global.input.bind(options.trigger, fastDev.setFnInScope(this, this.triggerEvent));
+                global.trigger.bind(options.trigger, fastDev.setFnInScope(this, this.triggerEvent));
+            }
+        }
+        // 绑定日历面板事件代理
+        global.picker.bind(&quot;click&quot;, fastDev.setFnInScope(this, this.pickerClick)).bind(&quot;mouseover&quot;, fastDev.setFnInScope(this, this.pickerOver)).bind(&quot;mouseout&quot;, fastDev.setFnInScope(this, this.pickerOut));
+        // IE6、7、8下dblclick事件不会执行click事件，点击过快时会有停顿感觉，所以需同时绑dblclick事件
+        if (fastDev.Browser.isIE6 || fastDev.Browser.isIE7 || fastDev.Browser.isIE8) {
+            global.picker.bind(&quot;dblclick&quot;, fastDev.setFnInScope(this, this.pickerClick));
+        }
+        // 绑定键盘相关操作
+        global.picker.bind(&quot;keydown&quot;, fastDev.setFnInScope(this, this.pickerKeydown));
+        if (fastDev.Browser.isIE6) {
+            // IE6不支持keydown捕获回车事件，改用keyup监听
+            global.picker.bind(&quot;keyup&quot;, function (event) {
+                if (event.keyCode === 13) {
+                    that.pickerKeydown(event);
+                }
+            });
+        }
+        // 绑定鼠标滚轮滚动事件，以便快速翻页
+        global.picker.bind(fastDev.Browser.isFirefox ? &quot;DOMMouseScroll&quot; : &quot;mousewheel&quot;, fastDev.setFnInScope(this, this.bodyMouseWheel));
+        global.yearMenu.bind(fastDev.Browser.isFirefox ? &quot;DOMMouseScroll&quot; : &quot;mousewheel&quot;, fastDev.setFnInScope(this, this.yearMenuMouseWheel));
+        global.monthMenu.bind(fastDev.Browser.isFirefox ? &quot;DOMMouseScroll&quot; : &quot;mousewheel&quot;, fastDev.setFnInScope(this, this.bodyMouseWheel));
+        global.monthMenu.bind(&quot;click&quot;, function (event) {
+            return that.menuClick(event, &quot;month&quot;);
+        });
+        global.yearMenu.bind(&quot;click&quot;, global.yearMenuClickHandle = function (event) {
+            return that.menuClick(event, &quot;year&quot;);
+        });
+        if (fastDev.Browser.isIE6) {
+            // IE6下不支持样式设置hover，需添加js事件
+            global.monthMenu.bind(&quot;mouseover&quot;, fastDev.setFnInScope(global.monthMenu, this.menuOver)).bind(&quot;mouseout&quot;, fastDev.setFnInScope(global.monthMenu, this.menuOut));
+            global.yearMenu.bind(&quot;mouseover&quot;, fastDev.setFnInScope(global.yearMenu, this.menuOver)).bind(&quot;mouseout&quot;, fastDev.setFnInScope(global.yearMenu, this.menuOut));
+        }
+        if (fastDev.Browser.isIE6 || fastDev.Browser.isIE7 || fastDev.Browser.isIE8) {
+            global.yearMenu.bind(&quot;dblclick&quot;, global.yearMenuClickHandle);
+        }
+        global.docClickEventHandle = fastDev.setFnInScope(this, this.documentClick);
+        // 面板点击默认取消事件冒泡
+        global.cancelBubble = true;
+        // 初始化清理标识
+        global.clear = false;
+    },
+    /*
+     * 触发器触发事件
+     * @param {Event} event
+     * @private
+     */
+    triggerEvent: function (event) {
+        this.show();
+        // 取消事件冒泡
+        return this.stopBubble(event);
+    },
+    /*
+     * 阻止文本选择
+     * @private
+     */
+    preventTextSelect: function () {
+        var global = this._global;
+        if (fastDev.Browser.isFirefox) {
+            // 火狐下禁用日历面板文本选择
+            global.picker.css(&quot;-moz-user-select&quot;, &quot;-moz-none&quot;);
+            global.yearMenu.css(&quot;-moz-user-select&quot;, &quot;none&quot;);
+        } else {
+            // Chrome、IE禁用文本选择
+            global.picker.elems[0].onselectstart = global.yearMenu.elems[0].onselectstart = global.monthMenu.elems[0].onselectstart = fastDev.setFnInScope(this, this.stopBubble);
+            global.yearInput.elems[0].onselectstart = global.monthInput.elems[0].onselectstart = function () {
+                // 年份与月份输入框应该拥有可选文本事件
+                global.cancelBubble = false;
+            };
+            if (this._options.showTimePicker) {
+                fastDev.each([&quot;Hours&quot;, &quot;Minutes&quot;, &quot;Seconds&quot;], function (idx, val) {
+                    global[&quot;timePicker&quot; + val].elems[0].onselectstart = function () {
+                        global.cancelBubble = !global[&quot;show&quot; + val];
+                    };
+                });
+            }
+        }
+    },
+    /*
+     * 日历面板鼠标悬浮事件代理
+     * @param {Event} event
+     * @private
+     */
+    pickerOver: function (event) {
+        var options = this._options,
+            global = this._global,
+            target = fastDev(event.target),
+            name = (target.attr(&quot;name&quot;) || target.prop(&quot;name&quot;) || &quot;&quot;).split(&quot;-&quot;);
+        if (name[1] === global.sequence + &quot;&quot;) {
+            // 日期项鼠标悬浮
+            target.addClass(&quot;ui-datepicker-over&quot;);
+            if (options.showLunarTips &amp;&amp; !target.prop(&quot;title&quot;)) {
+                if (typeof this.showLunarTips !== &quot;function&quot;) {
+                    throw &quot;未包含相关农历日期功能API，需导入DatePicker.lunar.js扩展文件.&quot;;
+                }
+                target.prop(&quot;title&quot;, this.showLunarTips(name));
+            }
+        } else {
+            switch (name[0]) {
+                // 上一年按钮鼠标悬浮事件
+                case &quot;prevYearBtn&quot;:
+                    // 下一年按钮鼠标悬浮事件
+                case &quot;nextYearBtn&quot;:
+                    // 上一月按钮鼠标悬浮事件
+                case &quot;prevMonthBtn&quot;:
+                    // 下一月按钮鼠标悬浮事件
+                case &quot;nextMonthBtn&quot;:
+                    target.parent().addClass(&quot;ui-datepicker-header-over&quot;);
+                    break;
+                    // 今天按钮悬浮
+                case &quot;todayBtn&quot;:
+                    // 确定按钮悬浮
+                case &quot;confirmBtn&quot;:
+                    // 清除按钮悬浮
+                case &quot;cleanBtn&quot;:
+                    target.prop(&quot;title&quot;, name[0] === &quot;cleanBtn&quot; ? &quot;&quot; : fastDev.Util.DateUtil.format(name[0] === &quot;todayBtn&quot; ? new Date() : new Date(global.year, global.month, global.forSelectDate, global.hours, global.minutes, global.seconds), options.format));
+                    target.parent().parent().addClass(&quot;ui-button-over&quot;);
+                    break;
+                    // 时间选择器向上按钮点击事件
+                case &quot;timePickerUpBtn&quot;:
+                    // 时间选择器向下按钮点击事件
+                case &quot;timePickerDownBtn&quot;:
+                    target.parent().addClass(&quot;ui-numberbox-over&quot;);
+            }
+        }
+        // 取消事件冒泡
+        return this.stopBubble(event);
+    },
+    /*
+     * 菜单鼠标悬浮事件，IE6兼容考虑
+     * @param {Event} event
+     * @private
+     */
+    menuOver: function (event) {
+        if (event.target.tagName.toLowerCase() === &quot;a&quot;) {
+            fastDev(event.target).addClass(&quot;ui-datepicker-menu-over&quot;);
+        }
+    },
+    /*
+     * 菜单鼠标移出事件，IE6兼容考虑
+     * @param {Event} event
+     * @private
+     */
+    menuOut: function (event) {
+        this.find(&quot;.ui-datepicker-menu-over&quot;).removeClass(&quot;ui-datepicker-menu-over&quot;);
+    },
+    /*
+     * 日历面板鼠标移出事件代理
+     * @param {Event} event
+     * @private
+     */
+    pickerOut: function (event) {
+        var global = this._global;
+        global.body.find(&quot;.ui-datepicker-over&quot;).removeClass(&quot;ui-datepicker-over&quot;);
+        global.header.find(&quot;.ui-datepicker-header-over&quot;).removeClass(&quot;ui-datepicker-header-over&quot;);
+        global.toolbar.find(&quot;.ui-button-over&quot;).removeClass(&quot;ui-button-over&quot;);
+        if (this._options.showTimePicker) {
+            global.timePickerTrigger.find(&quot;.ui-numberbox-over&quot;).removeClass(&quot;ui-numberbox-over&quot;);
+        }
+        // 取消事件冒泡
+        return this.stopBubble(event);
+    },
+    /*
+     * 日历面板鼠标点击事件
+     * @param {Event} event
+     * @private
+     */
+    pickerClick: function (event) {
+        var options = this._options,
+            global = this._global,
+            target = fastDev(event.target),
+            name = (target.attr(&quot;name&quot;) || target.prop(&quot;name&quot;) || &quot;&quot;).split(&quot;-&quot;);
+        // 隐藏年、月份菜单层，未传值则表示需验证年、月份输入框的值
+        this.hideMenu(&quot;month&quot;);
+        this.hideMenu(&quot;year&quot;);
+        // 验证时间选择器的值
+        this.validateTime(name[0]);
+        global.handleClick = true;
+        if (name[1] === global.sequence + &quot;&quot;) {
+            // 日期值点选
+            this.bodyClick(name, target, event);
+        } else {
+            switch (name[0]) {
+                // 上一年按钮点击事件
+                case &quot;prevYearBtn&quot;:
+                    // 下一年按钮点击事件
+                case &quot;nextYearBtn&quot;:
+                    // 上一月按钮点击事件
+                case &quot;prevMonthBtn&quot;:
+                    // 下一月按钮点击事件
+                case &quot;nextMonthBtn&quot;:
+                    name = name[0].match(/(prev|next)(Year|Month)Btn/);
+                    this.headerBtnClick(fastDev.Util.StringUtil.capitalize(name[1]), name[2].toLowerCase(), target.parent().hasClass(&quot;ui-datepicker-header-disabled&quot;));
+                    break;
+                    // 月份输入框点击事件
+                case &quot;monthInput&quot;:
+                    // 年份输入框点击事件
+                case &quot;yearInput&quot;:
+                    this.headerInputClick(name[0].match(/(month|year)Input/)[1]);
+                    break;
+                    // &quot;今天&quot;按钮点击事件
+                case &quot;todayBtn&quot;:
+                    // &quot;确定&quot;按钮点击事件
+                case &quot;confirmBtn&quot;:
+                    // &quot;清除&quot;按钮点击事件
+                case &quot;cleanBtn&quot;:
+                    this[name[0] + &quot;Click&quot;](event);
+                    break;
+                case &quot;timePickerUpBtn&quot;:
+                    this.timePickerBtnClick(&quot;up&quot;);
+                    break;
+                case &quot;timePickerDownBtn&quot;:
+                    this.timePickerBtnClick(&quot;down&quot;);
+                    break;
+                    // 时间选择器
+                case &quot;timePickerHours&quot;:
+                case &quot;timePickerMinutes&quot;:
+                case &quot;timePickerSeconds&quot;:
+                    this.timePickerFocus(name[0]);
+                    break;
+                default:
+                    this.btnClickCount();
+            }
+        }
+        global.handleClick = false;
+        if (options.display === &quot;inline&quot;) {
+            // 行内模式时，点击日历面板，需清理未关闭的其他非行内模式的日历面板
+            global.clear = true;
+            // 取消阻止事件冒泡，以避免影响其他监听doc click的控件（实际上clear操作已经取消阻止事件冒泡了，此处作个Note而已）
+            global.cancelBubble = false;
+        }
+        // 取消事件冒泡
+        return this.stopBubble(event);
+    },
+    /*
+     * 监听按键触发事件
+     * @param {Event} event
+     * @private
+     */
+    pickerKeydown: function (event) {
+        var global = this._global;
+        if (event.keyCode === 13) {
+            this.hideMenu(&quot;year&quot;, undefined, true);
+            this.hideMenu(&quot;month&quot;, undefined, true);
+            this.refreshDate(global.year, global.month);
+        } else {
+            var target = event.target;
+            if (target === global.yearInput.elems[0]) {
+                if (event.keyCode === 9) {
+                    this.hideMenu(&quot;year&quot;, undefined, true);
+                    this.refreshDate(global.year, global.month);
+                    this.headerInputClick(&quot;month&quot;);
+                } else {
+                    this.setTimer(function () {
+                        this.refreshYearMenu(parseInt(this._global.yearInput.prop(&quot;value&quot;), 10), true);
+                    }, 10);
+                    global.cancelBubble = false;
+                }
+            } else if (target === global.monthInput.elems[0]) {
+                if (event.keyCode === 9) {
+                    this.hideMenu(&quot;month&quot;, undefined, true);
+                    this.refreshDate(global.year, global.month);
+                    this.headerInputClick(&quot;year&quot;);
+                } else {
+                    global.cancelBubble = false;
+                }
+            } else if (this._options.showTimePicker &amp;&amp; /^timePicker([HMS].*)$/.test((target = fastDev(target)).prop(&quot;name&quot;))) {
+                if (event.keyCode === 9) {
+                    this.validateTime();
+                    switch (RegExp.$1) {
+                        case &quot;Hours&quot;:
+                            this.timePickerFocus(global.timePickerMinutes.prop(&quot;disabled&quot;) ? &quot;timePickerSeconds&quot; : &quot;timePickerMinutes&quot;);
+                            break;
+                        case &quot;Minutes&quot;:
+                            this.timePickerFocus(global.timePickerSeconds.prop(&quot;disabled&quot;) ? &quot;timePickerHours&quot; : &quot;timePickerSeconds&quot;);
+                            break;
+                        case &quot;Seconds&quot;:
+                            this.timePickerFocus(global.timePickerHours.prop(&quot;disabled&quot;) ? &quot;timePickerMinutes&quot; : &quot;timePickerHours&quot;);
+                    }
+                } else if (event.keyCode === 38) {
+                    this.setTimer(this.timePickerBtnClick, 25, &quot;up&quot;);
+                } else if (event.keyCode === 40) {
+                    this.setTimer(this.timePickerBtnClick, 25, &quot;down&quot;);
+                } else {
+                    global.cancelBubble = false;
+                }
+            } else {
+                global.cancelBubble = false;
+            }
+            return this.stopBubble(event);
+        }
+    },
+    /*
+     * 刷新日期
+     * @param {Number} year
+     * @param {Number} month
+     * @private
+     */
+    refreshDate: function (year, month) {
+        var options = this._options,
+            global = this._global,
+            lastDay = new Date(year, month + 1, 0).getDate(),
+            date = options.showTimePicker ? global.forSelectDate &gt; lastDay ? lastDay : global.forSelectDate : global.date &gt; lastDay ? lastDay : global.date;
+        this.refreshToRecent(options.showTimePicker ? new Date(year, month, date, global.hours, global.minutes, global.seconds) : new Date(year, month, date));
+    },
+    /*
+     * 设置计时器
+     * @param {Function} func 函数
+     * @param {Number} timeout 超时时长
+     * @param {Object} parama 参数a
+     * @param {Object} paramb 参数b
+     * @private
+     */
+    setTimer: function (func, timeout, parama, paramb) {
+        var that = this,
+            global = this._global;
+        global.pageContext.clearTimeout(global.timer);
+        global.timer = global.pageContext.setTimeout(function () {
+            func.call(that, parama, paramb);
+        }, timeout);
+    },
+    /*
+     * 日期格子点击事件
+     * @param {Array} name
+     * @param {Element} target
+     * @param {Event} event
+     * @private
+     */
+    bodyClick: function (name, target, event) {
+        var options = this._options,
+            global = this._global,
+            month = name[2] === &quot;prev&quot; ? global.month - 1 : name[2] === &quot;next&quot; ? global.month + 1 : global.month,
+            year = month &lt; 0 ? global.year - 1 : month &gt; 11 ? global.year + 1 : global.year,
+            date = new Date(year, month = month &lt; 0 ? 11 : month &gt; 11 ? 0 : month, name[0]),
+            needFresh;
+        if (options.display === &quot;block&quot;) {
+            if (!options.showTimePicker) {
+                // 有时间选择器的时候，需通过点击文档来关闭日历面板
+                // 非行内模式则清理并隐藏日历面板
+                global.forSelectDate = null;
+                if (!options.readonly) {
+                    // 选取日期时间值并刷新输入框
+                    this.select(date);
+                }
+                this.documentClick(event);
+            } else {
+                this.forSelect(date.getDate(), month, year);
+                // 点击日期在上月或下月，则刷新面板
+                needFresh = name[2];
+            }
+        } else {
+            needFresh = this.select(date);
+        }
+        if (needFresh) {
+            global.forSelectDate = date.getDate();
+            global.year = year;
+            global.month = month;
+            this.refreshHeader();
+            this.refreshBody();
+        }
+        this.btnClickCount();
+    },
+    /*
+     * 鼠标滚轮滚动翻页事件
+     * @param {Event} event
+     * @private
+     */
+    bodyMouseWheel: function (event) {
+        var global = this._global,
+            direct = event.wheelDelta || -event.detail;
+        this.hideMenu(&quot;year&quot;);
+        this.hideMenu(&quot;month&quot;);
+        if (this._options.showTimePicker &amp;&amp; (global.timePicker.contains(event.target) || global.timePicker.elems[0] === event.target)) {
+            this.setTimer(this.timePickerBtnClick, 15, direct &gt; 0 ? &quot;up&quot; : &quot;down&quot;);
+        } else if (global.body.contains(event.target)) {
+            this.headerBtnClick(direct &gt; 0 ? &quot;Prev&quot; : &quot;Next&quot;, &quot;month&quot;);
+        }
+        this.btnClickCount();
+        this.cancelBubble = true;
+        return this.stopBubble(event);
+    },
+    /*
+     * 鼠标滚轮滚动翻页&quot;年&quot;事件
+     * @param {Event} event
+     * @private
+     */
+    yearMenuMouseWheel: function (event) {
+        var direct = event.wheelDelta || -event.detail;
+        this.btnClickCount();
+        this.yearMenuPaging(direct &gt; 0 ? &quot;Prev&quot; : &quot;Next&quot;);
+        this.cancelBubble = true;
+        return this.stopBubble(event);
+    },
+    /*
+     * 上下年月份按钮点击事件
+     * @param {String} name Next或Prev
+     * @param {String} type year或者month
+     * @param {Boolean} disabled 是否被禁用
+     * @private
+     */
+    headerBtnClick: function (name, type, disabled) {
+        if (disabled) {
+            this.btnClickCount();
+            return;
+        }
+        var global = this._global,
+            options = this._options,
+            time;
+        if (type === &quot;year&quot;) {
+            do {
+                time = this.getUsableYear(name, global.year);
+            } while (time.month === null);
+        } else {
+            time = this.getUsableMonth(name, global.year, global.month);
+        }
+        this.refreshDate(time.year, time.month);
+        this.btnClickCount(type);
+    },
+    /*
+     * 年月份输入框点击事件
+     * @param {String} type year或month
+     * @private
+     */
+    headerInputClick: function (type) {
+        var global = this._global,
+            cType = fastDev.Util.StringUtil.capitalize(type),
+            elem;
+        this.btnClickCount();
+        if (global[&quot;is&quot; + cType + &quot;MenuShowed&quot;]) {
+            return;
+        }
+        global[type + &quot;Input&quot;].addClass(&quot;ui-datepicker-header-input-over&quot;).prop(&quot;value&quot;, global[type] + (type === &quot;year&quot; ? 0 : 1));
+        this.position(global[type + &quot;Menu&quot;], global[type + &quot;Input&quot;]).show();
+        if (type === &quot;year&quot;) {
+            global.pageYear = global.year;
+        } else {
+            global.monthMenu.find(&quot;.ui-datepicker-menu-selected&quot;).removeClass(&quot;ui-datepicker-menu-selected&quot;);
+            global.monthMenu.find(&quot;[name='&quot; + global.month + &quot;']&quot;).addClass(&quot;ui-datepicker-menu-selected&quot;);
+        }
+        this[&quot;refresh&quot; + cType + &quot;Menu&quot;]();
+        (elem = global[type + &quot;Input&quot;].elems[0]).select();
+        elem.focus();
+        global[&quot;is&quot; + cType + &quot;MenuShowed&quot;] = true;
+    },
+    /*
+     * “今天”按钮点击事件
+     * @param {Event} event
+     * @private
+     */
+    todayBtnClick: function (event) {
+        if (!this._global.todayBtn.attr(&quot;forbidden&quot;)) {
+            // 点击&quot;今天&quot;按钮，则直接选取今天
+            if (!this._options.readonly) {
+                this.select(new Date());
+            }
+            this.documentClick(event);
+        } else {
+            this.btnClickCount();
+        }
+    },
+    /*
+     * “确定”按钮点击事件
+     * @param {Event} event
+     * @private
+     */
+    confirmBtnClick: function (event) {
+        var global = this._global;
+        if (global.forSelectDate) {
+            if (!this._options.readonly) {
+                this.validateTime();
+                this.select(new Date(global.year, global.month, global.forSelectDate, global.hours, global.minutes, global.seconds));
+            }
+        }
+        this.documentClick(event);
+    },
+    /*
+     * “清除”按钮点击事件
+     * @param {Event} event
+     * @private
+     */
+    cleanBtnClick: function (event) {
+        var global = this._global;
+        // 清理并隐藏日历面板
+        this.documentClick(event);
+        if (!this._options.readonly) {
+            this.setValue(&quot;&quot;);
+        }
+    },
+    /*
+     * 菜单点击事件
+     * @param {Event} event
+     * @param {String} type year或month
+     * @private
+     */
+    menuClick: function (event, type) {
+        var global = this._global,
+            target = fastDev(event.target),
+            name = target.prop(&quot;name&quot;),
+            time = parseInt(name, 10);
+        this.btnClickCount();
+        if (target.hasClass(&quot;ui-datepicker-disabled&quot;)) {
+            // 被禁用
+        } else if (typeof time === &quot;number&quot; &amp;&amp; !isNaN(time)) {
+            this.refreshDate(type === &quot;year&quot; ? time : global.year, type === &quot;year&quot; ? global.month : time);
+            this.hideMenu(type, time, true);
+        } else if (type === &quot;year&quot; &amp;&amp; (name === &quot;prev&quot; || name === &quot;next&quot;)) {
+            // 上下翻页
+            this.yearMenuPaging(fastDev.Util.StringUtil.capitalize(name));
+        }
+        // 取消事件冒泡
+        return this.stopBubble(event);
+    },
+    /*
+     * 年份菜单上下翻页
+     * @param {String} type Next或Prev
+     * @private
+     */
+    yearMenuPaging: function (type) {
+        var global = this._global,
+            year = this.getUsableYear(type, global.pageYear + (type === &quot;Next&quot; ? 4 : -5)).year;
+        if (type === &quot;Next&quot; ? year &lt;= global.maxYear &amp;&amp; global.pageYear !== year + 5 : year &gt;= global.minYear &amp;&amp; global.pageYear !== year - 4) {
+            global.pageYear = year + (type === &quot;Next&quot; ? 5 : -4);
+            global[&quot;yearMenu&quot; + (type === &quot;Next&quot; ? &quot;Prev&quot; : &quot;Next&quot;) + &quot;Btn&quot;].removeClass(&quot;ui-datepicker-disabled&quot;);
+            this.refreshYearMenu();
+        }
+        // 到达最值，禁用按钮
+        if (year === global[type === &quot;Next&quot; ? &quot;maxYear&quot; : &quot;minYear&quot;]) {
+            global[&quot;yearMenu&quot; + type + &quot;Btn&quot;].addClass(&quot;ui-datepicker-disabled&quot;);
+            global.yearMenuLine.addClass(&quot;ui-datepicker-disabled&quot;);
+        } else {
+            global.yearMenuLine.removeClass(&quot;ui-datepicker-disabled&quot;);
+        }
+    },
+    /*
+     * 时间选择器聚焦事件
+     * @param {String} name 输入框名
+     * @private
+     */
+    timePickerFocus: function (name) {
+        var global = this._global;
+        if (!global[name].prop(&quot;disabled&quot;)) {
+            (global.timePickerInputFocus || global[name]).removeClass(&quot;ui-datepicker-change&quot;);
+            (global.timePickerInputFocus = global[name]).addClass(&quot;ui-datepicker-change&quot;);
+            global[name].elems[0].select();
+            global[name].elems[0].focus();
+        } else {
+            (global.timePickerInputFocus || global[name]).elems[0].blur();
+        }
+    },
+    /*
+     * 验证时间选择器输入框的时间值是否有效
+     * @param {String} name 不传name值则表示非增减时间按钮点击
+     * @private
+     */
+    validateTime: function (name) {
+        if (this._options.showTimePicker) {
+            var global = this._global,
+                focus = global.timePickerInputFocus,
+                // 获取所有时间输入框的当前值
+                time = this.getTime(name);
+            fastDev.apply(global, time);
+            this.refreshTimePicker();
+        }
+    },
+    /*
+     * 时间选择器按钮点击事件
+     * @param {String} name 按钮名称
+     * @private
+     */
+    timePickerBtnClick: function (name) {
+        var global = this._global,
+            focus = global.timePickerInputFocus || global.timePickerHours,
+            time = focus.prop(&quot;name&quot;)
+                .split(&quot;timePicker&quot;)[1].toLowerCase(),
+            value = parseInt(focus.prop(&quot;value&quot;), 10) || 0,
+            // 时钟点击
+            hours = time === &quot;hours&quot; ? value : global.hours,
+            // 分钟点击
+            minutes = time === &quot;minutes&quot; ? value : global.minutes,
+            // 秒种点击
+            seconds = time === &quot;seconds&quot; ? value : global.seconds;
+        time = global.timePickerInputFocus ? time : &quot;&quot;;
+        time = name === &quot;up&quot; ? this.getNextTime(hours, minutes, seconds, time) : this.getPrevTime(hours, minutes, seconds, time);
+        global.hours = time[0];
+        global.minutes = time[1];
+        global.seconds = time[2];
+        this.refreshTimePicker();
+    },
+    /*
+     * 获取时间选择器聚焦输入框的名称
+     * @private
+     */
+    getTimeFocusName: function () {
+        var focus = this._global.timePickerInputFocus;
+        return focus ? focus.prop(&quot;name&quot;).split(&quot;timePicker&quot;)[1].toLowerCase() : &quot;&quot;;
+    },
+    /*
+     * 文档点击事件
+     * @param {Event} event
+     * @private
+     */
+    documentClick: function (event) {
+        var options = this._options,
+            global = this._global;
+        this.btnClickCount();
+        if (event.target === global.input.elems[0] || !global.isPickerShowed || options.display === &quot;inline&quot; || global.clear) {
+            if (options.display === &quot;inline&quot; &amp;&amp; !global.clear) {
+                // 如果是清理操作，则跳过下面，以确保不会被自己给清理
+                // 隐藏菜单时会根据已选值是否改变来刷新日历面板
+                this.hideMenu(&quot;month&quot;);
+                this.hideMenu(&quot;year&quot;);
+            }
+            global.clear = false;
+            return;
+        }
+        if (options.display === &quot;block&quot;) {
+            this.hide();
+        }
+    },
+    /*
+     * 阻止事件冒泡
+     * @param {Event} event
+     * @private
+     */
+    stopBubble: function (event) {
+        var global = this._global;
+        if (!global.cancelBubble || global.clear) {
+            // 非取消事件冒泡或者处于清理状态则返回
+            global.cancelBubble = true;
+            return;
+        }
+        fastDev.Event.stopBubble(event);
+        return false;
+    },
+    /*
+     * 按钮点击计数
+     * 若连续点击某类按钮5次则弹出相应菜单
+     * @param {String} name 按钮名
+     * @private
+     */
+    btnClickCount: function (name) {
+        var global = this._global,
+            clickCount = global[name + &quot;BtnClickCount&quot;] || 0;
+        if (name !== &quot;year&quot;) {
+            global.yearBtnClickCount = 0;
+        }
+        if (name !== &quot;month&quot;) {
+            global.monthBtnClickCount = 0;
+        }
+        if (!name) {
+            return;
+        }
+        if (++clickCount === 5) {
+            // 5次连续点击则自动弹出选择菜单
+            global[name + &quot;BtnClickCount&quot;] = 0;
+            this.headerInputClick(name);
+        } else {
+            global[name + &quot;BtnClickCount&quot;] = clickCount;
+        }
+    },
+    /*
+     * 生成日历面板HTML
+     * @param {Number} year 年份
+     * @param {Number} month 月份
+     * @return {String}
+     * @private
+     */
+    generateBody: function (year, month) {
+        var day, cls, disabled, body = [],
+            global = this._global,
+            today = new Date(),
+            sysYear = today.getFullYear(),
+            sysMonth = today.getMonth(),
+            sysDay = today.getDate(),
+            // 上月
+            prevMonth = month === 0 ? 11 : month - 1,
+            // 上月所在的年
+            prevMonthYear = prevMonth === month - 1 ? year : year - 1,
+            // 下月
+            nextMonth = month === 11 ? 0 : month + 1,
+            // 下月所在的年
+            nextMonthYear = nextMonth === month + 1 ? year : year + 1,
+            // 该月的第一天在星期几（0~6）
+            firstDay = new Date(year, month, 1).getDay(),
+            // 上月的总天数
+            daysInPreMonth = new Date(year, month, 0).getDate(),
+            // 该月的总天数
+            daysInMonth = new Date(year, month + 1, 0).getDate(),
+            // 每周的第一天
+            firstDayOfWeek = this._options.firstDayOfWeek,
+            // 日历面板上显示的属于上月日子的天数（第一天现默认以星期日开始）
+            daysFromPreMonth = firstDay - firstDayOfWeek;
+        // 保证总是有上月日子显示，更加符合习惯，也更加对称美观
+        daysFromPreMonth = daysFromPreMonth === 0 ? 7 : daysFromPreMonth &lt; 0 ? daysFromPreMonth + 7 : daysFromPreMonth;
+        body.push(&quot;&lt;tr&gt;&quot;);
+        for (var i = 0, j; i &lt; 42; i++) {
+            if (i &gt; 0 &amp;&amp; i % 7 === 0) {
+                body.push(&quot;&lt;/tr&gt;&lt;tr&gt;&quot;);
+            }
+            // 周末样式
+            if ((j = (firstDayOfWeek + i) % 7) === 0 || j === 6) {
+                cls = &quot;ui-datepicker-holiday&quot;;
+            } else {
+                cls = &quot;&quot;;
+            }
+            disabled = false;
+            if (i &lt; daysFromPreMonth) {
+                // 上月日子
+                cls += &quot; ui-datepicker-other&quot;;
+                day = daysInPreMonth - daysFromPreMonth + i + 1;
+                if (this.isDisabled(prevMonthYear, prevMonth, day)) {
+                    // 被禁用
+                    cls += &quot; ui-datepicker-disabled&quot;;
+                    disabled = true;
+                }
+                body.push('&lt;td ' + (disabled ? &quot;&quot; : 'name=&quot;' + day + &quot;-&quot; + global.sequence + '-prev&quot;') + ' class=&quot;' + cls + '&quot;&gt;' + day + '&lt;/td&gt;');
+            } else if ((day = i - daysFromPreMonth + 1) &gt; daysInMonth) {
+                // 下月日子
+                day = day - daysInMonth;
+                cls += &quot; ui-datepicker-other&quot;;
+                if (this.isDisabled(nextMonthYear, nextMonth, day)) {
+                    // 被禁用
+                    cls += &quot; ui-datepicker-disabled&quot;;
+                    disabled = true;
+                }
+                body.push('&lt;td ' + (disabled ? &quot;&quot; : 'name=&quot;' + day + &quot;-&quot; + global.sequence + '-next&quot;') + ' class=&quot;' + cls + '&quot;&gt;' + day + '&lt;/td&gt;');
+            } else {
+                // 当前月日子
+                if (day === sysDay &amp;&amp; month === sysMonth &amp;&amp; year === sysYear) {
+                    // 今天
+                    cls += &quot; ui-datepicker-today&quot;;
+                }
+                if (this.isDisabled(year, month, day)) {
+                    // 被禁用
+                    cls += &quot; ui-datepicker-disabled&quot;;
+                    disabled = true;
+                } else if (this.isSelected(year, month, day)) {
+                    // 已选择值
+                    cls += &quot; ui-datepicker-selected&quot;;
+                }
+                body.push('&lt;td ' + (disabled ? &quot;&quot; : 'name=&quot;' + day + &quot;-&quot; + global.sequence + '&quot;') + ' class=&quot;' + cls + '&quot;&gt;' + day + '&lt;/td&gt;');
+            }
+        }
+        body.push(&quot;&lt;/tr&gt;&quot;);
+        return body.join(&quot;&quot;);
+    },
+    /*
+     * 刷新年份菜单
+     * @param {Number} year 当前选择年份
+     * @param {Boolean} highlight 高亮传参年份
+     * @private
+     */
+    refreshYearMenu: function (year, highlight) {
+        var global = this._global, menu = [], selectedYear;
+        year = (year &amp;&amp; year &lt; 9996 &amp;&amp; year &gt; 1004) ? year : year === undefined ? global.pageYear : global.year;
+        global.pageYear = year;
+        selectedYear = highlight ? this.isDisabled(year) ? undefined : year : global.year;
+        for (var y = year - 5; y &lt; year + 5; y++) {
+            menu.push('&lt;a name=&quot;' + y + '&quot; class=&quot;' + (y === selectedYear ? &quot;ui-datepicker-menu-selected&quot; : this.isDisabled(y) ? &quot; ui-datepicker-disabled&quot; : &quot;&quot;) + '&quot;&gt;' + y + '&lt;/a&gt;');
+        }
+        global.yearMenuPlaceHolder.empty()
+            .elems[0].innerHTML = menu.join(&quot;&quot;);
+        global.yearMenu.find(&quot;.ui-datepicker-menu-year-page&quot;).find(&quot;.ui-datepicker-disabled&quot;).removeClass(&quot;ui-datepicker-disabled&quot;);
+    },
+    /*
+     * 刷新月份菜单
+     * @param {Number} month 当前月份(0~11)
+     * @private
+     */
+    refreshMonthMenu: function (month) {
+        var locale = [&quot;一月&quot;, &quot;二月&quot;, &quot;三月&quot;, &quot;四月&quot;, &quot;五月&quot;, &quot;六月&quot;, &quot;七月&quot;, &quot;八月&quot;, &quot;九月&quot;, &quot;十月&quot;, &quot;十一&quot;, &quot;十二&quot;],
+            global = this._global,
+            menu = [];
+        month = month || global.month;
+        for (var m = 0; m &lt; 12; m++) {
+            menu.push('&lt;a name=&quot;' + m + '&quot; class=&quot;' + (m === global.month ? &quot;ui-datepicker-menu-selected&quot; : this.isDisabled(global.year, m) ? &quot; ui-datepicker-disabled&quot; : &quot;&quot;) + '&quot;&gt;' + locale[m] + '&lt;/a&gt;');
+        }
+        global.monthMenu.empty()
+            .elems[0].innerHTML = menu.join(&quot;&quot;);
+    },
+    /*
+     * 刷新日历面板
+     * @param {Number} year
+     * @param {Number} month(0~11)
+     * @private
+     */
+    refreshBody: function (year, month) {
+        var global = this._global,
+            body = global.body,
+            tbody = this.generateBody(year || global.year, parseInt(month || global.month, 10)),
+            doc = global.pageContext.document;
+        // 清理DOM
+        body.empty();
+        if (fastDev.Browser.isIE) {
+            // IE下table的innerHTML为只读属性
+            var div = doc.createElement(&quot;div&quot;);
+            div.innerHTML = &quot;&lt;table&gt;&lt;tbody&gt;&quot; + tbody + &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;;
+            global.body = fastDev(div).find(&quot;tbody&quot;).replace(body);
+        } else {
+            body.elems[0].innerHTML = tbody;
+        }
+        // 刷新&quot;今天&quot;按钮
+        this.freshUI(true);
+    },
+    /*
+     * 刷新日历头部样式
+     * @param {Number} year 年份
+     * @param {Number} month 月份(0~11)
+     * @private
+     */
+    refreshHeader: function (year, month) {
+        var global = this._global;
+        global.yearInput.removeClass(&quot;ui-datepicker-header-input-over&quot;).prop(&quot;value&quot;, this.toLocaleYear(year || global.year));
+        global.monthInput.removeClass(&quot;ui-datepicker-header-input-over&quot;).prop(&quot;value&quot;, this.toLocaleMonth(month || global.month));
+        this.refreshHeaderBtn();
+    },
+    /*
+     * 刷新日历头部按钮样式
+     * @param {Number} year 当前年份
+     * @param {Number} month 当前月份
+     * @private
+     */
+    refreshHeaderBtn: function (year, month) {
+        var global = this._global;
+        year = year || global.year;
+        month = month || global.month;
+        global.header.find(&quot;.ui-datepicker-header-disabled&quot;).removeClass(&quot;ui-datepicker-header-disabled&quot;);
+        if (year === global.maxYear) {
+            global.nextYearBtn.parent().addClass(&quot;ui-datepicker-header-disabled&quot;);
+            if (month === global.maxMonth) {
+                global.nextMonthBtn.parent().addClass(&quot;ui-datepicker-header-disabled&quot;);
+            }
+        }
+        if (year === global.minYear) {
+            global.prevYearBtn.parent().addClass(&quot;ui-datepicker-header-disabled&quot;);
+            if (month === global.minMonth) {
+                global.prevMonthBtn.parent().addClass(&quot;ui-datepicker-header-disabled&quot;);
+            }
+        }
+    },
+    /*
+     * 刷新至较近可用时间点
+     * @param {Date} date
+     * @private
+     */
+    refreshToRecent: function (date) {
+        var global = this._global,
+            options = this._options,
+            oldYear = global.year,
+            oldMonth = global.month,
+            oldDate = global.date,
+            now, year, month, last, time;
+        if (!global.selectedYear) {
+            // 以指定日期或当前日期点刷新
+            now = date || new Date();
+        } else {
+            // 以指定日期或已选择日期点刷新
+            now = date || global.selectedValue;
+            global.hours = now.getHours();
+            global.minutes = now.getMinutes();
+            global.seconds = now.getSeconds();
+        }
+        date = new Date(now.getFullYear(), now.getMonth() - 1);
+        year = date.getFullYear();
+        month = date.getMonth();
+        time = this.getUsableMonth(&quot;Next&quot;, year, month);
+        if (time.month === month) {
+            time = this.getUsableMonth(&quot;Prev&quot;, now.getFullYear(), now.getMonth());
+        }
+        global.year = year = time.year;
+        global.month = month = time.month;
+        global.date = date = now.getDate();
+        if (date &gt; (last = new Date(year, month + 1, 0).getDate())) {
+            global.date = date = last;
+        }
+        // 确定当前待选日可用
+        while (this.isDisabled(year, month, date) &amp;&amp; !! date) {
+            date = date &gt;= global.date ? date === last ? global.date - 1 : date + 1 : date - 1;
+        }
+        global.date = date === 0 ? global.date : date;
+        if (options.showTimePicker) {
+            // 刷新待选日样式
+            this.forSelect(global.forSelectDate = global.date);
+        } else {
+            global.forSelectDate = global.selectedDate;
+        }
+        // 刷新头部
+        this.refreshHeader();
+        // 刷新面板
+        this.refreshBody();
+        if (options.showTimePicker) {
+            // 获取最近整点
+            if (global.hours === undefined || global.hours === null) {
+                time = this.getNextTime(now.getHours(), now.getMinutes(), now.getSeconds(), this.getTimeFocusName());
+            } else if (this.isDisabled(global.year, global.month, global.forSelectDate, global.hours, global.minutes, global.seconds)) {
+                time = this.getNextTime(global.hours, global.minutes, global.seconds, this.getTimeFocusName());
+            } else {
+                time = null;
+            }
+            if (time !== null) {
+                global.hours = time[0] || 0;
+                global.minutes = time[1] || 0;
+                global.seconds = time[2] || 0;
+            }
+            this.refreshTimePicker();
+        }
+    },
+    /*
+     * 隐藏菜单
+     * @param {String} type year或month
+     * @param {Number} time 当前年月值，月份值(1~12)
+     * @param {Boolean} noFresh 是否不刷新
+     * @private
+     */
+    hideMenu: function (type, time, noFresh) {
+        var global = this._global,
+            cType = fastDev.Util.StringUtil.capitalize(type);
+        if (global[&quot;is&quot; + cType + &quot;MenuShowed&quot;]) {
+            if (time === undefined) {
+                //验证输入框输入
+                time = parseInt(global[type + &quot;Input&quot;].prop(&quot;value&quot;), 10) || -1;
+                time = type === &quot;year&quot; ? (time &gt;= global.minYear &amp;&amp; time &lt;= global.maxYear &amp;&amp; !this.isDisabled(time)) ? time : global.year : (time &gt; 0 &amp;&amp; time &lt; 13 &amp;&amp; !this.isDisabled(global.year, time - 1)) ? time - 1 : global.month;
+            }
+            global[type] = time;
+            if (!noFresh) {
+                this.refreshBody(global.year, global.month + &quot;&quot;);
+            }
+            this.refreshHeader(global.year, global.month + &quot;&quot;);
+            global[type + &quot;Input&quot;].elems[0].blur();
+            global[type + &quot;Menu&quot;].hide();
+            global[&quot;is&quot; + cType + &quot;MenuShowed&quot;] = false;
+        }
+    },
+    /*
+     * 获取可用年份
+     * @param {String} type Next或Prev
+     * @param {Number} year 当前年份
+     * @param {Boolean} forMonth 是否是获取月份操作
+     * @return {Object}
+     * @private
+     */
+    getUsableYear: function (type, year, forMonth) {
+        var global = this._global,
+            extremum = global[type === &quot;Next&quot; ? &quot;maxYear&quot; : &quot;minYear&quot;],
+            month = global.month,
+            maxLoopCount = 2000;
+        year = type === &quot;Next&quot; ? year &gt;= extremum ? extremum - 1 : year : year &lt;= extremum ? extremum + 1 : year;
+        while (type === &quot;Next&quot; ? ++year &lt; extremum : --year &gt; extremum) {
+            if (!this.isDisabled(year)) {
+                //可用年份
+                // 如果当前月份被禁用，则获取当前年的上或下一个可用月份
+                if (!forMonth &amp;&amp; this.isDisabled(year, month)) {
+                    while (type === &quot;Next&quot; ? --month &gt; -1 : ++month &lt; 12) {
+                        if (!this.isDisabled(year, month)) {
+                            break;
+                        } else if (month === (type === &quot;Next&quot; ? 0 : 11)) {
+                            // 获取当前年下或上一个可用的月份
+                            month = global.month;
+                            while (type === &quot;Next&quot; ? ++month &lt; 12 : --month &gt; -1) {
+                                if (!this.isDisabled(year, month)) {
+                                    break;
+                                } else if (month === (type === &quot;Next&quot; ? 11 : 0)) {
+                                    // 当前年根本无可用的月份
+                                    month = null;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            if (!(maxLoopCount--)) {
+                break;
+            }
+        }
+        return maxLoopCount ? {
+            year: year,
+            month: month
+        } : {
+            year: global[type === &quot;Next&quot; ? &quot;maxYear&quot; : &quot;minYear&quot;],
+            month: global[type === &quot;Next&quot; ? &quot;maxMonth&quot; : &quot;minMonth&quot;]
+        };
+    },
+    /*
+     * 获取可用月份
+     * @param {String} type Next或Prev
+     * @param {Number} year 当前年份
+     * @param {Number} month 当前月份(0~11)
+     * @private
+     */
+    getUsableMonth: function (type, year, month) {
+        var global = this._global,
+            usableYear, temp = month,
+            maxLoopCount = 2000;
+        while (maxLoopCount--) {
+            if (month === (type === &quot;Prev&quot; ? 0 : 11)) {
+                // 获取下一个可用年份
+                if ((usableYear = this.getUsableYear(type, year, true).year) === year) {
+                    month = temp;
+                    break;
+                }
+                year = usableYear;
+                month = (type === &quot;Prev&quot; ? 11 : 0);
+            } else {
+                month += (type === &quot;Prev&quot; ? -1 : 1);
+            }
+            if (!this.isDisabled(year, month)) {
+                break;
+            }
+        }
+        return maxLoopCount ? {
+            year: year,
+            month: month
+        } : {
+            year: global[type === &quot;Prev&quot; ? &quot;minYear&quot; : &quot;maxYear&quot;],
+            month: global[type === &quot;Prev&quot; ? &quot;minMonth&quot; : &quot;maxMonth&quot;]
+        };
+    },
+    /*
+     * 获取当前时间的下一个较近的可选时间值
+     * @param {Number} hours
+     * @param {Number} minutes
+     * @param {Number} seconds
+     * @param {String} focus
+     * @param {Array} original 原值
+     * @private
+     */
+    getNextTime: function (hours, minutes, seconds, focus, original) {
+        var global = this._global,
+            sPlus = global.showSeconds &amp;&amp; (!focus || focus === &quot;seconds&quot; || !! original),
+            mPlus = global.showMinutes &amp;&amp; (!focus || focus === &quot;minutes&quot; || !! original),
+            hPlus = global.showHours &amp;&amp; (!focus || focus === &quot;hours&quot;),
+            step = focus ? 1 : 15,
+            args = Array.prototype.slice.call(arguments, 0, 3),
+            prev = false,
+            time;
+        minutes = focus ? minutes : mPlus ? Math.floor(minutes / 15) * 15 : 0;
+        seconds = focus ? seconds : sPlus ? !! original ? 0 : 45 : 0;
+        if ( !! original &amp;&amp; !this.isDisabled(global.year, global.month, global.forSelectDate, hours, minutes, seconds)) {
+            return [hours, minutes, seconds];
+        }
+        do {
+            if (sPlus) {
+                hPlus = ((mPlus = !(seconds = ((time = seconds + step) &lt; 60 ? time : 0)) &amp;&amp; global.showMinutes) || (!seconds &amp;&amp; !global.showMinutes)) &amp;&amp; global.showHours;
+                if (seconds === 0 &amp;&amp; !hPlus &amp;&amp; !mPlus) {
+                    prev = true;
+                    break;
+                }
+            }
+            if (mPlus &amp;&amp; !(hPlus = !(minutes = ((time = minutes + step) &lt; 60 ? time : 0)) &amp;&amp; global.showHours) &amp;&amp; minutes === 0) {
+                prev = true;
+                break;
+            }
+            if (hPlus &amp;&amp; !(hours = (hours &lt; 23 ? hours + 1 : 0))) {
+                prev = true;
+                break;
+            }
+            if ( !! original &amp;&amp; (hours &gt; original[0] || (hours === original[0] &amp;&amp; minutes &gt;= original[1]) || (hours === original[0] &amp;&amp; minutes === original[1] &amp;&amp; seconds &gt;= original[2]))) {
+                return original;
+            }
+        } while (this.isDisabled(global.year, global.month, global.forSelectDate, hours, minutes, seconds));
+        return prev ? original || this.getNextTime(hours, minutes, seconds, focus, args) : [hours, minutes, seconds];
+    },
+    /*
+     * 获取当前时间的上一个较近的可选时间值
+     * @param {Number} hours
+     * @param {Number} minutes
+     * @param {Number} seconds
+     * @param {Array} original 原值
+     * @private
+     */
+    getPrevTime: function (hours, minutes, seconds, focus, original) {
+        var global = this._global,
+            sPlus = focus ? global.showSeconds &amp;&amp; (focus === &quot;seconds&quot; || !! original) : false,
+            mPlus = global.showMinutes &amp;&amp; (!focus || focus === &quot;minutes&quot; || !! original),
+            hPlus = global.showHours &amp;&amp; (!focus || focus === &quot;hours&quot;),
+            step = focus ? -1 : -15,
+            args = Array.prototype.slice.call(arguments, 0, 3),
+            next = false,
+            time;
+        minutes = focus ? minutes : mPlus ? Math.floor(minutes / 15) * 15 : 0;
+        if ( !! original &amp;&amp; !this.isDisabled(global.year, global.month, global.forSelectDate, hours, minutes, seconds)) {
+            return [hours, minutes, seconds];
+        }
+        do {
+            if (sPlus) {
+                if ((time = seconds + step) &lt; 0) {
+                    seconds = 59;
+                    if (!(mPlus = global.showMinutes) &amp;&amp; !(hPlus = global.showHours)) {
+                        next = true;
+                        break;
+                    }
+                } else {
+                    seconds = time;
+                    hPlus = mPlus = false;
+                }
+            }
+            if (mPlus) {
+                if ((time = minutes + step) &lt; 0) {
+                    minutes = focus ? 59 : 45;
+                    if (!(hPlus = global.showHours)) {
+                        next = true;
+                        break;
+                    }
+                } else {
+                    minutes = time;
+                    hPlus = false;
+                }
+            }
+            if (hPlus) {
+                if ((time = hours - 1) &lt; 0) {
+                    hours = 23;
+                    next = true;
+                    break;
+                } else {
+                    hours = time;
+                }
+            }
+            if ( !! original &amp;&amp; (hours &lt; original[0] || (hours === original[0] &amp;&amp; minutes &lt;= original[1]) || (hours === original[0] &amp;&amp; minutes === original[1] &amp;&amp; seconds &lt;= original[2]))) {
+                return original;
+            }
+        } while (this.isDisabled(global.year, global.month, global.forSelectDate, hours, minutes, seconds));
+        return next ? original || this.getPrevTime(hours, minutes, seconds, focus, args) : [hours, minutes, seconds];
+    },
+    /*
+     * 判断该日期是否被禁用
+     * @param {Number|Date} year 年
+     * @param {Number} month 月(0~11)
+     * @param {Number} date 日
+     * @param {Number} hours 时
+     * @param {Number} minutes 分
+     * @param {Number} seconds 秒
+     * @return {Boolean}
+     * @private
+     */
+    isDisabled: function (year, month, date, hours, minutes, seconds) {
+        var that = this,
+            options = that._options,
+            global = this._global,
+            time, disabled;
+        hours = global.showHours ? hours : undefined;
+        minutes = global.showMinutes ? minutes : undefined;
+        seconds = global.showSeconds ? seconds : undefined;
+        // 最值判断
+        if (year === undefined) {
+            disabled = true;
+        } else if (month === undefined) {
+            disabled = year &gt; global.maxYear || year &lt; global.minYear;
+        } else if (date === undefined) {
+            time = new Date(year, month).getTime();
+            disabled = time &gt;= new Date(global.maxYear, global.maxMonth + 1).getTime() || time &lt; new Date(global.minYear, global.minMonth, 1).getTime();
+        } else if (hours === undefined) {
+            time = new Date(year, month, date).getTime();
+            disabled = time &gt;= new Date(global.maxYear, global.maxMonth, global.maxDay + 1).getTime() || time &lt; new Date(global.minYear, global.minMonth, global.minDay).getTime();
+        } else if (minutes === undefined) {
+            time = new Date(year, month, date, hours).getTime();
+            disabled = time &gt;= new Date(global.maxYear, global.maxMonth, global.maxDay, global.maxHours + 1).getTime() || time &lt; new Date(global.minYear, global.minMonth, global.minDay, global.minHours).getTime();
+        } else if (seconds === undefined) {
+            time = new Date(year, month, date, hours, minutes).getTime();
+            disabled = time &gt;= new Date(global.maxYear, global.maxMonth, global.maxDay, global.maxHours, global.maxMinutes + 1).getTime() || time &lt; new Date(global.minYear, global.minMonth, global.minDay, global.minHours, global.minMinutes).getTime();
+        } else {
+            time = new Date(year, month, date, hours, minutes, seconds).getTime();
+            disabled = time &gt;= new Date(global.maxYear, global.maxMonth, global.maxDay, global.maxHours, global.maxMinutes, global.maxSeconds + 1).getTime() || time &lt; new Date(global.minYear, global.minMonth, global.minDay, global.minHours, global.minMinutes, global.minSeconds).getTime();
+        }
+        return (!disabled &amp;&amp; !! this.cronParser) ? this.match({
+            year: year,
+            month: month,
+            date: date,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds
+        }) : disabled;
+    },
+    /*
+     * 判断日期值是否为当前所选值
+     * @param {Number} year
+     * @param {Number} month
+     * @param {Number} date
+     * @return {Boolean}
+     * @private
+     */
+    isSelected: function (year, month, date) {
+        var global = this._global;
+        return global.forSelectDate === date || (global.selectedDate === date &amp;&amp; global.selectedMonth === month &amp;&amp; global.selectedYear === year &amp;&amp; global.forSelectDate === date);
+    },
+    /*
+     * 判断是否需要显示时间选择器
+     * @private
+     */
+    isShowTimePicker: function () {
+        var options = this._options;
+        if (options.display === &quot;inline&quot;) {
+            return false;
+        }
+        var global = this._global,
+            format = options.format,
+            // 查找小时域
+            h = /.*[Hh]{1,2}.*/g.test(format),
+            // 查找分钟域
+            m = /.*m{1,2}.*/g.test(format),
+            // 查找秒钟域
+            s = /.*s{1,2}.*/g.test(format),
+            //判断
+            isShow = options.showTimePicker === true ? true : options.showTimePicker === false ? false : (h || m || s);
+        if (isShow) {
+            global.showHours = h;
+            global.showMinutes = m;
+            global.showSeconds = s;
+        }
+        return isShow;
+    },
+    /*
+     * 预备选取
+     * @param {Number} date 日
+     * @param {Number} month 月（0~11）
+     * @param {Number} year 年
+     * @private
+     */
+    forSelect: function (date, month, year) {
+        var options = this._options,
+            global = this._global;
+        global.body.find(&quot;.ui-datepicker-selected&quot;).removeClass(&quot;ui-datepicker-selected&quot;);
+        global.body.find(&quot;[name='&quot; + date + &quot;-&quot; + global.sequence + &quot;']&quot;).addClass(&quot;ui-datepicker-selected&quot;);
+        // 待选日期标记
+        if (options.showTimePicker) {
+            global.forSelectDate = date;
+            if (this.isDisabled(year || global.year, month === undefined ? global.month : month, date, global.hours, global.minutes, global.seconds)) {
+                // 需重新判断当天时间选择值是否有效
+                this.timePickerBtnClick(&quot;up&quot;);
+            }
+        }
+    },
+    /*
+     * 选择指定的日期时间
+     * @param {Date} date 日期对象
+     * @return {Boolean} 是否已接受此值
+     * @private
+     */
+    select: function (date) {
+        var options = this._options,
+            global = this._global,
+            value;
+        date = this.toValidDate(date);
+        if ( !! date &amp;&amp; this.isDisabled(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())) {
+            return false;
+        }
+        value = date ? fastDev.Util.DateUtil.format(date, options.format) : &quot;&quot;;
+        if (options.onPick.call(this, date, value) !== false) {
+            options.value = value;
+            if (options.display !== &quot;inline&quot;) {
+                global.input.prop(&quot;value&quot;, value);
+                if (global.handleClick) {
+                    this.fire(&quot;focus&quot;);
+                }
+            }
+            fastDev.each([&quot;After&quot;, &quot;Before&quot;], function (i, name) {
+                name = &quot;time&quot; + name;
+                global[name] = options[name].alias === &quot;DatePicker&quot; ? options[name] : fastDev.getInstance(options[name]);
+            });
+            if ( !! global.timeAfter &amp;&amp; global.timeAfter._global.initialized &amp;&amp; typeof global.timeAfter.setMaxDate === &quot;function&quot;) {
+                global.timeAfter.setMaxDate(date);
+            }
+            if ( !! global.timeBefore &amp;&amp; global.timeBefore._global.initialized &amp;&amp; typeof global.timeBefore.setMinDate === &quot;function&quot;) {
+                global.timeBefore.setMinDate(date);
+            }
+            fastDev.apply(global, {
+                selectedYear: date ? date.getFullYear() : null,
+                selectedMonth: date ? date.getMonth() : null,
+                selectedDate: date ? date.getDate() : null,
+                selectedValue: date,
+                hours: date ? date.getHours() : null,
+                minutes: date ? date.getMinutes() : null,
+                seconds: date ? date.getSeconds() : null
+            });
+            return true;
+        }
+    },
+    /*
+     * 获取有效时间值
+     * @param {String} name
+     * @return {Object}
+     * @private
+     */
+    getTime: function (name) {
+        var global = this._global,
+            options = this._options,
+            hours, minutes, seconds, time;
+        hours = parseInt(global.timePickerHours.prop(&quot;value&quot;), 10);
+        hours = isNaN(hours) ? 0 : hours &gt; 23 ? 23 : hours &lt; 0 ? 0 : hours;
+        minutes = parseInt(global.timePickerMinutes.prop(&quot;value&quot;), 10);
+        minutes = isNaN(minutes) ? 0 : minutes &gt; 59 ? 59 : minutes &lt; 0 ? 0 : minutes;
+        seconds = parseInt(global.timePickerSeconds.prop(&quot;value&quot;), 10);
+        seconds = isNaN(seconds) ? 0 : seconds &gt; 59 ? 59 : seconds &lt; 0 ? 0 : seconds;
+        if (!this.isDisabled(global.year, global.month, global.forSelectDate, hours, minutes, seconds)) {
+            return {
+                hours: hours,
+                minutes: minutes,
+                seconds: seconds
+            };
+        } else {
+            time = (name &amp;&amp; (name === &quot;timePickerUpBtn&quot; || name === &quot;timePickerDownBtn&quot;)) ? [hours, minutes, seconds] : this.getNextTime(hours, minutes, seconds, this.getTimeFocusName());
+            return {
+                hours: time[0],
+                minutes: time[1],
+                seconds: time[2]
+            };
+        }
+    },
+    /*
+     * 刷新时间选择器
+     * @param {Number} hours 小时
+     * @param {Number} minutes 分钟
+     * @param {Number} seconds 秒钟
+     * @private
+     */
+    refreshTimePicker: function (hours, minutes, seconds) {
+        if (this._options.showTimePicker) {
+            var global = this._global,
+                fn = fastDev.Util.NumberUtil.pad;
+            // 时
+            hours = global.showHours ? fn(hours || global.hours, 2) : &quot;00&quot;,
+            // 分
+            minutes = global.showMinutes ? fn(minutes || global.minutes, 2) : &quot;00&quot;,
+            // 秒
+            seconds = global.showSeconds ? fn(seconds || global.seconds, 2) : &quot;00&quot;;
+            global.timePickerHours.prop(&quot;value&quot;, hours);
+            global.timePickerMinutes.prop(&quot;value&quot;, minutes);
+            global.timePickerSeconds.prop(&quot;value&quot;, seconds);
+        }
+    },
+    /*
+     * 定位层
+     * @param {fastDev.Core.DomObject} obj 需定位的对象
+     * @param {fastDev.Core.DomObject} elem 相对其定位的元素
+     * @return {fastDev.Core.DomObject} obj 定位对象
+     * @private
+     */
+    position: function (obj, elem) {
+        var global = this._global;
+        if (!obj.resetedPostion) {
+            obj.appendTo(global.pageContext.document.body);
+            obj.resetedPostion = true;
+        }
+        return fastDev.Util.position.locate(obj, elem, global.pageContext, 2, false);
+    },
+    /*
+     * 显示日历面板
+     * @return {fastDev.Ui.DatePicker} 本控件实例
+     */
+    show: function () {
+        var global = this._global,
+            options = this._options;
+        if (global.isPickerShowed || options.disabled) {
+            // 已显示日历面板或者只读状态，则返回
+            return this;
+        }
+        // 显示日历面板
+        global.picker.show();
+        // 刷新面板
+        this.refreshToRecent( !! global.selectedYear ? global.selectedValue : new Date());
+        if (options.display === &quot;inline&quot;) {
+            global.pageYear = global.year;
+        } else {
+            // 定位
+            this.position(global.picker, global.wrapper);
+            // 聚焦
+            global.input.parent().addClass(&quot;ui-form-focus&quot;);
+            global.trigger.parent().addClass(&quot;ui-form-trigger-over&quot;);
+        }
+        // 绑定隐藏或刷新日历面板事件
+        if (!options.inside) {
+            global.topDocHtml.bind(&quot;click&quot;, global.docClickEventHandle);
+        }
+        global.docHtml.bind(&quot;click&quot;, global.docClickEventHandle);
+        global.clear = true;
+        global.isBlur = false;
+        global.isPickerShowed = true;
+        return this;
+    },
+    /*
+     * 隐藏日历面板
+     * @return {fastDev.Ui.DatePicker} 本控件实例
+     */
+    hide: function () {
+        var options = this._options,
+            global = this._global;
+        // 隐藏面板
+        this.hideMenu(&quot;month&quot;);
+        this.hideMenu(&quot;year&quot;);
+        global.picker.hide();
+        if (options.display === &quot;block&quot;) {
+            global.docHtml.unbind(&quot;click&quot;, global.docClickEventHandle);
+            if (!options.inside) {
+                global.topDocHtml.unbind(&quot;click&quot;, global.docClickEventHandle);
+            }
+            // 失焦
+            global.input.parent().removeClass(&quot;ui-form-focus&quot;);
+            global.trigger.parent().removeClass(&quot;ui-form-trigger-over&quot;);
+            if (!global.isBlur) {
+                global.onBlur();
+                global.isBlur = true;
+            }
+        }
+        global.forSelectDate = null;
+        global.isPickerShowed = false;
+        return this;
+    },
+    /*
+     * 获取本地化月份值
+     * @param {Number} month 月
+     * @return {String}
+     * @private
+     */
+    toLocaleMonth: function (month) {
+        var locale = [&quot;一月&quot;, &quot;二月&quot;, &quot;三月&quot;, &quot;四月&quot;, &quot;五月&quot;, &quot;六月&quot;, &quot;七月&quot;, &quot;八月&quot;, &quot;九月&quot;, &quot;十月&quot;, &quot;十一月&quot;, &quot;十二月&quot;];
+        return locale[month];
+    },
+    /*
+     * 获取本地化年份值
+     * @param {Number} year 年
+     * @return {String}
+     * @private
+     */
+    toLocaleYear: function (year) {
+        return year + &quot;年&quot;;
+    },
+    /*
+     * 获取有效日期对象
+     * @param {String|Date} date 需验证的日期字符串或对象
+     * @return {Date} 若为有效日期，则返回解析后的日期对象，否则返回null
+     */
+    toValidDate: function (date) {
+        if (date) {
+            if (typeof date === &quot;string&quot;) {
+                date = fastDev.Util.DateUtil.parse(fastDev.Util.StringUtil.trim(date));
+            }
+            var value = date.toString();
+            if (!(value === &quot;Invalid Date&quot; || value === &quot;NaN&quot;)) {
+                return date;
+            }
+        }
+        return null;
+    },
+    /*
+     * 设置日期时间值
+     * @param {String|Date} value 字符串形式或日期对象形式的日期时间值
+     * @return {fastDev.Ui.DatePicker} 本控件实例
+     */
+    setValue: function (value) {
+        var options = this._options,
+            global = this._global;
+        global.lastValue = global.input.prop(&quot;value&quot;);
+        this.select(/now/i.test(value) ? new Date() : value);
+        if ((value = global.input.prop(&quot;value&quot;)) !== global.lastValue) {
+            (options.onchange || fastDev.noop).call(this, value, global.selectedValue);
+        }
+        if (this._options.display === &quot;inline&quot;) {
+            this.refreshToRecent();
+        }
+        return this;
+    },
+    /*
+     * 获取日期时间值
+     * @return {String} 按配置格式格式化后的日期时间值
+     */
+    getValue: function () {
+        return this._options.value;
+    },
+    /*
+     * 获取控件当前值的日期对象
+     * @return {Date} 当前日期对象或者null
+     */
+    getDate: function () {
+        return this._global.selectedValue || null;
+    },
+    /*
+     * 设置极值日期
+     * @param {String} type max或min
+     * @return {fastDev.Ui.DatePicker}
+     * @private
+     */
+    setExtremumDate: function (date, type) {
+        var global = this._global,
+            options = this._options,
+            extremum, time;
+        date = this.toValidDate(date);
+        if (date &amp;&amp; (time = date.getTime()) &lt;= global.maxDate.getTime() &amp;&amp; time &gt;= global.minDate.getTime()) {
+            extremum = options[type + &quot;Date&quot;] = date;
+        } else {
+            extremum = options[type + &quot;Date&quot;] = global[type + &quot;Date&quot;];
+        }
+        global[type + &quot;Year&quot;] = extremum.getFullYear();
+        global[type + &quot;Month&quot;] = extremum.getMonth();
+        global[type + &quot;Day&quot;] = extremum.getDate();
+        global[type + &quot;Hours&quot;] = extremum.getHours();
+        global[type + &quot;Minutes&quot;] = extremum.getMinutes();
+        global[type + &quot;Seconds&quot;] = extremum.getSeconds();
+        if (type === &quot;max&quot;) {
+            if (extremum.getTime() &lt; options.minDate.getTime()) {
+                this.setMinDate(global.minDate);
+            }
+            if (global.selectedValue &amp;&amp; global.selectedValue.getTime() &gt; extremum.getTime()) {
+                this.setValue(&quot;&quot;);
+            }
+        } else {
+            if (extremum.getTime() &gt; options.maxDate.getTime()) {
+                this.setMaxDate(global.maxDate);
+            }
+            if (global.selectedValue &amp;&amp; global.selectedValue.getTime() &lt; extremum.getTime()) {
+                this.setValue(&quot;&quot;);
+            }
+        }
+        if (options.display === &quot;inline&quot; &amp;&amp; global.initialized) {
+            this.refreshToRecent();
+        }
+        return this;
+    },
+    /*
+     * 设置最小日期限制
+     * @param {String|Date} date 日期时间字符串或日期对象
+     * @return {fastDev.Ui.DatePicker} 本控件实例
+     */
+    setMinDate: function (date) {
+        return this.setExtremumDate(date, &quot;min&quot;);
+    },
+    /*
+     * 设置最大日期限制
+     * @param {String|Date} date 日期时间字符串或日期对象
+     * @return {fastDev.Ui.DatePicker} 本控件实例
+     */
+    setMaxDate: function (date) {
+        return this.setExtremumDate(date, &quot;max&quot;);
+    },
+    /*
+     * 设置是否只读
+     * @param {Boolean} [readonly=true] 是否只读
+     * @return {fastDev.Ui.DatePicker} 本控件实例
+     */
+    setReadonly: function (readonly) {
+        var options = this._options;
+        if (options.display === &quot;inline&quot; || !! options.disabled) {
+            return;
+        }
+        options.readonly = readonly === false ? false : true;
+        return this;
+    },
+    /*
+     * 启用控件
+     */
+    enable: function () {
+        this._options.disabled = false;
+        this.setReadonly(false);
+        this._global.input.prop(&quot;disabled&quot;, &quot;&quot;).parent().removeClass(&quot;ui-form-disabled&quot;);
+    },
+    /*
+     * 禁用控件
+     */
+    disable: function () {
+        this._options.disabled = false;
+        this.setReadonly(true);
+        this._options.disabled = true;
+        this._global.input.prop(&quot;disabled&quot;, &quot;disabled&quot;).parent().addClass(&quot;ui-form-disabled&quot;);
+    }
+});</pre>
+</body>
+</html>

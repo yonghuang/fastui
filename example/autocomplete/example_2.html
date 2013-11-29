@@ -1,0 +1,71 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+			<link href="../../themes/base/css/main.css" rel="stylesheet"
+		type="text/css" />
+				<script src="../../src/library/jquery-1.5.1.min.js"></script>
+	<script src="../../src/library/FastDev.js"></script>
+	<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/core/ClassManager.js"></script>
+	<script src="../../src/core/Base.js"></script>
+	<script src="../../src/core/Base_Patch.js"></script>
+	<script src="../../src/core/ControlBus.js"></script>
+	<script src="../../src/core/ControlBus_Patch.js"></script>
+	<script src="../../src/core/DataBus.js"></script>
+	<script src="../../src/core/DataBus_Patch.js"></script>
+	  <script src="../../src/library/Tools.js"></script>
+	<script src="../../src/component/basecontrol/SimpleControl.js"></script>
+		<script src="../../src/component/basecontrol/Input.js"></script>
+		<script src="../../src/component/basecontrol/Anchor.js"></script>
+		<script src="../../src/component/basecontrol/Body.js"></script>
+		<script src="../../src/component/basecontrol/Button.js"></script>
+		<script src="../../src/component/basecontrol/CheckBox.js"></script>
+		<script src="../../src/component/basecontrol/Div.js"></script>
+		<script src="../../src/component/basecontrol/Dl.js"></script>
+		<script src="../../src/component/basecontrol/File.js"></script>
+		<script src="../../src/component/basecontrol/Form.js"></script>
+		<script src="../../src/component/basecontrol/Hidden.js"></script>
+		<script src="../../src/component/basecontrol/Iframe.js"></script>
+		<script src="../../src/component/basecontrol/Image.js"></script>
+		<script src="../../src/component/basecontrol/Label.js"></script>
+		<script src="../../src/component/basecontrol/Password.js"></script>
+		<script src="../../src/component/basecontrol/Pre.js"></script>
+		<script src="../../src/component/basecontrol/Radio.js"></script>
+		<script src="../../src/component/basecontrol/Span.js"></script>
+		<script src="../../src/component/basecontrol/Table.js"></script>
+		<script src="../../src/component/basecontrol/Text.js"></script>
+		<script src="../../src/component/basecontrol/TextArea.js"></script>
+		<script src="../../src/component/basecontrol/Ul.js"></script>
+        
+		<script src="../../src/library/Patch.js"></script>
+	<script src="../../src/component/Component.js"></script>
+	<script src="../../src/component/Component_Patch.js"></script>
+	<script src="../../src/component/form/Box.js"></script>
+    <script src="../../src/component/form/AutoComplete.js"></script>
+    <script src="../../src/component/form/AutoComplete_Patch.js"></script>
+	<script language="javascript">
+	/*
+         *$(function(){
+         *...
+         *});
+         *
+         *1)上方结构体为jquery特有,等同于window.onload
+         *2)在控件初始化时必须保证当前HTML文档已经加载完成
+         */
+        fastDev.ready(function () {
+            fastDev.create("fastDev.Ui.AutoComplete",{
+                container : "example",
+                dataSource : "example_init.jsp",
+                name : "testAutoComplete"
+            });
+        });
+
+	</script>
+	<title>高级应用示例</title>
+	</head>
+	<body><div id="example"></div>
+    <br/><br/>
+    此示例虚拟数据源仅提供首字符为"a"、"b"、"c"、"我"的查询,正式使用请配合后台Sql
+    </body>
+	</html>

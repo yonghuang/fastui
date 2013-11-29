@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title><h4>主框架布局之tree+tabs</h4> 
+			<u><li>主框架布局-左边为tree，右边为tabs。点击左边树节点，在右边新增对应标签页。</li></ul>
+			</title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function addTab()
+			{
+							
+				//alert("exe....");
+				var dtUserTree = fastDev.getInstance("lefttree");
+				//alert("tree"+dtUserTree);
+        	var currentId = dtUserTree.getCurrentId();
+        	
+        	//alert("点击节点"+currentId);
+        	//alert("点击"+dtUserTree.getCurrentTxt());
+				var tab1=fastDev.getInstance("tabs1");
+				var title = dtUserTree.getCurrentTxt();
+				//var taburl = "add.jsp?id="+currentId;
+				var taburl = "tab.html";
+				
+				
+				if( tab1.exists(title)== true)
+				{
+					
+					tab1.setActiveTabByTitle(title);
+				}
+				else
+				{
+				tab1.addTab({
+				title: title,
+				url: taburl,
+				iconCls: "icon-add",
+				showCloseBtn:true,
+				allowDND:true
+			});
+			}
+			
+			
+			
+				
+			}
+			
+			
+		</script>
+	</head>
+	<body>
+		<div class="ui-layout" style="width:98%; margin: 10px; height: 560px;">
+			
+			<div class="ui-layout-left" style="width:18%; top:0; height:560px;">
+			<div itype="Tree"  initSource="../../data/treedata1.txt"  showIco="true" 
+			onNodeClick="addTab()"  topParentid="0" openFloor=2 id="lefttree" saveInstance=true></div>	
+			</div>
+	
+	<div id="example" class="ui-layout-center" style="width:80.5%;  height:560px; top:0; left:18.5%; ">
+	
+		<div itype="Tabs" container="example" id="tabs1"  saveInstance="true">
+			</div>
+		</div> 
+		</div>
+	</body>
+</html>

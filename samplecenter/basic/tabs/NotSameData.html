@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>不同数据加载方式（ajax、iframe、div，包括本地和远程数据源）</h4>
+        <ul>        
+        <li>tabs项的类型默认是iframe的。iframe类型的直接是一个页面嵌入到一个iframe中，ajax类型的会将请求的页面的内容文本放到内容中，div的为静态内容，可是是任意Dom和控件。</li>
+        <li>
+        selected 只能有一个为true，showCloseBtn 是否带关闭按钮，iconCls的tabs项的图标样式
+        </li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+	</head>
+	<body><div style="margin:10px;">
+		<div  style="float:left; " >
+			<div class="ui-layout-text">本地数据源</div>
+		<div itype="Tabs" id="aaa" ie6Mode="tabs" width="500px" height="350px">        
+				<div title="Iframe" selected=true url="../tree/flag/10.png" id="afafa" iconCls="icon-add" showCloseBtn=true></div>                					
+                <div title="Ajax" url="bb.html" type="ajax" showCloseBtn=true></div>
+                <div title="Div控件" type="div"  showCloseBtn=true >
+                	<div>
+					<div itype="Button" text="按钮"></div>
+                    <textarea id="code" name="code">滴滴答答</textarea>
+                     </div>
+				</div>
+                <div title="Div文本" type="div" showCloseBtn=true>
+                发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>
+                </div>
+			</div>
+	    </div>
+    	<div style="float:left;padding-left:10px;" >
+    		<div class="ui-layout-text">远程数据源</div>
+		<div itype="Tabs" ie6Mode="tabs" initSource="../../data/tabs_data.txt" id="aaa"  container="example" width="500px" height="350px"></div>
+        </div></div>
+	</body>
+</html>

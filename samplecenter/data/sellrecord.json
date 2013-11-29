@@ -1,0 +1,16 @@
+{
+	"data": [
+		{
+			"empno": "0001",
+			"selldate": "2012-11-11",
+			"number": "10",
+			"remark ": "前端工程师"
+		}
+	],
+	"info": {
+		"pageSize": 1,
+		"records": 1,
+		"page": 1,
+		"total": 1
+	}
+}

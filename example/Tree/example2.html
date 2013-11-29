@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>普通树 </title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+    
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>     
+        <script src="../../src/component/list/Tree.js"></script> 
+     <script>
+			$(function() {
+				var data=[{pid:"0",id:"1",val:"基础控件",chk:"true"},{pid:"0",id:"2",val:"复合控件"},{pid:"0",id:"3",val:"业务组件"},{pid:"0",id:"4",val:"业务模板",asyn:"true"},{pid:"1",id:"5",val:"基础控件父类基础控件父类基础控件父类",chk:"true"},{pid:"5",id:"6",val:"基础表单控件"},{pid:"5",id:"7",val:"容器展示类控件"},{pid:"6",id:"8",val:"input类"},{pid:"8",id:"9",val:"按钮"},{pid:"8",id:"10",val:"文本框"},{pid:"6",id:"11",val:"文本域"},{pid:"8",id:"12",val:"密码框"},{pid:"8",id:"13",val:"隐藏域"},{pid:"8",id:"14",val:"单选框"},{pid:"8",id:"15",val:"复选框"},{pid:"6",id:"16",val:"下拉框"},{pid:"8",id:"17",val:"文件选择"},{pid:"6",id:"18",val:"表单"},{pid:"6",id:"29",val:"label标签"},{pid:"6",id:"28",val:"A标记"},{pid:"7",id:"19",val:"Pre标签"},{pid:"7",id:"20",val:"Ul列表"},{pid:"7",id:"21",val:"Div"},{pid:"7",id:"22",val:"Span"},{pid:"7",id:"23",val:"表格"},{pid:"7",id:"24",val:"Body"},{pid:"7",id:"25",val:"Dl"},{pid:"7",id:"26",val:"Iframe"},{pid:"7",id:"31",val:"图片"},{pid:"2",id:"201",val:"树"},{pid:"2",id:"202",val:"表单",chk:"true"},{pid:"2",id:"203",val:"单选框组"},{pid:"2",id:"204",val:"复选框组",chk:"part"},{pid:"2",id:"205",val:"选项卡",chk:"false"},{pid:"2",id:"206",val:"富文本编辑器"},{pid:"2",id:"207",val:"纵向导航"},{pid:"2",id:"208",val:"手风琴"},{pid:"2",id:"209",val:"FieldSet"},{pid:"2",id:"212",val:"DataGrid控件"},{pid:"2",id:"213",val:"智能提示框"},{pid:"2",id:"214",val:"信息板"},{pid:"2",id:"215",val:"双向选择下拉框"},{pid:"2",id:"216",val:"表单"},{pid:"2",id:"222",val:"日历控件"},{pid:"2",id:"223",val:"消息框"},{pid:"2",id:"224",val:"弹出框",asyn:"true"},{pid:"2",id:"225",val:"面包屑",asyn:"true"},{pid:"2",id:"226",val:"上传组件"},{pid:"2",id:"227",val:"进度条"},{pid:"3",id:"301",val:"选人控件"},{pid:"3",id:"302",val:"复合选择列表"}];
+
+				$.create("Tree", {
+					container : "example",
+					id:"tree1",
+					topParentid:"0",
+					showIco:true,
+					openFloor:3,
+					items :data
+				});
+				
+			});
+		
+	
+		
+	</script>
+</head>
+<body>普通树
+	<div id="example">
+    </div>
+</body>
+</html>
+

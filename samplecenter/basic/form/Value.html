@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>        
+        <li>设置值与得到值</li>
+        <li>可得到表单实例进行批量获取值与设置值</li>
+        <li>也可以得到某个控件的实例，再调用控件的设置值与得到值方法</li>
+        <li>表单内的控件默认都加上了设置实例为真的属性，所以控件都能通过id得到实例</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+	  <script>			
+	  		//得到表单所有控件的值 字符串
+			var getvalues=function(){
+				var form=fastDev.getInstance("form1");
+				fastDev.tips(form.getValues());
+			}
+			//得到表单所有控件的值 键值对对象
+			var getitems=function(){				
+				var form=fastDev.getInstance("form1");
+				var items=form.getItems();
+				fastDev.tips(items["txt1"]+","+items["pwd1"]+","+items["area1"]+"...");
+			}	
+			//得到某个控件的值
+			var getvalue=function(){				
+				var txt1=fastDev.getInstance("txt1");
+				fastDev.tips(txt1.getValue());
+			}				
+			//批量设置表单控件的值
+			var setvalues=function(){
+				var form=fastDev.getInstance("form1");
+				form.setValues({"txt1":"文本框新值","area1":"文本域新值"});
+			}
+			//设置某个控件的值
+			var setvalue=function(){
+				var autotxt1=fastDev.getInstance("autotxt1");
+				autotxt1.setValue("智能提示框新值");
+			}
+		</script>
+	</head>
+	<body style="width:820px;"><div style="margin:10px;"><div class="ui-layout-text">设置值与得到值</div>
+		 <form itype="Form" action="../../data/form_example_submit.jsp" id="form1" initSource="../../data/form_example_1_init.jsp" dataSource="../../data/form_example_1_load.jsp" requestType="get" saveInstance="true" onSubmitSuccess="submitSuccess()">
+		<table width="800px" border="0" cellspacing="0" cellpadding="0"   class="ui-form-table">
+		  <tr>
+		    <td class="ui-form-table-dt">text：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt1" ></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">password：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="pwd1"   type="password" ></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt" style="height:57px;">textarea：</td>
+		    <td class="ui-form-table-dd"><textarea itype="TextBox" id="area1"   type="textarea" height="50px" width="400px"></textarea></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">智能提示框：</td>
+		    <td class="ui-form-table-dd">
+        <input id="autotxt1" itype="AutoComplete"   initSource="../../data/form_data.jsp" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" iwidth="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100">
+        </td>
+	      </tr>
+           <tr>
+		    <td class="ui-form-table-dt">智能提示框1：</td>
+		    <td class="ui-form-table-dd">
+        <input id="autotxt11" itype="AutoComplete"    multiple="true"  items="Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" iwidth="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100">
+        </td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">复选框：</td>
+		    <td class="ui-form-table-dd"><div itype="CheckBoxGroup"  name="check1" id="check1"  ></div></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">单选框：</td>
+		    <td class="ui-form-table-dd"><div itype="RadioGroup"  name="radio1" id="radio1"   >
+			<div value=1 text="男" checked=true></div>			
+			<div value=0 text="女"></div>
+			</div>
+			</td>
+	      </tr>
+          <tr>
+          <td class="ui-form-table-dt">下拉框：</td>
+          <td class="ui-form-table-dd">
+			<select itype="Select"  id="select1"    width="200px"  value="test1,test3"  onValueChange="handle1()">	<option  text="-请选择-"></option><option value="test5" text="测试5"></option></select>
+		   </td>
+          </tr>
+           <tr>
+          <td class="ui-form-table-dt">下拉树：</td>
+          <td class="ui-form-table-dd">
+			<div itype="SelectTree"  id="selecttree1"  initSource="../../data/form_data2.txt" rootValue="-请选择-" topParentid="0" openFloor=2>
+			</div>
+		  </td>
+          </tr>          
+           <tr>
+          <td class="ui-form-table-dt">日历控件：</td>
+          <td class="ui-form-table-dd"><input itype="DatePicker" id="data1" trigger="click"></td>
+          </tr>          
+         </table>
+         <div style="width:800px; text-align:center">
+			<div itype="Button" text="得到表单的所有值" onclick="getvalues()" ></div>
+            <div itype="Button" text="得到表单的所有值对象" onclick="getitems()" ></div>
+            <div itype="Button" text="得到某控件的值" onclick="getvalue()" ></div>
+            <div itype="Button" text="批量设置表单控件值" onclick="setvalues()" ></div>
+            <div itype="Button" text="设置某控件的值" onclick="setvalue()" ></div>
+
+		</div>
+	</form>   
+    </div>
+	</body>
+</html>

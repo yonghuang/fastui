@@ -1,0 +1,49 @@
+    .select-input {
+        background:url(../images/pulldownmenu.gif) no-repeat right 0 !important;
+    	border:1px solid #7f9db9;
+        color:#075586;
+    	cursor: pointer;
+    	font:12px/20px Arial, Helvetica, sans-serif, "宋体";color:#075586;
+    	margin:0;
+    	padding:0;
+    	overflow:hidden;
+    	vertical-align:middle;
+    	width:100%;
+    	height:20px;
+    }
+    .select-input:hover, .select-input.error:hover {
+        background:#fff url(../images/pulldownmenu.gif) no-repeat right -20px;
+    }
+   /* .select-input.error {
+        background:#fff url(../images/pulldownmenu_error.gif) no-repeat right 0;
+    }*/
+    .selectbox {
+        border: 1px solid #7f9db9;
+    	background:#fff;
+    	width:100%;
+    	overflow-y:auto;
+    	overflow-x:hidden;
+    	margin-top:-1px;
+    	_margin-top:-2px;
+    	_height:expression(this.scrollHeight < 100 ? "100px" : (this.scrollHeight > 200 ? "200px" : "auto"));
+    }
+    .selectbox ul {
+    	width:100%;
+    }
+    .selectbox li, .selectbox-open li {
+        display:block; width:100%; 
+        text-indent:4px; 
+        overflow:hidden; 
+        height:20px;
+    }
+    .selectbox li:hover, .selectbox-open li:hover {
+        background:#f9fcfd url(../images/pulldownmenu.gif) repeat-x 0 -40px; 
+        color:#075586; 
+        cursor:pointer;
+    }
+    .selectbox li.active,  .selectbox-open li.active  {
+        background:#f9fcfd url(../images/pulldownmenu.gif) repeat-x 0 -63px; 
+        color:#075586;
+    }
+    
+

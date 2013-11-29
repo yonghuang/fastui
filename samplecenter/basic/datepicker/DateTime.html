@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					可通过format属性指定日期时间的值格式（格式字段说明请参考API文档）。
+				</li>
+				<li>
+					当format格式化属性值带时间格式时，即开启时间选择器。
+				</li>
+				<li>
+					format格式化属性值中，未指定的时间子域将被禁用，例如：格式字符串中不带ss或s时，秒钟域将被禁用。
+				</li>
+				<li>
+					未指定时间时，默认初始时间值为系统当前时间的下一个整点时间（梯度为15分钟）。
+				</li>
+				<li>
+					未点选指定时间子域时，将默认以15分钟步进值增减时间，点选子域后（右上角以红色图标标记）将以1为步进值增减（若遇不可选时间自动跳至下一个可用时间）。
+				</li>
+				<li>
+					也可以直接通过键盘输入时间值，错误或不可用的值将自动纠正至有效值，支持上下方向键、鼠标滚轮增减时间，制表键各域快速切换。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<!-- 农历信息扩展功能所需js文件 -->
+		<script src="../../../src/component/form/datepicker/DatePicker.lunar.js"></script>
+		<!-- 日期范围表达式扩展功能所需js文件  -->
+		<script src="../../../src/component/form/datepicker/DatePicker.expression.js"></script>
+	</head>
+	<body>
+		<div style="margin:10px">
+			<div class="ui-layout-text">
+				设置日期值格式
+			</div>
+			<!-- 默认格式化成  yyyy-MM-dd -->
+			<input itype="DatePicker" format="MM月 dd日 yyyy年"/>
+			<br />
+			<div class="ui-layout-text">
+				开启时间选择器
+			</div>
+			<!-- 也可以通过showTimePicker属性强制开启或关闭时间选择器  -->
+			<input itype="DatePicker" format="yyyy-MM-dd HH:mm:ss"/>
+			<br />
+			<div class="ui-layout-text">
+				禁选时间子域
+			</div>
+			<!-- 若不需要秒钟值，作复杂时间范围控制时，禁用秒钟域在上下增减时间时将显著提升有效时间的查找效率 -->
+			<input itype="DatePicker" format="HH:mm M/d/yyyy" />
+		</div>
+	</body>
+</html>
+

@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>	
+		<style>
+			span p{ line-height: 26px}
+		</style>
+		<style type="text/css">
+            body,html {margin:10px;}
+            .button-style {margin-bottom:10px}
+            .text {font-size:12px; line-height: 24px; color:#333;}
+            .title-line {font-weight:bold; font-size:14px; background:#09427C; padding:2px 12px; color:#fff; line-height: 30px}
+            .pre {background:#F8F8F8; border-top:1px solid #CCC; border-bottom:1px solid #CCC; padding:10px 5px; margin:10px 0}
+        </style>
+	</head>
+	<body>
+		<div style="margin:10px; float:left">
+<span class="text title-line">1、环境说明</span><br/><pre>
+<p>现在结合快框组件中功能页面（组织管理）做示例：</p>
+<p>组件版本：<span lang="EN-US" xml:lang="EN-US">1.5</span></p>
+<p><span lang="EN-US" xml:lang="EN-US">IE</span>版本：<span lang="EN-US" xml:lang="EN-US">  IE10</span></p>
+<p>组织管理页面：<span lang="EN-US" xml:lang="EN-US">orgmanage.html</span></p>
+<p>参考<span lang="EN-US" xml:lang="EN-US">demo</span>：<span lang="EN-US" xml:lang="EN-US"><a href="http://192.168.141.8:8080/twdpe-webcomponent/">http://192.168.141.8:8080/twdpe-webcomponent/</a></span></p>
+<p>将结合快框组件中功能页面（组织管理）做示例：</p>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image001.png" alt="" width="554" height="196" border="0" v:shapes="_x0000_i1055" /></span></p>
+</pre>
+<br/><span class="text title-line">2、调试讲解</span><br/><pre>
+<h3><span lang="EN-US" xml:lang="EN-US">2.1</span>打开<span lang="EN-US" xml:lang="EN-US">IE</span>调试工具</h3>
+<p>开发人员工具就是为前端开发人员开发页面而设计的工具。 提供一系列的小工具，让你可以方便的查找、调试页面的<span lang="EN-US" xml:lang="EN-US">BUG</span>，包括<span lang="EN-US" xml:lang="EN-US">HTML</span>代码、<span lang="EN-US" xml:lang="EN-US">CSS</span>代码和<span lang="EN-US" xml:lang="EN-US">JavaScript</span>代码。 </p>
+<p>打开方法：</p>
+<p><span lang="EN-US" xml:lang="EN-US">1</span>．在<span lang="EN-US" xml:lang="EN-US">IE</span>浏览器直接按 &ldquo;<span lang="EN-US" xml:lang="EN-US">F12&rdquo;</span>； </p>
+<p><span lang="EN-US" xml:lang="EN-US">2</span>．在<span lang="EN-US" xml:lang="EN-US">IE</span>浏览器菜单栏&ldquo;工具&rdquo;中选择&ldquo;<span lang="EN-US" xml:lang="EN-US">F12</span>开发人员工具&rdquo;。</p>
+<h3><span lang="EN-US" xml:lang="EN-US">2.2</span>监控<span lang="EN-US" xml:lang="EN-US">Form</span>、<span lang="EN-US" xml:lang="EN-US">DataGrid</span></h3>
+<h4><span lang="EN-US" xml:lang="EN-US">2.2.1</span>查看<span lang="EN-US" xml:lang="EN-US">DataGrid</span>请求<span lang="EN-US" xml:lang="EN-US">initSource</span>的数据访问</h4>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">a.</span>启动调试</li>
+  <li><span lang="EN-US" xml:lang="EN-US">b.</span>并打开网络的捕获功能后，再刷新一次组织首页面</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image003.png" alt="" width="319" height="131" border="0" v:shapes="图片_x0020_6" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">c.</span>在网络视图中可以查看到<span lang="EN-US" xml:lang="EN-US">grid</span>列表的默认请求：</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image005.png" alt="" width="625" height="165" border="0" v:shapes="图片_x0020_9" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">d.</span>双击可看详细信息，其中&ldquo;响应正文&rdquo;中是后台返回至前台的<span lang="EN-US" xml:lang="EN-US">json</span>对象</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image007.png" alt="" width="633" height="147" border="0" v:shapes="图片_x0020_12" /></span></p>
+<h4><span lang="EN-US" xml:lang="EN-US">2.2.2</span>查看<span lang="EN-US" xml:lang="EN-US">Form</span>联动<span lang="EN-US" xml:lang="EN-US">DataGrid</span></h4>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">a.</span>在<span lang="EN-US" xml:lang="EN-US">Form</span>中输入条件查询<span lang="EN-US" xml:lang="EN-US">:</span></li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image09.png" alt="" width="645" height="58" border="0" v:shapes="_x0000_i1051" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">b.</span>在&ldquo;查询&rdquo;按钮的点击事件方法中加入断点监控：</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image011.png" alt="" width="645" height="279" border="0" v:shapes="图片_x0020_33" /></span></p>
+<p>通过选中变量右键&ldquo;添加监视&rdquo;，即可在调试工具的监视选项卡中看变量的值、类型、结构及自身已封装的方法等</p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">c.</span>查看参数的传递</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image013.png" alt="" width="625" height="54" border="0" v:shapes="_x0000_i1049" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">d.</span>查看<span lang="EN-US" xml:lang="EN-US">Form</span>请求<span lang="EN-US" xml:lang="EN-US">DataGrid</span>后的后台数据返回</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image015.png" alt="" width="649" height="142" border="0" v:shapes="_x0000_i1048" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">e.</span>前台展现</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image017.png" alt="" width="653" height="145" border="0" v:shapes="图片_x0020_10" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<h3><span lang="EN-US" xml:lang="EN-US">2.3</span>监控<span lang="EN-US" xml:lang="EN-US">Tree</span>的初始加载和异步加载</h3>
+<h4><span lang="EN-US" xml:lang="EN-US">2.3.1</span>查看<span lang="EN-US" xml:lang="EN-US">Tree</span>的初始化加载</h4>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">a.</span>在首次打组织首页面加载<span lang="EN-US" xml:lang="EN-US">orgmanage.html</span>时，还有一条请求是<span lang="EN-US" xml:lang="EN-US">Tree</span>的<span lang="EN-US" xml:lang="EN-US">initSource</span>请求</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image019.png" alt="" width="660" height="171" border="0" v:shapes="图片_x0020_36" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">b.</span><span lang="EN-US" xml:lang="EN-US">Tree</span>数据返回控件自动完成绑定</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image021.png" alt="" width="636" height="115" border="0" v:shapes="_x0000_i1045" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">c.</span>查看树节点元素</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<p>单击选择元素，选中后，用鼠标点击页面元素时，即可选中该元素，并且会列出该元素的<span lang="EN-US" xml:lang="EN-US">DOM</span>结果、<span lang="EN-US" xml:lang="EN-US">CSS</span>样式信息、控件的<span lang="EN-US" xml:lang="EN-US">value</span>值、<span lang="EN-US" xml:lang="EN-US">id</span>值等等。</p>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image023.png" alt="" width="623" height="325" border="0" v:shapes="_x0000_i1044" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image025.png" alt="" width="617" height="262" border="0" v:shapes="图片_x0020_4" /></span></p>
+<p>直接修改页面元素的样式信息，便可以看到修改后的效果，如把<span lang="EN-US" xml:lang="EN-US">ui-tree</span>的<span lang="EN-US" xml:lang="EN-US">font-size</span>由<span lang="EN-US" xml:lang="EN-US">12px</span>改为<span lang="EN-US" xml:lang="EN-US">24px</span></p>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image027.png" alt="" width="609" height="200" border="0" v:shapes="图片_x0020_49" /></span></p>
+<p>改完效果</p>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image029.png" alt="" width="429" height="227" border="0" v:shapes="图片_x0020_1" /></span></p>
+<p>同时字体、颜色、边框、边距都可以改。</p>
+<h4><span lang="EN-US" xml:lang="EN-US">2.3.2</span>查看<span lang="EN-US" xml:lang="EN-US">Tree</span>的异步加载</h4>
+<p>所谓异步加载不是一次加载全部数据，而是点击节点<span lang="EN-US" xml:lang="EN-US">+</span>号才延后加载的一种提高效率和用户体验的一种加载方式。如下图：当点击<span lang="EN-US" xml:lang="EN-US"><img src="img/image031.png" alt="" width="119" height="30" border="0" v:shapes="_x0000_i1040" /></span>的<span lang="EN-US" xml:lang="EN-US">+</span>号时，才触发<span lang="EN-US" xml:lang="EN-US">Tree</span>控件的<span lang="EN-US" xml:lang="EN-US">asyncDataSource</span>请求</p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">a.</span>树前台展现</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image033.png" alt="" width="197" height="165" border="0" v:shapes="图片_x0020_45" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">b.</span><span lang="EN-US" xml:lang="EN-US">asyncDataSource</span>请求数据返回查看</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image035.png" alt="" width="623" height="92" border="0" v:shapes="_x0000_i1038" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">c.</span>异步树需要同时满足第一次加载的数据源节点数据里包含<span lang="EN-US" xml:lang="EN-US">asyn:true</span>并且配置了<span lang="EN-US" xml:lang="EN-US">asyncDataSource</span>两个要求才能实现异步。</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<h4><span lang="EN-US" xml:lang="EN-US">2.3.3</span>查看<span lang="EN-US" xml:lang="EN-US">Tree</span>节点联动<span lang="EN-US" xml:lang="EN-US">DataGrid</span></h4>
+<p><span lang="EN-US" xml:lang="EN-US">a.</span>通过点组织树上的节点并作为条件完成<span lang="EN-US" xml:lang="EN-US">DataGrid</span>记录的  查询过滤</p>
+<p><span lang="EN-US" xml:lang="EN-US">    <img src="img/image037.png" alt="" width="671" height="187" border="0" v:shapes="图片_x0020_7" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US">b.</span>查看节点点击事件</p>
+<p><span lang="EN-US" xml:lang="EN-US">   </span>点击根节点<span lang="EN-US" xml:lang="EN-US">—</span>所有组织，利用工具查看方法中的参数值</p>
+<p><span lang="EN-US" xml:lang="EN-US">   <img src="img/image039.png" alt="" width="662" height="236" border="0" v:shapes="图片_x0020_13" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US">c.DataGrid</span>刷新方法的使用</p>
+<p><span lang="EN-US" xml:lang="EN-US">   <img src="img/image041.png" alt="" width="622" height="181" border="0" v:shapes="图片_x0020_16" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">d.</span>请求正文和数据返回</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image043.png" alt="" width="417" height="186" border="0" v:shapes="图片_x0020_22" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image045.png" alt="" width="582" height="146" border="0" v:shapes="图片_x0020_25" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">e.</span>同时在断点调试可以查看控件的属性方法，比如刚刚在刷新<span lang="EN-US" xml:lang="EN-US">DataGrid</span>时：</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image047.png" alt="" width="582" height="354" border="0" v:shapes="图片_x0020_19" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<h3><span lang="EN-US" xml:lang="EN-US">2.4</span>监控对话框打开传参和关闭返回</h3>
+<p><span lang="EN-US" xml:lang="EN-US">2.</span></p>
+<h4><span lang="EN-US" xml:lang="EN-US">2.4.1 </span>查看点击组织页面操作列的修改按扭后对话框创建过程</h4>
+<p><span lang="EN-US" xml:lang="EN-US">a.</span>点击修改按钮</p>
+<p><span lang="EN-US" xml:lang="EN-US">    <img src="img/image049.png" alt="" width="631" height="148" border="0" v:shapes="图片_x0020_28" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US">b.</span>监控按钮的点击事件，其中createWindow是封闭的业务方法和组件无关</p>
+<p><span lang="EN-US" xml:lang="EN-US">    <img src="img/image051.png" alt="" width="586" height="214" border="0" v:shapes="图片_x0020_31" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US">c.window</span>控件创建方法需要配置好一系列的属性参数，在下图监控中可以看到参数对象<span lang="EN-US" xml:lang="EN-US">config</span>结构和值</p>
+<p><span lang="EN-US" xml:lang="EN-US">    <img src="img/image053.png" alt="" width="621" height="295" border="0" v:shapes="图片_x0020_34" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">d.</span>修改页面创建成功，如图。其宽度<span lang="EN-US" xml:lang="EN-US">width</span>为<span lang="EN-US" xml:lang="EN-US">conifg</span>中设置的<span lang="EN-US" xml:lang="EN-US">604px</span>。</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image055.png" alt="" width="613" height="347" border="0" v:shapes="图片_x0020_37" /></span></p>
+<ol>
+  <li><span lang="EN-US" xml:lang="EN-US">e.</span>在监视中修改&ldquo;&rdquo;或在控制台中运行脚本<span lang="EN-US" xml:lang="EN-US">config.width=302</span>后，可以看到打开的对话框宽度为<span lang="EN-US" xml:lang="EN-US">302px</span>，小了一半。</li>
+</ol>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image057.png" alt="" width="619" height="202" border="0" v:shapes="图片_x0020_43" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<p><span lang="EN-US" xml:lang="EN-US"><img src="img/image059.png" alt="" width="601" height="371" border="0" v:shapes="图片_x0020_40" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US">f</span>．修改页面点保存后表单回调结果的监控</p>
+<p><span lang="EN-US" xml:lang="EN-US"> </span></p>
+<p><span lang="EN-US" xml:lang="EN-US">   </span>以下是表单定义的回调事件的响应方法</p>
+<p><span lang="EN-US" xml:lang="EN-US">   <img src="img/image061.png" alt="" width="636" height="331" border="0" v:shapes="图片_x0020_46" /></span></p>
+<p><span lang="EN-US" xml:lang="EN-US">  </span>并可以从指定返回<span lang="EN-US" xml:lang="EN-US">result</span>中查看后台的处理结果</p>
+</div>
+	</body>
+</html>

@@ -1,0 +1,506 @@
+﻿    .messageBox_alphadiv {
+        position: absolute;
+        z-index: 99;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #000;
+        width: 100%;
+        height: 100%;
+        filter: alpha(opacity=20);
+        opacity: 0.20;
+        -moz-opacity: 0.20;
+        -khtml-opacity: 0.20;
+    }
+    .messageBox_updiv {
+        position: relative;
+        z-index: 300;
+        margin: auto;
+        border: 1px solid #0195c5;
+        width: 400px; 
+        background: #fff;
+    }
+    .messageBox_updiv .titlediv {
+        background: url(../images/dialog_titlebg.gif) repeat-x 0 -5px;
+        text-indent: 12px;
+        height: 24px;
+        width: 100%;
+    }
+    .messageBox_updiv .titlediv span {
+        font: normal 12px /24px Arial, "宋体";
+        color: #333;
+        height: 24px;
+        vertical-align: middle;
+        float: left;
+    }
+    .messageBox_updiv .titlediv a {
+        vertical-align: middle;
+        border: 0;
+        float: right;
+        cursor: pointer;
+        text-decoration: none;
+        margin: 3px 6px 0;
+        background: url(../images/messageBox-close1.gif) no-repeat;
+        width: 16px;
+        height: 16px;
+        text-indent: -30000px;
+    }
+    .messageBox_updiv .titlediv a:hover {
+        background: url(../images/messageBox-close1.gif) no-repeat -16px 0;
+    }
+    .messageBox_updiv .contentdiv {
+        background: #fff;
+        margin: 8px 0;
+        width: 100%;
+    }
+    .messageBox_updiv .content {
+        margin: 16px 12px 0;
+        background: #fff;
+        color: #075587;
+        font: 12px /160% "微软雅黑", "宋体", Verdana;
+    }
+    .messageBox_updiv .content span {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    .messageBox_updiv .content_d {
+        margin: 0;
+        background: #fff;
+    }
+    .btndiv {
+        padding: 30px 0 12px;
+        text-align: center;
+    }
+    .messageBox_updiv .footerdiv {
+        background: #e7f0fb url(../images/messageBox_footerbg.gif) repeat-x;
+        height: 22px;
+        line-height: 22px;
+        margin: 0 auto;
+        position: relative;
+        text-align: right;
+        vertical-align: middle;
+        width: 100%;
+        z-index: 300;
+    }
+    .messageBox_updiv .footerdiv .button_nofloat {
+        height: 20px !important;
+        line-height: 20px !important;
+    }
+    .messageBox_updiv .footerdiv span {
+        margin: 0 8px;
+    }
+	
+	
+	/*
+     * 消息框控件（圆角）外层 div样式
+     * */
+	.messageBox_updiv1 {
+		margin: auto; 
+	    position: relative;
+        width: 450px;
+        z-index: 300;
+	}
+	.messageBox_updiv1 .headerdiv, .messageBox_updiv1 .contentdiv, .messageBox_updiv1 .footerdiv {
+	    width:100%;
+	}
+	/*
+     * 控件header div样式
+     * */
+	.messageBox_updiv1 .headerdivL, .messageBox_updiv1 .headerdivC, .messageBox_updiv1 .headerdivR, 
+	.messageBox_updiv1 .footerdivL, .messageBox_updiv1 .footerdivC, .messageBox_updiv1 .footerdivR {
+        background: url(../images/messagebox.png);
+		_background: url(../images/messagebox.gif);
+		margin:0;
+		padding:0;
+    }
+	.messageBox_updiv1 .headerdivL {
+		background-repeat: no-repeat;
+	    background-position: left 0;
+		float:left;
+		height:38px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: 24px;
+    }
+	.messageBox_updiv1 .headerdivC {
+		background-repeat: repeat-x;
+	    background-position: left -40px;
+		height:38px;
+		margin:0 50px 0 24px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: auto;
+    }
+	.messageBox_updiv1 .headerdivR {
+        background-repeat: no-repeat;
+	    background-position: right 0;
+		height:38px;
+		_margin:0 -3px;
+		float:right;
+        width: 50px;
+    }
+	.messageBox_updiv1 .headerdivC span {
+	    color: #2a4f8a;
+	    font: bold 14px/20px Arial, "宋体";
+		display:inline-block;
+		margin:15px 0 0 0;
+		_margin:12px 0 0 0;
+	}
+    .messageBox_updiv1 .headerdivR a {
+	    background: url(../images/messagebox.png) no-repeat left -368px;
+        border: 0;
+        cursor: pointer;
+		float:right;
+		margin:15px 14px 0 0;
+        height: 16px;
+        text-decoration: none;
+        text-indent: -30000px;
+        vertical-align: bottom;
+        width: 16px;
+    }
+    .messageBox_updiv1 .headerdivR a:hover {
+	    background: url(../images/messagebox.png) no-repeat -16px -368px;
+    }
+	.messageBox_updiv1 .headerdivR span {
+	    display:none;
+	}
+	/*
+     * 控件content div样式
+     * */
+    .messageBox_updiv1 .contentdivL {
+		background: url(../images/messageboxbg.png) repeat-y left 0;
+		_background: url(../images/messageboxbg.gif) repeat-y left 0;
+		float:left;
+		height:80px;
+		_margin:0 -3px;
+		padding:14px 0 0;
+        width: 9px;
+    }
+	.messageBox_updiv1 .contentdivC {
+		/*background-color: #c6dfe6 #b6d5df;*/
+		background: #fff /*url(../images/messageboxbg2.png) repeat*/;
+		_background: #fff /*url(../images/messageboxbg2.gif) repeat*/;
+		height:80px;
+		margin:0 9px;
+		_margin:0 -3px;
+		padding:14px 30px 0;
+        width: auto;
+		white-space:nowrap;
+    }
+
+	.messageBox_updiv1 .contentdivR {
+		background: url(../images/messageboxbg.png) repeat-y right 0;
+		_background: url(../images/messageboxbg.gif) repeat-y right 0;
+		float:right;
+		height:80px;
+		_margin:0 -3px;
+		padding:14px 0 0;
+        width: 9px;
+    }
+    .messageBox_updiv1 .contentdivC .content {
+	    color: #3d464f;
+        font: bold 14px/120% "宋体", Verdana;
+        margin: 0;
+		padding: 0;
+		text-align:left;
+		white-space: normal;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+	.messageBox_updiv1 .contentdivC .content span {
+        margin:0;
+		padding:5px 0 0;
+    }
+	.messageBox_updiv1 .contentdivC .content input,.messageBox_updiv1 .contentdivC .content textarea {
+		border-color: #e8e8e8 #e8e8e8 #f3f3f3 #e8e8e8;
+		border-style: inset;
+		border-width:1px;
+        height:20px;
+		line-height:20px;
+		margin:8px 0;
+		_margin:8px -2px;
+		padding:0;
+    }
+	.messageBox_updiv1 .contentdivC .content span.hint, .messageBox_updiv1 .contentdivC .content span.warning, .messageBox_updiv1 .contentdivC .content span.error, .messageBox_updiv1 .contentdivC .content span.questions {
+		background:url(../images/messagebox.png) no-repeat;
+		_background: url(../images/messagebox.gif) no-repeat;
+		border:0;
+		display:inline-block;
+		height:50px;
+        margin: 0;
+		padding-left:80px;
+		width:auto;
+    }
+	.messageBox_updiv1 .contentdivC .content span.hint {
+		background-position: -10px -124px;
+    }
+	.messageBox_updiv1 .contentdivC .content span.warning {
+		background-position: -10px -185px;
+    }
+	.messageBox_updiv1 .contentdivC .content span.error {
+		background-position: -10px -244px;
+    }
+	.messageBox_updiv1 .contentdivC .content span.questions {
+		background-position: -10px -302px;
+    }
+    .btndiv {
+		margin: 0;
+		padding: 0;
+        text-align: center;
+    }
+	.btndiv_d {
+		background: #ecf5f7;
+		margin: 0;
+		padding: 0 0 12px;
+        text-align: center;
+    }
+	.button94 {
+	    background:url(../images/buttonbg_94.gif) no-repeat 0 0;
+		border:0;
+		font:normal 14px/28px Arial, Helvetica, sans-serif, "宋体";
+		margin:0 6px;
+		padding:0;
+		height:28px;
+		width:94px;
+	} 
+	.button94:hover {
+	    background:url(../images/buttonbg_94.gif) no-repeat 0 -30px;
+	}
+	
+	/*
+     * 控件footer div样式
+     * */
+	.messageBox_updiv1 .footerdivL {
+		background-repeat: no-repeat;
+	    background-position: left -390px;
+		float:left;
+		height:56px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: 15px;
+    }
+	.messageBox_updiv1 .footerdivC {
+		background-repeat: repeat-x;
+	    background-position: left -450px;
+		height:56px;
+		margin:0 15px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+		text-align:center;
+        width: auto;
+    }
+	.messageBox_updiv1 .footerdivR {
+        background-repeat: no-repeat;
+	    background-position: right -390px;
+		height:56px;
+		_margin:0 -3px;
+		float:right;
+        width: 15px;
+    }
+    
+   /*
+     * 红色皮肤演示
+     * */
+	.messageBox_updiv1red {
+		margin: auto; 
+	    position: relative;
+        width: 450px;
+        z-index: 300;
+	}
+	.messageBox_updiv1red .headerdiv, .messageBox_updiv1red .contentdiv, .messageBox_updiv1red .footerdiv {
+	    width:100%;
+	}
+	/*
+     * 控件header div样式
+     * */
+	.messageBox_updiv1red .headerdivL, .messageBox_updiv1red .headerdivC, .messageBox_updiv1red .headerdivR, 
+	.messageBox_updiv1red .footerdivL, .messageBox_updiv1red .footerdivC, .messageBox_updiv1red .footerdivR {
+        background: url(../images/messagebox.png);
+		_background: url(../images/messagebox.gif);
+		margin:0;
+		padding:0;
+    }
+	.messageBox_updiv1red .headerdivL {
+		background-repeat: no-repeat;
+	    background-position: left 0;
+		float:left;
+		height:38px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: 24px;
+    }
+	.messageBox_updiv1red .headerdivC {
+		background-repeat: repeat-x;
+	    background-position: left -40px;
+		height:38px;
+		margin:0 50px 0 24px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: auto;
+    }
+	.messageBox_updiv1red .headerdivR {
+        background-repeat: no-repeat;
+	    background-position: right 0;
+		height:38px;
+		_margin:0 -3px;
+		float:right;
+        width: 50px;
+    }
+	.messageBox_updiv1red .headerdivC span {
+	    color: red;
+	    font: bold 14px/20px Arial, "宋体";
+		display:inline-block;
+		margin:15px 0 0 0;
+		_margin:12px 0 0 0;
+	}
+    .messageBox_updiv1red .headerdivR a {
+	    background: url(../images/messagebox.png) no-repeat left -368px;
+        border: 0;
+        cursor: pointer;
+		float:right;
+		margin:15px 14px 0 0;
+        height: 16px;
+        text-decoration: none;
+        text-indent: -30000px;
+        vertical-align: bottom;
+        width: 16px;
+    }
+    .messageBox_updiv1red .headerdivR a:hover {
+	    background: url(../images/messagebox.png) no-repeat -16px -368px;
+    }
+	.messageBox_updiv1red .headerdivR span {
+	    display:none;
+	}
+	/*
+     * 控件content div样式
+     * */
+    .messageBox_updiv1red .contentdivL {
+		background: url(../images/messageboxbg.png) repeat-y left 0;
+		_background: url(../images/messageboxbg.gif) repeat-y left 0;
+		float:left;
+		height:80px;
+		_margin:0 -3px;
+		padding:14px 0 0;
+        width: 9px;
+    }
+	.messageBox_updiv1red .contentdivC {
+		/*background-color: #c6dfe6 #b6d5df;*/
+		background: #b6d5df url(../images/messageboxbg2.png) repeat;
+		_background: #b6d5df url(../images/messageboxbg2.gif) repeat;
+		height:80px;
+		margin:0 9px;
+		_margin:0 -3px;
+		padding:14px 30px 0;
+        width: auto;
+		white-space:nowrap;
+    }
+	
+	.messageBox_updiv1red .contentdivR {
+		background: url(../images/messageboxbg.png) repeat-y right 0;
+		_background: url(../images/messageboxbg.gif) repeat-y right 0;
+		float:right;
+		height:80px;
+		_margin:0 -3px;
+		padding:14px 0 0;
+        width: 9px;
+    }
+    .messageBox_updiv1red .contentdivC .content {
+	    color: red;
+        font: bold 14px/120% "宋体", Verdana;
+        margin: 0;
+		padding: 0;
+		text-align:left;
+		white-space: normal;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+	.messageBox_updiv1red .contentdivC .content span {
+        margin:0;
+		padding:5px 0 0;
+    }
+	.messageBox_updiv1red .contentdivC .content input {
+		border-color: red red red red;
+		border-style: inset;
+		border-width:2px;
+        height:20px;
+		line-height:20px;
+		margin:8px 0;
+		padding:0;
+    }
+	.messageBox_updiv1red .contentdivC .content span.hint, .messageBox_updiv1red .contentdivC .content span.warning, .messageBox_updiv1red .contentdivC .content span.error, .messageBox_updiv1red .contentdivC .content span.questions {
+		background:url(../images/messagebox.png) no-repeat;
+		_background: url(../images/messagebox.gif);
+		border:0;
+		display:inline-block;
+		height:50px;
+        margin: 0;
+		padding-left:80px;
+		width:auto;
+    }
+	.messageBox_updiv1red .contentdivC .content span.hint {
+		background-position: -10px -124px;
+    }
+	.messageBox_updiv1red .contentdivC .content span.warning {
+		background-position: -10px -185px;
+    }
+	.messageBox_updiv1red .contentdivC .content span.error {
+		background-position: -10px -244px;
+    }
+	.messageBox_updiv1red .contentdivC .content span.questions {
+		background-position: -10px -302px;
+    }
+    .btndiv {
+		margin: 0;
+		padding: 0;
+        text-align: center;
+    }
+	.btndiv_d {
+		background: #ecf5f7;
+		margin: 0;
+		padding: 0 0 12px;
+        text-align: center;
+    }
+	.button94 {
+	    background:url(../images/buttonbg_94.gif) no-repeat 0 0;
+		border:0;
+		font:normal 14px/28px Arial, Helvetica, sans-serif, "宋体";
+		margin:0 6px;
+		padding:0;
+		height:28px;
+		width:94px;
+	} 
+	.button94:hover {
+	    background:url(../images/buttonbg_94.gif) no-repeat 0 -30px;
+	}
+	
+	/*
+     * 控件footer div样式
+     * */
+	.messageBox_updiv1red .footerdivL {
+		background-repeat: no-repeat;
+	    background-position: left -390px;
+		float:left;
+		height:56px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+        width: 15px;
+    }
+	.messageBox_updiv1red .footerdivC {
+		background-repeat: repeat-x;
+	    background-position: left -450px;
+		height:56px;
+		margin:0 15px;
+		_margin:0 -3px;
+		vertical-align: bottom;
+		text-align:center;
+        width: auto;
+    }
+	.messageBox_updiv1red .footerdivR {
+        background-repeat: no-repeat;
+	    background-position: right -390px;
+		height:56px;
+		_margin:0 -3px;
+		float:right;
+        width: 15px;
+    }

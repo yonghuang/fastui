@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">﻿(function(){
+	talkweb.BaseControl.CheckBox = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.CheckBox.Class&quot;,settings)	
+	}
+	
+	fastDev.define(&quot;talkweb.BaseControl.CheckBox.Class&quot;,{
+		extend : &quot;talkweb.BaseControl.Input&quot;,
+		_options : {
+			id : null,
+			name : null,
+			className : null,
+			value : &quot;&quot;,
+			type : &quot;checkbox&quot;,
+			checked:false
+		},
+		init :function(options){	
+		debugger;
+			if(&quot;&quot;+options.checked === &quot;true&quot; || &quot;&quot;+options.checked === &quot;1&quot; ){
+				this.check();
+			}else{
+				this.unCheck();
+			}
+			if(options.value){
+				 this.attr(&quot;value&quot;, options.value);
+			}	 
+		},
+    	check : function(){
+    		this[0].checked = true;
+    		this[0].defaultChecked = true;
+    	},
+		getValue : function() {
+			return this.isChecked()?this.attr(&quot;value&quot;):&quot;&quot;;
+		},
+	//	setValue : function(param) {			
+//			 if(typeof param === 'string') {
+//				 this.attr(&quot;value&quot;, param);
+//			 }else{
+//				param===true? this.check() : this.unCheck(); 
+//			 }
+//		},
+		setValue : function(param) {			
+		debugger;
+			 if(&quot;&quot;+param === 'true' || &quot;&quot;+param === &quot;1&quot; ) {
+				this.check();
+			 }else if(&quot;&quot;+param === 'false' || &quot;&quot;+param === &quot;0&quot; ){
+				this.unCheck();
+			 }else{
+				  this.attr(&quot;value&quot;, param);
+			 }
+		},		
+		getText : function() {
+			return this.attr(&quot;value&quot;);
+		},		
+    	unCheck : function(){
+    		this[0].checked = false;
+    		this[0].defaultChecked = false;
+    	},
+    	isChecked :function(){
+			if(this[0].checked===undefined || this[0].checked===&quot;&quot;){
+				return this[0].defaultChecked;
+			}
+			else{
+				return this[0].checked;
+			}
+		}
+	});
+	
+})()</pre>
+</body>
+</html>

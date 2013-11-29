@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>基本树的方法</h4>
+        <ul>        
+        <li>基本树的常用方法。包括得到当前节点，设置当前节点，得到节点的数据等。详细请看按钮上的文字和方法注释。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+		//设置当前选中节点，如果此节点为展开会自动展开
+		var btnsetCurrentId=function(){
+			var tree1=fastDev.getInstance("tree1");
+			tree1.setCurrentId("202");
+		}
+		//得到当前节点id
+        var btngetCurrentId=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(tree1.getCurrentId());
+		}
+		//得到树的选中值。如果是多选和单选树，得到的值是勾选值，相关半选值和父节点还可以配置不取。
+        var btngetValue=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(tree1.getValue());
+		}
+		//得到父节点的值
+        var btngetParentid=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(tree1.getParentid("202"));
+		}
+		//得到当前文本
+        var btngetCurrentTxt=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(tree1.getCurrentTxt());
+		}
+		//得到某个id的文本
+        var btngetValByid=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(tree1.getValByid("202"));
+		}
+		//得到某个id的全部数据。注意，额外配置的自定义数据要配置customFields属性，多个用,分隔。
+        var btngetNodeByid=function(){
+			var tree1=fastDev.getInstance("tree1");
+			var node=tree1.getNodeByid("202");
+			fastDev.tips(node["id"]+","+node["pid"]+","+node["val"]);//还有其他值的请以此类推的写			
+		}
+		//得到多个id的文本值
+        var btngetValsByids=function(){
+			var tree1=fastDev.getInstance("tree1");			
+			var txt=tree1.getValsByids("203,204,205");//得到指定多个节点val 
+			fastDev.tips(txt);
+		}
+		//某个节点id是否树的节点数据
+        var btnisRealData=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(""+tree1.isRealData("202"));
+		}
+		//得到某个父id下的子节点
+        var btngetNodesByPid=function(){
+			var tree1=fastDev.getInstance("tree1");
+			var Nodes=tree1.getNodesByPid("2");//得到指定多个节点
+			var txt="";
+			for(var i=0;i<Nodes.length;i++){
+				txt=txt+Nodes[i]["val"]+",";//其他值同样可以取
+			}
+			fastDev.tips(txt);
+		}
+		//得到某个父id下的子孙节点
+        var btnfindNodesByPid=function(){
+			var tree1=fastDev.getInstance("tree1");
+			var Nodes=tree1.findNodesByPid("5");//得到指定多个节点
+			var txt="";
+			for(var i=0;i<Nodes.length;i++){
+				txt=txt+Nodes[i]["val"]+",";//其他值同样可以取
+			}
+			fastDev.tips(txt);
+
+		}
+		//某个节点是否是枝节点
+		var btnisBranch=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(""+tree1.isBranch("202"));
+		}
+		//某个节点是否是叶节点
+        var btnisLeaf=function(){
+			var tree1=fastDev.getInstance("tree1");
+			fastDev.tips(""+tree1.isLeaf("2"));
+		}
+		//重新加载
+		var  btnreload=function(){
+			var tree1=fastDev.getInstance("tree1");
+			tree1.reLoad();
+		}
+		//换数据源的重新加载方法
+        var btnreload2=function(){
+			var tree1=fastDev.getInstance("tree1");
+			tree1.reLoad({url:"../../data/tree_data1.txt"});
+		}
+		//设置某个节点展开
+		var btnsetExpand=function(){
+			var tree1=fastDev.getInstance("tree1");
+			tree1.setExpand("2");
+		}
+		//设置某个节点收缩
+		var btnsetCollect=function(){
+			var tree1=fastDev.getInstance("tree1");
+			tree1.setCollect("2");
+		}
+		var btnsetAllCollect=function(){
+			var tree1=fastDev.getInstance("tree1");
+			tree1.setAllCollect();
+		}
+        </script>
+	</head>
+	<body><div style="margin:10px;"><div class="ui-layout-text">基本树方法集</div>
+		<div >
+			<div itype="Tree"  initSource="../../data/tree_data.txt" customFields="url" showIco="true" topParentid="0" openFloor=2  id="tree1" saveInstance="true"></div>            
+         <div>
+         	<div itype="Button"  text="设置当前节点id" onclick="btnsetCurrentId()" ></div>
+			<div itype="Button"  text="得到当前节点id" onclick="btngetCurrentId()" ></div>
+            <div itype="Button"  text="得到当前树的选中值id" onclick="btngetValue()" ></div>
+			<div itype="Button"  text="得到当前节点父id"  onclick="btngetParentid()" ></div>
+            <div itype="Button"  text="得到当前节点文本"  onclick="btngetCurrentTxt()" ></div>
+			<div itype="Button"  text="得到指定节点id202的文本"  onclick="btngetValByid()" ></div>            
+            <div itype="Button"  text="得到指定节点id202的节点数据" onclick="btngetNodeByid()" ></div>
+            
+            <div itype="Button"  text="得到多个节点id203,204,205的节点文本字符串" onclick="btngetValsByids()" ></div>
+			<div itype="Button"  text="是否节点214是树中的节点"  onclick="btnisRealData()" ></div>
+            <div itype="Button"  text="查找指定父节点id 5的子一级节点"  onclick="btngetNodesByPid()" ></div>
+			<div itype="Button"  text="查找指定父节点id 2的所有子孙级节点"  onclick="btnfindNodesByPid()" ></div>            
+            <div itype="Button"  text="指定节点202是否枝节点" onclick="btnisBranch()" ></div>
+            <div itype="Button"  text="节点2是否叶节点" onclick="btnisLeaf()" ></div>
+            <div itype="Button"  text="重新加载" onclick="btnreload()" ></div>           
+            <div itype="Button"  text="换数据源并重新加载" onclick="btnreload2()" ></div>            
+            
+            <div itype="Button"  text="展开复合控件节点" onclick="btnsetExpand()" ></div>           
+            <div itype="Button"  text="收缩复合控件节点" onclick="btnsetCollect()" ></div>            
+            <div itype="Button"  text="收缩全部展开的节点" onclick="btnsetAllCollect()" ></div>      
+            
+            
+		</div>
+	</div></div>
+	</body>
+</html>

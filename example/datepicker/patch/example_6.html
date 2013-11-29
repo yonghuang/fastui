@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="../../../themes/default/css/ui-main.css"/>
+		<script src="../../../src/library/FastDev.js"></script>
+		<script src="../../../src/library/Query.js"></script>
+		<script src="../../../src/library/Dom.js"></script>
+		<script src="../../../src/library/Ajax.js"></script>
+		<script src="../../../src/library/Event.js"></script>
+		<script src="../../../src/library/Browser.js"></script>
+		<script src="../../../src/library/Queue.js"></script>
+		<script src="../../../src/library/Tools.js"></script>
+		<script src="../../../src/library/Library_Patch.js"></script>
+
+		<script src="../../../src/core/ClassManager.js"></script>
+		<script src="../../../src/core/EventManager.js"></script>
+		<script src="../../../src/core/Base.js"></script>
+		<script src="../../../src/core/Template.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+		<script src="../../../src/core/Core_Patch.js"></script>
+
+		<script src="../../../src/data/Proxy.js"></script>
+		<script src="../../../src/data/DataSet.js"></script>
+		<script src="../../../src/data/Record.js"></script>
+		<script src="../../../src/data/Field.js"></script>
+		<script src="../../../src/data/Reader.js"></script>
+		<script src="../../../src/data/Data_Patch.js"></script>
+		<script src="../../../src/core/DomObject.js"></script>
+		<script src="../../../src/core/ControlBus.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+
+		<script src="../../../src/component/Component.js"></script>
+
+		<script src="../../../src/component/form/Box.js"></script>
+		<script src="../../../src/component/form/DatePicker.js"></script>
+		<script src="../../../src/component/form/DatePicker_Patch.js"></script>
+
+		<script type="text/javascript">
+			// talkweb.Bus.ready({
+			// items : [{
+			// order : 2,
+			// classPath : "Components.Form",
+			// options : {
+			// container : "example",
+			// initSource : "../../../demo/services/forminit.jsp",
+			// dataSource : "../../../demo/services/formload.jsp",
+			// name : "testForm",
+			// blurValidate : false,
+			// action : "../../../demo/services/formsubmit.jsp",
+			// columns : 2,
+			// id : "testForm",
+			// displayError : function(error) {
+			// for (var p in error) {
+			// alert(p + ":" + error[p]);
+			// }
+			// },
+			// saveInstance : true,
+			// submitCallback : function(result) {
+			// alert(result.msg);
+			// },
+			// errorFile : "../../../demo/config/errorConfig.json",
+			// items : [{
+			//
+			// classPath : "Components.Datepicker",
+			// width : "50%",
+			// options : {
+			// notes : "开始时间",
+			// width : "150px",
+			// id : "finishDate",
+			// name : "finishDate",
+			// switchClock : "on",
+			// TimeafterID : "finishDate2",
+			// validateItems : {
+			// requires : true
+			// },
+			// displayFormat : "yyyy-mm-dd  hh24:mi:ss"
+			// }
+			// }, {
+			// classPath : "Components.Datepicker",
+			// width : "50%",
+			// options : {
+			// notes : "结束时间",
+			// width : "150px",
+			// id : "finishDate2",
+			// name : "finishDate2",
+			// switchClock : "on",
+			// FormertimeID : "finishDate",
+			// validateItems : {
+			// requires : true
+			// },
+			// displayFormat : "yyyy-mm-dd  hh24:mi:ss"
+			// }
+			// }]
+			// }
+			// }]
+			// })
+
+			talkweb.Bus.ready({
+				items : [{
+					classPath : "Components.Datepicker",
+					options : {
+						container : "example1",
+						notes : "开始时间",
+						width : "150px",
+						id : "finishDate",
+						name : "finishDate",
+						switchClock : "on",
+						TimeafterID : "finishDate2",
+						validateItems : {
+							requires : true
+						},
+						displayFormat : "yyyy-mm-dd  hh24:mi:ss"
+					}
+				}, {
+					classPath : "Components.Datepicker",
+					width : "50%",
+					options : {
+						container : "example2",
+						notes : "结束时间",
+						width : "150px",
+						id : "finishDate2",
+						name : "finishDate2",
+						switchClock : "on",
+						FormertimeID : "finishDate",
+						validateItems : {
+							requires : true
+						},
+						displayFormat : "yyyy-mm-dd  hh24:mi:ss"
+					}
+				}]
+			});
+		</script>
+		<title>高级应用示例</title>
+	</head>
+	<body>
+		<div id="example1">
+			开始时间
+		</div>
+		<br />
+		<div id="example2">
+			结束时间
+		</div>
+		<br/>
+		<br/>
+		TimeafterID用于验证后一日历控件的时间限制，将后一日历控件的id配置在TimeafterID属性里，则小于当前控件时间的日期都不可选取。FormertimeID属性反之。请注意验证时必须填写日历控件的id属性。
+	</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>        
+        <li>布局有横向布局、竖向布局两种模式</li>
+        <li>默认是自适应宽度的横向布局</li>
+        <li>可以设置没项的宽和高，也可以按每排或每列几个来进行项的宽度控制。</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">    
+		<script src="../../../src/fastDev-import.js"></script>		
+	</head>
+	<body>
+     
+	<div style="width:460px; height:60px;margin: 10px">
+	
+    <!--repeatItems为每竖排有几个-->
+    <div  style="width:460px;height:70px;margin: 10px">
+    	<div class="ui-layout-text">设置竖向排列每列3个</div>
+    <div itype="CheckBoxGroup"  repeatDirection="vertical" repeatItems=3>
+    	<div value="1" text="足球"></div>			
+		<div value="2" text="排球"></div>
+        <div value="3" text="羽毛球"></div>
+         <div value="4" text="乒乓球"></div>
+         <div value="5" text="蓝球"></div>			
+		<div value="6" text="橄榄球"></div>
+        <div value="7" text="高尔夫球"></div>
+         <div value="8" text="保龄球"></div>
+    </div>
+	</div>
+   
+	</body>
+</html>

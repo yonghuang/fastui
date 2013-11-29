@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Core-Template'>/**
+</span> *	控件展现模板实现，负责解析控件内定义的界面规则并生成对应的Element
+ * @class fastDev.Core.Template
+ * @extends fastDev.Core.Base
+ * @author  袁刚
+ */
+
+<span id='fastDev-Core-Template-method-destroy'>/**
+</span> * @method destroy
+ * @private
+ */
+fastDev.define(&quot;fastDev.Core.Template&quot;, {
+	extend : &quot;fastDev.Core.Base&quot;,
+	alias : &quot;Template&quot;,
+	_options : {
+<span id='fastDev-Core-Template-property-htmlList'>		/**
+</span>		 * @type {Array[String]} 模板语句数组
+		 */
+		htmlList : null,
+<span id='fastDev-Core-Template-property-params'>		/**
+</span>		 * @type {JsonObject} 模板中用到的参数存储对象
+		 */
+		params : null,
+<span id='fastDev-Core-Template-property-parseType'>		/**
+</span>		 * 解析数据类型
+		 * @type {String} dataset or Array[JsonObject]
+		 */
+		parseType : &quot;dataset&quot;
+	},
+	_global : {
+		staticTpl : null,
+		dynamicTpl : null
+	},
+	// 匹配标签
+	_tplTag : /(?:&lt;tpl\s(dynamic|each)\s*([^&gt;]*)\&gt;)|(?:&lt;\/tpl&gt;)/g,
+				 
+	// 匹配结束标签
+	_tplTagEnd : /&lt;\/tpl&gt;/,
+	// 匹配if标签内的条件
+	_captureCond : /\({1}(.*)\){1}/,
+	// 匹配条件语句
+	_tplIF : /&lt;tpl\s(else|else\sif)(.*)/,
+	// 匹配变量关键字
+	_captureParamKey : /#\{(.*)\}/,
+	// 匹配变量
+	_captureParam : /#\{[^\}]*\}/g,
+	// 匹配数据关键字
+	_captureDataKey : /\{(.*)\}/,
+	// 匹配数据变量
+	_captureData : /\{[^\}]*\}/g,
+	// 匹配数据子集
+	_captureEachProp : /each\(\{(.*)\}\)/,
+	_eachCount :0,
+<span id='fastDev-Core-Template-method-ready'>	/**
+</span>	 * 模板初始化方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	ready : function(options, global) {
+		// 初始化动态模板存储空间
+		global.dynamicTpl = {};
+		// load plugin
+	},
+<span id='fastDev-Core-Template-method-construct'>	/**
+</span>	 * 模板构造方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	construct : function(options, global) {
+		// 编译生成模板静态标签部分
+		var staticTplHandle = new Function(this.compile(options.htmlList.join(&quot;&quot;)).join(&quot;&quot;));
+		global.staticTpl = staticTplHandle;
+	},
+	compile : function(tplStr, param, iterate,index) {
+		var body  = [];
+		this.initBody(body);
+		var begin, end, len = tplStr.length,
+		// 标签正则 
+		tplTag = this._tplTag,
+		level = 0;
+		
+		index = index || 0;
+		
+		for( ; index &lt; len; index = end) {
+			tplTag.lastIndex = index;
+			var match = tplTag.exec(tplStr);
+			if(match == null) {
+				body.push(&quot;html.push('&quot;+tplStr.substring(index, len)+&quot;');\n&quot;);
+				break;
+			}
+
+			begin = match.index;
+			end = tplTag.lastIndex;
+
+			if(index &lt; begin) {
+				body.push(&quot;html.push('&quot;+tplStr.substring(index, begin)+&quot;');\n&quot;);
+			}
+			
+			if(match[1]){
+				level ++;
+			}
+			
+			switch(match[1]){
+				case &quot;dynamic&quot; : 
+					var name = /name\s*=\s*(.*)/.exec(match[2])[1] || &quot;tpl&quot;+fastDev.getID(),
+					info = this.compileDynamic(tplStr,param,end);
+					end = info.end;
+					this._global.dynamicTpl[name] = info.body;
+					body.push(&quot;html.push('&lt;span name=\&quot;&quot; + name + &quot;\&quot;&gt;&lt;/span&gt;');\n&quot;);
+					break;
+				case &quot;each&quot;:
+					this.compileEach(body);
+					break;
+					
+			}
+			
+			 if (match[0] === &quot;&lt;/tpl&gt;&quot;){
+				if(level === 0){
+					break;
+				}
+				body.push(&quot;}\n&quot;);
+				level --;
+			 }
+		}
+		body.push(&quot;return html.join('');&quot;);
+		
+		if(iterate === true){
+			return {end:end,body:body};
+		}
+		return body;
+	},
+	initBody : function(body){
+		body.push(&quot;var html=[];\n&quot;);
+	},
+	compileDynamic:function(tplStr,param,index){
+		return this.compile(tplStr,param,true,index);
+	},
+	compileEach : function(body){
+		var eachCount = this._eachCount++;
+		var i = &quot;i&quot;+eachCount,len = &quot;len&quot;+eachCount,data = &quot;data&quot;+eachCount;
+		body.push(&quot;var &quot;+i+&quot; = 0,&quot;+len+&quot; = dataList.length,&quot;+data+&quot;;\n&quot;);
+		body.push(&quot;for(;&quot;+i+&quot;&lt;&quot;+len+&quot;;&quot;+i+&quot;++){\n&quot;);
+		body.push(data+&quot; = dataList[&quot;+i+&quot;];\n&quot;);
+	}
+});
+
+</pre>
+</body>
+</html>

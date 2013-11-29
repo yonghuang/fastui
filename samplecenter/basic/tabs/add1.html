@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>方法事件集</h4>
+        <ul>     
+        <li>包括添加，删除，修改，得到tab数据</li>   
+        <li>删除前，添加后，修改后，删除后，点击事件等</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+				
+				//添加方法
+				var btnaddtab=function(){					
+					var tab1=fastDev.getInstance("tabs1");
+					try{
+						var id=fastDev.getID().toString().substr(5,6);
+						var param="{'flag':'0','processdefname':'会议室申请'}";
+						var urlvalue='dd.html?flowinfo='+param;
+						tab1.addTab({title:"新"+id,url:urlvalue,showCloseBtn:true});
+					}catch(e){
+						fastDev.tips(e);
+					}
+				}
+				
+        </script>
+	</head>
+	<body>	<div style="margin:10px;">
+    	<div>
+		<div itype="Tabs" id="tabs1" width="600px" saveInstance="true" height="150px" >       
+         <div title="baidu" url="bb.html" showCloseBtn=true></div>
+         <div title="Ajax" url="aa.html" type="ajax" showCloseBtn=true></div>
+         <div title="Iframe" url="cc.html" showCloseBtn=true></div>
+         <div title="div" showCloseBtn=true type="div"  >
+            <div>腐干地方萨嘎发疯似发呆四个第三个豆腐干地方</div>
+         </div>
+        </div>
+        </div>
+          <div style="padding-top:10px;" >
+			<div itype="Button" text="添加选项卡" onclick="btnaddtab()" ></div>
+          </div></div>
+	</body>
+</html>

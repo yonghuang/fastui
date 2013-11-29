@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>DatePicker</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+         <script src="../../src/core/ControlBus_Patch.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+		<script src="../../src/component/MessageBox.js"></script>
+
+		<script src="../../src/component/form/Box.js"></script>
+		<script src="../../src/component/form/DatePicker.js"></script>
+
+		<script type="text/javascript">
+			var datepicker1, datepicker2, datepicker3, datepicker4, datepicker5, datepicker6;
+			fastDev(function() {
+				fastDev.create("DatePicker", {
+					id:"date1",
+					saveInstance:true,
+					container : "example1"
+				});
+				var date1=fastDev.getInstance("date1");
+				date1.setValue("2009-01-01");
+				alert(date1.getValue());
+				
+				fastDev.create("DatePicker", {
+					container : "example2",
+					format : "yyyy年MM月dd HH时mm分ss"	// 指定带时间值的日期格式化属性，则开启时间选择器
+				});
+				fastDev.create("DatePicker", {
+					container : "example3",
+					format : "yyyy-MM-dd HH:mm:ss",
+					minDate : new Date()	// 最小日期限制，也可以为一个日期字符串
+				});
+				fastDev.create("DatePicker", {
+					container : "example4",
+					format : "yyyy年MM月dd hh点mm分",
+					maxDate : new Date()	// 最大日期限制，也可以为一个日期字符串
+				});
+				fastDev.create("DatePicker", {
+					container : "example5",
+					format : "yyyy-MM-dd HH:mm:ss",
+					minDate : "2012-01-01 00:00:00", // 最小限制日期
+					maxDate : "2014-07-07 23:59:59"	// 最大限制日期
+				});
+				datepicker1 = fastDev.create("DatePicker", {
+					container : "example6",
+					format : "yyyy-MM-dd HH:mm:ss",
+					onSelect : function(date, value) {
+						// 注意，此处需要先判断datepicker2是否已经被实例化
+						// 回调函数参数，date为当前选择的日期对象（Date对象，注意：有可能为null），value为经过格式化后的日期时间值
+						datepicker2 && datepicker2.setMinDate(date);
+						fastDev.tips(value);
+					}
+				});
+				datepicker2 = fastDev.create("DatePicker", {
+					container : "example7",
+					format : "yyyy-MM-dd HH:mm:ss",
+					onSelect : function(date, value) {
+						datepicker1.setMaxDate(date);
+						// 注意，此处需要先判断datepicker3是否已经被实例化
+						datepicker3 && datepicker3.setMinDate(date);
+						fastDev.tips(value);
+					}
+				});
+				datepicker3 = fastDev.create("DatePicker", {
+					container : "example8",
+					format : "yyyy-MM-dd HH:mm:ss",
+					onSelect : function(date, value) {
+						datepicker2.setMaxDate(date);
+						fastDev.tips(value);
+					}
+				});
+				datepicker4 = fastDev.create("DatePicker", {
+					container : "example9",
+					format : "yyyy-MM-dd HH:mm:ss",
+					includes : ["1/2 * MON-FRI"], // includes表达式组声明被包含日期的cron表达式，可省略"秒 分 时"子表达式，省略的子表达式将默认以"?"值替代
+					onSelect : function(date, value) {
+						// 注意，此处需要先判断datepicker2是否已经被实例化
+						// 回调函数参数，date为当前选择的日期对象（Date对象，注意：有可能为null），value为经过格式化后的日期时间值
+						datepicker5 && datepicker5.setMinDate(date);
+						fastDev.tips(value);
+					}
+				});
+				datepicker5 = fastDev.create("DatePicker", {
+					container : "example10",
+					format : "yyyy-MM-dd HH:mm:ss",
+					excludes : ["* * * * * 1-3"], // excludes表达式组声明被排除日期的cron表达式
+					onSelect : function(date, value) {
+						datepicker4.setMaxDate(date);
+						// 注意，此处需要先判断datepicker3是否已经被实例化
+						datepicker6 && datepicker6.setMinDate(date);
+						fastDev.tips(value);
+					}
+				});
+				datepicker6 = fastDev.create("DatePicker", {
+					container : "example11",
+					format : "yyyy-MM-dd HH:mm:ss",
+					includes : ["* * * 1,2,3,4,5,6 * * *", "* * * * * 4#2"], // 可同时声明多个表达式
+					excludes : ["10W * *", "* * 3#1"],
+					onSelect : function(date, value) {
+						datepicker5.setMaxDate(date);
+						fastDev.tips(value);
+					}
+				});
+				fastDev.create("DatePicker", {
+					container : "example12",
+					format : "yyyy年MM月dd日",
+					firstDayOfWeek : "4"	// 需放到第一列显示的星期值，范围为0-6，星期日为0
+				});
+				fastDev.create("DatePicker", {
+					container : "example13",
+					firstDayOfWeek : "1", // 需放到第一列显示的星期值，范围为0-6，星期日为0
+					includes : "1/3 2/3 1/2 2012/2",	// 单个表达式可以使用字符串来传参
+					display : "inline", // 指定为"行内"展现模式
+					onSelect : function(date, value) {
+						fastDev.tips(value);
+					}
+				});
+				fastDev.create("DatePicker", {
+					container : "example14",
+					trigger : "click"	// 指定触发日历面板显示的方式，默认为"button"，即图标按钮点击触发
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div>
+			<p>
+				<h3>默认配置</h3>
+				<h4>鼠标悬浮至日历控件上时，可通过滚轮快速翻页，年份选择下拉菜单也可以使用滚轮快速翻页</h4>
+				<h4>连续点击翻页按钮5次即自动打开相应的下拉菜单，方便快速选取</h4>
+			</p>
+			<div id="example1">
+
+			</div>
+			<br />
+			<p>
+				<h3>配置的日期值格式化属性值若包含时间格式，则开启时间选择器</h3>
+			</p>
+			<div id="example2">
+
+			</div>
+			<br />
+			<p>
+				<h3>设置最小日期限制</h3>
+			</p>
+			<div id="example3">
+
+			</div>
+			<br />
+			<p>
+				<h3>设置最大日期限制</h3>
+			</p>
+			<div id="example4">
+
+			</div>
+			<br />
+			<p>
+				<h3>设置时间范围</h3>
+			</p>
+			<div id="example5">
+
+			</div>
+			<br />
+			<p>
+				<h3>多个日历间相互限制时间范围</h3>
+				<h4>初始时间为最近可用的整点时间，日期时间值自动输入纠错，拟选日期时间变更时自动调整至可用时间点，增减时间以15分钟步进</h4>
+			</p>
+			<div>
+				<span id="example6" style="float: left;">起始时间： </span>
+				<span id="example7" style="float: left;position: relative;left: 50px;">中间时间： </span>
+				<span id="example8" style="float: left;position: relative;left: 100px;">结束时间： </span>
+			</div>
+			<div style="clear: both;">
+
+			</div>
+			<br />
+			<p>
+				<h3>同时使用表达式筛选日期</h3>
+				<h4>更多有关于表达式的使用，请参考表达式示例说明:<a href="datepicker-range.html" target="_blank">传送门!</a></h4>
+			</p>
+			<div>
+				<span id="example9" style="float: left;">起始时间： </span>
+				<span id="example10" style="float: left;position: relative;left: 50px;">中间时间： </span>
+				<span id="example11" style="float: left;position: relative;left: 100px;">结束时间： </span>
+			</div>
+			<div style="clear: both;">
+
+			</div>
+			<br />
+			<p>
+				<h3>行内模式展现</h3>
+				<div id="example13" style="height: 300px;">
+
+				</div>
+			</p>
+			<br />
+			<div style="clear: both;">
+
+			</div>
+			<br />
+			<div id="example12" style="position: absolute;left: 380px;bottom: 60px;">
+				<p>
+					<h3>指定周的第一天（日历面板及选择菜单展现定位总是以最佳呈现视角来展现，但目前不提供跨iframe展现功能）</h3>
+				</p>
+			</div>
+			<div style="clear: both;">
+
+			</div>
+		</div>
+		<div id="example14" style="position: absolute;right: -30px;bottom: 80px;">
+			<p>
+				<h3 style="position: relative;left: -40px;">指定触发方式（如点击输入框）</h3>
+			</p>
+		</div>
+	</body>
+</html>
+

@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					MessageBox提供了一些常用的消息框控件。
+				</li>
+				<li>
+					控件默认将依据消息内容以及当前视窗宽高智能调整消息框的尺寸至适当的大小。
+				</li>
+				<li>
+					此外，也可以通过创建MessageBox的方式自定义符合所需的消息框。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function showAlert() {
+				fastDev.alert(getValue());
+			}
+
+			function showInfoAlert() {
+				fastDev.alert(getValue(), "信息", "tip");
+			}
+
+			function showErrorAlert() {
+				fastDev.alert(getValue(), "错误", "error", function() {
+					window.location.reload();
+					return false;
+				});
+			}
+
+			function showQuestionAlert() {
+				fastDev.alert(getValue(), "询问", "help");
+			}
+
+			function showWarningAlert() {
+				fastDev.alert(getValue(), "警告", "warning");
+			}
+
+			function showOKAlert() {
+				fastDev.alert(getValue(), "完成", "ok");
+			}
+
+			function showConfirm() {
+				fastDev.confirm(getValue(), "确认", function(response) {
+					if (response) {
+						// 点击了确定按钮
+						fastDev.tips("点击了确定按钮");
+					} else {
+						// 点击了取消按钮或者标题栏的关闭按钮
+						fastDev.tips("点击了取消或关闭按钮")
+					}
+				});
+			}
+
+			function showPrompt() {
+				fastDev.prompt(getValue(), "请输入", function(response, value) {
+					if (response) {
+						// 点击确定按钮
+						fastDev.tips(value);
+					} else {
+						// 点击关闭或取消按钮
+						fastDev.tips("取消");
+					}
+				});
+			}
+
+			function showMultiPrompt() {
+				fastDev.prompt(getValue(), "多行输入", function(response, value) {
+					if (response) {
+						// 点击确定按钮
+						fastDev.tips(value);
+					} else {
+						// 点击关闭按钮或取消按钮
+						fastDev.tips("取消");
+					}
+				}, true);
+			}
+
+			function showTips() {
+				fastDev.tips(getValue());
+			}
+
+			function showShakeTips() {
+				// 第一个参数为提示内容，第二个参数为提示内容图标名，第三个参数为是否晃动，第四个参数为显示时长（秒）
+				fastDev.tips("Are you crazy?", "error", true, 4);
+			}
+
+			function showNoIconTips() {
+				// tips默认会取tip消息图标，如不需要图标可以置图标为空串
+				fastDev.tips(getValue(), "");
+			}
+
+			function showNotice() {
+				fastDev.notice({
+					// position参数可定义通知框的弹出位置
+					position : fastDev.getInstance("position").getValue(),
+					// horizontalOffset可定义最终弹出位置在水平方向（X轴）上与边界的间距，可使用百分比（相对当前可视区域宽度计算）
+					horizontalOffset : fastDev.getInstance("hor").getValue(),
+					// verticalOffset可定义最终弹出位置在垂直方向（Y轴）上与边界的间距，可使用百分比（相对当前可视区域宽度计算）
+					verticalOffset : fastDev.getInstance("ver").getValue(),
+					title : "消息",
+					content : getValue(),
+					onBeforeClose : function() {
+						fastDev.tips("onBeforeClose()");
+					}
+				});
+			}
+
+			function showAutoCloseNotice() {
+				fastDev.notice({
+					// itype用于指定弹窗的类型，默认为MessageBox
+					itype : "Window",
+					width : 220,
+					height : 150,
+					title : "通知",
+					// position参数可定义通知框的弹出位置
+					position : fastDev.getInstance("position").getValue(),
+					// horizontalOffset可定义最终弹出位置在水平方向（X轴）上与边界的间距，可使用百分比（相对当前可视区域宽度计算）
+					horizontalOffset : fastDev.getInstance("hor").getValue(),
+					// verticalOffset可定义最终弹出位置在垂直方向（Y轴）上与边界的间距，可使用百分比（相对当前可视区域宽度计算）
+					verticalOffset : fastDev.getInstance("ver").getValue(),
+					content : "<span style='color:green;'>" + getValue() + "</span>",
+					animateSpeed : 1000,
+					showCloseBtn : false,
+					// time参数可用于定义弹窗的显示时长，超过时长后弹窗将自动关闭，单位为秒
+					time : 5,
+					// showTime参数用于定义弹窗开启自动关闭后，是否在标题栏显示关闭倒计时信息
+					showTime : true,
+					icon : "tip",
+					onBeforeClose : function() {
+						fastDev.tips("onBeforeClose()");
+					}
+				});
+			}
+
+			function showYesNoCancel() {
+				fastDev.save(getValue(), "消息", function(r) {
+					switch(r) {
+						case "yes" :
+						case "no" :
+						case "cancel" :
+							fastDev.tips(r);
+					}
+				}, "icon-save");
+			}
+
+			function createMessageBox() {
+				// MessageBox继承自Dialog，Dialog继承自Window，因此所有Window中实现的属性和方法均可在MessageBox中使用（但标题栏仅含关闭按钮）
+				fastDev.create("MessageBox", {
+					title : "自定义消息框",
+					// 标题栏的图标样式
+					iconCls : "icon-save",
+					animateTarget : this,
+					animateSpeed : 350,
+					// 内容图标名
+					icon : "help",
+					content : getValue(),
+					inside : false,
+					modal : false,
+					buttons : [{
+						text : "是",
+						align : "right",
+						iconCls : "icon-save",
+						onclick : function(event, that, win, fast) {
+							fastDev.tips("点击了是");
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}, {
+						text : "否",
+						align : "right",
+						iconCls : "icon-delete",
+						onclick : function(event, that, win, fast) {
+							fastDev.tips("点击了否");
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}, {
+						text : "取消",
+						// align可指定按钮的位置left、center、right
+						align : "left",
+						iconCls : "icon-close",
+						onclick : function(event, that, win, fast) {
+							fastDev.tips("点击了取消");
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}]
+				});
+			}
+
+			//
+			function createFoldMessageBox() {
+				var dataBox = fastDev("#datagridbox"), datagrid = fastDev.getInstance("datagrid"), folded = true, progress, timer;
+				fastDev.create("MessageBox", {
+					width : 337,
+					height : 140,
+					inside : true,
+					onAfterOpen : function() {
+						var that = this, value;
+						// sheContent用于设置窗体内容
+						this.setContent('<div id="tips" style="margin-bottom:5px">正在删除...</div><div id="progress" saveInstance="true" itype="ProgressBar" width="310" model="progress"></div>', false);
+						// append用于追加窗体内容
+						this.append(dataBox);
+						// 内容包含控件声明时，通过弹窗控件去获取控件的实例是保险的做法（因为若弹窗跨级展现，此时直接通过fastDev.getInstance是获取不到该ProgressBar实例的）。
+						// 详情请参见弹窗(Window)控件的setContent、append、getInstance方法说明。
+						progress = this.getInstance("progress");
+						timer = window.setInterval(function() {
+							value = progress.getValue();
+							if (value === 100) {
+								window.clearInterval(timer);
+								that.close();
+							} else {
+								that.find("div[id=tips]").setText("正在删除文件" + value + "...");
+								datagrid.addFirstRow({
+									name : "文件" + value,
+									state : "已删除"
+								}, false);
+								progress.setValue(value + 10);
+							}
+						}, 700);
+					},
+					onBeforeClose : function() {
+						// 作一些必要的清理
+						window.clearInterval(timer);
+						progress.close();
+						// 把DataGrid设置回原来的位置，以下下次示例窗口能够重用此表格
+						var datas = datagrid.getAllValue(), data;
+						while ( data = datas.shift()) {
+							datagrid.delRow(data.name);
+						}
+						fastDev(document.body).append(dataBox.hide());
+					},
+					buttons : [{
+						text : "详细信息",
+						align : "left",
+						onclick : function(event, that, win, fast) {
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							if (folded) {
+								dataBox.show();
+								that.resize({
+									height : "auto"
+								}, true);
+								this.setText("简略信息")
+							} else {
+								dataBox.hide();
+								that.resize({
+									height : "auto"
+								}, true);
+								this.setText("详细信息")
+							}
+							folded = !folded;
+						}
+					}, {
+						text : "取消",
+						width : "58px",
+						onclick : function(event, that, win, fast) {
+							// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+							// 参数that为当前对话框控件实例
+							that.close();
+						}
+					}]
+				});
+			}
+
+			function getValue() {
+				return fastDev.getInstance("content").getValue();
+			}
+
+		</script>
+		<style type="text/css">
+			.notice-tbl td {
+				padding: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				消息内容
+			</div>
+			<div id="content" saveInstance="true" resize="both" itype="TextBox" type="textarea" width="350px" height="100px">
+				曲曲折折的荷塘上面，弥望的是田田的叶子。叶子出水很高，像亭亭的舞女的裙。层层的叶子中间，零星地点缀着些白花，有袅娜地开着的，有羞涩地打着朵儿的；正如一粒粒的明珠，又如碧天里的星星，又如刚出浴的美人。
+			</div>
+			<div class="ui-layout-text">
+				Alert
+			</div>
+			<div>
+				<input itype="Button" text="default" onclick="showAlert()"/>
+				<input itype="Button" text="Info" onclick="showInfoAlert()"/>
+				<input itype="Button" text="Error" onclick="showErrorAlert()"/>
+				<input itype="Button" text="Question" onclick="showQuestionAlert()"/>
+				<input itype="Button" text="Warning" onclick="showWarningAlert()"/>
+				<input itype="Button" text="OK" onclick="showOKAlert()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				Confirm
+			</div>
+			<div>
+				<input itype="Button" text="confirm" onclick="showConfirm()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				Prompt
+			</div>
+			<div>
+				<input itype="Button" text="prompt" onclick="showPrompt()"/>
+				<input itype="Button" text="MultiPrompt" onclick="showMultiPrompt()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				Tips
+			</div>
+			<div>
+				<input itype="Button" text="tips" onclick="showTips()"/>
+				<input itype="Button" text="shake" onclick="showShakeTips()"/>
+				<input itype="Button" text="不含图标" onclick="showNoIconTips()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				Notice
+			</div>
+			<div>
+
+				<table class="notice-tbl">
+					<tr>
+						<td> position:
+						<select itype="Select" width="100px" id="position" saveInstance=true>
+							<option value="left" text="left"></option>
+							<option value="top" text="top"></option>
+							<option value="right" text="right"></option>
+							<option value="bottom" text="bottom"></option>
+							<option value="left-bottom" text="left-bottom"></option>
+							<option value="left-top" text="left-top"></option>
+							<option value="right-top" text="right-top"></option>
+							<option value="right-bottom" text="right-bottom" selected></option>
+						</select></td>
+						<td> horizontalOffset(px/%):
+						<input itype="TextBox" saveInstance="true" id="hor" value="20"/>
+						</td>
+						<td> verticalOffset(px/%):
+						<input itype="TextBox" saveInstance="true" id="ver" value="5%"/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+						<input itype="Button" text="notice" onclick="showNotice()"/>
+						<input itype="Button" text="AutoClose" onclick="showAutoCloseNotice()"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				Yes_No_Cancel
+			</div>
+			<div>
+				<input itype="Button" text="YES_NO_CANCEL" onclick="showYesNoCancel()"/>
+			</div>
+			<br />
+			<div class="ui-layout-text">
+				自定义消息框
+			</div>
+			<div>
+				<input itype="Button" text="自定义" onclick="createMessageBox()"/>
+				<input itype="Button" text="内容折叠" onclick="createFoldMessageBox()"/>
+			</div>
+			<!--  -->
+			<div id="datagridbox" style="display:none;">
+				<div class="ui-layout-text">
+					已删除文件列表：
+				</div>
+				<div itype="DataGrid" id="datagrid" pagePosition="none" keyword="name" saveInstance="true" width="312px" height="150px">
+					<div width="70%" name="name" text="文件"></div>
+					<div width="30%" name="state" text="状态"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

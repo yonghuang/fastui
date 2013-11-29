@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title><h4>跨级弹窗</h4> </title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 创建跨级弹窗并存储日期值
+			function showCrossWindow() {
+				fastDev.create("Window", {
+					id : "window_2",
+					saveInstance : true,
+					inside : false,
+					width : "60%",
+					height : "60%",
+					src : "basic/window/iframe_b.html"
+				}).setData("date", fastDev.getInstance("datepicker_1").getValue());
+			}
+
+			// 保存上方输入框的值并关闭弹窗
+			function saveAndCloseWindow() {
+				var value = fastDev("#input").prop("value");
+				var parent = fastDev.Ui.Window.getData("parent");
+				parent.fastDev.getInstance("window_1").setData("value", value).close();
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div>
+				<input itype="DatePicker" id="datepicker_1" saveInstance="true"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="创建跨级弹窗并存储日期值" onclick="showCrossWindow()"/>
+			</div>
+			<br />
+			<div>
+				<input id="input"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="保存上方输入框的值并关闭弹窗" onclick="saveAndCloseWindow()"/>
+			</div>
+		</div>
+	</body>
+</html>

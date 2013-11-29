@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///import plugins\inserthtml.js
+///import plugins\catchremoteimage.js
+///commands 插入图片，操作图片的对齐方式
+///commandsName  InsertImage,ImageNone,ImageLeft,ImageRight,ImageCenter
+///commandsTitle  图片,默认,居左,居右,居中
+///commandsDialog  dialogs\image\image.html
+/*
+ * Created by .
+ * User: zhanyi
+ * for image
+ */
+
+UE.commands['imagefloat'] = {
+    execCommand : function (cmd, align){
+        var me = this,
+            range = me.selection.getRange();
+        if(!range.collapsed ){
+            var img = range.getClosedNode();
+            if(img &amp;&amp; img.tagName == 'IMG'){
+                switch (align){
+                    case 'left':
+                    case 'right':
+                    case 'none':
+                        var pN = img.parentNode,tmpNode,pre,next;
+                        while(dtd.$inline[pN.tagName] || pN.tagName == 'A'){
+                            pN = pN.parentNode;
+                        }
+                        tmpNode = pN;
+                        if(tmpNode.tagName == 'P' &amp;&amp; domUtils.getStyle(tmpNode,'text-align') == 'center'){
+                            if(!domUtils.isBody(tmpNode) &amp;&amp; domUtils.getChildCount(tmpNode,function(node){return !domUtils.isBr(node) &amp;&amp; !domUtils.isWhitespace(node)}) == 1){
+                                pre = tmpNode.previousSibling;
+                                next = tmpNode.nextSibling;
+                                if(pre &amp;&amp; next &amp;&amp; pre.nodeType == 1 &amp;&amp;  next.nodeType == 1 &amp;&amp; pre.tagName == next.tagName &amp;&amp; domUtils.isBlockElm(pre)){
+                                    pre.appendChild(tmpNode.firstChild);
+                                    while(next.firstChild){
+                                        pre.appendChild(next.firstChild)
+                                    }
+                                    domUtils.remove(tmpNode);
+                                    domUtils.remove(next);
+                                }else{
+                                    domUtils.setStyle(tmpNode,'text-align','')
+                                }
+
+
+                            }
+
+                            range.selectNode(img).select()
+                        }
+                        domUtils.setStyle(img,'float',align);
+                        break;
+                    case 'center':
+                        if(me.queryCommandValue('imagefloat') != 'center'){
+                            pN = img.parentNode;
+                            domUtils.setStyle(img,'float','none');
+                            tmpNode = img;
+                            while(pN &amp;&amp; domUtils.getChildCount(pN,function(node){return !domUtils.isBr(node) &amp;&amp; !domUtils.isWhitespace(node)}) == 1
+                                &amp;&amp; (dtd.$inline[pN.tagName] || pN.tagName == 'A')){
+                                tmpNode = pN;
+                                pN = pN.parentNode;
+                            }
+                            range.setStartBefore(tmpNode).setCursor(false);
+                            pN = me.document.createElement('div');
+                            pN.appendChild(tmpNode);
+                            domUtils.setStyle(tmpNode,'float','');
+
+                            me.execCommand('insertHtml','&lt;p id=&quot;_img_parent_tmp&quot; style=&quot;text-align:center&quot;&gt;'+pN.innerHTML+'&lt;/p&gt;');
+
+                            tmpNode = me.document.getElementById('_img_parent_tmp');
+                            tmpNode.removeAttribute('id');
+                            tmpNode = tmpNode.firstChild;
+                            range.selectNode(tmpNode).select();
+                            //去掉后边多余的元素
+                            next = tmpNode.parentNode.nextSibling;
+                            if(next &amp;&amp; domUtils.isEmptyNode(next)){
+                                domUtils.remove(next)
+                            }
+
+                        }
+
+                        break;
+                }
+
+            }
+        }
+    },
+    queryCommandValue : function() {
+        var range = this.selection.getRange(),
+            startNode,floatStyle;
+        if(range.collapsed){
+            return 'none';
+        }
+        startNode = range.getClosedNode();
+        if(startNode &amp;&amp; startNode.nodeType == 1 &amp;&amp; startNode.tagName == 'IMG'){
+            floatStyle = domUtils.getComputedStyle(startNode,'float');
+            if(floatStyle == 'none'){
+                floatStyle = domUtils.getComputedStyle(startNode.parentNode,'text-align') == 'center' ? 'center' : floatStyle
+            }
+            return {
+                    left : 1,
+                    right : 1,
+                    center : 1
+                }[floatStyle] ? floatStyle : 'none'
+        }
+        return 'none'
+
+
+    },
+    queryCommandState : function(){
+        if(this.highlight){
+                   return -1;
+               }
+        var range = this.selection.getRange(),
+            startNode;
+        if(range.collapsed){
+            return -1;
+        }
+        startNode = range.getClosedNode();
+        if(startNode &amp;&amp; startNode.nodeType == 1 &amp;&amp; startNode.tagName == 'IMG'){
+            return 0;
+        }
+        return -1;
+    }
+};
+
+UE.commands['insertimage'] = {
+    execCommand : function (cmd, opt){
+
+        opt = utils.isArray(opt) ? opt : [opt];
+        if(!opt.length) return;
+        var me = this,
+            range = me.selection.getRange(),
+            img = range.getClosedNode();
+        if(img &amp;&amp; /img/i.test( img.tagName ) &amp;&amp; img.className != &quot;edui-faked-video&quot; &amp;&amp;!img.getAttribute(&quot;word_img&quot;) ){
+            var first = opt.shift();
+            var floatStyle = first['floatStyle'];
+            delete first['floatStyle'];
+////                img.style.border = (first.border||0) +&quot;px solid #000&quot;;
+////                img.style.margin = (first.margin||0) +&quot;px&quot;;
+//                img.style.cssText += ';margin:' + (first.margin||0) +&quot;px;&quot; + 'border:' + (first.border||0) +&quot;px solid #000&quot;;
+            domUtils.setAttributes(img,first);
+            me.execCommand('imagefloat',floatStyle);
+            if(opt.length &gt; 0){
+                range.setStartAfter(img).setCursor(false,true);
+                me.execCommand('insertimage',opt);
+            }
+
+        }else{
+            var html = [],str = '',ci;
+            ci = opt[0];
+            if(opt.length == 1){
+                str = '&lt;img src=&quot;'+ci.src+'&quot; '+ (ci.data_ue_src ? ' data_ue_src=&quot;' + ci.data_ue_src +'&quot; ':'') +
+                        (ci.width ? 'width=&quot;'+ci.width+'&quot; ':'') +
+                        (ci.height ? ' height=&quot;'+ci.height+'&quot; ':'') +
+                        (ci['floatStyle']&amp;&amp;ci['floatStyle']!='center' ? ' style=&quot;float:'+ci['floatStyle']+';&quot;':'') +
+                        (ci.title?' title=&quot;'+ci.title+'&quot;':'') + ' border=&quot;'+ (ci.border||0) + '&quot; hspace = &quot;'+(ci.hspace||0)+'&quot; vspace = &quot;'+(ci.vspace||0)+'&quot; /&gt;';
+                if(ci['floatStyle'] == 'center'){
+                        str = '&lt;p style=&quot;text-align: center&quot;&gt;'+str+'&lt;/p&gt;'
+                 }
+                html.push(str)
+
+            }else{
+                for(var i=0;ci=opt[i++];){
+                    str =  '&lt;p ' + (ci['floatStyle'] == 'center' ? 'style=&quot;text-align: center&quot; ' : '') + '&gt;&lt;img src=&quot;'+ci.src+'&quot; '+
+                        (ci.width ? 'width=&quot;'+ci.width+'&quot; ':'') +   (ci.data_ue_src ? ' data_ue_src=&quot;' + ci.data_ue_src +'&quot; ':'') +
+                        (ci.height ? ' height=&quot;'+ci.height+'&quot; ':'') +
+                        ' style=&quot;' + (ci['floatStyle']&amp;&amp;ci['floatStyle']!='center' ? 'float:'+ci['floatStyle']+';':'') +
+                        (ci.border||'') + '&quot; ' +
+                        (ci.title?' title=&quot;'+ci.title+'&quot;':'') + ' /&gt;&lt;/p&gt;';
+//                        if(ci['floatStyle'] == 'center'){
+//                            str = '&lt;p style=&quot;text-align: center&quot;&gt;'+str+'&lt;/p&gt;'
+//                        }
+                    html.push(str)
+                }
+            }
+
+            me.execCommand('insertHtml',html.join(''));
+        }
+    },
+    queryCommandState : function(){
+        return this.highlight ? -1 :0;
+    }
+};</pre>
+</body>
+</html>

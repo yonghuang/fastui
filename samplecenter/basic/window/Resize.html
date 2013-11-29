@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					窗体尺寸调节示例。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			// 宽高尺寸等比调节
+			function showRatioWindow() {
+				// 比例为宽高比
+				fastDev.create("Window", {
+					height : 100,
+					width : 100 * 16 / 9,
+					resizeRatio : 16 / 9
+				});
+			}
+
+			// 限制最大最小尺寸
+			function showLimitWindow() {
+				// 最大最小宽高支持数字，百分比（相对于当前窗口），px等单位
+				fastDev.create("Window", {
+					maxWidth : "300px",
+					maxHeight : "50%",
+					minWidth : "120px",
+					minHeight : 45,
+					width : "173px",
+					height : "123px"
+				});
+			}
+
+			// 定义可调节尺寸的方向
+			function showHandleWindow() {
+				//  n(北)、ne(东北)、e(东)、se(东南)、s(南)、sw(西南)、w(西)、nw(西北)、all(全部)
+				fastDev.create("Window", {
+					resizeDirection : "all",
+					title : "全方位尺寸调节"
+				});
+			}
+
+			// 禁用Resize功能
+			function showNoResizeWindow() {
+				fastDev.create("Window", {
+					allowResize : false
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				尺寸调节
+			</div>
+			<div>
+				<input itype="Button" text="宽高尺寸等比调节" onclick="showRatioWindow()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="限制最大最小尺寸" onclick="showLimitWindow()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="定义可调节尺寸的方向" onclick="showHandleWindow()"/>
+			</div>
+			<br />
+			<div>
+				<input itype="Button" text="禁用Resize功能" onclick="showNoResizeWindow()"/>
+			</div>
+		</div>
+	</body>
+</html>
+

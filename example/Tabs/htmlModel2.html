@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>tabs</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-07-18 -->
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+		<style>
+    .intabs{ padding:5px}
+    </style>
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/interaction/Draggable.js"></script>
+        <script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/form/CheckBoxGroup.js"></script>
+		<script src="../../src/component/layout/Tabs.js"></script>
+
+		<script>
+			$(function() {
+				fastDev.Core.ControlBus.compile();
+			});
+
+		</script>
+	</head>
+	<body style="margin:5px;">
+		<div id="example" style="width:100%" >
+			<div itype="Tabs" id="aaa"  container="example" width="100%" height="200px">
+				<div title="复选框" type="div"  selected=true showCloseBtn=true >
+                	<div>
+                    <div><div itype="CheckBoxGroup" name="check1"  cls="intabs" >
+						<div value="1" text="旅游" checked=true></div>
+						<div value="2" text="唱歌" checked=true></div>
+						<div value="3" text="跳舞" checked=false></div>
+					    </div></div>
+                    <div><div itype="Button" text="按钮" width="100"></div></div>
+                    <div><textarea id="code" name="code">滴滴答答</textarea></div>
+                    </div>					
+				</div>
+                <div title="代码" type="div"  showCloseBtn=false ><div>
+					<div itype="Button" text="按钮"></div>
+                    <textarea id="code" name="code">滴滴答答</textarea>
+                     </div>
+				</div>
+				<div title="单选框" url="bb.html" type="ajax"></div>
+                <div title="静态内容" type="div">
+                发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>发疯似发呆四个第三个豆腐干地方萨嘎<p>
+                </div>
+				<div title="手风琴" url="cc.html" iconCls="icon-add"></div>
+			</div>
+		</div>
+	</body>
+</html>
+

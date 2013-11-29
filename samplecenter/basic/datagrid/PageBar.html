@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>当前示例为分页工具栏的使用方法，可分为三部分</li>
+				<li>1.分页栏的显示位置：通过DataGrid的pagePosition属性可定义分页栏的显示位置，可用值为"none"、"top"、"bottom"、"all"</li>
+				<li>2.分页栏的扩展按钮：分页栏也是工具栏，所以上面仍然可以像定义工具栏一样定义其他的功能按钮，有所不同的是分页栏的扩展配置需要写在name="bottom-toolbar"的描述标签下,该配置也是DataGrid的特殊配置</li>
+				<li>3.每页显示行数选择器：该选择器的作用为让用户选择每页显示条数使用，该配置也是DataGrid的特殊配置，需要写在name="pageSizeList"的标签下</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script type="text/javascript">
+			function add() {
+				fastDev.tips("新增");
+			}
+
+			function edit() {
+				fastDev.tips("修改");
+			}
+
+			function save() {
+				fastDev.tips("保存");
+			}
+
+			function remove() {
+				fastDev.tips("删除");
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px;">
+			<div class="ui-layout-text">无分页</div>
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" pagePosition="none" showSeqColumn=true width="98%">
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+			</div>
+		</div>
+		<div style="margin: 10px;">
+			<div class="ui-layout-text">默认分页、定义分页栏下拉项、定义分页栏附加按钮</div>
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" pagePosition="bottom" pageSize="5" width="98%">
+				<!-- pageSize属性定义-->
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+				<!-- 列属性定义-->
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<!-- 分页栏按钮定义-->
+				<div name="bottom-toolbar">
+					<div plain=true text="增加" iconCls="icon-add" onclick="add()"></div>
+					<div plain=true text="修改" iconCls="icon-edit" onclick="edit()"></div>
+					<div plain=true text="保存" iconCls="icon-save" onclick="save()"></div>
+					<div plain=true text="删除" iconCls="icon-delete" onclick="remove()"></div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 10px;">
+			<div class="ui-layout-text">顶部放置分页栏</div>
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" pageSize="5" pagePosition="top" width="98%">
+				<!-- 列属性定义-->
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 10px;">
+			<div class="ui-layout-text">顶部底部都放置分页栏</div>
+			<div itype="DataGrid" initSource="../../data/griddata.jsp" pageSize="5" pagePosition="all" width="98%">
+				<!-- 列属性定义-->
+				<div width="10%" name="empno" text="员工工号"></div>
+				<div width="20%" name="name" text="姓名"></div>
+				<div width="12%" name="department" text="所属部门"></div>
+				<div width="8%" name="isuse" text="是否可用"></div>
+				<div width="15%" name="position" text="职位"></div>
+				<div width="10%" name="pay" text="薪资"></div>
+				<div width="10%" name="datesemployed" text="入职时间"></div>
+				<div width="15%" name="birthday" text="生日" defaultValue="1985-01-01"></div>
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,140 @@
+﻿    .form {
+    	margin:0 0 10px;
+    	padding:0;
+    }
+    .form dl {
+    	padding:0;
+    	margin:0;
+    	height: auto;
+    	float:left;
+    	line-height: normal;
+    	_margin-right:-1px;
+    	*margin-right:-1px;
+    }
+    .form dt, .form dd {
+        float:left;
+    	margin:0;
+    	vertical-align:middle;
+    	color:#075587;
+    }
+    .form dt {
+        font:12px/28px Arial, Helvetica, sans-serif, "宋体";
+    	text-align:right;
+    	width:100px;
+    	padding:3px 4px 1px;
+    	margin-right:4px;
+    }
+    .form dd {
+        display:block;
+    	padding:2px 0 0;
+    	padding:5px 0 0 \9;
+    	vertical-align:middle;
+    	font:12px/26px Arial, Helvetica, sans-serif, "宋体";
+    }
+    /*
+     * dl 内容隐藏 
+     * */
+    .form dl.no_line {
+        border:0;
+    }
+    .form dl.no_line dd {
+        padding:0;
+    }
+    
+    /*
+     * dt no width
+     * */
+    .form .dl_nowidth dt {
+        margin:0;
+    	width:auto;
+    	padding:3px 4px 1px;
+    }
+    
+    /*
+     * dd 内容位置
+     * */
+    .form .dl_left dd, .form .dl_center dd, .form .dl_right dd {
+        float:none;
+    	width:auto;
+    	display:block;
+    }
+    .form .dl_left dd {
+    	text-align:left;
+    }
+    .form .dl_center dd {
+    	text-align:center;
+    }
+    .form .dl_right dd {
+    	text-align:right;
+    }
+    /*
+     * form　input select 'style'
+     * */
+    .form input, .form select {
+        color:#075586;
+    	vertical-align:middle;
+    	height:17px;
+    	height:18px \9;
+    	_height:16px;
+    	/*border:1px solid #D0E1E6;*/
+    	font-family:"宋体";
+    	font-size:12px;
+    	line-height:18px;
+    	_line-height:16px;
+    	padding-top:1px;
+    	padding-top:0 \9;
+    	_padding-top:2px;
+    }
+    
+    .form select {
+        height:20px;
+        _height:18px;
+    }
+    .form dd div {
+        padding-top:3px;
+        padding-top:0 \9;
+    }
+    /*
+     * form的 border or bg
+     * */
+    .formborder {
+        border-bottom:1px solid #d8e2eb;
+        border-right:1px solid #d8e2eb;
+    }
+    .formborder dl {
+        border-top:1px solid #d8e2eb;
+    }
+    .formborder dl.no_line {
+        border-top:0px solid #d8e2eb;
+    }
+    .formborder dt {
+        background:#f3f7fa;
+        border-right:1px solid #d8e2eb;
+        border-left:1px solid #d8e2eb;
+    }
+    
+    /*
+     * 清除浮动
+     * */
+    .clearfix:after {
+    	content: ".";
+    	display: block;
+    	clear: both;
+    	visibility: hidden;
+    	line-height: 0;
+    	height: 0;
+    }
+    .clearfix {
+    	display: block;
+    	display: inline-block;
+    	clear: both;
+    	line-height: 0; 
+    	height: 0; 
+    	font-size:0;
+    }
+    html[xmlns] .clearfix {
+    	display: block;
+    }
+    * html .clearfix {
+    	height: 1%;
+    }

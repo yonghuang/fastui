@@ -1,0 +1,25 @@
+{
+	"data": [
+		{
+			"empno": "2212",
+			"name": "袁维",
+			"department": "产品研发部",
+			"position ": "前端工程师",
+			"pay": 4632,
+			"datesemployed": "2012-05-17",
+			"admin":"David",
+			"system":"软件体系",
+			"sex":"男",
+			"stature":"171cm",
+			"weight":"73kg",
+			"city":"长沙",
+			"isuse": true
+		}
+	],
+	"info": {
+		"pageSize": 1,
+		"records": 1,
+		"page": 1,
+		"total": 1
+	}
+}

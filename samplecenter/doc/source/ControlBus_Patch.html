@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.apply(fastDev.Core.ControlBus._options, {
+	idSequence : 0
+});
+
+fastDev.apply(fastDev.Core.ControlBus, {
+	_instanceMap : {},
+	getInstance : function(key) {
+		return this._instanceMap[key];
+	},
+	setInstance : function(key, obj) {
+		this._instanceMap[key] = obj;
+	},
+	deleteInstance : function(key) {
+		this._instanceMap[key] = null;
+		delete this._instanceMap[key];
+	},
+	getIDSequence : function() {
+		return this._options.idSequence += 1;
+	},
+	getID : function() {
+		return &quot;tw_control_id_&quot; + this.getIDSequence();
+	},
+	destory : function(id) {
+		var obj = this.getInstance(id);
+		typeof obj === &quot;object&quot; &amp;&amp; this.deleteInstance(id);
+		//obj &amp;&amp; obj[0] &amp;&amp; $(obj[0]).remove();
+		obj &amp;&amp; obj[0] &amp;&amp; obj[0].parentNode.removeChild(obj[0]);
+	},
+	buildInitQueue : function(items) {
+		for(var i = 0; i &lt; items.length; i += 1) {
+			for(var j = 0; j &lt; items.length - i - 1; j += 1) {
+				if(items[j].order &gt; items[j + 1].order) {
+					var temp = items[j];
+					items[j] = items[j + 1];
+					items[j + 1] = temp;
+				}
+			}
+		}
+		talkweb.ControlBus.constructControl(items);
+	},
+	constructControl : function(items) {
+		var dataKey, requestInfo = talkweb.DataBus.buildRequestInfo(items);
+		for(var i = 0; i &lt; items.length; i += 1) {
+			var param, info, requireRequest, config = items[i], path = &quot;talkweb.&quot; + config.classPath;
+			if(/BaseControl/.test(path)) {
+				path = path + &quot;.Class&quot;;
+			}
+			var control = fastDev.create(path, config.options);
+			config.control = control;
+			var initSource =&quot;&quot;, dataSource = &quot;&quot;;
+			control.getInitURLByEncode &amp;&amp; ( initSource = control.getInitURLByEncode());
+			control.getDataURLByEncode &amp;&amp; ( dataSource = control.getDataURLByEncode());
+			requireRequest = requestInfo[config.initGroup] ? true : false;
+			if(requireRequest &amp;&amp; initSource) {
+				info = requestInfo[config.initGroup];
+				info instanceof Array &amp;&amp; ( param = &quot;&amp;method=&quot; + info);
+				var init = talkweb.Tools.queueFn.getInstance({
+					fnType : &quot;ajax&quot;,
+					url : initSource,
+					parameters : &quot;cacheID=&quot; + config.initGroup + (param || &quot;&quot;)
+				});
+				talkweb.DataBus.execute(init);
+			}
+			requireRequest = requestInfo[config.dataGroup] ? true : false;
+			if(requireRequest &amp;&amp; dataSource) {
+				info = requestInfo[config.dataGroup];
+				info instanceof Array &amp;&amp; ( param = &quot;&amp;method=&quot; + info);
+				var load = talkweb.Tools.queueFn.getInstance({
+					fnType : &quot;ajax&quot;,
+					url : dataSource,
+					parameters : &quot;cacheID=&quot; + config.dataGroup + (param || &quot;&quot;)
+				});
+				talkweb.DataBus.execute(load);
+			}
+		}
+		var nomal = talkweb.Tools.queueFn.getInstance({
+		 fnBody : talkweb.ControlBus.controlInit,
+		 parameters : items
+		 });
+		 talkweb.DataBus.execute(nomal);
+	},
+	controlInit : function(items) {
+		for(var i = 0; i &lt; items.length; i += 1) {
+			var control = items[i].control;
+			var cacheID = items[i].initGroup + (items[i].initMethod ? &quot;.&quot; + items[i].initMethod : &quot;&quot;);
+			var initData, loadData, cacheid_init = cacheID, cacheid_load;
+			if(items[i].merge === true) {
+				var cache = talkweb.DataBus.getCache(cacheID);
+				initData = cache.data;
+				loadData = cache.value;
+				control.setGlobal &amp;&amp; control.setGlobal({
+					cacheid_init : cacheid_init
+				});
+			} else {
+				initData = talkweb.DataBus.getCache(cacheID);
+				cacheID = items[i].dataGroup + (items[i].dataMethod ? &quot;.&quot; + items[i].dataMethod : &quot;&quot;);
+				cacheid_load = cacheID;
+				loadData = talkweb.DataBus.getCache(cacheID);
+				control.setGlobal &amp;&amp; control.setGlobal({
+					cacheid_init : cacheid_init,
+					cacheid_load : cacheid_load
+				});
+			}
+			(control.getGlobal().excuteCI === true || Boolean(control.getOptions().items) === false) &amp;&amp; (control.constructItems &amp;&amp; control.constructItems(initData));
+			loadData &amp;&amp; control.setValue(loadData);
+		}
+		if(talkweb.ControlBus.getInstance(&quot;_pageload&quot;)) {
+			talkweb.ControlBus.getInstance(&quot;_pageload&quot;).closeBox();
+		}
+	},
+	getRequest : function() {
+		var parameters, url = window.location, request = {};
+		parameters = decodeURI(url.search).slice(1);
+		parameters = parameters.split(&quot;&amp;&quot;);
+		for(var i = 0; i &lt; parameters.length; i += 1) {
+			var parameter = parameters[i].split(&quot;=&quot;);
+			var key = parameter[0];
+			var value = parameter[1];
+			request[key] = value;
+		}
+		return request;
+	},
+	getBrowser : function() {
+		var info = {};
+		switch(true) {
+			case jQuery.browser.msie:
+				info[&quot;type&quot;] = &quot;msie&quot;;
+				break;
+			case jQuery.browser.safari:
+				info[&quot;type&quot;] = &quot;safari&quot;;
+				break;
+			case jQuery.browser.mozilla:
+				info[&quot;type&quot;] = &quot;mozilla&quot;;
+				break;
+			case jQuery.browser.opera:
+				info[&quot;type&quot;] = &quot;opera&quot;;
+				break;
+		}
+		info[&quot;version&quot;] = jQuery.browser.version;
+		return info;
+	},
+	ready : function(param) {
+		if(!param || !param.items){
+			return;
+		};
+		fastDev.ready(function() {
+			var items = param.items;
+			var callback = function(remoteItems) {
+				items = items ? items.concat(remoteItems) : remoteItems;
+				talkweb.ControlBus.buildInitQueue(items);
+			};
+			if(param.configSource) {
+				var ajax = talkweb.Tools.queueFn.getInstance({
+					fnType : &quot;ajax&quot;,
+					url : param.configSource,
+					callback : callback
+				});
+				talkweb.DataBus.execute(ajax);
+			} else {
+				talkweb.ControlBus.buildInitQueue(items);
+			}
+		});
+	}
+	/*if(typeof talkweb.ControlBus.getInstance(&quot;_pageload&quot;) === &quot;undefined&quot; &amp;&amp; !param.configSource){
+	 talkweb.Components.Loading({
+	 saveInstance : true,
+	 id : &quot;_pageload&quot;
+	 }).show();
+	 }*/
+
+});
+
+</pre>
+</body>
+</html>

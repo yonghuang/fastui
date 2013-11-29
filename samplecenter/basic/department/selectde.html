@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title><h4>基本功能</h4>
+        <ul>
+        <li>选部门组件，和选人组件风格样式相同的组件</li>
+        <li>注:此组件是基于fastui现有的控件开发,不存在于fastui控件库中,使用时需要下载组件的相关页面、js和css文件(下载地址:http://sip.talkweb.com.cn:8090/pages/viewpage.action?pageId=11078022)</li>
+        <li>无法下载或者使用时有问题，请联系禄铭。</li>
+        </ul></title>
+<script type="text/javascript" src="fastui/fastDev-import.js"></script>
+<script type="text/javascript">
+//底部按钮（居中）
+function showDialog() {
+	//判断展示选人的textbox是否有数据，如果没有则将存储已选数据的对象清空
+	//注:此窗口若为弹出的二级窗口，则需要使用以下方法。否则反选时数据依旧存在，不会被内存回收
+	var isNull= fastDev.getInstance("text").getValue();
+	if(!isNull){
+		fastDev.Ui.Window.setData("selectDepartmentData","");
+	}
+	
+	var isHideData= fastDev.getInstance("isHideDeData").getValue();
+	if(isHideData){
+		var jsonData = fastDev.Util.JsonUtil.parseJson(isHideData);
+		fastDev.Ui.Window.setData("selectDepartmentData",jsonData);
+	}
+	
+	
+	fastDev.create("Dialog", {
+		height : "400px",
+		width : "630px",
+		minHeight : "400px",
+		minWidth : "630px",
+		src : "selectdewin.html",
+		onAfterResize : changeSize,
+		onAfterMaximize : changeSize,
+		onAfterReset : changeSize,
+		buttons : [{
+			text : "保存",
+			align : "center",
+			iconCls : "icon-save",
+			onclick : function(event, that, win, fast) {
+				fastDev.tips("你点击了保存按钮");
+
+				//获取窗口保存的已选数据并保存
+				fastDev.Ui.Window.setData("selectDepartmentData",win.selectDepartmentData);
+				
+				//获取的selectTemp为跨域变量,不要直接操作改变其中的数据,操作后会改变反选时的数据,引发错误
+				//如果要改动则放入另一个变量操作,参考that.close()语句之后的注释
+				var selectTemp = fastDev.Ui.Window.getData("selectDepartmentData");
+				var i,id="",name="",pid="";
+				//获取已选到的数据(id:部门id;  name:部门名;  pid:部门所属的上级id)
+				for(i=0;i<selectTemp.length;i++){
+					id+=selectTemp[i].id+",";
+					name+=selectTemp[i].name+",";
+					pid+=selectTemp[i].pid+",";
+				}
+				//添加到显示的textbox
+				fastDev.getInstance("text").setValue("id:"+id+"    name:"+name+"     pid:"+pid);
+				
+				fastDev.getInstance("isHideDeData").setValue("");
+				that.close();
+				
+				//获取可以修改的变量的方式
+				/*var data = fastDev.Ui.Window.getData("selectDepartmentData");
+				var pram=[];
+				for(var i=0,len=data.length;i<len;i++){
+					pram.push(data[i]);
+				}
+				alert("修改前pram的长度:"+pram.length+";修改前data的长度:"+data.length);
+				pram.splice(0,1);
+				alert("修改后的pram长度:"+pram.length+";修改后data的长度:"+data.length);*/
+			}
+		}, {
+			text : "关闭",
+			align : "center",
+			iconCls : "icon-close",
+			onclick : function(event, that, win, fast) {
+				// 按钮点击事件回调的作用域(this)指向当前按钮控件实例
+				// 参数that为当前对话框控件实例
+				that.close();
+			}
+		}]
+	});
+}
+//改变窗口大小时，改变里面的元素。
+function changeSize(){
+	var that = this;
+	var iFrameFastDev = that.find(".ui-window-iframe").elems[0].contentWindow.fastDev;
+	if(!iFrameFastDev){
+		return;
+	}
+	var iFrameWindow = that.find(".ui-window-iframe").elems[0].contentWindow;
+	var left = iFrameWindow.fastDev("#left");
+	var right = iFrameWindow.fastDev("#right");
+	//获得窗口边缘宽高
+	var haw = that.getContentBounding();
+	var wHeight = that._options.height;
+	var wWidth = that._options.width;
+	//左侧窗口的高度
+	var leftHeight = wHeight-80;
+	left.css("height",leftHeight+"px");
+	//设置tabs高度
+	var tabHeight = leftHeight;
+	var ta = iFrameFastDev.getInstance("tabs");
+	ta.setOptions({
+		height : tabHeight + "px"
+		});
+	ta.setHeightWidth(ta.getOptions());
+	//右侧窗口的高度
+	var rightHeight = wHeight-80;
+	var rightWidth = wWidth-270;
+	right.css("height",rightHeight+"px").css("width",rightWidth+"px");
+	//右侧下部分高度
+	var rightContent = rightHeight-45;
+	var s = iFrameWindow.fastDev(".right-content").css("height",rightContent+"px");
+	var contentRightSelected = rightHeight-80;
+	iFrameWindow.fastDev(".content-right-selected").css("height",contentRightSelected+"px");
+	
+	
+}
+</script>
+</head>
+<body>
+	<input itype="Button" text="弹出窗口" onclick="showDialog()">
+	<textarea saveInstance="true" itype="TextBox" id="text" type="textarea" height="200px" width="400px"></textarea>
+	<input type="hidden" itype="TextBox" saveInstance="true" id="isHideDeData" />
+</body>
+</html>

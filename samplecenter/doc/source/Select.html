@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Select'>/**
+</span> * @class fastDev.Ui.Select
+ * @extends fastDev.Ui.Box
+ * 下拉框组件，采用内置input和ul实现页面信息的录入、展现等功能，支持多选、单选。&lt;p&gt;
+ * 注意事项：HTML定义下拉框控件时时，结构跟跟原生的标签一样，唯一不同的是子项文本定义不是&amp;lt;option&amp;gt;文本&amp;lt;/option&amp;gt;而是&amp;lt;option text=&quot;文本&quot;&amp;gt;&amp;lt;/option&amp;gt;&lt;p&gt;
+ * 作者：袁刚
+ *
+ *		&lt;select itype=&quot;Select&quot;&gt;
+ *			&lt;option value=&quot;data1&quot;&gt;本地数据1&lt;/option&gt;
+ *			&lt;option value=&quot;data2&quot; selected&gt;本地数据2&lt;/option&gt;
+ *			&lt;option value=&quot;data3&quot;&gt;本地数据3&lt;/option&gt;
+ *			&lt;option value=&quot;data4&quot;&gt;本地数据4&lt;/option&gt;
+ *		&lt;/select&gt;
+ */
+
+<span id='fastDev-Ui-Select-event-onBoxBlur'>/**
+</span> * @event onBoxBlur
+ * @private
+ */
+fastDev.define(&quot;fastDev.Ui.Select&quot;, {
+	extend : &quot;fastDev.Ui.Box&quot;,
+	alias : &quot;Select&quot;,
+	_options : {
+<span id='fastDev-Ui-Select-property-iwidth'>		/**
+</span>		 * @property {String} iwidth
+		 * @private
+		 */
+		width : &quot;150px&quot;,
+<span id='fastDev-Ui-Select-property-size'>		/**
+</span>		 * 下拉列表中可见选项的数目
+		 * @type {Number}
+		 */
+		size : 1,
+<span id='fastDev-Ui-Select-property-multiple'>		/**
+</span>		 * 是否可选择多个选项
+		 * @type {Boolean}
+		 */
+		multiple : false,
+<span id='fastDev-Ui-Select-property-items'>		/**
+</span>		 * 下拉列表的数据
+		 * @type {JsonObject}
+		 */
+		items : null,
+<span id='fastDev-Ui-Select-property-value'>		/**
+</span>		 * 下拉列表默认选择值
+		 * @type {String}
+		 */
+		value : &quot;&quot;,
+<span id='fastDev-Ui-Select-property-disabled'>		/**
+</span>		 * 规定禁用该下拉列表
+		 * @type {Boolean}
+		 */
+		disabled : false,
+<span id='fastDev-Ui-Select-property-disabledItems'>		/**
+</span>		 * 设定禁止的下拉列表值，用逗号隔开
+		 * @type {Boolean}
+		 */
+		disabledItems : &quot;&quot;,
+<span id='fastDev-Ui-Select-property-panelWidth'>		/**
+</span>		 * 下拉选项内容宽度
+		 * @type {String}
+		 */
+		panelWidth : &quot;auto&quot;,
+<span id='fastDev-Ui-Select-property-readonly'>		/**
+</span>		 * 是否只读
+		 * @type {Boolean}
+		 */
+		readonly : false,
+<span id='fastDev-Ui-Select-property-zIndex'>		/**
+</span>		 * 下拉选项内容层级
+		 * @type {Number}
+		 */
+		zIndex : 200,
+<span id='fastDev-Ui-Select-property-inside'>		/**
+</span>		 * 是否在当前Window作用域中显示下拉面板(改成false会将面板弹出至顶级窗口显示)
+		 * @type {Boolean}
+		 */
+		inside : true,
+<span id='fastDev-Ui-Select-event-onItemDblclick'>		/**
+</span>		 * 下拉选项双击事件
+		 * @event
+		 * @param {Event} event
+		 */
+		onItemDblclick : fastDev.noop,
+		enableDataSet : true,
+		enableInitProxy : true,
+		enableDataProxy : true
+	},
+	_global : {
+		initFinish : false
+	},
+	staticTemplate : function(params) {
+		if(params.expand === false) {
+			return ['&lt;div style=&quot;width:' + params.width + '&quot; class=&quot;ui-form&quot;&gt;', '&lt;div class=&quot;ui-form-wrap ui-select&quot;&gt;', '&lt;input type=&quot;text&quot; id=&quot;' + params.id + '&quot; class=&quot;ui-form-field ui-form-input&quot; readonly&gt;', '&lt;div class=&quot;ui-form-trigger&quot;&gt;&lt;div class=&quot;ui-select-icon&quot;&gt;&lt;/div&gt;&lt;/div&gt;', '&lt;/div&gt;', '&lt;/div&gt;'].join('');
+		}
+		return '';
+	},
+	dynamicTemplate : function(params, data) {
+		var html = ['&lt;div class=&quot;ui-selectlist-list-ct&quot;&gt;'];
+		html.push('&lt;ul&gt;');
+		for(var item, i = 0, len = data.length; i &lt; len; i++) {
+			item = data[i];
+			html.push('&lt;li class=&quot;ui-list-item&quot; ivalue=&quot;' + item.value + '&quot;&gt;' + item.text + '&lt;/li&gt;');
+		}
+		html.push('&lt;/ul&gt;');
+		html.push('&lt;/div&gt;');
+		return html.join('');
+	},
+	panelTemplate : function(params) {
+		return '&lt;div class=&quot;ui-select-list ' + params.panelCls + '&quot; style=&quot;height: ' + params.height + '; z-index: ' + params.zIndex + '; width: ' + params.panelWidth + '; min-width: ' + params.minWidth + '; display:' + params.show + '&quot;&gt;&lt;/div&gt;';
+	},
+	tplParam : [&quot;id&quot;, &quot;width&quot;, &quot;height&quot;, &quot;panelWidth&quot;, &quot;minWidth&quot;, &quot;expand&quot;, &quot;show&quot;, &quot;zIndex&quot;, &quot;panelCls&quot;],
+	fields : [{
+		name : &quot;value&quot;,
+		type : &quot;String&quot;,
+		defaultValue : &quot;_empty&quot;
+	}, &quot;text&quot;, {
+		name : &quot;selected&quot;,
+		type : &quot;Boolean&quot;,
+		defaultValue : false
+	}],
+<span id='fastDev-Ui-Select-method-ready'>	/**
+</span>	 * 组件参数准备方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	ready : function(options, global) {
+		var match, panelCls = &quot;&quot;, width = options.width, panelWidth = options.panelWidth;
+		// size属性大于1时，下拉框使用展开形态，展开形态下默认显示面板
+		if(global.expand = options.size &gt; 1) {
+			global.show = &quot;block&quot;;
+			// 计算面板高度，每个下拉项高度为20px
+			options.height = options.size * 20 + &quot;px&quot;;
+			panelWidth = panelWidth === &quot;auto&quot; ? width : panelWidth;
+			options.inside = true;
+			// 初始化当前选中节点
+		} else {
+			global.show = &quot;none&quot;;
+			// 下拉框需要面板浮动以及背景，下拉列表不要
+			panelCls = &quot;ui-layer ui-shadow&quot;;
+		}
+		global.currItems = {};
+		global.panelCls = panelCls;
+
+		// 计算面板宽度以及最小宽度
+		width = (( match = /((?:\d*\.|)\d+(%?))/.exec(width)) ? match[1] : &quot;150&quot;);
+
+		options.width = match[2] ? width : width + &quot;px&quot;;
+		if(!match[2]) {
+			if( match = /((?:\d*\.|)\d+)/.exec(panelWidth)) {
+				global.minWidth = options.panelWidth = (+match[1] - 2) + &quot;px&quot;;
+			} else if(panelWidth === &quot;auto&quot;) {
+				global.minWidth = (width - 2) + &quot;px&quot;;
+			} else {
+				global.minWidth = options.panelWidth = (width - 2) + &quot;px&quot;;
+			}
+		}
+		// 如果当前window对象就是顶层window，则不做跨级
+		// 设定面板上下文
+		global.panelContext = (options.inside = (options.inside === false &amp;&amp; window.top === window) ? true : options.inside) ? window : window.top;
+	},
+	construct : function(options, global) {
+		var context = global.panelContext,
+		// 设定面板所在容器
+		container = global.expand ? options.container : fastDev(global.panelContext.document.body);
+		
+		if(!context.fastDev) {
+			global.panelContext = window;
+			fastDev.log(&quot;Select&quot;, &quot;construct&quot;, &quot;顶层页面未加载控件库&quot;);
+		}
+		
+		// 创建面板至容器
+		global.panel = context.fastDev(this.panelTemplate(global.params)).appendTo(container);
+		// 将面板归入当前控件Dom统一管理
+		this.merge(global.panel);
+		// 修正面板索引，反正外部append方法改变面板所属容器
+		this.correctElems(global);
+	},
+<span id='fastDev-Ui-Select-method-init'>	/**
+</span>	 * 组件初始化方法
+	 * @param {Object} options 当前控件配置信息
+	 * @param {Object} global 当前控件全局信息
+	 * @protected
+	 */
+	init : function(options, global) {
+		// 下拉框不是展开形态则初始化感应区域
+		if(!global.expand) {
+			// 下拉框出面板感应区域
+			global.inducArea = this.find(&quot;.ui-select&quot;);
+			// 下拉框下拉图标
+			global.icon = this.find(&quot;.ui-form-trigger&quot;);
+
+			if(options.disabled === true) {
+				options.disabled = false;
+				this.disable();
+			} else {
+				this.bindInducAreaEvent(global, options);
+			}
+		}
+
+		// 失去焦点隐藏面板
+		global.htmlClickHandle = fastDev.setFnInScopeByParam(this, this.htmlClickHandle, options, global);
+		// 在当前窗体增加失去焦点隐藏面板功能
+		fastDev(&quot;html&quot;).bind(&quot;click&quot;, global.htmlClickHandle);
+		if(options.inside === false) {
+			// 在顶级窗体中增加失去焦点隐藏面板功能
+			global.panelContext.fastDev(&quot;html&quot;).bind(&quot;click&quot;, global.htmlClickHandle);
+			var unloadHandle = fastDev.setFnInScope(this, function() {
+				global.panelContext.fastDev(&quot;html&quot;).unbind(&quot;click&quot;, global.htmlClickHandle);
+				this.destroy();
+			});
+			fastDev(window).bind(&quot;unload&quot;, unloadHandle);
+		}
+	},
+<span id='fastDev-Ui-Select-method-bindInducAreaEvent'>	/**
+</span>	 * 绑定感应区域及其相关事件
+	 * @private
+	 */
+	bindInducAreaEvent : function(global, options) {
+		// 单击感应区域弹出下拉面板
+		global.inducAreaClickHandle = fastDev.setFnInScope(this, this.showPanel);
+
+		global.inducArea.bind(&quot;click&quot;, global.inducAreaClickHandle);
+	},
+<span id='fastDev-Ui-Select-method-unbindInducAreaEvent'>	/**
+</span>	 * 解绑感应区域及其相关事件
+	 * @private
+	 */
+	unbindInducAreaEvent : function(global) {
+		global.inducArea.unbind(&quot;click&quot;, global.inducAreaClickHandle);
+		fastDev(&quot;html&quot;).unbind(&quot;click&quot;, global.htmlClickHandle);
+	},
+<span id='fastDev-Ui-Select-method-bindPanelEvent'>	/**
+</span>	 * 绑定下拉面板事件
+	 * @private
+	 */
+	bindPanelEvent : function(global, options) {
+		if(options.disabled === true || options.readonly === true || global.panelEventReady === true) {
+			return;
+		}
+
+		var panel = global.panel;
+		// 下拉项双击事件
+		global.panelDblclickHandle = fastDev.setFnInScopeByParam(this, this.panelDblclickHandle, options.onItemDblclick);
+		// 鼠标悬停下拉项高亮事件
+		global.panelMouseoverHandle = fastDev.setFnInScope(this, this.panelMouseoverHandle);
+		// 单击选择下拉想事件
+		global.panelClickHandle = fastDev.setFnInScope(this, this.panelClickHandle);
+		if(!fastDev.isNoop(options.onItemDblclick)) {
+			panel.bind(&quot;dblclick&quot;, global.panelDblclickHandle);
+		}
+
+		// 禁用处理
+		if(options.disabled === true) {
+			panel.addClass(&quot;ui-selectlist-disabled&quot;);
+		} else {
+			panel.bind(&quot;mouseover&quot;, global.panelMouseoverHandle);
+			// 只读处理
+			if(options.readonly === false) {
+				panel.bind(&quot;click&quot;, global.panelClickHandle);
+			}
+		}
+		global.panelEventReady = true;
+	},
+<span id='fastDev-Ui-Select-method-unbindPanelEvent'>	/**
+</span>	 * 解绑下拉面板事件
+	 * @private
+	 */
+	unbindPanelEvent : function(global) {
+		var panel = global.panel;
+		panel.unbind(&quot;dblclick&quot;, global.panelDblclickHandle);
+		panel.unbind(&quot;mouseover&quot;, global.panelMouseoverHandle);
+		panel.unbind(&quot;click&quot;, global.panelClickHandle);
+		global.panelEventReady = false;
+	},
+<span id='fastDev-Ui-Select-method-htmlClickHandle'>	/**
+</span>	 * 单击非感应区域隐藏下拉面板
+	 * @private
+	 */
+	htmlClickHandle : function(event, options, global) {
+		if(global.expand === false &amp;&amp; (global.inducArea.contains(event.target) || !fastDev.isValid(global.panel))) {
+			return;
+		}
+		this.onSelectBlur(event, options.onblur, global);
+	},
+<span id='fastDev-Ui-Select-method-panelDblclickHandle'>	/**
+</span>	 * 双击选择项事件
+	 * @private
+	 */
+	panelDblclickHandle : function(event, handle) {
+		if(event.target.tagName === &quot;LI&quot;) {
+			handle.call(this, event);
+		}
+	},
+<span id='fastDev-Ui-Select-method-panelMouseoverHandle'>	/**
+</span>	 * 鼠标滑过下拉项高亮事件
+	 * @private
+	 */
+	panelMouseoverHandle : function(event) {
+		if(event.target.tagName === &quot;LI&quot;) {
+			this.find(&quot;.ui-list-over&quot;).removeClass(&quot;ui-list-over&quot;);
+			var target = fastDev(event.target);
+			if(!target.hasClass(&quot;ui-list-selected&quot;)) {
+				target.addClass(&quot;ui-list-over&quot;);
+			}
+		}
+	},
+<span id='fastDev-Ui-Select-method-panelClickHandle'>	/**
+</span>	 * 点击选择项事件
+	 * @private
+	 */
+	panelClickHandle : function(event) {
+		if(event.target.tagName === &quot;LI&quot;) {
+			var target = fastDev(event.target);
+			if(target.hasClass(&quot;ui-list-disabled&quot;)) {
+				return;
+			}
+			this.setValue(target.attr(&quot;ivalue&quot;), true);
+			this._global.focusState = true;
+			if(!this._global.expand) {
+				this.hidePanel();
+			}
+		}
+	},
+<span id='fastDev-Ui-Select-method-constructItems'>	/**
+</span>	 * 构造下拉项界面以及初始化相关属性和事件
+	 * @private
+	 */
+	constructItems : function() {
+		// 下拉框是展开形态时，下拉项面板容器由用户指定，否则下拉项容器为当前文档Body
+		var options = this._options, global = this._global, initFinish = global.initFinish;
+		// 调用父类方法构建下拉内容
+		this._renderDynamicHtml(global.panel, global.panelContext);
+		// 绑定下拉面板事件
+		if(options.disabledItems) {
+			this.disableItems(options.disabledItems);
+		}
+		var selectedList = this.dataset.select(function(i, data) {
+			return data.selected === true;
+		}), value = [];
+		if(selectedList.length) {
+			if(options.multiple === true) {
+				for(var i = 0, item; item = selectedList[i]; i++) {
+					value.push(item.value);
+				}
+			} else {
+				value.push(selectedList.pop().value);
+			}
+			options.value = value.join(&quot;,&quot;);
+			this.setValue(options.value);
+		} else if(global.expand === false) {
+			this.selectedDefault();
+		}
+		this.bindPanelEvent(global, options);
+	},
+<span id='fastDev-Ui-Select-method-correctElems'>	/**
+</span>	 * 修正动态模板创建的元素位置
+	 * @private
+	 */
+	correctElems : function(global) {
+		if(!global.initFinish &amp;&amp; !global.expand) {
+			this.elems[2] = this.elems[1];
+			this.elems[1] = &quot;none&quot;;
+			global.initFinish = true;
+		}
+	},
+<span id='fastDev-Ui-Select-method-showPanel'>	/**
+</span>	 * 显示内容面板
+	 * @private
+	 */
+	showPanel : function(event) {
+		var global = this._global, panel = global.panel, icon = global.icon, inducArea = global.inducArea;
+
+		if(fastDev.isFunction(this._options.onclick)) {
+			this._options.onclick.call(this, event);
+		}
+
+		// 定位下拉项面板
+		this.fixedPosition();
+
+		if(panel.isShow()) {
+			return this.hidePanel();
+		} else {
+			panel.show();
+			inducArea.addClass(&quot;ui-form-focus&quot;);
+		}
+		// 下拉图标高亮
+		icon.addClass(&quot;ui-form-trigger-over&quot;);
+		global.focusState = true;
+	},
+<span id='fastDev-Ui-Select-method-fixedPosition'>	/**
+</span>	 * 定位下拉面板
+	 * @private
+	 */
+	fixedPosition : function() {
+		var options = this._options, global = this._global, panelCss = {},
+		// 获取面板高度
+		panelHeight = parseInt(options.height, 10) || global.panel.height();
+
+		if(!global.minWidth) {
+			global.minWidth = fastDev(this.elems[0]).width() - 2 + &quot;px&quot;;
+			panelCss[&quot;min-width&quot;] = global.minWidth;
+		}
+
+		if(fastDev.Browser.isIE6 &amp;&amp; global.panel.width() &lt; parseFloat(global.minWidth)) {
+			panelCss.width = global.minWidth;
+		}
+
+		if(panelHeight === 0) {
+			panelCss.height = &quot;80px&quot;;
+		}
+
+		global.panel.css(panelCss);
+		fastDev.Util.position.locate(global.panel, global.inducArea, global.panelContext);
+	},
+<span id='fastDev-Ui-Select-method-hidePanel'>	/**
+</span>	 * 隐藏内容面板
+	 * @private
+	 */
+	hidePanel : function() {
+		var global = this._global,
+		// 下拉图标
+		icon = global.icon,
+		// 下拉项内容Div
+		panel = global.panel;
+		// 重置高亮为当前选中项
+		panel.find(&quot;.ui-list-over&quot;).removeClass(&quot;ui-list-over&quot;);
+
+		panel.hide();
+		// 去除下拉图标高亮
+		icon.removeClass(&quot;ui-form-trigger-over&quot;);
+		global.inducArea.removeClass(&quot;ui-form-focus&quot;);
+	},
+<span id='fastDev-Ui-Select-method-getProp'>	/**
+</span>	 * 获取当前选中项的值或者文本
+	 * @private
+	 */
+	getProp : function(getValue) {
+		var global = this._global, items = global.currItems, value = [];
+		for(var p in items) {
+			value.push(p === &quot;_empty&quot; ? &quot;&quot; : getValue ? p : items[p].getText());
+		}
+		value = value.join(&quot;,&quot;);
+		return value === &quot;_empty&quot; ? &quot;&quot; : value;
+	},
+<span id='fastDev-Ui-Select-method-getValue'>	/**
+</span>	 * 获取当前选中项的实际值
+	 */
+	getValue : function() {
+		return this.getProp(true);
+	},
+<span id='fastDev-Ui-Select-method-getText'>	/**
+</span>	 * 获取当前选中项的文本值
+	 */
+	getText : function() {
+		return this.getProp();
+	},
+<span id='fastDev-Ui-Select-method-setValue'>	/**
+</span>	 * 设置当前选中项
+	 * @param {String} values 下拉项实际值 (value / value1,value2,...)
+	 */
+	setValue : function(value, useChange) {
+		var global = this._global, options = this._options, change = false, currItems = global.currItems;
+		value = value || options.value;
+		// 下拉项内容
+		var panel = global.panel, valueList = (value + &quot;&quot;).split(&quot;,&quot;);
+		while(fastDev.isValid(( value = valueList.shift()))) {
+			// 获取当前选中项对象
+			var item = panel.find(&quot;[ivalue='&quot; + value + &quot;']&quot;), highlight = true;
+			if(item.isEmpty()) {
+				continue;
+			}
+			// 移除鼠标滑过样式
+			item.removeClass(&quot;ui-list-over&quot;);
+
+			if(options.multiple === true &amp;&amp; global.expand === true) {
+				// 多选处理
+				// 如果当前项已经被选中则判断此次操作为取消选中
+				if(item.hasClass(&quot;ui-list-selected&quot;)) {
+					item.removeClass(&quot;ui-list-selected&quot;);
+					delete currItems[value];
+					highlight = false;
+				}
+			} else {
+				// 单选处理
+				if(item.hasClass(&quot;ui-list-selected&quot;)) {
+					continue;
+				}
+				// 移除上次选中项
+				panel.find(&quot;.ui-list-selected&quot;).removeClass(&quot;ui-list-selected&quot;);
+				for(var p in currItems) {
+					delete currItems[p];
+				}
+				this.superClass.setValue.call(this, item.getText(), true);
+			}
+			if(highlight === true) {
+				// 选中项高亮
+				item.addClass(&quot;ui-list-selected&quot;);
+				currItems[value] = item;
+			}
+			change = true;
+		}
+		// 值被鼠标操作改变时触发事件
+		if(useChange === true) {
+			if(change === useChange) {
+				if(!fastDev.isNoop(options.onchange) &amp;&amp; fastDev.isFunction(options.onchange)) {
+					options.onchange.call(this, this.getValue(), this.getText());
+				}
+			}
+			this.fire(&quot;focus&quot;);
+		}
+
+		return this;
+	},
+<span id='fastDev-Ui-Select-method-changeState'>	/**
+</span>	 * 改变当前组件禁用/启用状态
+	 * @private
+	 */
+	changeState : function(oper, method, disable) {
+		var global = this._global, options = this._options, state = disable ? &quot;disable&quot; : &quot;enable&quot;;
+
+		// 目标状态与当前状态一致则当前操作无效
+		if(options.disabled === disable) {
+			return;
+		}
+		options.disabled = !options.disabled;
+
+		if(global.expand) {
+			this[oper+&quot;PanelEvent&quot;](global, options);
+			global.panel[method](&quot;ui-selectlist-disabled&quot;);
+		} else {
+			this[oper+&quot;InducAreaEvent&quot;](global, options);
+			this.superClass[state].call(this);
+		}
+		fastDev(&quot;html&quot;)[oper](&quot;click&quot;, global.htmlClickHandle);
+		return this;
+	},
+<span id='fastDev-Ui-Select-method-enable'>	/**
+</span>	 * 启用当前组件(当组件被禁用时有效)
+	 */
+	enable : function() {
+		return this.changeState(&quot;bind&quot;, &quot;removeClass&quot;, false);
+	},
+<span id='fastDev-Ui-Select-method-disable'>	/**
+</span>	 * 禁用当前组件(当组件被启用时有效)
+	 */
+	disable : function() {
+		return this.changeState(&quot;unbind&quot;, &quot;addClass&quot;, true);
+	},
+<span id='fastDev-Ui-Select-method-setReadonly'>	/**
+</span>	 * 设置当前组件是否只读
+	 * @param {Boolean} [readonly=true] 是否只读
+	 */
+	setReadonly : function(readonly) {
+		var global = this._global, options = this._options;
+		// 目标状态与当前状态一致或者组件被禁用则当前操作无效
+		if(options.readonly === ( readonly = readonly === false ? false : true) || options.disabled === true) {
+			return;
+		}
+
+		options.readonly = readonly;
+		var method = &quot;bind&quot;;
+
+		if(readonly) {
+			method = &quot;unbind&quot;;
+
+		}
+		global.panel[method](&quot;click&quot;, global.panelClickHandle);
+		return this;
+	},
+<span id='fastDev-Ui-Select-method-changeItemState'>	/**
+</span>	 * 改变当前组件下拉项禁用/启用状态
+	 * @param {String} values 待改变下拉项实际值
+	 * @param {String} method 样式改变方法名称
+	 * @private
+	 */
+	changeItemState : function(values, method) {
+		var panel = this._global.panel;
+		values = values.split(&quot;,&quot;);
+		for(var i = 0, value; value = values[i]; i++) {
+			panel.find(&quot;[ivalue='&quot;+value+&quot;']&quot;)[method](&quot;ui-list-disabled&quot;);
+		}
+	},
+<span id='fastDev-Ui-Select-method-disableItems'>	/**
+</span>	 * 禁用指定值的下拉项(下拉想被启用时有效)
+	 * @param {String} values 待改变下拉项实际值 ( value / value1,value2,... )
+	 */
+	disableItems : function(values) {
+		this.changeItemState(values, &quot;addClass&quot;);
+	},
+<span id='fastDev-Ui-Select-method-enableItems'>	/**
+</span>	 * 启用指定值的下拉项(下拉想被禁用时有效)
+	 * @param {String} values 待改变下拉项实际值 ( value / value1,value2,... )
+	 */
+	enableItems : function(values) {
+		this.changeItemState(values, &quot;removeClass&quot;);
+	},
+<span id='fastDev-Ui-Select-method-addItems'>	/**
+</span>	 * 增加下拉项
+	 * @param {JsonObject/Array[JsonObject]} items
+	 */
+	addItems : function(items) {
+		// 数据兼容性处理
+		if(!fastDev.isArray(items)) {
+			items = [items];
+		}
+		var value = this.getValue();
+		// 保存数据至数据集
+		this.dataset.fill(items);
+		// 重新初始化动态模板内容
+		this.constructItems();
+		// 重新设置当前选中项
+		this.setValue(value);
+	},
+<span id='fastDev-Ui-Select-method-removeItems'>	/**
+</span>	 * 根据指定值删除下拉项
+	 * @param {String} values 下拉项实际值 (value / value1,value2,...)
+	 */
+	removeItems : function(values) {
+		var options = this._options, global = this._global, value, panel = global.panel, item;
+		values = values.split(&quot;,&quot;);
+		var currItems = global.currItems;
+
+		while( value = values.shift()) {
+			item = panel.find(&quot;[ivalue='&quot; + value + &quot;']&quot;);
+			if(item.isEmpty()) {
+				continue;
+			}
+			delete currItems[value];
+
+			this.dataset.remove(this.removeData, value);
+
+			if(options.multiple === false &amp;&amp; item.hasClass(&quot;ui-list-selected&quot;)) {
+				this.selectedDefault();
+			}
+			item.remove();
+		}
+	},
+<span id='fastDev-Ui-Select-method-removeData'>	/**
+</span>	 * @private
+	 */
+	removeData : function(index, data, value) {
+		return data.value === value;
+	},
+<span id='fastDev-Ui-Select-method-getItems'>	/**
+</span>	 * 获取所有子项
+	 * @return {Array{JsonObject}}
+	 */
+	getItems : function() {
+		return this.dataset.select();
+	},
+<span id='fastDev-Ui-Select-method-getSelectedItem'>	/**
+</span>	 * 获取选中选项
+	 * @return {Array{JsonObject}}
+	 */
+	getSelectedItem : function() {
+		var result = [], items = this._global.currItems;
+		for(var p in items) {
+			result.push({
+				value : p,
+				text : items[p].getText()
+			});
+		}
+		return result;
+	},
+<span id='fastDev-Ui-Select-property-clean'>	/**
+</span>	 * 清除当前可选项
+	 * @type {Boolean} all 清除所有选项包括静态配置的选项
+	 */
+	clean : function(all) {
+		// 重置数据集
+		this.dataset.reset();
+		if(all !== false) {
+			this.dataset.removeStaticData(function(i, item) {
+				return item.value !== &quot;_empty&quot;;
+			});
+		}
+		// 删除当前选中值
+		var global = this._global;
+		global.currItems = {};
+		global.panel.removeCss(&quot;height&quot;);
+		// 重新构建下拉项
+		this.constructItems();
+		return this;
+	},
+<span id='fastDev-Ui-Select-method-reset'>	/**
+</span>	 * 重置下拉框为空值状态
+	 */
+	reset : function() {
+		this._global.currItems = {};
+		this.find(&quot;.ui-list-selected&quot;).removeClass(&quot;ui-list-selected&quot;);
+		if(!this._global.expand) {
+			this.selectedDefault();
+		}
+	},
+<span id='fastDev-Ui-Select-method-selectedDefault'>	/**
+</span>	 * 初始化默认选中项
+	 * @private
+	 */
+	selectedDefault : function() {
+		var record = this.dataset.get(0);
+		this.superClass.setValue.call(this, record.text);
+	},
+<span id='fastDev-Ui-Select-method-onSelectBlur'>	/**
+</span>	 * 下拉框失去焦点事件
+	 * @param {Function} handle
+	 * @private
+	 */
+	onSelectBlur : function(event, handle, global) {
+		var target = event.target, clickPanel = global.panel.contains(target), clickInducArea = global.expand ? false : global.inducArea.contains(target);
+
+		if(global.focusState !== true) {
+			return;
+		} else if(global.focusState === true &amp;&amp; !clickInducArea &amp;&amp; !clickPanel) {
+			if(!global.expand) {
+				this.hidePanel();
+			}
+			handle.call(this, event);
+			global.focusState = false;
+		}
+	},
+<span id='fastDev-Ui-Select-method-destroy'>	/**
+</span>	 * 控件销毁方法
+	 */
+	destroy : function() {
+		fastDev(&quot;html&quot;).unbind(&quot;click&quot;, this._global.htmlClickHandle);
+		this.superClass.destroy.call(this);
+	},
+<span id='fastDev-Ui-Select-method-move'>	/**
+</span>	 * 子项上下移动的实现方法
+	 * @private
+	 */
+	move : function(item, method, position) {
+		if(fastDev.isValid(item)) {
+			return item[method](item[position]());
+		}
+
+		var items = this._global.currItems;
+		for(var p in items) {
+			this.move(items[p], method, position);
+		}
+		return this;
+	},
+<span id='fastDev-Ui-Select-method-moveUp'>	/**
+</span>	 * 将当前选中项上移一位
+	 */
+	moveUp : function() {
+		return this.move(null, &quot;insertBefore&quot;, &quot;prev&quot;);
+	},
+<span id='fastDev-Ui-Select-method-moveDown'>	/**
+</span>	 * 将当前选中项下移一位
+	 */
+	moveDown : function() {
+		return this.move(null, &quot;insertAfter&quot;, &quot;next&quot;);
+	},
+	bind : function(type, handle, cover) {
+		var m;
+		if( m = /(change|blur|click)/.exec(type)) {
+			if(cover !== false) {
+				this._options[&quot;on&quot; + m[1]] = handle;
+			}
+		} else {
+			this.superClass.bind.call(this, type, handle);
+		}
+		return this;
+	},
+<span id='fastDev-Ui-Select-method-onSelectFocus'>	/**
+</span>	 * 获取焦点时记录标志位
+	 * @private
+	 */
+	onSelectFocus : function() {
+		this._global.focusState = true;
+	}
+});
+</pre>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Child Filters</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script>
+			$(function() {
+				function clearCss() {
+					$("*").css("border", "none");
+				}
+
+
+				$("#btn1").bind("click", function() {
+					clearCss();
+					// 在每个 ul 查找第 2 个li
+					$("ul li:nth-child(2)").css("border", "2px dotted blue");
+				});
+
+				$("#btn2").bind("click", function() {
+					clearCss();
+					// 在每个 ul 中查找第一个 li
+					$("ul li:first-child").css("border", "2px dotted blue");
+				});
+
+				$("#btn3").bind("click", function() {
+					clearCss();
+					// 在每个 ul 中查找最后一个 li
+					$("ul li:last-child").css("border", "2px dotted blue");
+				});
+				$("#btn4").bind("click", function() {
+					clearCss();
+					// 在 ul 中查找是唯一子元素的 li
+					$("ul li:only-child").css("border", "2px dotted blue");
+				});
+
+				
+
+			});
+		</script>
+	</head>
+	<body>
+		在每个 ul 查找第 2 个li:<a id="btn1" href="#">ul li:nth-child(2)</a><br>
+		在每个 ul 中查找第一个 li:<a id="btn2" href="#">ul li:first-child</a><br> 
+		在每个 ul 中查找最后一个 li:<a id="btn3" href="#">ul li:last-child</a><br>
+		在 ul 中查找是唯一子元素的 li:<a id="btn4" href="#">"ul li:only-child</a><br>
+		
+
+		<!-- HTML元素测试区 -->
+		<ul>
+		  <li>item1</li>
+		  <li>item2</li>
+		  <li>item3</li>
+		</ul>
+		<ul>
+		  <li>item1</li>
+		  <li>item2</li>
+		  <li>item3</li>
+		</ul>
+		<ul>
+		  <li>item1</li>
+		</ul>
+	</body>
+</html>
+

@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Button</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-09 -->
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+        <script src="../../src/component/form/Button.js"></script>
+
+		<script>
+			$(function() {
+				
+					
+							
+				//带下拉列表的按钮
+				//按钮的事件
+				var btnclickall1=function(){
+					alert("你点击了打印方式(点击小三角弹出)按钮");
+				}				
+				var btnclickall3=function(){
+					alert("你点击了打印方式(滑过弹出)按钮");
+				}
+				var btnclick1=function(){
+					alert("你点击了横向打印按钮");
+				}
+				//按钮的事件
+				var btnclick2=function(){
+					alert("你点击了纵向打印按钮");
+				}
+				//按钮的事件
+				var btnclick3=function(){
+					alert("你点击了双面打印按钮");
+				}
+				var btnclick21=function(){
+					alert("你点击了横向打印2按钮");
+				}
+				//按钮的事件
+				var btnclick22=function(){
+					alert("你点击了纵向打印2按钮");
+				}
+				//按钮的事件
+				var btnclick23=function(){
+					alert("你点击了双面打印2按钮");
+				}
+				var btnclick31=function(){
+					alert("你点击了横向打印3按钮");
+				}
+				//按钮的事件
+				var btnclick32=function(){
+					alert("你点击了纵向打印3按钮");
+				}
+				//按钮的事件
+				var btnclick33=function(){
+					alert("你点击了双面打印3按钮");
+				}
+				$.create("Button", {
+					container : "example",
+					text:"打印方式(点击小三角弹出)",
+					iconCls:"icon-print icon-arrow-right",
+					onBtnClick:btnclickall1,//如果这里
+					subItems:
+					    [{
+							text:"横向打印2",
+							onBtnClick:btnclick21
+						},
+						{
+							text:"纵向打印2",
+							onBtnClick:btnclick22
+						},
+						{
+							text:"双面打印2",
+							onBtnClick:btnclick23
+						}]
+				});
+				
+				$.create("Button", {
+					container : "example1",
+					text:"打印方式(点击弹出)",
+					iconCls:"icon-print icon-arrow-right",
+					subItems:
+					    [{
+							text:"横向打印",
+							onBtnClick:btnclick1
+						},
+						{
+							text:"纵向打印",
+							onBtnClick:btnclick2
+						},
+						{
+							text:"双面打印",
+							onBtnClick:btnclick3
+						}]
+				});
+				
+				$.create("Button", {
+					container : "example2",
+					text:"打印方式(滑过弹出)",
+					showMenuOnMouseover:true,
+					iconCls:"icon-print icon-arrow-right",
+					onBtnClick:btnclickall3,//如果这里
+					subItems:
+					    [{
+							text:"横向打印3",
+							onBtnClick:btnclick31
+						},
+						{
+							text:"纵向打印3",
+							onBtnClick:btnclick32
+						},
+						{
+							text:"双面打印3",
+							onBtnClick:btnclick33
+						}]
+				});
+//			
+//				
+			});
+		</script>
+	</head>
+	<body>    
+	<div id="example"  style="margin:50px; float:left"></div>
+    <div id="example1"  style="margin:50px; float:left"></div>
+    <div id="example2"  style="margin:50px; float:left"></div>
+	</body>
+
+</html>
+

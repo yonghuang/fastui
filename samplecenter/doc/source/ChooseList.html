@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-ChooseList'>/**
+</span> * @class fastDev.Ui.ChooseList
+ * @extends fastDev.Ui.Component
+ * @author chengwei
+ * &lt;p&gt;选择列表控件。&lt;/p&gt;
+ * &lt;p&gt;适用于需对某一数据集进行数据筛选过滤的场合。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *     
+ *     &lt;div itype=&quot;ChooseList&quot; id=&quot;list2&quot; saveInstance=&quot;true&quot; leftWidth=&quot;160px&quot; 
+ *          rightWidth=&quot;160px&quot; initSource=&quot;../../data/chooselist.json&quot; 
+ *          dataSource=&quot;../../data/chooselist_select.json&quot;&gt;
+ *     &lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.ChooseList&quot;, {
+    alias: &quot;ChooseList&quot;,
+    extend: &quot;fastDev.Ui.Component&quot;,
+    _options: {
+<span id='fastDev-Ui-ChooseList-property-leftWidth'>        /**
+</span>         * 左侧区域的宽度
+         * @type {String|Number}
+         */
+        leftWidth: &quot;122px&quot;,
+<span id='fastDev-Ui-ChooseList-property-leftTopHeight'>        /**
+</span>         * 左侧顶部区域高度
+         * @type {String|Number}
+         */
+        leftTopHeight: 0,
+<span id='fastDev-Ui-ChooseList-property-leftBottomHeight'>        /**
+</span>         * 左侧底部区域的高度
+         * @type {String|Number}
+         */
+        leftBottomHeight: 0,
+<span id='fastDev-Ui-ChooseList-property-centerWidth'>        /**
+</span>         * 中部区域的宽度
+         * @type {String|Number}
+         */
+        centerWidth: &quot;77px&quot;,
+<span id='fastDev-Ui-ChooseList-property-buttonWidth'>        /**
+</span>         * 按钮的宽度
+         * @type {String|Number}
+         */
+        buttonWidth: &quot;50px&quot;,
+<span id='fastDev-Ui-ChooseList-property-rightWidth'>        /**
+</span>         * 右侧区域的宽度
+         * @type {String|Number}
+         */
+        rightWidth: &quot;122px&quot;,
+<span id='fastDev-Ui-ChooseList-property-rightTopHeight'>        /**
+</span>         * 右侧顶部区域的高度
+         * @type {String|Number}
+         */
+        rightTopHeight: 0,
+<span id='fastDev-Ui-ChooseList-property-rightBottomHeight'>        /**
+</span>         * 右侧底部区域的高度
+         * @type {String|Number}
+         */
+        rightBottomHeight: 0,
+<span id='fastDev-Ui-ChooseList-property-height'>        /**
+</span>         * 整个控件的高度
+         * @type {String|Number}
+         */
+        height: &quot;150px&quot;,
+<span id='fastDev-Ui-ChooseList-property-leftTop'>        /**
+</span>         * 左部上方自定义模板
+         * @type {String}
+         */
+        leftTop: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-leftBottom'>        /**
+</span>         * 左部下方自定义模板
+         * @type {String}
+         */
+        leftBottom: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-rightTop'>        /**
+</span>         * 右部上方自定义模板
+         * @type {String}
+         */
+        rightTop: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-rightBottom'>        /**
+</span>         * 右部下方自定义模板
+         * @type {String}
+         */
+        rightBottom: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-leftCls'>        /**
+</span>         * 左边中部区域自定义样式名
+         * @type {String}
+         */
+        leftCls: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-rightCls'>        /**
+</span>         * 右边中部区域自定义样式名
+         * @type {String}
+         */
+        rightCls: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-centerCls'>        /**
+</span>         * 中部区域自定义样式名
+         * @type {String}
+         */
+        centerCls: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-showFunctionBtn'>        /**
+</span>         * 是否显示功能按钮（选取，移除等操作按钮）
+         * 不需要功能按钮时，可以通过该属性撤销按钮的构建
+         * @type {Boolean} 
+         */
+        showFunctionBtn: true,
+<span id='fastDev-Ui-ChooseList-property-initSource'>        /**
+</span>         * 远程数据源链接地址
+         * @type {String}
+         */
+        initSource: null,
+<span id='fastDev-Ui-ChooseList-property-dataSource'>        /**
+</span>         * 已选值数据源
+         * @type {String}
+         */
+        dataSource: null,
+<span id='fastDev-Ui-ChooseList-property-showLoading'>        /**
+</span>         * 是否在加载数据时显示加载图标
+         * @type {Boolean} 
+         */
+        showLoading: true,
+<span id='fastDev-Ui-ChooseList-property-zIndex'>        /**
+</span>         * 重置索引值
+         * @type {Number} 
+         */
+        zIndex: 2012,
+<span id='fastDev-Ui-ChooseList-property-loadingMsg'>        /**
+</span>         * 加载图标附带的提示文本信息
+         * @type {String} 
+         */
+        loadingMsg: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-primaryKey'>        /**
+</span>         * 记录的主键字段名
+         * 用于标记记录的唯一性
+         * @type {String}
+         */
+        primaryKey: &quot;&quot;,
+<span id='fastDev-Ui-ChooseList-property-maxItems'>        /**
+</span>         * 最大可选项数
+         * 0表示不受限
+         * @type {Number}
+         */
+        maxItems: 0,
+<span id='fastDev-Ui-ChooseList-property-items'>        /**
+</span>         * 静态数据源
+         * @type {Array}
+         */
+        items: null,
+<span id='fastDev-Ui-ChooseList-property-params'>        /**
+</span>         * 刷新控件时额外的查询参数
+         * @type {Object}
+         */
+        params: {},
+<span id='fastDev-Ui-ChooseList-property-itemRenderer'>        /**
+</span>         * 列表项使用的自定义渲染器（回调函数）
+         * 传递参数为当前列表项，回调需返回渲染后的DOM片段或文本值，否则按默认文本处理
+         * @type {Function}
+         */
+        itemRenderer: fastDev.noop,
+<span id='fastDev-Ui-ChooseList-property-leftWidget'>        /**
+</span>         * 左边待选项数据展示部件（控件）自定义配置
+         * 默认为列表控件
+         * @type {Object} obj 部件配置对象
+         * @param {String} obj.type 控件类型，可为控件的全类型名或者别名
+         * @param {String|Function} obj.onGetSelectedItems 获取控件已选中项的方法名，或者自定义一个函数来返回控件已选择项（this指向对应的控件类型，如：type为Tree，则this为树控件，下同）
+         * @param {String|Function} obj.onGetAllItems 获取控件所有可选项的方法名，或者自定义一个函数来返回控件的所有可选项
+         * @param {String|Function} obj.onRemoveItems 控件移除指定列表项的方法名，或者自定义一个函数来移除控件值项，传递参数为被移除的项列表（数组）
+         * @param {String|Function} obj.onAddItems 控件添加指定列表项的方法名，或者自定义一个函数来添加控件值项，传递参数为被添加的项列表（数组）
+         * @param {String|Function} [obj.onRefresh] 刷新控件的方法名或者自定义一个函数，传递参数为查询参数
+         * @param {Object} obj.options 控件配置对象
+         */
+        leftWidget: null,
+<span id='fastDev-Ui-ChooseList-property-rightWidget'>        /**
+</span>         * 右边已选项数据展现部件（控件）自定义配置
+         * 默认为列表控件
+         * @type {Object} obj 部件配置对象
+         * @param {String} obj.type 控件类型，可为控件的全类型名或者别名
+         * @param {String|Function} obj.onGetSelectedItems 获取控件已选中项的方法名，或者自定义一个函数来返回控件已选择项（this指向对应的控件类型，如：type为Tree，则this为树控件，下同）
+         * @param {String|Function} obj.onGetAllItems 获取控件所有可选项的方法名，或者自定义一个函数来返回控件的所有可选项
+         * @param {String|Function} obj.onRemoveItems 控件移除指定列表项的方法名，或者自定义一个函数来移除控件值项，传递参数为被移除的项列表（数组）
+         * @param {String|Function} obj.onAddItems 控件添加指定列表项的方法名，或者自定义一个函数来添加控件值项，传递参数为被添加的项列表（数组）
+         * @param {String|Function} [obj.onGetValue] 控件的&quot;getValue&quot;取值性质的方法名或者函数
+         * @param {String|Function} [obj.onGetText] 控件的&quot;getText&quot;取文本值性质的方法名或者函数
+         * @param {String|Function} [obj.onGetItems] 控件的&quot;getItems&quot;取值对象性质的方法名或者函数
+         * @param {String|Function} [obj.onMoveUp] 控件的&quot;moveUp&quot;上移记录性质的方法名或者函数
+         * @param {String|Function} [obj.onMoveDown] 控件的&quot;moveDown&quot;下移记录性质的方法名或者函数
+         * @param {Object} obj.options 控件配置对象
+         */
+        rightWidget: null,
+<span id='fastDev-Ui-ChooseList-property-buttons'>        /**
+</span>         * 中部区域操作按钮自定义配置（按钮控件的配置对象）
+         * 所有按钮的点击回调事件中，this指向按钮控件，回调函数的参数依次为event（事件对象）、chooselist（当前ChooseList实例）
+         * 以下本控件的方法可以在按钮点击的回调里面调用来响应用户操作
+         * &lt;p&gt;- select(items) 选取操作，如果未传递参数，则控件会默认去获取用户已选择的项（建议不传递参数由控件内部自动去获取值）&lt;/p&gt;
+         * &lt;p&gt;- selectAll() 全部选取操作&lt;/p&gt;
+         * &lt;p&gt;- deselect(items) 取消选取操作，如果未传递参数，则控件会默认去获取需取消的的项（建议不传参数由控件内部自动去获取值）&lt;/p&gt;
+         * &lt;p&gt;- deselectAll() 全部取消选取操作&lt;/p&gt;
+         * 也可以在按钮配置中，声明name属性值为以上函数名，其点击事件自动绑定至对应的函数。
+         * @type {Array}
+         */
+        buttons: null,
+<span id='fastDev-Ui-ChooseList-event-onBeforeSelect'>        /**
+</span>         * 选取前的回调
+         * 传递参数为拟选记录对象
+         * this指向当前控件实例
+         * 返回false则放弃选取该项
+         * @type {Function}
+         * @event
+         */
+        onBeforeSelect: fastDev.noop,
+<span id='fastDev-Ui-ChooseList-event-onAfterSelect'>        /**
+</span>         * 选取后的事件回调
+         * 传递参数为此次选取的记录的集合（数组）
+         * this指向当前控件实例
+         * @type {Function}
+         * @event
+         */
+        onAfterSelect: fastDev.noop,
+<span id='fastDev-Ui-ChooseList-event-onBeforeDeselect'>        /**
+</span>         * 取消选取前的回调
+         * 传递参数为待撤销选取的记录对象
+         * this指向当前控件实例
+         * 返回false值则放弃取消操作
+         * @type {Function}
+         * @event
+         */
+        onBeforeDeselect: fastDev.noop,
+<span id='fastDev-Ui-ChooseList-event-onAfterDeselect'>        /**
+</span>         * 取消选取后的回调
+         * 传递参数为此次撤销选取的记录的集合（数组）
+         * this指向当前控件实例
+         * @type {Function}
+         * @event
+         */
+        onAfterDeselect: fastDev.noop,
+<span id='fastDev-Ui-ChooseList-property-enableInitProxy'>        /**
+</span>         * @private
+         */
+        enableInitProxy: false,
+<span id='fastDev-Ui-ChooseList-property-enableDataProxy'>        /**
+</span>         * @private
+         */
+        enableDataProxy: false,
+<span id='fastDev-Ui-ChooseList-property-enableDataSet'>        /**
+</span>         * @private 
+         */
+        enableDataSet: false
+    },
+<span id='fastDev-Ui-ChooseList-method-staticTemplate'>    /**
+</span>     * 静态模板
+     * @param {Object} params 模板参数
+     * @private 
+     */
+    staticTemplate: function (params) {
+        return [
+            '&lt;div class=&quot;ui-form ui-chooselist&quot; style=&quot;height:' + params.listHeight + '&quot;&gt;',
+            '&lt;div class=&quot;ui-chooselist-float&quot;&gt;',
+            '&lt;div id=&quot;chooselist-lefttop-' + params.sequence + '&quot; style=&quot;display:none;width:' + params.leftTplWidth + ';height:' + params.leftTopHeight + ';overflow-x:hidden;&quot;&gt;' + params.leftTop + '&lt;/div&gt;',
+            '&lt;div id=&quot;chooselist-left-' + params.sequence + '&quot; style=&quot;width:' + params.leftWidth + ';height:' + params.leftHeight + '&quot; class=&quot;ui-chooselist-list ' + params.leftCls + '&quot;&gt;&lt;/div&gt;',
+            '&lt;div id=&quot;chooselist-leftbottom-' + params.sequence + '&quot; style=&quot;display:none;width:' + params.leftTplWidth + ';height:' + params.leftBottomHeight + ';overflow-x:hidden;&quot;&gt;' + params.leftBottom + '&lt;/div&gt;',
+            '&lt;/div&gt;',
+            '&lt;div class=&quot;ui-chooselist-panel ui-chooselist-float ' + params.centerCls + '&quot; style=&quot;height:' + params.listHeight + ';width:' + params.centerWidth + '&quot;&gt;',
+            '&lt;div class=&quot;ui-chooselist-block&quot;&gt;', '&lt;div id=&quot;chooselist-center-' + params.sequence + '&quot; class=&quot;ui-chooselist-tools&quot;&gt;&lt;/div&gt;',
+            '&lt;/div&gt;',
+            '&lt;/div&gt;',
+            '&lt;div class=&quot;ui-chooselist-float&quot;&gt;',
+            '&lt;div id=&quot;chooselist-righttop-' + params.sequence + '&quot; style=&quot;display:none;width:' + params.rightTplWidth + ';height:' + params.rightTopHeight + ';overflow-x:hidden;&quot;&gt;' + params.rightTop + '&lt;/div&gt;',
+            '&lt;div id=&quot;chooselist-right-' + params.sequence + '&quot; style=&quot;width:' + params.rightWidth + ';height:' + params.rightHeight + '&quot; class=&quot;ui-chooselist-list ' + params.rightCls + '&quot;&gt;&lt;/div&gt;',
+            '&lt;div id=&quot;chooselist-rightbottom-' + params.sequence + '&quot; style=&quot;display:none;width:' + params.rightTplWidth + ';height:' + params.rightBottomHeight + ';overflow-x:hidden;&quot; &gt;' + params.rightBottom + '&lt;/div&gt;',
+            '&lt;/div&gt;',
+            '&lt;/div&gt;'].join(&quot;&quot;);
+    },
+    tplParam: [&quot;sequence&quot;, &quot;listHeight&quot;, &quot;leftWidth&quot;, &quot;rightWidth&quot;, &quot;leftHeight&quot;, &quot;rightHeight&quot;, &quot;centerWidth&quot;, &quot;leftTplWidth&quot;, &quot;leftTopHeight&quot;, &quot;leftBottomHeight&quot;, &quot;rightTopHeight&quot;, &quot;rightBottomHeight&quot;, &quot;rightTplWidth&quot;, &quot;leftCls&quot;, &quot;centerCls&quot;, &quot;rightCls&quot;, &quot;leftTop&quot;, &quot;leftBottom&quot;, &quot;rightTop&quot;, &quot;rightBottom&quot;],
+<span id='fastDev-Ui-ChooseList-method-ready'>    /**
+</span>     * 参数准备
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有参数
+     * @protected
+     */
+    ready: function (options, global) {
+        var fn = fastDev.Util.StringUtil.stripUnits,
+            // 容器的内容宽度
+            width = options.container.width(),
+            height = fn(options.height, options.container.height()) || 150;
+        global.sequence = fastDev.getID();
+        global.listHeight = height + &quot;px&quot;;
+        fastDev.apply(options, {
+            // 整个控件的高度（包括边框）
+            height: height,
+            id: options.id || fastDev.getID() + &quot;&quot;,
+            // 不包括边框的宽度
+            leftWidth: (parseInt(options.leftWidgetWidth, 10) || ((fn(options.leftWidth, width) || 122) - 2)) + &quot;px&quot;, //2px的边框
+            centerWidth: ((fn(options.centerWidth, width) || 77) - 30) + &quot;px&quot;, //30px的外边距
+            buttonWidth: options.buttonWidth === &quot;auto&quot; ? &quot;auto&quot; : ((fn(options.buttonWidth, width) || 52) - 7) + &quot;px&quot;, //7px的外边距加边框
+            // 不包括边框的宽度
+            rightWidth: (parseInt(options.rightWidgetWidth, 10) || ((fn(options.rightWidth, width) || 122) - 2)) + &quot;px&quot;, //2px的边框
+            leftWidget: fastDev.isPlainObject(options.leftWidget) ? options.leftWidget : {},
+            rightWidget: fastDev.isPlainObject(options.rightWidget) ? options.rightWidget : {},
+            maxItems: (options.maxItems &amp;&amp; !isNaN(parseInt(options.maxItems, 10))) ? parseInt(options.maxItems, 10) : Infinity,
+            params: fastDev.isPlainObject(options.params) ? options.params : {},
+            saveInstance: true
+        });
+        options.leftWidget.name = &quot;left&quot;;
+        options.leftWidget.options = fastDev.isPlainObject(options.leftWidget.options) ? options.leftWidget.options : {};
+        options.rightWidget.name = &quot;right&quot;;
+        options.rightWidget.options = fastDev.isPlainObject(options.rightWidget.options) ? options.rightWidget.options : {};
+        fastDev.each([&quot;onBeforeSelect&quot;, &quot;onAfterSelect&quot;, &quot;onBeforeDeselect&quot;, &quot;onAfterDeselect&quot;, &quot;itemRenderer&quot;], function (i, name) {
+            options[name] = typeof options[name] === &quot;function&quot; ? options[name] : fastDev.noop;
+        });
+        fastDev.apply(options, {
+            leftTopHeight: (fn(options.leftTopHeight, height) || 0) + &quot;px&quot;,
+            leftBottomHeight: (fn(options.leftBottomHeight, height) || 0) + &quot;px&quot;,
+            rightTopHeight: (fn(options.rightTopHeight, height) || 0) + &quot;px&quot;,
+            rightBottomHeight: (fn(options.rightBottomHeight, height) || 0) + &quot;px&quot;,
+            // 绝对宽度
+            leftTplWidth: (parseInt(options.leftWidth, 10) + 2) + &quot;px&quot;,
+            rightTplWidth: (parseInt(options.rightWidth, 10) + 2) + &quot;px&quot;
+        });
+        options.leftWidgetWidth = options.leftWidth;
+        options.rightWidgetWidth = options.rightWidth;
+        // 初始计算时，减2px边框
+        options.leftHeight = (parseInt(options.leftWidgetHeight, 10) || Math.max((height - 2 - (parseInt(options.leftTopHeight, 10) || 0) - (parseInt(options.leftBottomHeight, 10) || 0)), 0)) + &quot;px&quot;;
+        options.rightHeight = (parseInt(options.rightWidgetHeight, 10) || Math.max((height - 2 - (parseInt(options.rightTopHeight, 10) || 0) - (parseInt(options.rightBottomHeight, 10) || 0)), 0)) + &quot;px&quot;;
+        if (options.leftWidget.options &amp;&amp; typeof options.leftWidget.options.dataSource === &quot;string&quot;) {
+            options.dataSource = options.leftWidget.options.dataSource;
+        }
+        global.widgets = {};
+        // 保存已选值主键，用于判断数据是否已被选取
+        global.keyMap = {};
+        // 已选记录数
+        global.size = 0;
+        // 用于缓存当前待选数据
+        global.datas = [];
+    },
+<span id='fastDev-Ui-ChooseList-method-construct'>    /**
+</span>     * 构造控件
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有参数
+     * @protected
+     */
+    construct: function (options, global) {
+        var sequence = global.sequence;
+        fastDev.apply(global, {
+            left: this.find(&quot;[id='chooselist-left-&quot; + sequence + &quot;']&quot;),
+            leftTop: this.find(&quot;[id='chooselist-lefttop-&quot; + sequence + &quot;']&quot;),
+            leftBottom: this.find(&quot;[id='chooselist-leftbottom-&quot; + sequence + &quot;']&quot;),
+            center: this.find(&quot;[id='chooselist-center-&quot; + sequence + &quot;']&quot;),
+            right: this.find(&quot;[id='chooselist-right-&quot; + sequence + &quot;']&quot;),
+            rightTop: this.find(&quot;[id='chooselist-righttop-&quot; + sequence + &quot;']&quot;),
+            rightBottom: this.find(&quot;[id='chooselist-rightbottom-&quot; + sequence + &quot;']&quot;)
+        });
+        fastDev.each([&quot;leftTop&quot;, &quot;leftBottom&quot;, &quot;rightTop&quot;, &quot;rightBottom&quot;], function (idx, name) {
+            options[name + &quot;Height&quot;] = !! options[name + &quot;Element&quot;] ? global[name].outerHeight(true) : 0;
+        });
+        if (!fastDev.getInstance(options.id)) {
+            fastDev.Core.ControlBus.saveInstance(options.id, this);
+        }
+    },
+<span id='fastDev-Ui-ChooseList-method-init'>    /**
+</span>     * 初始控件
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有参数
+     * @protected
+     */
+    init: function (options, global) {
+        if (options.dataSource &amp;&amp; typeof options.dataSource === &quot;string&quot;) {
+            this.dataProxy = fastDev.create(&quot;Proxy&quot;, {
+                url: options.dataSource,
+                onAfterLoad: fastDev.setFnInScope(this, this.setValue)
+            });
+        }
+        // 初始化按钮
+        this.initButtons(options.buttons);
+        // 初始化左部数据展现部件
+        this.initWidget(options.leftWidget);
+        // 初始化右部数据展现部件
+        this.initWidget(options.rightWidget);
+        // 初始自定义模板区域
+        this.initTemplate();
+        if (options.leftWidget.isNotDefaultContainer || options.rightWidget.isNotDefaultContainer) {
+            this.hide();
+        } else {
+            var that = this;
+            fastDev(function () {
+                that.setLoading( !! options.leftWidget.options.initSource);
+            });
+        }
+    },
+<span id='fastDev-Ui-ChooseList-method-refreshData'>    /**
+</span>     * 刷新已选数据
+     * @param {Object} widget 部件配置对象
+     * @private 
+     */
+    refreshData: function (widget) {
+        var options = this._options,
+            global = this._global;
+        global.widgets[widget.id] = widget;
+        widget.initialized = true;
+        if (options.leftWidget.initialized &amp;&amp; options.rightWidget.initialized) {
+            global.initialized = true;
+            if ( !! options.dataSource) {
+                this.dataRefresh();
+                global.initSource = options.initSource;
+                global.dataSource = options.dataSource;
+                options.initSource = &quot;&quot;;
+                options.dataSource = &quot;&quot;;
+            }
+        }
+    },
+<span id='fastDev-Ui-ChooseList-method-setLoading'>    /**
+</span>     * 显示与隐藏数据加载图标
+     * @param {Boolean} show 为false值时隐藏加载图标，为null时关闭加载图标，否则显示加载图标
+     * @param {Boolean} [extra] 是否是额外的数据展现控件
+     * @private 
+     */
+    setLoading: function (show, extra) {
+        var options = this._options,
+            global = this._global;
+        if (options.showLoading &amp;&amp; !extra) {
+            if (!fastDev.isComponent(global.loading)) {
+                global.loading = fastDev.create(&quot;ProgressBar&quot;, {
+                    opacity: 0.02,
+                    display: false,
+                    container: global.left,
+                    text: options.loadingMsg,
+                    zIndex: parseInt(options.zIndex, 10) || 2012
+                });
+            }
+            window.setTimeout(function () {
+                global.loading[show === null ? &quot;close&quot; : show === false ? &quot;hide&quot; : &quot;show&quot;]();
+            }, 100);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-ChooseList-method-initButtons'>    /**
+</span>     * 初始化按钮
+     * @param {Array} buttons 按钮组
+     * @private
+     */
+    initButtons: function (buttons) {
+        var options = this._options,
+            global = this._global,
+            btn, name;
+        if (options.showFunctionBtn) {
+            buttons = buttons ? fastDev.isArray(buttons) ? buttons : [buttons] : [{
+                    text: &quot;&gt;&quot;,
+                    tips: &quot;选取&quot;,
+                    name: &quot;select&quot;
+                }, {
+                    text: &quot;&gt;&gt;&quot;,
+                    tips: &quot;全部选取&quot;,
+                    name: &quot;selectAll&quot;
+                }, {
+                    text: &quot;&lt;&quot;,
+                    tips: &quot;移除&quot;,
+                    name: &quot;deselect&quot;
+                }, {
+                    text: &quot;&lt;&lt;&quot;,
+                    tips: &quot;全部移除&quot;,
+                    name: &quot;deselectAll&quot;
+                }
+            ];
+            for (var i = 0; i &lt; buttons.length; i++) {
+                btn = buttons[i];
+                btn.container = fastDev(&quot;&lt;div/&gt;&quot;).appendTo(global.center);
+                // 按钮右外边距加边框有7px
+                btn.width = btn.width || options.buttonWidth;
+                btn.onclick = this.getBtnCallback(btn.name, btn.onclick);
+                buttons[i] = fastDev.create(&quot;Button&quot;, btn);
+            }
+            options.buttons = buttons;
+        }
+    },
+<span id='fastDev-Ui-ChooseList-method-getBtnCallback'>    /**
+</span>     * 获取按钮的回调
+     * @param {String} name 按钮名
+     * @param {Function} fn 用户声明的回调
+     * @private 
+     */
+    getBtnCallback: function (name, fn) {
+        var that = this;
+        return typeof fn === &quot;function&quot; ? function (event) {
+            fn.call(this, event, that);
+        } : /^selectAll|deselectAll|select|deselect|moveUp|moveDown$/i.test(name) ? function () {
+            that[name]();
+        } : fastDev.noop;
+    },
+<span id='fastDev-Ui-ChooseList-method-initWidget'>    /**
+</span>     * 初始化数据展现部件
+     * @param {Object} widget 部件配置对象
+     * @private
+     */
+    initWidget: function (widget) {
+        var that = this,
+            options = this._options,
+            global = this._global,
+            container = widget.options.container;
+        container = !! container ? fastDev(fastDev.isString(container) ? &quot;#&quot; + container : container) : global[widget.name];
+        widget.options.container = container.hasElem() ? container : global[widget.name];
+        if (container !== global[widget.name]) {
+            global[widget.name].hide();
+            widget.isNotDefaultContainer = true;
+        }
+        if ( !! widget.widgetElement) {
+            widget.options.container.append(widget.widgetElement);
+        } else {
+            widget.type = !! widget.type ? widget.type : &quot;ChooseList.ComboList&quot;;
+            widget.options.items = widget.options.items || (widget.name === &quot;left&quot; ? options.items : null);
+            widget.component = fastDev.create(widget.type, this.initPredefine(options, widget));
+        }
+        if (widget.type === &quot;DataGrid&quot; || widget.type === &quot;fastDev.Ui.DataGrid&quot;) {
+            global[widget.name].css(&quot;border&quot;, &quot;none&quot;);
+        }
+    },
+<span id='fastDev-Ui-ChooseList-method-initPredefine'>    /**
+</span>     * 初始预定义控件回调方法
+     * @param {Object} options 控件配置对象
+     * @param {Object} widget 部件配置对象
+     * @return {Object} settings 部件用户配置对象
+     * @private
+     */
+    initPredefine: function (options, widget) {
+        var uuid = fastDev.getID(),
+            name = widget.name,
+            settings = widget.options;
+        options.id = options.id || (fastDev.getID() + &quot;&quot;);
+        widget.id = fastDev.getID() + &quot;&quot;;
+        if (!widget.isNotDefaultContainer) {
+            var fn = fastDev.Util.StringUtil.stripUnits;
+            fastDev.apply(settings, {
+                width: options[name + &quot;WidgetWidth&quot;] || ((parseInt(options[name + &quot;Width&quot;], 10) || 122) - 2 + &quot;px&quot;),
+                height: options[name + &quot;WidgetHeight&quot;] || (Math.max((fn(options.height, fastDev(typeof options.container === &quot;string&quot; ? &quot;#&quot; + options.container : options.container).height()) || 150) - 2 - (parseInt(options[name + &quot;TopHeight&quot;], 10) || 0) - (parseInt(options[name + &quot;BottomHeight&quot;], 10) || 0), 0) + &quot;px&quot;)
+            });
+            options[name + &quot;WidgetWidth&quot;] = settings.width;
+            options[name + &quot;WidgetHeight&quot;] = settings.height;
+        }
+        settings.initSource = settings.initSource || (widget.name === &quot;left&quot; ? options.initSource : &quot;&quot;);
+        // fastDev.apply(settings, {
+        // initSource: settings.initSource || (widget.name === &quot;left&quot; ? options.initSource : &quot;&quot;),
+        // dataSource: settings.dataSource || (widget.name === &quot;left&quot; ? options.dataSource : &quot;&quot;)
+        // });
+        // 若以后需要内置新的控件定义，到下面的case语句后添加即可
+        switch (widget.type) {
+            case &quot;Tree&quot;:
+            case &quot;fastDev.Ui.Tree&quot;:
+                this.initTreeWidget(options, widget);
+                break;
+            case &quot;DataGrid&quot;:
+            case &quot;fastDev.Ui.DataGrid&quot;:
+                this.initDataGridWidget(options, widget);
+                break;
+            default:
+                this.initComboListWidget(options, widget);
+        }
+        settings.enableDataProxy = false;
+        var onAfterInitRender = settings.onAfterInitRender || fastDev.noop,
+            onAfterInit = settings.onAfterInit || fastDev.noop;
+        fastDev.apply(settings, {
+            onAfterInit: function () {
+                this.widgetName = widget.name + &quot;Widget&quot;;
+                this.widgetSettings = widget;
+                widget.component = this;
+                onAfterInit.call(this);
+                if (!settings.initSource &amp;&amp; !widget.initialized) {
+                    fastDev.getInstance(options.id).refreshData(widget);
+                }
+            },
+            onAfterInitRender: function () {
+                var that = fastDev.getInstance(options.id);
+                if (widget.name === &quot;left&quot;) {
+                    that.setLoading(false, widget.extraWidget);
+                }
+                onAfterInitRender.call(this);
+                that.refreshData(widget);
+            }
+        });
+        if (widget.mode === &quot;html&quot;) {
+            window[&quot;onAfterInitRender&quot; + uuid] = settings.onAfterInitRender;
+            settings.onAfterInitRender = &quot;onAfterInitRender&quot; + uuid + &quot;()&quot;;
+            window[&quot;onAfterInit&quot; + uuid] = settings.onAfterInit;
+            settings.onAfterInit = &quot;onAfterInit&quot; + uuid + &quot;()&quot;;
+        }
+        return settings;
+    },
+<span id='fastDev-Ui-ChooseList-method-initComboListWidget'>    /**
+</span>     * 初始化列表部件定义
+     * @param {Object} options 控件配置对象
+     * @param {Object} widget 部件配置对象
+     * @private
+     */
+    initComboListWidget: function (options, widget) {
+        var settings = widget.options,
+            isLeft = widget.name === &quot;left&quot;;
+        fastDev.apply(widget, {
+            textField: widget.textField || &quot;text&quot;,
+            valueField: widget.valueField || options.primaryKey || &quot;value&quot;,
+            onGetSelectedItems: &quot;getSelectedItems&quot;,
+            onGetAllItems: &quot;getItems&quot;,
+            onRemoveItems: &quot;removeItems&quot;,
+            onAddItems: &quot;addItems&quot;,
+            onGetValue: &quot;getValue&quot;,
+            onGetText: &quot;getText&quot;,
+            onGetItems: &quot;getItems&quot;,
+            onRefresh: &quot;initRefresh&quot;,
+            onMoveUp: function () {
+                this.move(true);
+            },
+            onMoveDown: function () {
+                this.move();
+            }
+        });
+        fastDev.apply(settings, {
+            enableDataProxy: false,
+            enableInitProxy: isLeft,
+            autoLoad: isLeft,
+            maxItems: isLeft ? 0 : options.maxItems,
+            itemRenderer: options.itemRenderer,
+            onDoubleClick: function (event, item) {
+                fastDev.getInstance(options.id)[isLeft ? &quot;select&quot; : &quot;deselect&quot;](item);
+            },
+            fields: settings.fields || [{
+                    name: widget.textField,
+                    mapping: &quot;text&quot;
+                }, {
+                    name: widget.valueField,
+                    mapping: &quot;value&quot;
+                }
+            ]
+        });
+    },
+<span id='fastDev-Ui-ChooseList-method-initDataGridWidget'>    /**
+</span>     * 初始化表格部件定义
+     * @param {Object} options 控件配置对象
+     * @param {Object} widget 部件配置对象
+     * @private
+     */
+    initDataGridWidget: function (options, widget) {
+        var settings = widget.options;
+        fastDev.apply(widget, {
+            isCopy: widget.name === &quot;left&quot; &amp;&amp; widget.isCopy,
+            onGetSelectedItems: widget.onGetSelectedItems || function () {
+                return this.getValue();
+            },
+            onGetAllItems: widget.onGetAllItems || function () {
+                return this.getAllValue();
+            },
+            onRemoveItems: widget.onRemoveItems || function (items) {
+                var list = fastDev.getInstance(options.id),
+                    item, key;
+                while (item = items.shift()) {
+                    key = list.getPrimaryValue(item);
+                    if (widget.isCopy) {
+                        this.cleanSelected(key);
+                        this.enableChooseBox(key);
+                    } else {
+                        this.delRow(key);
+                    }
+                }
+                this.find(&quot;input[name='dg_checkbox_all']&quot;).prop(&quot;checked&quot;, false);
+                if (widget.name === &quot;left&quot;) {
+                    this._options.onAfterInitRender.call(this);
+                }
+            },
+            onAddItems: widget.onAddItems || function (items) {
+                var list = fastDev.getInstance(options.id),
+                    item, key;
+                while (item = items.shift()) {
+                    key = list.getPrimaryValue(item);
+                    if (widget.isCopy || widget.name === &quot;left&quot; &amp;&amp; this.getValueByText(key, settings.keyword).length) {
+                        this.cleanSelected(key);
+                        this.enableChooseBox(key);
+                    } else {
+                        this.addRow(item, false);
+                    }
+                }
+                this.find(&quot;input[name='dg_checkbox_all']&quot;).prop(&quot;checked&quot;, false);
+                if (widget.name === &quot;left&quot;) {
+                    this._options.onAfterInitRender.call(this);
+                }
+            },
+            onGetValue: widget.onGetValue || function () {
+                var list = fastDev.getInstance(options.id),
+                    items = [].concat(this.getAllValue()),
+                    values = [],
+                    item;
+                while (item = items.shift()) {
+                    values.push(list.getPrimaryValue(item));
+                }
+                return values.join(&quot;,&quot;);
+            },
+            onGetText: widget.onGetText || &quot;getAllValue&quot;,
+            onGetItems: widget.onGetItems || &quot;getAllValue&quot;,
+            onRefresh: widget.onRefresh || function (config) {
+                this.refreshData(config.urlParam);
+            }
+        });
+        if (widget.name === &quot;right&quot;) {
+            settings.pagePosition = &quot;none&quot;;
+            settings.showCheckColumn = true;
+            settings.keyword = settings.keyword || options.primaryKey || &quot;&quot;;
+        } else {
+            fastDev.apply(settings, {
+                allowAutoFillRow: false,
+                showCheckColumn: true,
+                keyword: settings.keyword || options.primaryKey || &quot;&quot;,
+                onAfterInitRender: function () {
+                    var list = fastDev.getInstance(options.id),
+                        items = [].concat(this.getAllValue()),
+                        item;
+                    while (item = items.shift()) {
+                        if (list.isSelected(item)) {
+                            this.setSelected(list.getPrimaryValue(item));
+                        }
+                    }
+                    this.find(&quot;[name='dg_choose']:checked&quot;).each(function (elem) {
+                        fastDev(elem).prop(&quot;disabled&quot;, &quot;disabled&quot;);
+                    });
+                }
+            });
+        }
+    },
+<span id='fastDev-Ui-ChooseList-method-initTreeWidget'>    /**
+</span>     * 初始化树部件定义
+     * @param {Object} options 控件配置对象
+     * @param {Object} widget 部件配置对象
+     * @private
+     */
+    initTreeWidget: function (options, widget) {
+        var settings = widget.options;
+        fastDev.apply(widget, {
+            onlyLeaf: (widget.onlyLeaf === undefined &amp;&amp; settings.onlySelectedLeaf === undefined) ? true : widget.onlyLeaf || settings.onlySelectedLeaf,
+            onGetSelectedItems: widget.onGetSelectedItems || function () {
+                if (!settings.mTreeShowCkb) {
+                    var tree = this,
+                        nodes = [];
+                    fastDev.each(this.getSelectedIds(), function (idx, id) {
+                        nodes.push(tree.getNodeByid(id));
+                    });
+                    return nodes;
+                } else {
+                    return this.getValues(widget.onlyLeaf ? &quot;chkedLeafNodesArray&quot; : &quot;chkedNodesArray&quot;);
+                }
+            },
+            onGetAllItems: widget.onGetAllItems || function () {
+                return this[widget.onlyLeaf ? &quot;getAllLeafItems&quot; : &quot;getItems&quot;]();
+            },
+            onRemoveItems: widget.onRemoveItems || function (items) {
+                var list = fastDev.getInstance(options.id),
+                    branches = {},
+                    tree = this,
+                    branch, node;
+                fastDev.each(items, function (i, item) {
+                    if (!tree.isLeaf(item.id)) {
+                        list.select(tree.getNodesByPid(item.id) || []);
+                    } else {
+                        // branches[tree.getParentid(item.id)] = true;
+                    }
+                    tree.unCheckedById(item.id);
+                    tree.hideNode(item.id);
+                });
+                // 复选框禁用样式不对
+                // isHideNode判断有误
+                // for (branch in branches) {
+                // var children = tree.getNodesByPid(branch) || [];
+                // while (node = children.shift()) {
+                // if (!tree.isHideNode(node.id)) {
+                // branch = false;
+                // break;
+                // }
+                // }
+                // if ( !! branch) {
+                // tree.disableChk(branch);
+                // }
+                // }
+            },
+            onAddItems: widget.onAddItems || function (items) {
+                var list = fastDev.getInstance(options.id),
+                    tree = this,
+                    parent;
+                fastDev.each(items, function (i, item) {
+                    tree.unCheckedById(item.id);
+                    tree.showNode(item.id);
+                    if ( !! (parent = tree.getNodeByid(tree.getParentid(item.id))) &amp;&amp; list.isSelected(parent)) {
+                        list.deselect(parent);
+                        tree.setExpand(parent.id);
+                    }
+                });
+            },
+            onRefresh: widget.onRefresh || &quot;reLoad&quot;
+        });
+        fastDev.apply(settings, {
+            treeType: &quot;multitree&quot;,
+            enabledInitProxy: true,
+            mTreeShowCkb: settings.mTreeShowCkb === undefined ? true : settings.mTreeShowCkb,
+            onlySelectedLeaf: !! widget.onlyLeaf,
+            onExpand: function (id) {
+                var list = fastDev.getInstance(options.id),
+                    tree = this,
+                    nodes = tree.getNodesByPid(id);
+                fastDev.each(fastDev.isArray(nodes) ? nodes : [nodes], function (i, node) {
+                    if (tree.isLeaf(node.id) &amp;&amp; list.isSelected(node)) {
+                        tree.hideNode(node.id);
+                    }
+                });
+            },
+            onNodeDblClick: function (id) {
+                if (this.isLeaf(id)) {
+                    fastDev.getInstance(options.id).select(this.getNodeByid(id));
+                    this.unCheckedById(id);
+                    this.hideNode(id);
+                }
+            }
+        });
+        // html构建模式，则需在全局命名空间生成代理函数（控件的用户配置回调）
+        if (widget.mode === &quot;html&quot;) {
+            var uuid = fastDev.getID();
+            window[&quot;onExpand&quot; + uuid] = settings.onExpand;
+            settings.onExpand = &quot;onExpand&quot; + uuid + &quot;()&quot;;
+            window[&quot;onNodeDblClick&quot; + uuid] = settings.onNodeDblClick;
+            settings.onNodeDblClick = &quot;onNodeDblClick&quot; + uuid + &quot;()&quot;;
+        }
+        if (widget.name === &quot;left&quot;) {
+            options.primaryKey = options.primaryKey || &quot;id&quot;;
+        }
+    },
+<span id='fastDev-Ui-ChooseList-method-initTemplate'>    /**
+</span>     * 初始化自定义模板
+     * @private
+     */
+    initTemplate: function () {
+        var options = this._options,
+            global = this._global;
+        fastDev.each([&quot;leftTop&quot;, &quot;leftBottom&quot;, &quot;rightTop&quot;, &quot;rightBottom&quot;], function (i, name) {
+            if ( !! options[name + &quot;Element&quot;]) {
+                global[name].append(options[name + &quot;Element&quot;]).removeCss(&quot;display&quot;);
+            }
+        });
+    },
+<span id='fastDev-Ui-ChooseList-method-getPrimaryValue'>    /**
+</span>     * 获取记录的主键值
+     * @param {Object} item 值对象
+     * @param {Object} [field] 映射字段
+     * @return {String} key
+     * @private
+     */
+    getPrimaryValue: function (item, field) {
+        var key = &quot;&quot;;
+        if ( !! item || item === 0) {
+            field = field || this._options.primaryKey || &quot;value&quot;;
+            if (fastDev.isPlainObject(item) || typeof item === &quot;object&quot;) {
+                key = item[field];
+            } else {
+                key = item;
+            }
+        }
+        return fastDev.Util.StringUtil.trim(key + &quot;&quot;);
+    },
+<span id='fastDev-Ui-ChooseList-method-doSelect'>    /**
+</span>     * 操作控件进行增删操作
+     * @param {String} name left或right
+     * @param {Object} items 值项
+     * @private
+     */
+    doSelect: function (name, items) {
+        var that = this,
+            options = this._options,
+            global = this._global,
+            widget = options[name + &quot;Widget&quot;],
+            size = name === &quot;left&quot; ? global.size : -9999999;
+        if (size &lt; options.maxItems &amp;&amp; !! (items = items ? items : this.doCallback(widget.component, widget.onGetSelectedItems))) {
+            var array = [];
+            fastDev.each(fastDev.isArray(items) ? items : [items], function (idx, item) {
+                if ( !! item &amp;&amp; size &lt; options.maxItems &amp;&amp; (name === &quot;left&quot; ? !that.isSelected(item) : that.isSelected(item)) &amp;&amp; options[name === &quot;left&quot; ? &quot;onBeforeSelect&quot; : &quot;onBeforeDeselect&quot;].call(that, item) !== false) {
+                    global.keyMap[that.getPrimaryValue(item)] = name === &quot;left&quot;;
+                    array.push(item);
+                    size++;
+                }
+            });
+            if ( !! array.length) {
+                global.size += (array.length * (name === &quot;left&quot; ? 1 : -1));
+                fastDev.each(global.widgets, function (id, wigt) {
+                    try {
+                        that.doCallback(wigt.component, wigt[name === &quot;left&quot; ? (wigt.name === &quot;left&quot; ? &quot;onRemoveItems&quot; : &quot;onAddItems&quot;) : (wigt.name === &quot;left&quot; ? &quot;onAddItems&quot; : &quot;onRemoveItems&quot;)], array.slice(0));
+                    } catch (e) {}
+                });
+                global.hasChanged = true;
+                options[name === &quot;left&quot; ? &quot;onAfterSelect&quot; : &quot;onAfterDeselect&quot;].call(that, array);
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-ChooseList-method-doCallback'>    /**
+</span>     * 执行回调函数
+     * @param {fastDev.Ui.Component} obj
+     * @param {Function|String} func
+     * @param {Object} args
+     * @return {Object}
+     * @private
+     */
+    doCallback: function (obj, func, args) {
+        if (typeof func === &quot;function&quot;) {
+            return func.call(obj, args);
+        } else if (fastDev.isString(func) &amp;&amp; typeof obj[func] === &quot;function&quot;) {
+            return obj[func](args);
+        } else {
+            throw &quot;未知的回调函数(&quot; + func + &quot;)&quot;;
+        }
+    },
+<span id='fastDev-Ui-ChooseList-method-isSelected'>    /**
+</span>     * 判断某项是否已被选取
+     * 将根据primaryKey主键字段配置来判断
+     * @param {Object} item 待测项（记录对象或者记录的主键值）
+     * @return {Boolean}
+     */
+    isSelected: function (item) {
+        return !!this._global.keyMap[this.getPrimaryValue(item)];
+    },
+<span id='fastDev-Ui-ChooseList-method-select'>    /**
+</span>     * 执行选取
+     * @param {Array} [items] 要选择的项，若未指定则控件自动获取拟选项
+     * @return {fastDev.Ui.ChooseList} 本控件实例
+     */
+    select: function (items) {
+        return this.doSelect(&quot;left&quot;, items);
+    },
+<span id='fastDev-Ui-ChooseList-method-selectAll'>    /**
+</span>     * 选取所有值
+     * @return {fastDev.Ui.ChooseList} 本控件实例
+     */
+    selectAll: function () {
+        var left = this._options.leftWidget;
+        return this.select(this.doCallback(left.component, left.onGetAllItems) || []);
+    },
+<span id='fastDev-Ui-ChooseList-method-deselect'>    /**
+</span>     * 取消选取
+     * @param {Array} [items] 要取消的项，若未指定则控件自动获取拟取消选取的项
+     * @return {fastDev.Ui.ChooseList} 本控件实例
+     */
+    deselect: function (items) {
+        return this.doSelect(&quot;right&quot;, items);
+    },
+<span id='fastDev-Ui-ChooseList-method-deselectAll'>    /**
+</span>     * 全部取消选取
+     * @return {fastDev.Ui.ChooseList} 本控件实例
+     */
+    deselectAll: function () {
+        var right = this._options.rightWidget;
+        return this.deselect(this.doCallback(right.component, right.onGetAllItems) || []);
+    },
+<span id='fastDev-Ui-ChooseList-method-getValue'>    /**
+</span>     * 获取已选择项的有效值
+     * @return {Object} 控件值
+     */
+    getValue: function () {
+        var right = this._options.rightWidget;
+        return this.doCallback(right.component, right.onGetValue || &quot;getValue&quot;);
+    },
+<span id='fastDev-Ui-ChooseList-method-getText'>    /**
+</span>     * 获取已选择项的文本值
+     * @return {Object} 控件文本值
+     */
+    getText: function () {
+        var right = this._options.rightWidget;
+        return this.doCallback(right.component, right.onGetText || &quot;getText&quot;);
+    },
+<span id='fastDev-Ui-ChooseList-method-getItems'>    /**
+</span>     * 获取已选值对象数组
+     * @return {Array} 控件值对象数组
+     */
+    getItems: function () {
+        var right = this._options.rightWidget;
+        return this.doCallback(right.component, right.onGetItems || &quot;getItems&quot;) || [];
+    },
+<span id='fastDev-Ui-ChooseList-method-getData'>    /**
+</span>     * 获取待选值对象数组
+     * @param {fastDev.Ui.Component} [context] 数据的来源控件实例（可选参数，默认为当前使用的待选数据展现控件）
+     * @return {Array} 待选值对象数组
+     */
+    getData: function (context) {
+        var global = this._global,
+            data = !! context ? [] : global.hasChanged ? [] : global.datas.slice(0),
+            items, item, mark;
+        if (!data.length) {
+            fastDev.each( !! context ? this._global.widgets : [], function (id, widget) {
+                if (context === widget.component) {
+                    context = widget;
+                    return !(mark = true);
+                }
+            });
+            context = mark ? context : this._options.leftWidget;
+            items = [].concat(this.doCallback(context.component, context.onGetAllItems));
+            while (item = items.shift()) {
+                if (!this.isSelected(item)) {
+                    data.push(item);
+                }
+            }
+            global.datas = !! context ? [] : data.slice(0);
+            global.hasChanged = false;
+        }
+        return data;
+    },
+<span id='fastDev-Ui-ChooseList-method-setValue'>    /**
+</span>     * 设置值
+     * @param {Object} value 可以为非文本值
+     * @return {fastDev.Ui.ChooseList} 本控件实例
+     */
+    setValue: function (value) {
+        if (this._global.initialized &amp;&amp; value) {
+            this.select(value);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-ChooseList-method-moveUp'>    /**
+</span>     * 上移选中的记录
+     * @return {fastDev.Ui.ChooseList} 本控件实例
+     */
+    moveUp: function () {
+        var right = this._options.rightWidget;
+        this.doCallback(right.component, right.onMoveUp || &quot;moveUp&quot;);
+        return this;
+    },
+<span id='fastDev-Ui-ChooseList-method-moveDown'>    /**
+</span>     * 下移选中的记录
+     * @return {fastDev.Ui.ChooseList} 本控件实例
+     */
+    moveDown: function () {
+        var right = this._options.rightWidget;
+        this.doCallback(right.component, right.onMoveDown || &quot;moveDown&quot;);
+        return this;
+    },
+<span id='fastDev-Ui-ChooseList-method-getLeftWidget'>    /**
+</span>     * 获取当前使用的左侧控件实例
+     * @return {fastDev.Ui.Component}
+     */
+    getLeftWidget: function () {
+        return this._options.leftWidget.component;
+    },
+<span id='fastDev-Ui-ChooseList-method-getRightWidget'>    /**
+</span>     * 获取当前使用的右侧控件实例
+     * @return {fastDev.Ui.Component}
+     */
+    getRightWidget: function () {
+        return this._options.rightWidget.component;
+    },
+<span id='fastDev-Ui-ChooseList-method-setWidget'>    /**
+</span>     * 设置数据展现控件实例
+     * @param {fastDev.Ui.Component} widget 参数必须为使用createWidget()方法初始化出的控件实例
+     * @return {fastDev.Ui.ChooseList}
+     */
+    setWidget: function (widget) {
+        if (fastDev.isComponent(widget) &amp;&amp; /^(left|right)Widget/.test(widget.widgetName)) {
+            var options = this._options,
+                global = this._global;
+            options[widget.widgetName].component.hide();
+            options[widget.widgetName] = widget.widgetSettings;
+            global.widgets[widget.widgetSettings.id] = widget.widgetSettings;
+            if (!widget.widgetSettings.isNotDefaultContainer) {
+                global[widget.widgetSettings.name][widget.alias === &quot;DataGrid&quot; ? &quot;css&quot; : &quot;removeCss&quot;](&quot;border&quot;, &quot;none&quot;);
+            }
+            widget.show();
+            global.hasChanged = true;
+        } else {
+            throw &quot;参数无效（仅接受使用ChooseList控件的createWidget方法创建出的控件实例）.&quot;;
+        }
+        return this;
+    },
+<span id='fastDev-Ui-ChooseList-method-refresh'>    /**
+</span>     * 刷新左边区域控件的值
+     * @param {Object} config 请求参数配置对象(plain object)
+     * @param {String} [config.url] 请求链接，默认为initSource属性值
+     * @param {Object} [config.param] 查询参数对象(plain object)，键值对
+     * @param {Object} [config.data] 使用的静态数据
+     * @param {Boolean} cleanSelected 是否在刷新前清理右边已选数据
+     * @return {fastDev.Ui.ChooseList} 本控件实例
+     */
+    refresh: function (config, cleanSelected) {
+        var that = this,
+            options = this._options,
+            left = options.leftWidget,
+            right = options.rightWidget;
+        if ( !! cleanSelected) {
+            this.doCallback(right.component, right.onRemoveItems, this.doCallback(right.component, right.onGetAllItems) || []);
+            this._global.keyMap = {};
+        }
+        if (!fastDev.isPlainObject(config)) {
+            config = {};
+        }
+        if (fastDev.isPlainObject(config.param)) {
+            fastDev.apply(options.params, config.param);
+        }
+        config.url = config.url || left.options.initSource;
+        config.urlParam = options.params;
+        fastDev(function () {
+            that.setLoading(true, !config.url);
+        });
+        this.doCallback(left.component, left.onRefresh || &quot;initRefresh&quot;, config);
+        return this;
+    },
+<span id='fastDev-Ui-ChooseList-method-createWidget'>    /**
+</span>     * 创建一个数据展示部件（不传配置时，使用默认的列表控件）
+     * 控件使用ChooseList容器时，初始完成后，该控件默认会被隐藏起来
+     * @param {Object} [config] 部件配置对象 
+     * @param {String} [config.name] left或right值，标明需放置在左边（待选）或右边（已选） 
+     * @param {Object} [config.options] 控件配置对象
+     * @return {fastDev.Ui.Component} 控件实例或undefined（创建失败时）
+     */
+    createWidget: function (config) {
+        var options = this._options,
+            widget;
+        if (!fastDev.isPlainObject(config)) {
+            config = {};
+        }
+        fastDev.apply(config, {
+            extraWidget: true,
+            name: (config.name === &quot;left&quot; || config.name === &quot;right&quot;) ? config.name : &quot;left&quot;,
+            type: config.type || &quot;ChooseList.ComboList&quot;,
+            options: fastDev.isPlainObject(config.options) ? config.options : {}
+        });
+        if (!config.options.container) {
+            config.options.container = this._global[config.name];
+        } else {
+            config.isNotDefaultContainer = true;
+        }
+        (widget = fastDev.create(config.type, this.initPredefine(options, config)))[config.isNotDefaultContainer ? &quot;show&quot; : &quot;hide&quot;]();
+        return widget;
+    },
+<span id='fastDev-Ui-ChooseList-method-getSize'>    /**
+</span>     * 获取当前已选记录数
+     * @return {Number} 当前已选记录的数目 
+     */
+    getSize: function () {
+        return this._global.size;
+    }
+});
+// 内部子控件
+fastDev.define(&quot;fastDev.Ui.ChooseList.ComboList&quot;, {
+    alias: &quot;ChooseList.ComboList&quot;,
+    extend: &quot;fastDev.Ui.Component&quot;,
+    _options: {
+        width: &quot;&quot;,
+        height: &quot;&quot;,
+        multiple: true,
+        maxItems: 0,
+        itemRenderer: fastDev.noop,
+        onDoubleClick: fastDev.noop,
+        onItemClick: fastDev.noop,
+        onItemMouseOver: fastDev.noop,
+        onItemMouseOut: fastDev.noop,
+        fields: []
+    },
+    staticTemplate: function (params) {
+        var html = ['&lt;div id=&quot;combolist-container-' + params.uuid + '&quot;&gt;'];
+        html.push('&lt;div class=&quot;ui-selectlist-list-ct&quot; style=&quot;width:' + params.width + ';height:' + params.height + '&quot;&gt;');
+        html.push('&lt;ul id=&quot;combolist-list-' + params.uuid + '&quot;&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;');
+        return html.join(&quot;&quot;);
+    },
+    dynamicTemplate: function (params, data) {
+        var html = [];
+        for (var i = 0, item; item = data[i]; i++) {
+            html.push('&lt;li class=&quot;ui-list-item&quot; name=&quot;list' + params.uuid + '&quot; text=&quot;' + item.text + '&quot; itemVal=&quot;' + item.value + '&quot; item=&quot;' + item.item + '&quot;&gt;' + item.label + '&lt;/li&gt;');
+        }
+        return html.join(&quot;&quot;);
+    },
+    tplParam: [&quot;uuid&quot;, &quot;width&quot;, &quot;height&quot;, &quot;text&quot;, &quot;value&quot;],
+    fields: [&quot;text&quot;, &quot;value&quot;, &quot;label&quot;, &quot;item&quot;],
+    ready: function (options, global) {
+        global.uuid = fastDev.getID();
+        global.size = 0;
+        global.currItems = {};
+        options.maxItems = (options.maxItems &amp;&amp; fastDev.isNumber(options.maxItems)) ? options.maxItems : Infinity;
+    },
+    construct: function (options, global) {
+        var uuid = global.uuid;
+        global.list = this.find(&quot;[id='combolist-list-&quot; + uuid + &quot;']&quot;);
+    },
+    init: function (options, global) {
+        var that = this,
+            uuid = global.uuid;
+        global.list.bind(&quot;mouseover&quot;, function (event) {
+            options.onItemMouseOver.call(that, event, that.getListItem(event).addClass(&quot;ui-list-over&quot;));
+        }).bind(&quot;mouseout&quot;, function (event) {
+            options.onItemMouseOut.call(that, event, that.getListItem(event));
+            global.list.find(&quot;li.ui-list-over&quot;).removeClass(&quot;ui-list-over&quot;);
+        }).bind(&quot;click&quot;, function (event) {
+            var item = that.getListItem(event);
+            if (!options.multiple) {
+                global.list.find(&quot;li.ui-list-selected&quot;).removeClass(&quot;ui-list-selected&quot;);
+            }
+            item[(item.hasClass(&quot;ui-list-selected&quot;) ? &quot;remove&quot; : &quot;add&quot;) + &quot;Class&quot;](&quot;ui-list-selected&quot;);
+            options.onItemClick.call(that, event, global.currItems[item.attr(&quot;item&quot;)]);
+        }).bind(&quot;dblclick&quot;, function (event) {
+            global.list.find(&quot;li.ui-list-selected&quot;).removeClass(&quot;ui-list-selected&quot;);
+            options.onDoubleClick.call(that, event, global.currItems[that.getListItem(event).attr(&quot;item&quot;)]);
+        });
+        global.initialized = true;
+    },
+    constructItems: function () {
+        var opts = this._options,
+            global = this._global,
+            data = this.dataset.select(),
+            length = Math.min(data.length, opts.maxItems),
+            items = [],
+            item, id, label;
+        for (var i = 0; i &lt; length; i++) {
+            if (label = fastDev.Util.StringUtil.trim(opts.itemRenderer.call(this, {
+                text: (item = data[i]).text,
+                value: item.value
+            }) || item.text)) {
+                item.label = label;
+                item.item = id = fastDev.getID();
+                global.currItems[id] = {
+                    value: item.value,
+                    text: item.text
+                };
+                global.size += 1;
+                items.push(item);
+            }
+        }
+        this._renderDynamicHtml(global.list, items);
+    },
+    /*
+     * 取value、text、items等
+     * @private
+     */
+    get: function (type) {
+        var global = this._global,
+            items = [];
+        global.list.find(&quot;li[name='list&quot; + global.uuid + &quot;']&quot;).each(function (item) {
+            items.push(fastDev(item).attr(type));
+        });
+        return items;
+    },
+    /*
+     * 获取dom节点
+     * @private
+     */
+    getListItem: function (event) {
+        var uuid = this._global.uuid,
+            item = (item = fastDev(event.target)).attr(&quot;name&quot;) === &quot;list&quot; + uuid ? item : item.parents(&quot;li[name='list&quot; + uuid + &quot;']&quot;);
+        return item;
+    },
+    /*
+     * 获取已选择的项
+     * @private
+     */
+    getSelectedItems: function () {
+        var global = this._global,
+            uuid = global.uuid,
+            items = [];
+        global.list.find(&quot;li.ui-list-selected[name='list&quot; + uuid + &quot;']&quot;).each(function (item) {
+            items.push(global.currItems[(item = fastDev(item)).attr(&quot;item&quot;)]);
+        });
+        return items;
+    },
+    /*
+     * 判断Element是否在数组中
+     * @private
+     */
+    inArray: function (array, elem) {
+        elem = fastDev.isArray(elem.elems) ? elem.elems[0] : elem;
+        for (var i = 0; i &lt; array.length; i++) {
+            if (elem === (array[i].elems ? array[i].elems[0] : array[i])) {
+                return true;
+            }
+        }
+    },
+    /*
+     * 获取字段映射
+     * @private
+     */
+    getMapping: function (name) {
+        var options = this._options,
+            fields = options.fields,
+            length = fields.length;
+        while (length--) {
+            if (fastDev.isPlainObject(fields[length]) &amp;&amp; fields[length].mapping === name) {
+                return fields[length].name;
+            }
+        }
+        return name;
+    },
+    /*
+     * 移除项
+     * @return this
+     */
+    removeItems: function (items) {
+        var global = this._global,
+            uuid = global.uuid,
+            value = this.getMapping(&quot;value&quot;),
+            id, item;
+        items = fastDev.isArray(items) ? items : [items];
+        for (var i = 0; i &lt; items.length; i++) {
+            if ( !! (item = global.list.find(&quot;li[name='list&quot; + uuid + &quot;'][itemVal='&quot; + fastDev.Util.StringUtil.trim(items[i][value] || items[i]) + &quot;']&quot;)).elems.length) {
+                global.currItems[id = item.attr(&quot;item&quot;)] = null;
+                delete global.currItems[id];
+                item.remove();
+                global.size -= 1;
+            }
+        }
+        return this;
+    },
+    /*
+     * 添加项
+     * @return this
+     */
+    addItems: function (items) {
+        var opts = this._options,
+            global = this._global,
+            uuid = global.uuid,
+            text = this.getMapping(&quot;text&quot;),
+            value = this.getMapping(&quot;value&quot;),
+            item, id, html, length;
+        items = fastDev.isArray(items) ? items : [items];
+        length = Math.min(items.length, opts.maxItems - global.size);
+        for (var i = 0; i &lt; length; i++) {
+            if (html = fastDev.Util.StringUtil.trim(opts.itemRenderer.call(this, items[i]) || items[i][text] || items[i])) {
+                item = fastDev(document.createElement(&quot;li&quot;)).addClass(&quot;ui-list-item&quot;).attr(&quot;name&quot;, &quot;list&quot; + uuid).attr(&quot;itemVal&quot;, fastDev.Util.StringUtil.trim(items[i][value] || items[i])).attr(&quot;text&quot;, fastDev.Util.StringUtil.trim(items[i][text] || items[i])).attr(&quot;item&quot;, id = fastDev.getID()).appendTo(global.list);
+                item.elems[0].innerHTML = html;
+                global.currItems[id] = items[i];
+                global.size += 1;
+            }
+        }
+        return this;
+    },
+    /*
+     * 取得所有项数据对象
+     * @return {Array}
+     */
+    getItems: function () {
+        var global = this._global,
+            items = this.get(&quot;item&quot;),
+            data = [];
+        for (var i = 0; i &lt; items.length; i++) {
+            data.push(global.currItems[items[i]]);
+        }
+        return data;
+    },
+    /*
+     * 获取值
+     * @return {Array}
+     */
+    getValue: function () {
+        return this.get(&quot;itemVal&quot;).join(&quot;,&quot;);
+    },
+    /*
+     * 获取文本值
+     * @return {Array}
+     */
+    getText: function () {
+        return this.get(&quot;text&quot;).join(&quot;,&quot;);
+    },
+    /*
+     * 设置值
+     * @param {value}
+     */
+    setValue: function (value) {
+        if (this._global.initialized &amp;&amp; value) {
+            this.clean();
+            this.addItems(value);
+        }
+        return this;
+    },
+    /*
+     * 清空值
+     * @return this
+     */
+    clean: function () {
+        var global = this._global;
+        global.currItems = {};
+        global.size = 0;
+        global.list.empty();
+        if ( !! this.dataset) {
+            this.dataset.clean();
+        }
+        return this;
+    },
+    /*
+     * 获取当前控件列表的项数
+     */
+    getSize: function () {
+        return this._global.size;
+    },
+    /*
+     * 移动
+     * @param {String} isUp
+     * @param {Array} items
+     * @param {DomObject|Element} items.item
+     */
+    move: function (isUp, items) {
+        var global = this._global,
+            uuid = global.uuid,
+            item, prev;
+        items = !! items ? items : global.list.find(&quot;li.ui-list-selected[name='list&quot; + uuid + &quot;']&quot;).elems;
+        items = fastDev.isArray(items) ? items : [items];
+        items = !isUp ? items.reverse() : items;
+        for (var i = 0; i &lt; items.length; i++) {
+            if ((item = fastDev(items[i])).hasElem() &amp;&amp; (prev = item[isUp ? &quot;prev&quot; : &quot;next&quot;](&quot;li[name='list&quot; + uuid + &quot;']&quot;)).hasElem() &amp;&amp; !this.inArray(items, prev)) {
+                prev[isUp ? &quot;insertAfter&quot; : &quot;insertBefore&quot;](item.replace(prev));
+            }
+        }
+    }
+});</pre>
+</body>
+</html>

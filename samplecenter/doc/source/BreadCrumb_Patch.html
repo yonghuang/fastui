@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.namespace(&quot;talkweb.Components&quot;);
+fastDev.define(&quot;fastDev.Patch.BreadCrumb&quot;, {
+	extend : &quot;fastDev.Ui.BreadCrumb&quot;,
+	alias : &quot;Patch.BreadCrumb&quot;,
+	parseAttr : function(config) {
+		return fastDev.create(&quot;Patch.BreadCrumb&quot;, config);
+	},
+	ready : function(options, global) {
+		var that = this;
+		options.onAfterInitRender = function() {
+			if (!!options.symbolsimg) {
+				that.find(&quot;span&quot;).each(function(elem) {
+					fastDev(document.createElement(&quot;img&quot;)).replace(fastDev(elem)).prop(&quot;src&quot;, options.symbolsimg);
+				});
+			} else if (!!options.symbols) {
+				that.find(&quot;span&quot;).removeClass(&quot;ui-bread-symbols&quot;).setText(options.symbols);
+			}
+		};
+	}
+});
+talkweb.Components.BreadCrumb = function(config) {
+	return fastDev.Patch.BreadCrumb.parseAttr(config);
+};
+</pre>
+</body>
+</html>

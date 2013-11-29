@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>tabs</title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+        <script src="../../src/component/interaction/Draggable.js"></script>
+         <script src="../../src/component/form/CheckBoxGroup.js"></script>
+	     <script src="../../src/component/layout/Tabs.js"></script>
+         
+     <script>
+			$(function() {
+				 var data=[{title:"百度",url:"http://www.baidu.com",showCloseBtn:false},{title:"复选框",id:"checkbox1",type:"div",selected:true},{title:"单选框",url:"bb.html",type:"ajax"},{title:"手风琴",url:"cc.html",iconCls:"icon-add"}];
+				 
+				$.create("Tabs", {
+					container : "example",
+					items : data,		
+					allowDND:false,					
+					width:"500px",
+					height:"200px"
+				});				
+				
+				$.create("CheckBoxGroup", {
+					container : "checkbox1",
+					name:"check1",	
+					items: [ {
+						value : "1",
+						checked:true,
+						text : "旅游"
+					}, {
+						value : "2",
+						checked:true,
+						text : "唱歌"
+					},{
+						value : "3",
+						checked:false,
+						text : "跳舞"
+					}]
+				});
+				
+			});
+		
+	
+		
+	</script>
+</head>
+<body>
+	<div id="example" ></div>
+</body>
+</html>
+

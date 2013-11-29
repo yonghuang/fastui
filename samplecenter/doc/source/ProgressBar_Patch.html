@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.namespace(&quot;talkweb.Components&quot;);
+fastDev.define(&quot;fastDev.Patch.Loading&quot;, {
+	extend : &quot;fastDev.Ui.ProgressBar&quot;,
+	alias : &quot;Patch.ProgressBar&quot;,
+	mapping : {
+		&quot;imgtext&quot; : &quot;text&quot;,
+		&quot;itemvalue&quot; : &quot;totalValue&quot;,
+	},
+	parseAttr : function(config) {
+		return fastDev.create(&quot;Patch.ProgressBar&quot;, fastDev.parseMapping(config, this.mapping));
+	},
+	setValue : function(curr, total) {
+		var global = this._global, that = global.that || this;
+		that.setTotalValue(total || that._options.totalValue);
+		that.superClass.setValue.call(that, curr);
+	},
+	show : function(dom) {
+		if (!!dom) {
+			var global = this._global;
+			this._options.container = !!dom.alias ? dom.elems[0] : dom;
+			if (!!global.that) {
+				global.that.close();
+			}
+			this.hide();
+			return (global.that = fastDev.create(&quot;ProgressBar&quot;, this._options));
+		} else {
+			return this.superClass.show.call(this);
+		}
+	},
+	closeBox : function() {
+		if (!!this._global.that) {
+			this._global.that.close();
+		}
+		this.superClass.close.call(this);
+	}
+});
+talkweb.Components.Loading = function(config) {
+	return fastDev.Patch.Loading.parseAttr(config);
+};
+</pre>
+</body>
+</html>

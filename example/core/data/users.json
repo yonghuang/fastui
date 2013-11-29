@@ -1,0 +1,19 @@
+{
+	"users": [
+		{
+			"id": 1,
+			"name": "Ed",
+			"orders": [
+				{
+					"id": 10,
+					"total": 10.76,
+					"status": "invoiced"
+				}, {
+					"id": 11,
+					"total": 13.45,
+					"status": "shipped"
+				}
+			]
+		}
+	]
+}

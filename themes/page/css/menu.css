@@ -1,0 +1,32 @@
+#menudiv{margin:40px 0 0; height:30px; float:right;background:url(../images/top_tabbg.gif) repeat-x;}
+
+.menu { padding:0;}
+#menudiv ul {
+    line-height:30px; list-style:none;
+	background:url(../images/top_tabbg.gif) repeat-x;
+}
+#menudiv li {
+    padding:0 12px; float:left; position:relative;
+	background:url(../images/top_tabbg_line.gif) no-repeat right;
+}
+#menudiv li a {
+    color:#fff; text-decoration:none;
+}
+#menudiv li span {
+    padding:0 2px; height:30px;
+	background:url(../images/top_tabbg_line.gif) no-repeat right;
+}
+#menudiv li.prev {
+    background:url(../images/top_tabbg_left.gif) top left no-repeat; width:26px; padding:0; height:30px;
+}
+#menudiv li.next {
+    background:url(../images/top_tabbg_right.gif) top right no-repeat; width:26px; padding:0; height:30px;
+}
+#menudiv .active{background:url(../images/top_tabbg_hover.gif) repeat-x;color:#075587; font-weight:normal;}
+
+
+
+
+
+
+

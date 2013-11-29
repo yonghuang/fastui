@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Data-Node'>/**
+</span> * @class fastDev.Data.Node
+ */
+fastDev.define(&quot;fastDev.Data.Node&quot;, {
+	alias : &quot;S_Node&quot;,
+	prototype : function(setting) {
+		this.id = setting.id;
+		this.parentid = setting.parentid;
+		this.text = setting.text;
+		this.children = [];
+	}
+});
+
+fastDev.Data.Node.constructor = function(setting) {
+	return new this.prototype(setting);
+};
+
+fastDev.apply(fastDev.Data.Node.prototype.prototype, {
+<span id='fastDev-Data-Node-method-addChild'>	/**
+</span>	 * 增加子节点 
+	 * @param {fastDev.Data.Node} node
+	 */
+	addChild : function(node) {
+		this.children.push(node);
+		return this;
+	},
+<span id='fastDev-Data-Node-method-removeChild'>	/**
+</span>	 * 删除子节点
+	 * @param {fastDev.Data.Node} node
+	 */
+	removeChild : function(node) {
+		if(!node) {
+			return;
+		}
+		var id = node.id || node;
+		for(var i = 0; node = this.children[i]; i++) {
+			if(node.id === id) {
+				this.children.splice(i, 1);
+				break;
+			}
+		}
+	},
+<span id='fastDev-Data-Node-method-update'>	/**
+</span>	 * 更新当前节点属性 
+	 * @param {Object} parentid
+	 * @param {Object} text
+	 */
+	update : function(parentid, text) {
+		this.parentid = parentid || this.parentid;
+		this.text = text || this.text;
+	},
+	getSize : function() {
+		return this.children.length;
+	},
+	sort : function() {
+		if(this.children.length !== 0) {
+			this.children.sort(this.comparator);
+			for(var i = 0, node; node = this.children[i]; i++) {
+				node.sort();
+			}
+		}
+	},
+	comparator : function(node1, node2) {
+		return fastDev.comparator(node1.id, node2.id);
+	},
+	each : function(fn, level) {
+		level++;
+		for(var i = 0, len = this.children.length; i &lt; len; i++) {
+			fn.call(this.children[i], level, i === 0, i === len - 1, this.children[i].children.length === 0);
+			this.children[i].each(fn, level);
+		}
+	}
+});
+</pre>
+</body>
+</html>

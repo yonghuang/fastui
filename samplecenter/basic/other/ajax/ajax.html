@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Ajax使用</title>
+		<meta name="author" content="admin" />
+		<script src="../../../../src/fastDev-import.js"></script>
+		<style type="text/css">
+			body,html {margin:10px;}
+			.button-style {margin-bottom:10px}
+			.text {font-size:12px; line-height: 24px; color:#333;}
+			.title-line {font-weight:bold; font-size:14px; background:#09427C; padding:2px 12px; color:#fff; line-height: 30px}
+			.pre {background:#F8F8F8; border-top:1px solid #CCC; border-bottom:1px solid #CCC; padding:10px 5px; margin:10px 0}
+		</style>
+		<script>
+			function doGet(){
+				fastDev.get("../../../data/ajax_basic.json",{
+					success : function(response){
+						alert(response.msg);
+					}
+				});
+			}
+			
+			function timeout(){
+				fastDev.get("../../../data/timeout.jsp",{
+					success : function(response){
+						alert(response.msg);
+					},
+					timeout : 3000
+				});
+			}
+			
+			function queue(){
+				var queue = fastDev.Queue.getInstance();
+				fastDev.get("../../../data/timeout.jsp",{
+					success : function(data){
+						alert("jsp return");
+					},
+					queue : queue
+				});
+				
+				fastDev.get("../../../data/ajax_basic.json",{
+					success : function(data){
+						alert("json return");
+					},
+					queue : queue
+				});
+			}
+			
+		</script>
+		<!-- Date: 2013-05-09 -->
+	</head>
+	<body>
+		<div class="text">控件库内置Ajax组件，使用上跟Jquery的Ajax组件使用大致类似，但控件库的Ajax组件是由数据总线统一管理的，自带了对参数的统一编码、对返回数据的统一对象化、对请求时发生的异常统一处理以及多个Ajax之间的伪同步功能</div>
+		<br/>
+		<span class="text title-line">1.基础使用</span>
+		<br>
+		<div class="text">页面引用了控件库之后，在当前的window全局空间下会产生fastDev对象，此对象就是整个控件库功能的实现，其中包括了Ajax组件</div>
+		<pre class="pre">
+			fastDev.get("../../../data/ajax_basic.json",{
+				success : function(data){
+					alert(data.msg);
+				}
+			});
+		</pre>
+		<input cls="button-style" itype="Button" text="测试get请求" onclick="doGet()"><br>
+		<div class="text">这个例子是最简单的ajax使用，使用的是get模式，在请求成功之后会调用success方法</div>
+		<pre class="pre">
+			fastDev.post("../../../data/ajax_basic.json",{
+				success : function(data){
+					alert(data.msg);
+				}
+			});
+		</pre>
+		<div class="text">post模式的写法跟get的写法几乎是一样的。除了以上的基础使用外，我们可以通过配置一些参数来满足一些特殊的业务</div><br>
+		<span class="text title-line">2.设置请求超时时间</span>
+		<pre class="pre">
+			fastDev.get("../../../data/timeout.jsp",{
+				success : function(data){
+					alert(data.msg);
+				},
+				timeout : 3000
+			});
+		</pre>
+		<input cls="button-style" itype="Button" text="测试timeout" onclick="timeout()"><br>
+		<div class="text">这个例子就限定了如果后台3秒内仍未处理完逻辑就会终止请求的继续等待，控件库会自动抛出请求超时的异常</div><br>
+		<span class="text title-line">3.传递参数</span>
+		<pre class="pre">
+			fastDev.get("../../../data/ajax_basic.json",{
+				success : function(data){
+					alert(data.msg);
+				},
+				data : {
+					"paramkey" : "paramvalue" 
+				}
+			});
+		</pre>
+		<div class="text">这个例子展示了如何往后台传递参数，从浏览器监控中我们可以看到地址栏上已经将我们传递的参数附加进去了</div><br>
+		<div class="text">http://localhost:8080/twdpe-ui/library/samplecenter/data/ajax_basic.json?cache_id=1368089413795&amp;paramkey=paramvalue</div><br>
+		<span class="text title-line">4.中文编码</span>
+		<pre class="pre">
+			fastDev.get("../../../data/ajax_basic.json",{
+				success : function(data){
+					alert(data.msg);
+				},
+				data : {
+					"paramkey" : "中文" 
+				},
+				encode : true
+			});
+		</pre>
+		<div class="text">使用控件库的Ajax组件会默认对中文进行编码，从浏览器的监控中可以看到，传递的参数值已经做了编码处理了，编码的设定是由encode参数决定的，此参数默认为true，不需要进行设置</div><br>
+		<div class="text">http://localhost:8080/twdpe-ui/library/samplecenter/data/ajax_basic.json?cache_id=1368089652365&amp;paramkey=%E4%B8%AD%E6%96%87</div><br>
+		<span class="text title-line">5.设置参数格式</span>
+		<pre class="pre">
+			fastDev.get("../../../data/ajax_basic.json",{
+				success : function(data){
+					alert(data.msg);
+				},
+				data : {
+					"paramkey" : "paramvalue" 
+				},
+				json : false
+			});
+		</pre>
+		<div class="text">参数提交时，默认是使用传统的松散模式提交，通过设定json参数为true，可以提交JSON格式的数据，设定为true后所有参数及值会被转换成一个JSON格式的字符串作为值，Ajax组件会自动为这个值添加一个名叫data的键</div>
+		<div class="text">http://localhost:8080/twdpe-ui/library/samplecenter/data/ajax_basic.json?cache_id=1368090346912&amp;data={"paramkey":"paramvalue"}</div><br>
+		<span class="text title-line">6.伪同步</span>
+		<pre class="pre">
+			var queue = fastDev.Queue.getInstance();
+			fastDev.get("../../../data/timeout.jsp",{
+				success : function(data){
+					alert("jsp return");
+				},
+				queue : queue
+			});
+			
+			fastDev.get("../../../data/ajax_basic.json",{
+				success : function(data){
+					alert("json return");
+				},
+				queue : queue
+			});
+		</pre>
+		<input cls="button-style" itype="Button" text="测试伪同步" onclick="queue()"><br>
+		<div class="text">本示例我们创建了俩个Ajax请求，并为他们设置了队列属性queue，jsp的后台写了个线程睡眠5秒，但我们可以看到，第二个请求并未在第一个请求返回前执行，也就达到了我们希望俩个请求依次执行的同步效果</div><br>
+		<span class="text title-line">7.请求错误事件</span>
+		<pre class="pre">
+			fastDev.post("../../../data/ajax_basic.json",{
+				success : function(data){
+					alert(data.msg);
+				},
+				error : function(data){
+					return "错误详细信息";
+				}
+			});
+		</pre>
+		<div class="text">当发出的请求没有成功返回，发生诸如404、500之类的错误时，error事件会被执行，error事件跟success以及complete处理有稍许不同，如果error事件最后返回了一个有效的字符串的话，这个字符串会被异常中心收到并作为详细信息打印出来，如果error事件什么都没返回的话，那么错误就需要用户自己处理了，异常中心会跳过这个错误的处理</div><br>
+		<span class="text title-line">8.请求完成事件</span>
+		<pre class="pre">
+			fastDev.post("../../../data/ajax_basic.json",{
+				success : function(data){
+					alert(data.msg);
+				},
+				complete : function(data){
+					
+				}
+			});
+		</pre>
+		<span>complete这个回调事件跟success不同，suceess只在请求成功时才会被触发，如果失败了不会执行success，但complete这个回调事件不会去区分请求是否成功，只要请求完成了就会触发</div>
+	</body>
+</html>
+

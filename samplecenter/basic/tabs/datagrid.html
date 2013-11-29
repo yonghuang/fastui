@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>
+			<ul>
+				<li>[itype="DataGrid"]所在Div描述的是DataGrid的总体配置(可用属性参考文档fastDev.Ui.DataGrid)</li>
+				<li>其内的子Div标签描述的是列配置信息以及特殊配置信息(列配置信息参考文档fastDev.Ui.DataGrid.Column)</li>
+				<li>特殊配置信息一般都是属性DataGrid总体配置，但因其数据结构复杂，所以单独以子标签进行描述</li>
+				<li>特殊配置信息的描述标签都含有name属性，其值为属性名称，这是它与列配置信息的不同之处</li>
+			</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+			var operTpl = '&nbsp;<a name="add">新增</a>&nbsp;<a name="update">修改</a>&nbsp;<a name="del">删除</a>';
+
+			function rowClick(event,rowindex,data) {
+				//data.empno
+				//data.name
+				switch(event.target.name){
+					case "add":
+						addinfo();
+						break;
+					case "update":
+						updatainfo(data.dg_seq,data.empno,data.name);
+						break;
+					case "del":
+						delinfo(data.empno);
+						break;
+				}
+			}
+			function addinfo(){
+				var tab1=window.parent.fastDev.getInstance("tabs1");
+				tab1.addTab({title:"添加员工信息",url:"addform.html",showCloseBtn:true});
+			}
+			function updatainfo(index,empno,name){
+				var tab1=window.parent.fastDev.getInstance("tabs1");
+				tab1.addTab({title:"修改员工信息",url:"editform.html?empno="+empno+"&name="+name+"&index="+index,showCloseBtn:true});
+			}
+			function delinfo(empno){
+				var datagrid=fastDev.getInstance("datagrid1");
+				datagrid.delRows(empno);
+			}
+			function onBeforeReadyfun(){
+				var items=[{"empno": "2212","name": "袁维"}, {"empno": "2320","name": "张琦"}, {"empno": "0143","name": "张鹏楠"}];
+				this.setOptions({items:items});
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">DataGrid的基本功能</div>
+			<div itype="DataGrid" keyword="empno" id="datagrid1" onBeforeReady="onBeforeReadyfun()" saveInstance="true" pagePosition="none" showSeqColumn=true height="200px" onRowClick="rowClick()">
+				<div width="30%" name="empno" text="员工工号"></div>
+				<div width="30%" name="name" text="姓名"></div>		
+				<div width="40%" text="操作" itype="template" tpl="#{operTpl}"></div>		
+				<div name="pageSizeList">
+					<div value="5" text="5条"></div>
+					<div value="10" text="10条"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

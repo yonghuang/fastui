@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Data-Field'>/**
+</span> * @class fastDev.Data.Field
+ * @extends fastDev.Core.Base
+ * @author 袁刚
+ * 字段模型实现类，定义了字段的各种信息，需配合{@link fastDev.Data.DataSet}使用
+ */
+
+fastDev.define(&quot;fastDev.Data.Field&quot;, {
+	extend : &quot;fastDev.Core.Base&quot;,
+	alias : &quot;Field&quot;,
+	_options : {
+<span id='fastDev-Data-Field-property-name'>		/**
+</span>		 * 字段名称
+		 * @type {String}
+		 */
+		name : null,
+<span id='fastDev-Data-Field-property-defaultValue'>		/**
+</span>		 * 默认值
+		 * @type {String/Boolean/Number}
+		 */
+		defaultValue : null,
+<span id='fastDev-Data-Field-property-mapping'>		/**
+</span>		 * 映射名称
+		 * @type {String}
+		 */
+		mapping : null,
+<span id='fastDev-Data-Field-property-type'>		/**
+</span>		 * 字段类型 String,Int,Float,Boolean,DataSet
+		 * @type {String}
+		 */
+		type : &quot;Object&quot;,
+<span id='fastDev-Data-Field-property-convert'>		/**
+</span>		 * 字段值转换器
+		 * @type {Function}
+		 */
+		convert : fastDev.noop
+	},
+<span id='fastDev-Data-Field-method-getValue'>	/**
+</span>	 * 获取当前字段对象值
+	 * @param {Object} value
+	 * @return {Boolean/String/Number}
+	 */
+	getValue : function(value) {
+		var convert, options = this._options, type = options.type;
+		// 如果数据无效则取数据默认值
+		value = !fastDev.isValid(value) ? options.defaultValue : value;
+
+		convert = fastDev.isNoop(options.convert) ? this[&quot;convert&quot; + type] : options.convert;
+
+		if(fastDev.isFunction(convert)) {
+			value = convert.call(this, value);
+		}
+
+		return !fastDev.isValid(value) ? &quot;&quot; : value;
+	},
+<span id='fastDev-Data-Field-method-getName'>	/**
+</span>	 * 获取当前字段名称
+	 * @return {String}
+	 */
+	getName : function() {
+		return this._options.name;
+	},
+<span id='fastDev-Data-Field-method-getMapping'>	/**
+</span>	 * 获取当前字段映射名称
+	 * @return {String}
+	 */
+	getMapping : function() {
+		return this._options.mapping || this._options.name;
+	},
+<span id='fastDev-Data-Field-method-convertString'>	/**
+</span>	 *  转换成字符串类型
+	 * @param {Object} value 
+	 * @return {String}
+	 * @private
+	 */
+	convertString : function(value) {
+		return !fastDev.isValid(value) ? &quot;&quot; : value + &quot;&quot;;
+	},
+<span id='fastDev-Data-Field-method-convertInt'>	/**
+</span>	 * 转换成整数类型
+	 * @param {Object} value
+	 * @return {Number}
+	 * @private
+	 */
+	convertInt : function(value) {
+		value = parseInt(value,10);
+		return isNaN(value) ? 0 : value;
+	},
+<span id='fastDev-Data-Field-method-convertFloat'>	/**
+</span>	 * 转换成浮点数类型 
+	 * @param {Object} value
+	 * @return {Number}
+	 * @private
+	 */
+	convertFloat : function(value) {
+		return value * 1;
+	},
+<span id='fastDev-Data-Field-method-convertBoolean'>	/**
+</span>	 *  转换成布尔类型
+	 * @param {Object} value
+	 * @return {Boolean}
+	 * @private
+	 */
+	convertBoolean : function(value) {
+		return (value === true || value === &quot;true&quot;) ? true : value === true;
+	},
+<span id='fastDev-Data-Field-method-convertDataset'>	/**
+</span>	 *  转换为数据集
+	 * @param {Object} value
+	 * @return {fastDev.Data.DataSet}
+	 * @private
+	 */
+	convertDataset : function(value) {
+		return fastDev.create(&quot;DataSet&quot;, {
+			fields : this._options.fields,
+			data : value,
+			autoLoad : true
+		});
+	}
+});
+</pre>
+</body>
+</html>

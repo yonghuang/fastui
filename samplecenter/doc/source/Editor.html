@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Editor'>/**
+</span> * @class fastDev.Ui.Editor
+ * @extends fastDev.Ui.Component
+ * 富文本框控件 富文本框主要支持对文本进行直接的编辑，如设置字体、粗体、高亮、列表等等，功能众多，开发起来工作量较大，现在网上有强大、稳定的第三方开源控件，本控件直接封装了百度ueditor组件，直接做接口适配封装后集成。有简单和完整两种模式，能在表单组件内使用。&lt;p&gt;
+ * 注意事项：使用该控件的页面除引用框架的js外，还需要引用2个ueditor的js和1个css文件。
+ * 控件不能缺少container属性。&lt;p&gt;
+ * 作者： 姜玲
+ *
+ *			&lt;div id=&quot;example&quot; style=&quot;width:500px; height:400px;&quot;&gt;
+ *			&lt;div itype=&quot;Editor&quot; container=&quot;example&quot; id=&quot;editor1&quot; mode=&quot;complete&quot;	 saveInstance=&quot;true&quot; value=&quot;这是值&quot;&gt;&lt;/div&gt;
+ *			&lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.Editor&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;Editor&quot;,
+	_options : {
+<span id='fastDev-Ui-Editor-property-container'>		/**
+</span>		 * 控件容器id
+		 * @type {String}
+		 */
+		container : null,
+<span id='fastDev-Ui-Editor-property-initialContent'>		/**
+</span>		 * 用于设置控件没值时的提示文本
+		 * @type {String}
+		 */
+		initialContent : '&lt;span style=\&quot;color:#ccc\&quot;&gt;请输入详细内容&lt;/span&gt;',
+<span id='fastDev-Ui-Editor-property-autoClearinitialContent'>		/**
+</span>		 * 控件没值时，是否显示提示文本
+		 * @type {Boolean}
+		 */
+		autoClearinitialContent : true,
+<span id='fastDev-Ui-Editor-property-dataSource'>		/**
+</span>		 * 初始值的url
+		 * @type {String}
+		 */
+		dataSource : &quot;&quot;,
+<span id='fastDev-Ui-Editor-property-value'>		/**
+</span>		 * 用于设置控件的初始值
+		 * @type {String}
+		 */
+		value : &quot;&quot;,
+<span id='fastDev-Ui-Editor-property-name'>		/**
+</span>		 * 设置名称
+		 * @type {String}
+		 */
+		name : &quot;editor&quot;,
+<span id='fastDev-Ui-Editor-property-id'>		/**
+</span>		 * 设置id
+		 * @type {String}
+		 */
+		id : &quot;editor&quot;,
+<span id='fastDev-Ui-Editor-property-mode'>		/**
+</span>		 * 设置控件类型,有简单和完整simple/complete两种
+		 * @type {String}
+		 */
+		mode : &quot;simple&quot;,
+<span id='fastDev-Ui-Editor-property-toolbars'>		/**
+</span>		 * 设置控件工具栏，simple类型时使用
+		 * @type {Array}
+		 */
+		toolbars : &quot;&quot;,
+<span id='fastDev-Ui-Editor-property-maximumWords'>		/**
+</span>		 * 允许的最大字符数
+		 * @type {Number}
+		 */
+		maximumWords : 10000,
+<span id='fastDev-Ui-Editor-property-minFrameHeight'>		/**
+</span>		 *  iframe的最小高度
+		 * @type {Number}
+		 */
+		minFrameHeight : 320,
+<span id='fastDev-Ui-Editor-property-elementPathEnabled'>		/**
+</span>		 * 是否启用Dom结构显示
+		 * @type {Boolean}
+		 */
+		elementPathEnabled : false,
+<span id='fastDev-Ui-Editor-property-wordCount'>		/**
+</span>		 * 是否开启字数统计
+		 * @type {Boolean}
+		 */
+		wordCount : false,
+		validateItems : {
+			requires : false
+		}
+	},
+	_global : {
+		editor : null,
+		containerid : &quot;&quot;
+	},
+<span id='fastDev-Ui-Editor-method-ready'>	/**
+</span>	 * 面板参数准备
+	 * @protected
+	 */
+	ready : function(options, global) {
+		// 初始化容器
+		if(fastDev.isString(options.container)) {
+			global.containerid = options.container;
+		} else {
+			global.containerid = fastDev(options.container).prop(&quot;id&quot;);
+		}
+		this.setID(options.id);
+	},
+<span id='fastDev-Ui-Editor-method-construct'>	/**
+</span>	 * 初始化控件列表
+	 * @param {Array} items数据项
+	 * @protected
+	 */
+	construct : function(options, global) {
+		var containerId = global.containerid, editor;
+		//根据编辑器的其他的配置的属性，给编辑器进行配置
+		try {
+			if(options.mode === &quot;simple&quot;) {
+				editor = new baidu.editor.ui.Editor({
+					toolbars : options.toolbars || [['FontFamily', 'FontSize', 'Bold', 'Italic', 'Underline', 'ForeColor', 'BackColor', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'Link', 'InsertUnorderedList', 'InsertOrderedList', 'Source']],
+					elementPathEnabled : options.elementPathEnabled, //是否启用elementPath
+					wordCount : options.wordCount, //是否开启字数统计
+					initialContent : options.initialContent,
+					minFrameHeight : options.minFrameHeight,
+					textarea : options.name,
+					autoClearinitialContent : options.autoClearinitialContent,
+					maximumWords : options.maximumWords
+				});
+			} else {
+				editor = new baidu.editor.ui.Editor({
+					initialContent : options.initialContent,
+					textarea : options.name,
+					minFrameHeight : options.minFrameHeight,
+					autoClearinitialContent : options.autoClearinitialContent,
+					maximumWords : options.maximumWords
+				});
+			}
+			editor.render(containerId);
+
+			global.editor = editor;
+			//表单必须是post模式，get模式提交不了那么多字符
+			//this.storage($(&quot;#&quot;+containerId));
+			options.container = null;
+		} catch(e) {
+			throw e;
+		}
+	},
+<span id='fastDev-Ui-Editor-method-setValueByUrl'>	/**
+</span>	 * 从一个数据源URL地址设置控件的值
+	 * @param {String}
+	 */
+	setValueByUrl : function(url) {
+		var options = this._options;
+		var that = this;
+		var editor = this._global.editor;
+		fastDev.Ajax.doPost(url, {
+			complete : function(data) {
+				editor.setContent(data.text);
+			}
+		});
+	},
+<span id='fastDev-Ui-Editor-method-setID'>	/**
+</span>	 * 设置id
+	 * @param {String}
+	 */
+	setID : function(id) {
+		if(!id) {
+			id = fastDev.getID();
+			this._options.id = id;
+		}
+	},
+<span id='fastDev-Ui-Editor-method-getID'>	/**
+</span>	 * 获取id
+	 */
+	getID : function() {
+		var options = this._options;
+		if(options.id) {
+			return options.id;
+		}
+	},
+<span id='fastDev-Ui-Editor-method-setValue'>	/**
+</span>	 * 设置值
+	 * @param {String}
+	 */
+	setValue : function(value) {
+		if(value) {
+			var editor = this._global.editor;
+			editor.setContent(unescape(value));
+		}
+	},
+<span id='fastDev-Ui-Editor-method-getValue'>	/**
+</span>	 * 得到值
+	 * @return {String}
+	 */
+	getValue : function() {
+		var editor = this._global.editor;
+		var result = editor.getContent();
+		result = escape(result);
+		return &quot;&quot; + result;
+	},
+<span id='fastDev-Ui-Editor-method-getText'>	/**
+</span>	 * 得到文本
+	 * @return {String}
+	 */
+	getText : function() {
+		var editor = this._global.editor;
+		var result = editor.getContentTxt();
+		return &quot;&quot; + result;
+	},
+<span id='fastDev-Ui-Editor-method-focus'>	/**
+</span>	 * 设置获取焦点　
+	 */
+	focus : function() {
+		var editor = this._global.editor;
+		editor.focus();
+	}
+	//	validate : function() {
+	//			return talkweb.BaseControl.SimpleControl.Class.validate.call(this);
+	//		}
+});
+</pre>
+</body>
+</html>

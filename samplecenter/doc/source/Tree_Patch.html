@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+talkweb.Components.Tree = fastDev.apply(function(settings){
+	return fastDev.create(&quot;fastDev.Ui.Tree&quot;,settings);
+},fastDev.Ui.Tree);
+
+fastDev.Core.ClassManager.addAlias(&quot;talkweb.Components.Tree&quot;,&quot;fastDev.Ui.Tree&quot;);
+
+fastDev.apply(fastDev.Ui.Tree._options, {
+		treeZindex : &quot;2100&quot;,
+		yccount : 300,
+		dragBefore : null,
+		dragAfter : null,
+		addBefore : null,
+		editBefore : null,
+		delBefore : null,
+		addAfter : null,
+		editAfter : null,
+		delAfter : null,
+		onclick : null,
+		dblclick : null,
+		expand : null,
+		collect : null,
+		loadDataAfter : null
+	});
+fastDev.apply(fastDev.Ui.Tree, {
+	ready:function(options, global){
+		options.zindex = options.treeZindex;
+		options.delayNum=options.yccount;
+		options.onBeforeDrag=options.dragBefore;
+		options.onAfterDrag=options.dragAfter;
+		options.onBeforeAdd =options.addBefore;
+		options.onBeforeEdit=options.editBefore;
+		options.onBeforeDel =options.delBefore;
+		options.onAfterAdd=options.addAfter;
+		options.onAfterEdit =options.editAfter;
+		options.onAfterDel =options.delAfter;
+		options.onNodeClick =options.onclick;
+		options.onNodeDblClick =options.dblclick;
+		options.onExpand =options.expand;
+		options.onCollect =options.collect;
+		options.onAfterLoad=options.loadDataAfter;
+	},
+	/*
+	 * 清空下拉框树的文本框与隐藏域中的值
+	 */
+	reSet : function() {
+		this.clean();
+	}
+	});
+	
+})()</pre>
+</body>
+</html>

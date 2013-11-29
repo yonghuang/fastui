@@ -1,0 +1,41 @@
+var db_addform_html = [
+    '<form itype="Form" saveInstance="true" action="data/fromsubmit.jsp" onSubmitSuccess="submitSuccess()"  id="addForm" initSource="data/from_init.jsp">',
+       '<table class="ui-form-table" >',
+           '<tr>',
+               '<td class="ui-form-table-dt">姓名：</td>',
+               '<td  class="ui-form-table-dd" width="245">',
+               ' <input itype="TextBox" id="name" iwidth="200px"  validatemode="blur" rule="Required;MaxLength:18"/></td>',               
+           '</tr>',
+		    '<tr>',
+               '<td class="ui-form-table-dt">部门：</td>',
+               '<td class="ui-form-table-dd" width="205"><div id="orgid" itype="Select" width="200px" height="200px" >',
+                 '<div>请选择</div>',
+               '</div></td>      ',                
+           '</tr>',
+           '<tr>',
+               '<td class="ui-form-table-dt">类型：</td>',
+               '<td class="ui-form-table-dd" width="205"><div id="type" itype="Select" width="200px" height="200px" >',
+                 '<div>请选择</div>',
+               '</div></td>      ',                
+           '</tr>',          
+            '<tr>',
+               '<td class="ui-form-table-dt">时间：</td>',
+               '<td class="ui-form-table-dd" width="205"><input itype="DatePicker" id="date" iwidth="200px"/></td> ',                              
+           '</tr>',
+            '<tr>',
+               '<td class="ui-form-table-dt">备注：</td>',
+               '<td class="ui-form-table-dd" width="205"><input itype="TextBox" type="textarea" id="remark" iwidth="200px"  validatemode="blur" rule="MaxLength:100"/></td>',
+           '</tr>   ',              
+          '<tr>',
+				'<td class="ui-form-table-dd" colspan="2">',
+					'<input itype="Button" text="确定" onclick="submitForm()">',
+					'<input itype="Button" text="重置" onclick="resetForm()">',
+				'</td>',
+			'</tr>',               
+       '</table>',
+    '</form>	'	
+    ];
+
+function getDbaddFormHtml(){
+	return db_addform_html.join('');
+}

@@ -1,0 +1,51 @@
+//dada.txt
+[
+    {
+        "value": "1",
+        "text": "旅游"
+    },
+    {
+        "value": "2",
+        "text": "唱歌"
+    },
+    {
+        "value": "3",
+        "text": "跳舞"
+    },
+    {
+        "value": "4",
+        "text": "音乐"
+    },
+    {
+        "value": "5",
+        "text": "电影"
+    }
+]
+
+//test.txt
+"5"
+
+//dada1.txt
+[
+    {
+        "value": "1",
+        "text": "旅游"
+    },
+    {
+        "value": "2",
+        "text": "唱歌"
+    },
+    {
+        "value": "3",
+        "text": "跳舞"
+    },
+    {
+        "value": "4",
+        "text": "音乐",
+        "checked": true
+    },
+    {
+        "value": "5",
+        "text": "电影"
+    }
+]

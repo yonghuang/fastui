@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Core-DataBus'>/**
+</span> * @class fastDev.Core.DataBus
+ * @extends fastDev.Core.Base
+ * @singleton
+ * 数据总线，输入控制层的一部分，负责管理数据的统一加载、接受以及数据异常的处理
+ */
+fastDev.define(&quot;fastDev.Core.DataBus&quot;, {
+	_global : {
+		reqCount : 0
+	},
+<span id='fastDev-Core-DataBus-method-processing'>	/**
+</span>	 * 数据处理
+	 * @param {Object} result 返回结果
+	 * @param {Function} success 成功回调
+	 * @param {Function} error 失败回调
+	 * @private
+	 */
+	processing : function(result, success, error, complete) {
+		var msg, type = result.xml &amp;&amp; result.xml.attributes ? &quot;xml&quot; : &quot;json&quot;, data, status, reader = fastDev.Core.DataBus.dataReader;
+
+		if(fastDev.isString(result)) {
+			if(fastDev.isFunction(error) &amp;&amp; !fastDev.isNoop(error)) {
+				error(result);
+				return;
+			}
+			data = result;
+		}
+		// 获取response中的数据部分
+		data = fastDev.Data.Reader.read( data ? {
+			status : &quot;system&quot;,
+			msg : data
+		} : type === &quot;xml&quot; ? result.xml : result.text, type);
+
+		if(fastDev.isFunction(reader)) {
+			data = reader(data) || data;
+		}
+		// 获取数据部分的状态信息
+		status = data ? ( msg = data.msg) &amp;&amp; data.status : &quot;&quot;;
+
+		if(/timeout|system/i.test(status)) {
+			status = fastDev.Util.StringUtil.capitalize(status);
+			try {
+				fastDev.Core.DataBus[&quot;do&quot;+status](msg);
+			} catch(e) {
+			}
+		} else {
+			success(data);
+		}
+		
+		complete(data);
+	},
+<span id='fastDev-Core-DataBus-method-doSystem'>	/**
+</span>	 * 处理系统错误
+	 */
+	doSystem : function(msg) {
+		fastDev.addError(&quot;Ajax&quot;, &quot;doAjax&quot;, msg);
+	},
+<span id='fastDev-Core-DataBus-method-doTimeout'>	/**
+</span>	 * 处理Session过期
+	 */
+	doTimeout : function(msg) {
+		fastDev.Core.ControlBus.fireTimeout(msg);
+	},
+<span id='fastDev-Core-DataBus-method-setDataReader'>	/**
+</span>	 * 设置数据读取器，数据总线处理数据时回调此方法，可用于统一处理数据
+	 * @param {Function} reader 数据读取函数
+	 */
+	setDataReader : function(reader) {
+		this.dataReader = fastDev.isFunction(reader) &amp;&amp; reader;
+	},
+<span id='fastDev-Core-DataBus-method-increaseReqCount'>	/**
+</span>	 * 请求队列数增加
+	 */
+	increaseReqCount : function() {
+		this._global.reqCount++;
+	},
+<span id='fastDev-Core-DataBus-method-reduceReqCount'>	/**
+</span>	 * 请求队列数减少
+	 */
+	reduceReqCount : function() {
+		if(this._global.reqCount) {
+			this._global.reqCount--;
+		}
+		this.execReqComplete();
+	},
+<span id='fastDev-Core-DataBus-method-bindReqComplete'>	/**
+</span>	 * 绑定所有请求队列执行完成事件
+	 * @param {Function} handle
+	 */
+	bindReqComplete : function(handle) {
+		this._global.onReqComplete = handle;
+	},
+<span id='fastDev-Core-DataBus-method-execReqComplete'>	/**
+</span>	 * 执行所有请求队列完成事件
+	 * @private
+	 */
+	execReqComplete : function() {
+		if(!this._global.reqCount) {
+			fastDev.Core.ExceptionManager.display();
+			if(fastDev.isFunction(this._global.onReqComplete)) {
+				this._global.onReqComplete();
+			}
+		}
+	}
+});
+
+</pre>
+</body>
+</html>

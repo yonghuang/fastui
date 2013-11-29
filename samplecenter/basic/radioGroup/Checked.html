@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><ul>        
+        <li>初始设置值</li> 
+        <li>可以用自身dataSource或表单dataSource设置选中值</li>
+        <li>可以直接在initSource数据源或静态数据源的选项里将选中数据加checked为true的属性</li>
+        <li>也可以直接给value赋选中值</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+	</head>
+	<body>
+	<div style="width:360px;margin: 10px">
+	<div class="ui-layout-text">dataSource设置选中值</div>   
+	<div itype="RadioGroup" name="check1" id="check1" initSource="../../data/radioGroup_dada.txt" dataSource="../../data/radioGroup_test.txt"></div>
+    </div>
+    <div class="ui-clear"></div>
+    <div style="width:360px;margin: 10px">
+    <div class="ui-layout-text">initSource数据源里将选中数据加checked为true的属性</div>   
+    <div itype="RadioGroup" name="check" id="check" initSource="../../data/radioGroup_dada1.txt"></div>
+     </div>
+     <div class="ui-clear"></div>
+    <div style="width:360px;margin: 10px">
+    <div class="ui-layout-text">静态数据源的选项里将选中数据加checked为true的属性</div>   
+    <div itype="RadioGroup" name="check2" id="check2">
+    	<div value="1" text="足球" ></div>			
+		<div value="2" text="排球" checked=true></div>
+        <div value="3" text="羽毛球"></div>
+         <div value="4" text="乒乓球"></div>
+    </div>
+    </div>
+    <div class="ui-clear"></div>
+    <div style="width:360px;margin: 10px">
+    <div class="ui-layout-text">value赋选中值</div>
+     <div itype="RadioGroup" name="check3" id="check3" value="3">
+    	<div value="1" text="羽毛球男双" ></div>			
+		<div value="2" text="羽毛球女双" ></div>
+        <div value="3" text="羽毛球单打"></div>
+         <div value="4" text="羽毛球混打"></div>
+    </div>
+	</div>
+	</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>多选框树方法集</h4>
+        <ul>        
+        <li>包括各种各样得到选中值，设置值，清空值的方法</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+        <script>
+		//清空某个节点的单选框或复选框选中状态
+		 var btnunCheckedById1=function(){
+			 var tree=fastDev.getInstance("tree2");
+        	 tree.unCheckedById("202");			 
+		}
+		var btnunCheckedById=function(){
+		 	 var tree=fastDev.getInstance("tree2");
+		 	  tree.unCheckedById("205");
+		 }
+		 var btnunCheckedById2=function(){
+		 	 var tree=fastDev.getInstance("tree2");
+		 	  tree.unCheckedById("23");
+		 }
+		//得到复选框的全部选中值
+        var btngetChkedIds_allchkValue=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(tree.getChkedIds("allchkValue")); 
+		 }
+		 //得到复选框半选和全选状态的值
+		  var btngetChkedIds_partchkValue=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(tree.getChkedIds("partchkValue")); 
+		 }
+		 //得到复选框全选状态的叶子节点的值
+		  var btngetChkedIds_onlyLeafValue=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(tree.getChkedIds("onlyLeafValue")); 
+		 }
+		 //	设置选中值
+		 var btnsetValueSome=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 tree.setValue(["204","205","212"]);
+			//   tree.setValue("204,205,212"); 两种都可以
+			
+		}
+		//清空选中值
+        var btnclearCheck=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 tree.clearCheck();
+		}
+		//判断某个节点是否选中
+        var btnisChecked=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 var id=tree.getCurrentId();//得到当前节点id
+			 if(id!==""){
+			 fastDev.tips(""+tree.isChecked(id));//是否选中
+			 }else{
+				 fastDev.tips("请先选择一个节点");
+			 }
+		 }	
+		 //得到复选框的全部选中节点数据集
+		 var btngetValues_chkedNodes=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(""+tree.getValues("chkedNodes")); 
+		}
+		//得到复选框全选和半选状态的数据集
+        var btngetValues_chkedPNodes=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(""+tree.getValues("chkedPNodes")); 
+		 }
+		//得到复选框叶子节点选中的数据集
+        var btngetValues_chkedLeafNodes=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 fastDev.tips(""+tree.getValues("chkedLeafNodes")); 
+		}
+		
+		 //	得到复选框全选状态的节点id和文本集
+		  var btngetValues_chkedNodesIdVal=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 var Nodes=tree.getValues("chkedNodesIdVal"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//val值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到复选框全选和半选状态的节点id和文本集
+		  var btngetValues_chkedPNodesIdVal=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  var Nodes=tree.getValues("chkedPNodesIdVal"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//val值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到复选框叶子节点的选中节点的id和文本集
+		  var btngetValues_chkedLeafNodesIdVal=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  var Nodes=tree.getValues("chkedLeafNodesIdVal"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//val值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到复选框全选状态的节点数据数组
+		  var btngetValues_chkedNodesArray=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 var Nodes=tree.getValues("chkedNodesArray"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//其他值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到复选框全选和半选状态的节点数据数组
+		  var btngetValues_chkedPNodesArray=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  var Nodes=tree.getValues("chkedPNodesArray"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//其他值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		 }
+		 //得到复选框叶子节点的全选状态的节点数据数组
+		  var btngetValues_chkedLeafNodesArray=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  var Nodes=tree.getValues("chkedLeafNodesArray"); 
+			 var txt="";
+			 for(var i=0;i<Nodes.length;i++){
+				 txt=txt+Nodes[i]["id"]+",";//其他值同样可以取
+			 }
+			 fastDev.tips(txt); 
+		}
+		//禁用某个复选框
+        var btndisableChk=function(){
+			 var tree=fastDev.getInstance("tree2");
+			 tree.disableChk("301");
+		}
+		//启用某个复选框
+        var btnenableChk=function(){
+			 var tree=fastDev.getInstance("tree2");
+			  tree.enableChk("301");
+		 }
+		 var checkClick=function(e,id,checked){
+		 	alert("复选框"+id+"点击后的选中状态是"+checked);
+		 }
+		 var btncheckedById=function(){
+		 	 var tree=fastDev.getInstance("tree2");
+		 	  tree.checkedById("205");
+		 }
+		 var btncheckedById2=function(){
+		 	 var tree=fastDev.getInstance("tree2");
+		 	  tree.checkedById("11");
+		 }
+		 
+		 
+		 
+        </script>
+	</head>
+	<body><div style="margin:10px;"><div class="ui-layout-text">多选框树方法集</div>
+		<div >
+			<div itype="Tree" onCheckClick="checkClick()" initSource="../../data/tree_data.txt" treeType="multitree" showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true"></div>
+	</div>
+    <div>
+			<div itype="Button"  text="去掉表单节点的选中状态" onclick="btnunCheckedById1()" ></div>
+            <div itype="Button"  text="勾选多节点复选框组，选项卡，datagird" onclick="btnsetValueSome()" ></div>
+            <div itype="Button"  text="禁用选人控件的复选框" onclick="btndisableChk()" ></div>           
+            <div itype="Button"  text="启用选人控件的复选框" onclick="btnenableChk()" ></div>            
+            <div itype="Button"  text="清空复选框" onclick="btnclearCheck()" ></div>           
+            <div itype="Button"  text="当前节点是否选中" onclick="btnisChecked()" ></div>
+            
+            <div itype="Button"  text="选中的节点id(字符串)" onclick="btngetChkedIds_allchkValue()" ></div>
+            <div itype="Button"  text="选中/半选的节点id(字符串)" onclick="btngetChkedIds_partchkValue()" ></div>
+            <div itype="Button"  text="选中的叶节点id(字符串)" onclick="btngetChkedIds_onlyLeafValue()" ></div>
+            <div itype="Button"  text="获取选中的叶节点id" onclick="btngetValues_chkedLeafNodes()" ></div>          
+            <div itype="Button"  text="获取选中的所有节点id" onclick="btngetValues_chkedNodes()" ></div>
+            <div itype="Button"  text="获取选中和半选中的所有节点id" onclick="btngetValues_chkedPNodes()" ></div>
+            
+            <div itype="Button"  text="当前选中的所有节点Id,Val" onclick="btngetValues_chkedNodesIdVal()" ></div>
+            <div itype="Button"  text="当前选中和半选中的所有节点Id,Val" onclick="btngetValues_chkedPNodesIdVal()" ></div>
+            <div itype="Button"  text="当前选中的所有叶节点Id,Val" onclick="btngetValues_chkedLeafNodesIdVal()" ></div>
+            <div itype="Button"  text="当前选中的所有节点node" onclick="btngetValues_chkedNodesArray()" ></div>
+            <div itype="Button"  text="当前选中和半选中的所有节点node" onclick="btngetValues_chkedPNodesArray()" ></div>
+            <div itype="Button"  text="当前选中的所有叶节点node" onclick="btngetValues_chkedLeafNodesArray()" ></div>
+            
+            <div itype="Button"  text="选中节点选项卡" onclick="btncheckedById()" ></div>
+            <div itype="Button"  text="选中节点文本域" onclick="btncheckedById2()" ></div>
+            <div itype="Button"  text="清空选中节点选项卡" onclick="btnunCheckedById()" ></div>
+            <div itype="Button"  text="清空选中节点表格" onclick="btnunCheckedById2()" ></div>
+    </div></div>
+	</body>
+</html>

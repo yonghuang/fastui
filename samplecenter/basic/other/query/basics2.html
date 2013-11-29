@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					常见jquery方法fastui选择器都能实现
+				</li>
+			</ul></title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<style>
+			.divlist .item{width:150px}
+			.divlist .item2{width:450px}
+		</style>
+		<style type="text/css">
+            body,html {margin:10px;}
+            .button-style {margin-bottom:10px}
+            .text {font-size:12px; line-height: 24px; color:#333;}
+            .title-line {font-weight:bold; font-size:14px; background:#09427C; padding:2px 12px; color:#fff; line-height: 30px}
+            .pre {background:#F8F8F8; border-top:1px solid #CCC; border-bottom:1px solid #CCC; padding:10px 5px; margin:10px 0}
+        </style>
+		<script>
+			fastDev(function() {
+				//$("#TxtMind99").val($("select[name=agree] option:selected").text());
+				fastDev("#TxtMid99").prop("value", fastDev("select[name=agree] option:selected").getText());
+				//$("#writeMind").hide();
+				fastDev("#writeMind").hide();
+				//$("select[name=agree]").val("true");//初始选中“同意”
+				fastDev("select[name=agree]").prop("value", "true")
+				//$("#driverFee").attr("disabled","true");
+				fastDev("#driverFee").attr("disabled", "true")
+				//$(function(){
+				fastDev(function() {
+					//getFirstActName();
+				});
+				//$("#writeMind").is(":hidden")==false
+				fastDev("#writeMind:hidden").elems.length > 0
+			});
+		</script>
+	</head>
+	<body style="height: 600px">
+	 <span class="text title-line">常见jquery方法fastui都能实现:</span><br/>		
+  
+		<pre class="pre">	
+  $("#TxtMind99").val($("select[name=agree] option:selected").text());
+  等同于
+  fastDev("#TxtMid99").prop("value", fastDev("select[name=agree] option:selected").getText());
+		
+  $("#writeMind").hide();
+  等同于
+  fastDev("#writeMind").hide();
+	
+  $("#pro.name").show();
+  等同于
+  fastDev("[id='pro.name']").show();
+		
+  $("select[name=agree]").val("true");
+  等同于
+  fastDev("select[name=agree]").prop("value", "true")
+		
+  $("#driverFee").attr("disabled","true");
+  等同于
+  fastDev("#driverFee").attr("disabled", "true")
+		
+  $(function(){
+  等同于
+  fastDev(function() {
+ 	//getFirstActName();
+  });
+		
+  $("#writeMind").is(":hidden")==false
+  等同于
+  fastDev("#writeMind:hidden").elems.length > 0
+		
+		</pre>
+		<div class="divlist" style="margin:10px; float:left; line-height: 17px; ">
+<span class="text title-line">以下方法的方法名和jQuery完全一致，功能类同。</span>
+<table>
+    <tbody>
+      <tr>
+        <td><div class="item"><a class="docClass" rel="fastDev.Dom-method-addClass"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-addClass">addClass </a></div>
+          
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-append"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-append">append </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-attr"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-attr">attr </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-children"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-children">children </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-clone"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-clone">clone </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-contains"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-contains">contains </a></div>
+          
+<div class="item"><a class="docClass" rel="fastDev.Dom-method-css"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-css">css </a></div>
+          
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-empty"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-empty">empty </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-fire"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Query-method-find">find </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-fire"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-fire">fire </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-first"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-first">first </a></div>
+          
+          
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-hasClass"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-hasClass">hasClass </a></div>
+          
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-height"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-height">height </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-hide"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-hide">hide </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-innerHeight"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-innerHeight">innerHeight </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-innerWidth"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-innerWidth">innerWidth </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-insertAfter"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-insertAfter">insertAfter </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-insertBefore"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-insertBefore">insertBefore </a></div>
+          
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-last"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-last">last </a></div>
+        </td>
+        <td style="vertical-align:top">
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-next"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-next">next </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-offset"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-offset">offset </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-outerHeight"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-outerHeight">outerHeight </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-outerWidth"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-outerWidth">outerWidth </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-parent"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-parent">parent </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-parents"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-parents">parents </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-prev"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-prev">prev </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-prop"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-prop">prop </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-remove"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-remove">remove </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-removeAttr"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-removeAttr">removeAttr </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-removeClass"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-removeClass">removeClass </a></div>
+          
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-removeProp"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-removeProp">removeProp </a></div>
+          
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-scrollLeft"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-scrollLeft">scrollLeft </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-scrollTop"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-scrollTop">scrollTop </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-show"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-show">show </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-toggle"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-toggle">toggle </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-toggleClass"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-toggleClass">toggleClass </a></div>
+          <div class="item"><a class="docClass" rel="fastDev.Dom-method-width"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-width">width </a></div>
+          </td>
+   
+      </tr>
+    </tbody>
+  </table>
+  <br/><br/>
+<span class="text title-line">以下方法的方法名jQuery里没有，但也是Dom操作的基本方法。</span>
+<table width="100%" class="tablelist">
+  <tbody>
+    <tr>
+      <td width="15%">
+        <div class="item"><a class="docClass" rel="fastDev.Dom-method-addText"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-addText">addText </a></div>
+        
+<div class="item"><a class="docClass" rel="fastDev.Dom-method-createByHTML"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-createByHTML">createByHTML </a></div>
+        <div class="item"><a class="docClass" rel="fastDev.Dom-method-createFragment"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-createFragment">createFragment </a></div>
+        
+        <div class="item"><a class="docClass" rel="fastDev.Dom-method-elements"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-elements">elements </a></div>
+        
+<div class="item"><a class="docClass" rel="fastDev.Dom-method-getText"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-getText">getText </a></div>
+        <div class="item"><a class="docClass" rel="fastDev.Dom-method-hasAttr"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-hasAttr">hasAttr </a></div>
+        
+        <div class="item"><a class="docClass" rel="fastDev.Dom-method-hasProp"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-hasProp">hasProp </a></div>
+        <div class="item"><a class="docClass" rel="fastDev.Dom-method-isShow"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-isShow">isShow </a></div>
+        
+<div class="item"><a class="docClass" rel="fastDev.Dom-method-removeCss"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-removeCss">removeCss </a></div>
+        
+        <div class="item"><a class="docClass" rel="fastDev.Dom-method-replace"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-replace">replace </a></div>
+        
+<div class="item"><a class="docClass" rel="fastDev.Dom-method-setHeight"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-setHeight">setHeight </a></div>
+        <div class="item"><a class="docClass" rel="fastDev.Dom-method-setText"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-setText">setText </a></div>
+        <span class="item"><a class="docClass" rel="fastDev.Dom-method-setWidth"  target="_blank" href="http://fastui.talkweb.com.cn:8888/doc/index.html#!/api/fastDev.Dom-method-setWidth">setWidth </a></span>
+        </td>
+      <td width="85%"><div class="item2">为当前对象增加文本</div>
+        
+<div class="item2">根据HTML字符串创建Dom元素</div>
+        <div class="item2">创建文档片段</div>
+        
+        <div class="item2">获取指定Dom元素下属所有子孙元素</div>
+        
+<div class="item2">获取当前对象文本</div>
+        <div class="item2">判断属性是否拥有指定属性值(适用于自定义属性)</div>
+        
+        <div class="item2">判断属性是否拥有指定属性值(适用于Dom源生属性)</div>
+        <div class="item2">判断当前Dom元素是否可见</div>
+        
+<div class="item2">清除Dom元素Style属性值</div>
+        
+        <div class="item2">将目标元素替换指定元素</div>
+        
+<div class="item2">设置Dom元素高度</div>
+        <div class="item2">设置当前对象文本</div>        <span class="item2">设置Dom元素</span>宽度</td>      
+    </tr>
+  </tbody>
+</table>
+		</div>
+			<div style="display: none">
+		设置内容和属性
+		<input id ="flag" type="hidden" />
+		<input id ="example.id" type="hidden" />
+		<TR id=writeMind>
+			<TD class="td_tit_l">填写意见：</TD>
+			<TD colSpan=5 class="td_tit_2">
+			<SELECT style="WIDTH: 80px" name=agree onchange=setFlag();>
+				<option value="true" selected>同意</option>
+				<option value="false">不同意</option>
+			</SELECT>			
+			<TEXTAREA style="WIDTH: 700px; HEIGHT: 80px" id=TxtMind99  name=TxtMind99 Mindflag="1" ></TEXTAREA></TD>
+		</TR>
+		<INPUT id=driverFee class=input name=driverFee >
+		</TD>
+</div>
+	</body>
+</html>
+

@@ -1,0 +1,56 @@
+    @charset "utf-8";
+
+	/*
+	 * 展开的样式
+	 * */
+	.fieldset-title-expand {
+		background:url(../images/dialog_titlebg1.gif) repeat-x 0 -5px;
+		border:1px solid #f5dddd;
+		cursor:pointer;
+		display:block;
+		color:#333;
+		height:25px;
+		line-height:25px;
+		line-height:27px /9;
+		text-indent:16px;
+		text-align:left;
+		width:100%;
+	}
+	.fieldset-title-expand {
+		border:1px solid #f5dddd;
+		border-bottom:0;
+	}
+	/*
+	 * 展开的内容样式
+	 * */
+	.fieldset-content-expand {
+		display:block;
+	}
+	.fieldset-content-expand {
+		border:0px solid #f5dddd;
+		border-top:0;
+	}
+	/*
+	 * 收缩样式
+	 * */
+	.fieldset-title-collect {
+		background:url(../images/dialog_titlebg1.gif) repeat-x 0 -5px;
+		border:1px solid #f5dddd;
+		cursor:pointer;
+		color:#333;
+		display:block;
+		line-height:25px;
+		line-height:27px /9;
+		text-indent:16px;
+		text-align:left;
+		width:100%;
+	}
+	.fieldset-title-collect {
+		border:1px solid #f5dddd;
+	}
+	/*
+	 * 收缩的内容样式
+	 * */
+	.fieldset-content-collect {
+		display:none;
+	}

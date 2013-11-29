@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+	Cookie Plug-in
+	
+	This plug in automatically gets all the cookies for this site and adds them to the post_params.
+	Cookies are loaded only on initialization.  The refreshCookies function can be called to update the post_params.
+	The cookies will override any other post params with the same name.
+*/
+
+var SWFUpload;
+if (typeof(SWFUpload) === &quot;function&quot;) {
+	SWFUpload.prototype.initSettings = function (oldInitSettings) {
+		return function (userSettings) {
+			if (typeof(oldInitSettings) === &quot;function&quot;) {
+				oldInitSettings.call(this, userSettings);
+			}
+			
+			this.refreshCookies(false);	// The false parameter must be sent since SWFUpload has not initialzed at this point
+		};
+	}(SWFUpload.prototype.initSettings);
+	
+	// refreshes the post_params and updates SWFUpload.  The sendToFlash parameters is optional and defaults to True
+	SWFUpload.prototype.refreshCookies = function (sendToFlash) {
+		if (sendToFlash === undefined) {
+			sendToFlash = true;
+		}
+		sendToFlash = !!sendToFlash;
+		
+		// Get the post_params object
+		var postParams = this.settings.post_params;
+		
+		// Get the cookies
+		var i, cookieArray = document.cookie.split(';'), caLength = cookieArray.length, c, eqIndex, name, value;
+		for (i = 0; i &lt; caLength; i++) {
+			c = cookieArray[i];
+			
+			// Left Trim spaces
+			while (c.charAt(0) === &quot; &quot;) {
+				c = c.substring(1, c.length);
+			}
+			eqIndex = c.indexOf(&quot;=&quot;);
+			if (eqIndex &gt; 0) {
+				name = c.substring(0, eqIndex);
+				value = c.substring(eqIndex + 1);
+				postParams[name] = value;
+			}
+		}
+		
+		if (sendToFlash) {
+			this.setPostParams(postParams);
+		}
+	};
+
+}
+</pre>
+</body>
+</html>

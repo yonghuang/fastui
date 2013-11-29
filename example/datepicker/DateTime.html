@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>时间选择器</title>
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+		<script src="../../src/fastDev-import.js"></script>
+	</head>
+	<body>
+		<div style="margin:30px">
+			<div>
+				<p>
+					带时间选择器
+				</p>
+				<!-- 当format格式化属性带时间格式时，即开启时间选择器  -->
+				<!-- 也可以通过showTimePicker属性来强制开启时间选择器，但与此同时，不能通过format格式化属性格式的时间域也会被禁用，因此，时间选择器的有效性最终决定于format格式化属性  -->
+				<input itype="DatePicker" format="yyyy-MM-dd HH:mm:ss"/>
+			</div>
+			<br />
+			<div>
+				<p>
+					禁选时间子域
+				</p>
+				<!-- format格式化属性值中，未指定的时间子域将被禁用，如不指定秒钟域(ss) -->
+				<input itype="DatePicker" format="HH:mm M/d/yyyy" />
+			</div>
+		</div>
+	</body>
+</html>
+

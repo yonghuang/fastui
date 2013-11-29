@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="../../../themes/default/css/ui-main.css"/>
+		<script src="../../../src/library/FastDev.js"></script>
+		<script src="../../../src/library/Query.js"></script>
+		<script src="../../../src/library/Dom.js"></script>
+		<script src="../../../src/library/Ajax.js"></script>
+		<script src="../../../src/library/Event.js"></script>
+		<script src="../../../src/library/Browser.js"></script>
+		<script src="../../../src/library/Queue.js"></script>
+		<script src="../../../src/library/Tools.js"></script>
+		<script src="../../../src/library/Library_Patch.js"></script>
+
+		<script src="../../../src/core/ClassManager.js"></script>
+		<script src="../../../src/core/EventManager.js"></script>
+		<script src="../../../src/core/Base.js"></script>
+		<script src="../../../src/core/Template.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+		<script src="../../../src/core/Core_Patch.js"></script>
+
+		<script src="../../../src/data/Proxy.js"></script>
+		<script src="../../../src/data/DataSet.js"></script>
+		<script src="../../../src/data/Record.js"></script>
+		<script src="../../../src/data/Field.js"></script>
+		<script src="../../../src/data/Reader.js"></script>
+		<script src="../../../src/data/Data_Patch.js"></script>
+		<script src="../../../src/core/DomObject.js"></script>
+		<script src="../../../src/core/ControlBus.js"></script>
+		<script src="../../../src/core/DataBus.js"></script>
+
+		<script src="../../../src/component/Component.js"></script>
+
+		<script src="../../../src/component/BreadCrumb.js"></script>
+		<script src="../../../src/component/BreadCrumb_Patch.js"></script>
+
+		<script type="text/javascript">
+			fastDev(function() {
+				talkweb.Components.BreadCrumb({
+					name : "BreadCrumb1",
+					container : "example",
+					symbolsimg : "breadcrumb.gif",
+					items : [{
+						value : "汽车之家",
+						href : "http://www.autohome.com.cn/"
+					}, {
+						value : "汽车报价",
+						href : "http://car.autohome.com.cn/"
+					}, {
+						value : "宝骏",
+						href : "http://car.autohome.com.cn/price/brand-120.html"
+					}, {
+						value : "上汽通用五菱",
+						href : "http://car.autohome.com.cn/price/brand-120-59.html"
+					}, {
+						value : "宝骏630",
+						href : "http://car.autohome.com.cn/price/series-2236.html"
+					}]
+				});
+			});
+		</script>
+		<title>高级应用示例</title>
+	</head>
+	<body>
+		<div id="example">
+			
+		</div>
+		<br/>
+		<br/>
+		symbolsimg属性设置层级之间连接的图片，设置时请注意路径。symbols属性设置连接符号，symbolsimg优先级大于symbols。
+	</body>
+</html>

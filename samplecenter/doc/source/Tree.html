@@ -1,0 +1,2712 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Tree'>/**
+</span> * @class fastDev.Ui.Tree
+ * @extends fastDev.Ui.Component
+ * 树控件 提供主流树控件的绝大多数功能，形式有普通树，多选树和单选树。继承自Component。导航类控件。&lt;p&gt;
+ * 主要事项：数据量超大时，openFloor设置较小性能较好。
+ * 作者：姜玲&lt;p&gt;
+ *
+ *		&lt;div itype=&quot;Tree&quot;  initSource=&quot;data.txt&quot; showIco=&quot;true&quot; topParentid=&quot;0&quot; openFloor=2&gt;&lt;/div&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.Tree&quot;,{
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;Tree&quot;,
+	_options : {
+<span id='fastDev-Ui-Tree-property-items'>		/**
+</span>		 * 合法的json数据源，必须有[val，id，pid]复选树加chk[值为true，part，false]，单选树加radio[值同chk]，异步树加asyn[值为true,false] font:文本样式 ico:图标样式 disabled:复选框或单选框禁用 nocheck:节点无复选框或单选框 readonly:文本只读
+		 * @type {Json}
+		 */
+		items : &quot;&quot;,
+<span id='fastDev-Ui-Tree-property-initSource'>		/**
+</span>		 * 控件初始化合法的json数据源url
+		 * @type {String}
+		 */
+		initSource : &quot;&quot;,
+<span id='fastDev-Ui-Tree-property-asyncDataSource'>		/**
+</span>		 * 异步的数据源
+		 * @type {String}
+		 */
+		asyncDataSource : &quot;&quot;,
+<span id='fastDev-Ui-Tree-property-topParentid'>		/**
+</span>		 * 顶级节点id
+		 * @type {String} [topParentid=&quot;0&quot;]
+		 */
+		topParentid : &quot;0&quot;,
+<span id='fastDev-Ui-Tree-property-openFloor'>		/**
+</span>		 * 默认打开层数
+		 * @type {Number} [openFloor=1]
+		 */
+		openFloor : 1,
+<span id='fastDev-Ui-Tree-property-textMaxLength'>		/**
+</span>		 * 节点文本的默认长度,默认10个汉字或20个英文，超过长度的截取...，文本悬停有提示
+		 * @type {Number} 
+		 */
+		textMaxLength:20,
+<span id='fastDev-Ui-Tree-property-treeType'>		/**
+</span>		 * 树类型，必须是normal;multitree;radiotree其一
+		 * @type {String} [treeType=&quot;normal&quot;]
+		 */
+		treeType : &quot;normal&quot;,
+<span id='fastDev-Ui-Tree-property-showLine'>		/**
+</span>		 * 是否显示树的连接线
+		 * @type {Boolean} [showLine=true]
+		 */
+		showLine : true,
+<span id='fastDev-Ui-Tree-property-showIco'>		/**
+</span>		 * 是否显示小图标
+		 * @type {Boolean}
+		 */
+		showIco : false,
+<span id='fastDev-Ui-Tree-property-currentId'>		/**
+</span>		 * 默认选中的节点id
+		 * @type {String}
+		 */
+		currentId : &quot;&quot;,		
+<span id='fastDev-Ui-Tree-property-rootValue'>		/**
+</span>		 * 根节点的文本值（非数据中的根节点）
+		 * @type {String}
+		 */
+		rootValue : null,
+<span id='fastDev-Ui-Tree-property-height'>		/**
+</span>		 * 高度
+		 * @type {String}
+		 */
+		height:&quot;100%&quot;,
+<span id='fastDev-Ui-Tree-property-width'>		/**
+</span>		 * 宽度
+		 * @type {String}
+		 */
+		width:&quot;100%&quot;,
+<span id='fastDev-Ui-Tree-property-hide'>		/**
+</span>		 * 是否隐藏
+		 * @type {Boolean} [hide=false]
+		 */
+		hide : false,
+<span id='fastDev-Ui-Tree-property-disabled'>		/**
+</span>		 * 是否禁用
+		 * @type {Boolean} [disabled=false]
+		 */
+		disabled : false,
+<span id='fastDev-Ui-Tree-property-nodeEdit'>		/**
+</span>		 * 是否开启节点右键菜单的添删改功能
+		 * @type {Boolean} [nodeEdit=false]
+		 */
+		nodeEdit : false,
+<span id='fastDev-Ui-Tree-property-rightMenu'>		/**
+</span>		 * 鼠标右键点击到节点上的菜单内容项
+		 * @type {String}
+		 */
+		rightMenu : null,		
+<span id='fastDev-Ui-Tree-property-mTreeShowCkb'>		/**
+</span>		 * 复选框树显示多选框
+		 * @type {Boolean} [mTreeShowCkb=true]
+		 */
+		mTreeShowCkb : true,
+<span id='fastDev-Ui-Tree-property-onlySelectedLeaf'>		/**
+</span>		 *  只能选中叶子节点的文本
+		 * @type {Boolean} [onlySelectLeaf=true]
+		 */
+		onlySelectedLeaf : false,
+<span id='fastDev-Ui-Tree-property-mTreeShowRadio'>		/**
+</span>		 * 单选框树显示单选框
+		 * @type {Boolean} [mTreeShowCkb=true]
+		 */
+		mTreeShowRadio : true,
+<span id='fastDev-Ui-Tree-property-chkedByLeaf'>		/**
+</span>		 * 根据多选树的叶子节点的选中状况勾选或半勾选其父节点
+		 * @type {Boolean}
+		 */
+		chkedByLeaf : false,
+<span id='fastDev-Ui-Tree-property-radioType'>		/**
+</span>		 *  单选勾选分组范围有,分&quot;同一级内&quot;level，&quot;整棵树内&quot;all两种
+		 * @type {String} [radioType=&quot;level&quot;]
+		 */
+		radioType : &quot;level&quot;,
+<span id='fastDev-Ui-Tree-property-partchkValue'>		/**
+</span>		 * 复选框是否要半选状态的值
+		 * @type {Boolean}
+		 */
+		partchkValue : true,	
+<span id='fastDev-Ui-Tree-property-partradioValue'>		/**
+</span>		 * 单选框是否要半选状态的值
+		 * @type {Boolean}
+		 */
+		partradioValue:true,	
+<span id='fastDev-Ui-Tree-property-onlyLeafValue'>		/**
+</span>		 * 多选树或单选树是否仅仅要叶节点的值
+		 * @type {Boolean} [onlyLeafValue=false]
+		 */
+		onlyLeafValue : false,
+<span id='fastDev-Ui-Tree-property-customFields'>		/**
+</span>		 * 自定义数据配置数据字段名
+		 * @type {string} 多个用逗号分割
+		 */
+		customFields : &quot;&quot;,
+<span id='fastDev-Ui-Tree-property-nodeDrag'>		/**
+</span>		 * 是否拖拽 
+		 * @type {Boolean}
+		 */
+		nodeDrag :false,
+<span id='fastDev-Ui-Tree-property-structure'>		/**
+</span>		 * 数据结构类型
+		 * @private 
+		 */
+		structure : &quot;Tree&quot;,
+<span id='fastDev-Ui-Tree-property-mapping'>		/**
+</span>		 * 数据映射，格式{&quot;parentid&quot;:&quot;pid&quot;,&quot;text&quot;:&quot;val&quot;}
+		 * @private 
+		 */
+		mapping : {'parentid':'pid','text':'val'},
+<span id='fastDev-Ui-Tree-event-onBeforeDrag'>		/**
+</span>		 * @event onBeforeDrag
+		 * 拖拽之前的事件  ,返回为false则取消
+		 * @param {String} id
+		 * @return {Boolean}
+		 */
+		onBeforeDrag : fastDev.noop,	
+<span id='fastDev-Ui-Tree-event-onAfterDrag'>		/**
+</span>		 * @event onAfterDrag
+		 * 拖拽之后的事件
+		 * @param {String} id
+		 * @param {String} newpid
+		 */
+		onAfterDrag : fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onBeforeAdd'>		/**
+</span>		 * @event onBeforeAdd
+		 * 节点添加前的自定义事件(如果添加方法没调用此方法则js生成随机的id添加) ,返回为false则取消
+		 * @param {String} pid
+		 * @return {String} newid 或者false
+		 */
+		onBeforeAdd: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onBeforeEdit'>		/**
+</span>		 * @event onBeforeEdit
+		 * 节点编辑前的自定义事件,返回为false则取消编辑
+		 * @param {String} id
+		 * @return {Boolean}
+		 */
+		onBeforeEdit : fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onBeforeDel'>		/**
+</span>		 * @event onBeforeDel
+		 * 节点删除前的自定义事件,返回为false则取消删除
+		 * @param {String} id
+		 * @return {Boolean}
+		 */
+		onBeforeDel: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onAfterAdd'>		/**
+</span>		 * @event onAfterAdd
+		 * 节点添加后的自定义事件
+		 * @param {json} item
+		 */
+		onAfterAdd: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onAfterEdit'>		/**
+</span>		 * @event onAfterEdit
+		 * 节点编辑后的自定义事件
+		 * @param {json} item
+		 */
+		onAfterEdit: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onAfterDel'>		/**
+</span>		 * @event onAfterDel
+		 * 节点删除后的自定义事件
+		 * @param {String} id
+		 */
+		onAfterDel: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onNodeClick'>		/**
+</span>		 * @event onNodeClick
+		 * 自定义点击事件
+		 * @param {String} id
+		 */
+		onNodeClick: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onNodeClick'>		/**
+</span>		 * @event onNodeClick
+		 * 自定义复选框点击事件
+		 * @param {String} id
+		 */
+		onCheckClick: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onNodeClick'>		/**
+</span>		 * @event onNodeClick
+		 * 自定义单选框点击事件
+		 * @param {String} id
+		 */
+		onRadioClick: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onNodeDblClick'>		/**
+</span>		 * @event onNodeDblClick
+		 * 自定义双击事件
+		 * @param {String} id
+		 */
+		onNodeDblClick: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onExpand'>		/**
+</span>		 * @event onExpand
+		 * 自定义展开事件
+		 * @param {String} id
+		 */
+		onExpand: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onCollect'>		/**
+</span>		 * @event onCollect
+		 * 自定义收缩事件
+		 * @param {String} id
+		 */
+		onCollect: fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onAfterLoad'>		/**
+</span>		 * @event onAfterLoad
+		 * 数据加载之后
+		 */
+		onAfterLoad : fastDev.noop,
+<span id='fastDev-Ui-Tree-event-onBeforeLoad'>		/**
+</span>		 * @event onBeforeLoad
+		 * 数据加载之前
+		 */
+		onBeforeLoad:fastDev.noop
+	},
+	_global : {		
+		items : &quot;&quot;,
+		ulCls:&quot;ui-tree&quot;,
+		thistree:null,
+		treeTypeCls:&quot;&quot;,
+		findItems:[],
+		allItems:[],
+		allBraIds:&quot;&quot;,
+		parentItems:[],
+		collectspan:[]
+	},
+	tplParam : [&quot;id&quot;,&quot;height&quot;,&quot;width&quot;,&quot;ulCls&quot;,&quot;treeTypeCls&quot;,&quot;showIco&quot;,&quot;itemsLen&quot;,&quot;asyncDataSource&quot;],
+	fields : [{name:&quot;id&quot;},{name:&quot;parentid&quot;},{name:&quot;text&quot;},{name : &quot;chk&quot;,defaultValue : &quot;false&quot;},{name : &quot;radio&quot;,defaultValue : &quot;false&quot;},{name : &quot;asyn&quot;,defaultValue : &quot;false&quot;},{name:&quot;font&quot;,defaultValue : &quot;&quot;},{name:&quot;ico&quot;,defaultValue : &quot;&quot;},{name:&quot;readonly&quot;,defaultValue : &quot;false&quot;},{name:&quot;disabled&quot;,defaultValue : &quot;false&quot;},{name:&quot;nocheck&quot;,defaultValue : &quot;false&quot;}],	
+	staticTemplate : function(params) {
+	  return '&lt;div id=&quot;'+params.id+'&quot; class=&quot;ui-tree-panel&quot; style=&quot;height:'+params.height+';&quot;&gt;&lt;/div&gt;';
+	},	
+<span id='fastDev-Ui-Tree-method-ready'>	/**
+</span>	 * 面板参数准备
+	 * @protected
+	 */
+	ready : function(options, global) {		
+		if(!options.showLine){
+			global.ulCls=&quot;ui-tree ui-tree-noline&quot;;
+		}
+		if(options.treeType===&quot;multitree&quot; &amp;&amp; options.mTreeShowCkb===true){
+			global.treeTypeCls=&quot;checkbox&quot;;
+		}else if(options.treeType===&quot;radiotree&quot; &amp;&amp; options.mTreeShowRadio===true){
+			global.treeTypeCls=&quot;radio&quot;;
+		}
+		if(options.id===&quot;&quot;){
+			options.id=fastDev.getID();
+		}
+		if(options.customFields){			
+			this.fields =this.fields.slice(0).concat(options.customFields.split(','));
+		}
+		if(!!options.mapping){
+			var mapping=options.mapping;
+			if(fastDev.isString(options.mapping)){
+				mapping=fastDev.Util.JsonUtil.parseJson(options.mapping);
+			}	
+			for (var p in mapping){
+				for(var i=0,field;(field=this.fields[i]);i++){
+					if(field.name===p){
+					this.fields[i].mapping=mapping[p];
+					this.fields =this.fields.slice(0).concat(mapping[p]);
+					break;
+					}	
+				}
+			}
+		}
+	},
+<span id='fastDev-Ui-Tree-method-constructItems'>	/**
+</span>	 * 初始化控件列表
+	 * @param {Array} items数据项
+	 * @protected
+	 */
+	constructItems : function() {
+		var me = this,options=this._options,global=this._global,dataSet,len;
+		global.allBraIds=&quot;&quot;;
+		options.onBeforeLoad();
+		var dataSet=this.dataset.structure.getNode(options.topParentid);
+		if(!!dataSet){
+			dataSet=dataSet.children;
+		}else{
+		var topitems = {
+			parentid : &quot;&quot;,
+			id : options.topParentid,
+			text : &quot;&quot;+options.rootValue
+		};
+		this.dataset.structure.addNode(topitems);
+		this.dataset.structure.initNodes();
+		
+		if(!!options.rootValue) {
+			dataSet=[this.dataset.structure.getRoot()];
+		}else{
+			dataSet=this.dataset.structure.getRoot().children;
+		}
+		}
+		len=dataSet.length;			
+		if(len===0){
+			return;
+		}
+		var html =this.dynamicTemplate(dataSet,1,false,false,options,global);
+		var div=fastDev(this.elems[0]);
+		div.append(fastDev(html.join('')));
+		global.thistree=div;
+		this.setConstruct(options,global);
+		this.bindEvent(options,global);		
+		options.onAfterLoad.call(this);		
+	},
+<span id='fastDev-Ui-Tree-method-dynamicTemplate'>	/**
+</span>	 * 创建节点
+	 * @param {Object} children 节点数据
+	 * @param {Number} level 现在展开的层次
+	 * @param {Boolean} isnotRoot 是否顶级节点
+	 * @param {Boolean} isonlyli 是否仅仅创建li
+	 * @private
+	 */
+	dynamicTemplate : function(children,level,isnotRoot,isonlyli,options,global){
+		var len=children.length,openClose=&quot;&quot;,text=&quot;&quot;,emptyObj,html,asyn=false;
+		isonlyli?html=[]:html = ['&lt;ul class=&quot;'+(isnotRoot?&quot;ui-line&quot;:global.ulCls)+'&quot;&gt;'];
+				for(var i=0;i&lt;len &amp;&amp; level&lt;=options.openFloor;i++){
+					var node=children[i];
+					html.push('&lt;li id=&quot;'+node.id+'&quot;');
+					emptyObj=!fastDev.isEmptyObject(node.children);
+					if(options.asyncDataSource!==&quot;&quot; &amp;&amp; node.asyn===&quot;true&quot; &amp;&amp; emptyObj===false){
+						asyn=true;
+						html.push(' asyn=&quot;1&quot; ');
+					}else{
+						asyn=false;
+					}					
+					if(emptyObj &amp;&amp; level==options.openFloor){
+						html.push(' yc=&quot;1&quot; ');
+					}					
+					html.push('&gt;&lt;div class=&quot;ui-tree-node&quot;&gt;&lt;span class=&quot;ico-node');
+					if(emptyObj || asyn){
+						(asyn ||level==options.openFloor)?openClose=&quot;-close&quot;:openClose=&quot;-open&quot;;
+						html.push(openClose);
+					}else{
+						openClose=&quot;&quot;;
+					}
+					if(len===1 &amp;&amp; isnotRoot===false){
+						html.push('-end');
+					}else if(i===len-1){
+						html.push('-last');
+					}else if(i===0 &amp;&amp; isnotRoot===false){
+						html.push('-first');
+					}
+					html.push('&quot;&gt;&lt;/span&gt;');
+
+					if(global.treeTypeCls!==&quot;&quot;){
+						html.push('&lt;span class=&quot;ico-'+global.treeTypeCls);
+						if(node.chk===&quot;true&quot; || node.radio===&quot;true&quot;){
+							html.push('-checked');
+						}else if(node.chk===&quot;part&quot; || node.radio===&quot;part&quot;){
+							html.push('-half');
+						}	
+						if(node.disabled===&quot;true&quot;){
+							html.push('-disabled');
+						}
+						if(node.nocheck===&quot;true&quot;){
+						html.push('-nocheck');
+						}
+						html.push('&quot;&gt;&lt;/span&gt;');
+					}
+					
+					html.push('&lt;span class=&quot;ui-tree-content&quot;&gt;');
+					
+					if(options.showIco){
+						html.push('&lt;span class=&quot;ico-');
+						!!openClose?html.push('folder'+openClose):html.push('file');
+						!!node.ico?html.push(' '+node.ico+openClose+'&quot; ico=&quot;'+node.ico+'&quot;'):html.push('&quot;');
+						html.push('&gt;&lt;/span&gt;');
+					}
+                    html.push('&lt;span class=&quot;ui-tree-text');
+					if(node.readonly===&quot;true&quot;){
+						html.push('-readonly');			
+					}
+					html.push(' '+node.font+'&quot;');
+					text=node.text;
+					if(text.length*2&gt;options.textMaxLength){
+						if(fastDev.Util.StringUtil.getChLength(text)&gt;options.textMaxLength &amp;&amp; text.indexOf('&lt;')===-1){
+						html.push(' title=&quot;'+text+'&quot;');
+						text=text.substr(0,(options.textMaxLength-4)/2)+&quot;...&quot;;
+						}
+					}					
+					html.push('&gt;'+text+'&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;');
+					if(emptyObj){
+						html = html.concat(arguments.callee(node.children,level+1,true,false,options,global));						
+					}
+					html.push('&lt;/li&gt;');
+				}
+				if(isonlyli===false){
+				html.push('&lt;/ul&gt;');
+				}
+				return html;
+	},	
+<span id='fastDev-Ui-Tree-method-setConstruct'>	/**
+</span>	 * 设置控件属性
+	 * @private
+	 */
+	setConstruct : function(options,global) {
+		this.setTreeCls();
+		if(options.hide){
+			 this.hide();
+		}
+		if(options.currentId) {
+			this.setCurrentId(options.currentId);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-setTreeCls'>	/**
+</span>	 * 设置树的图标样式
+	 * @private
+	 */
+	setTreeCls : function(li){
+		var lastuls =this._global.thistree.find(&quot;ul&gt;li:last-child&gt;ul&quot;);
+		lastuls.addClass(&quot;ui-line-no&quot;);
+		if(lastuls.elems.length===0){
+			this._global.thistree.find(&quot;ul.ui-line-no&quot;).removeClass(&quot;ui-line-no&quot;);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-bindEvent'>	/**
+</span>	 * 事件注册
+	 * @private
+	 */
+	bindEvent : function(options,global) {
+		//事件注册 展开收缩事件，复选框点击事件，文本点击事件
+		var that = this,treeobj=global.thistree,id,checked;
+		var treeClick=function(e) {
+		    var clickTg = fastDev(e.target);
+			var ctgclass = clickTg.attr(&quot;class&quot;);		
+			if(	ctgclass === undefined){
+				return;
+			}
+			if(ctgclass.indexOf(&quot;ico-checkbox&quot;) &gt; -1) {
+				that.chkclick(clickTg);
+				if(options.onCheckClick!==fastDev.noop){
+				id=clickTg.parents(&quot;li:first&quot;).attr(&quot;id&quot;);
+				checked=ctgclass.indexOf(&quot;ico-checkbox-checked&quot;) &gt; -1?false:true;
+				options.onCheckClick.call(that,e,id,checked);
+				}
+			} else if(ctgclass.indexOf(&quot;ico-radio&quot;) &gt; -1) {
+				that.radioclick(clickTg);
+				if(options.onRadioClick!==fastDev.noop){
+				id=clickTg.parents(&quot;li:first&quot;).attr(&quot;id&quot;);
+				checked=ctgclass.indexOf(&quot;ico-radio-checked&quot;) &gt; -1?false:true;
+				options.onRadioClick.call(that,e,id,checked);
+				}
+			} else if(ctgclass.indexOf(&quot;ico-node-open&quot;) &gt; -1) {
+				that.collect(clickTg);
+			} else if(ctgclass.indexOf(&quot;ico-node-close&quot;) &gt; -1) {
+				that.expand(clickTg);
+			} else if(ctgclass.indexOf(&quot;ui-tree-content&quot;) &gt; -1) {
+				that.textClick(clickTg,e);
+			} else if(/(ui-tree|icon)-(file|text|folder-open|folder-close)/.test(ctgclass)){
+				that.textClick(clickTg.parent(&quot;span&quot;),e);
+			}				
+		};
+		treeobj.unbind(&quot;click&quot;);
+		treeobj.bind(&quot;click&quot;, treeClick);				
+		var mouseOver = function(event) {
+			var span = fastDev(event.target);
+			treeobj.find(&quot;.ui-tree-over&quot;).removeClass(&quot;ui-tree-over&quot;);	
+			var cls=span.getClass();			
+			if(cls.indexOf(&quot;-disabled&quot;)&gt;0 || cls.indexOf(&quot;-readonly&quot;)&gt;0){
+			}else if(span.hasClass(&quot;ui-tree-content&quot;)){
+				var txt=span.children(&quot;.ui-tree-text-readonly&quot;).elems;
+				if(txt.length===0){
+					span.addClass(&quot;ui-tree-over&quot;);
+				}
+			}else if(/ico-(checkbox|radio)(-(checked|half))?/.test(cls)){				
+				if(cls.indexOf(&quot;-over&quot;)===-1) {
+					span.setClass(cls+&quot;-over&quot;);
+				}
+			}else if(/(ui-tree|icon)-(file|text|folder-open|folder-close)/.test(cls)){
+				span.parent(&quot;span.ui-tree-content&quot;).addClass(&quot;ui-tree-over&quot;);
+			}
+		};
+		var mouseOut = function(event) {
+			var span = fastDev(event.target);
+			treeobj.find(&quot;span.ui-tree-over&quot;).removeClass(&quot;ui-tree-over&quot;);
+			var cls=span.getClass();
+			span.setClass(cls.replace(&quot;-over&quot;,&quot;&quot;));	
+		};
+		treeobj.bind(&quot;mouseover&quot;, mouseOver).bind(&quot;mouseout&quot;, mouseOut);
+			var treeDblClick=function(e){
+				var clickTg = fastDev(e.target);
+				var li=clickTg.parents(&quot;li:first&quot;);
+				var id=li.attr(&quot;id&quot;);
+				var val=that.getValByid(id);				
+				if(id){					
+					var lidiv=li.children(&quot;div&quot;);
+					var opennode=lidiv.find(&quot;[class^='ico-node-open']&quot;);
+					var closenode=lidiv.find(&quot;[class^='ico-node-close']&quot;);
+					if(opennode.elems.length&gt;0){
+						that.collect(opennode);
+					}else if(closenode.elems.length&gt;0){
+						that.expand(closenode);
+					}
+					if(options.onNodeDblClick!==fastDev.noop){	
+						options.onNodeDblClick.call(that,e,id,val);
+					}
+				}
+			};
+			treeobj.bind(&quot;dblclick&quot;, treeDblClick);	
+		/*if(options.nodeDrag !==fastDev.noop) {//拖拽事件
+			this.nodeDragEvent();
+		}
+		if(options.rightMenu){ 
+			this.showRightMenu()
+		}
+		if(options.nodeEdit){
+			this.showNodeEdit();
+		}*/
+	},	
+<span id='fastDev-Ui-Tree-method-textClick'>	/**
+</span>	 *  文本选中事件
+	 * @param {Object} span
+	 * @private
+	 */ 
+	textClick : function(span,e){
+		var options=this._options;
+		var txt=span.children(&quot;span.ui-tree-text-readonly&quot;).elems;
+		if(txt.length&gt;0){
+			return false;
+		}
+		if(options.onlySelectedLeaf){
+			  var node=span.prev(&quot;span.ico-node&quot;).elems;
+			  var nodelast=span.prev(&quot;span.ico-node-last&quot;).elems;
+			  if((node.length+nodelast.length)===0){
+				  return false;
+			  }
+		}
+		if(options.treeType===&quot;multitree&quot; &amp;&amp; options.mTreeShowCkb===false){
+			if(span.hasClass(&quot;ui-tree-selected&quot;)){
+				span.removeClass(&quot;ui-tree-selected&quot;);
+			}else{
+				span.addClass(&quot;ui-tree-selected&quot;);
+			}
+		}else if(options.treeType===&quot;radiotree&quot; &amp;&amp; options.mTreeShowRadio===false &amp;&amp; options.radioType===&quot;level&quot;){
+			var parentUl=span.parents(&quot;ul:first&quot;);
+			var xdradio=parentUl.children(&quot;li&quot;).children(&quot;div&quot;).find(&quot;span.ui-tree-content&quot;);
+			xdradio.removeClass(&quot;ui-tree-selected&quot;);
+			span.addClass(&quot;ui-tree-selected&quot;);
+		}else{		
+			this._global.thistree.find(&quot;span.ui-tree-selected&quot;).removeClass(&quot;ui-tree-selected&quot;);
+			span.addClass(&quot;ui-tree-selected&quot;);
+		}
+		if(options.onNodeClick!==fastDev.noop){
+			var id=span.parent(&quot;div&quot;).parent(&quot;li&quot;).attr(&quot;id&quot;);
+			var val=this.getValByid(id) || span.children(&quot;span.ui-tree-text&quot;).getText();
+			options.onNodeClick.call(this,e,id,val);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-setChkCls'>	/**
+</span>	 * 设置复选框的样式
+	 * @private
+	 */
+	setChkCls : function(chklist,cls){
+		var len=chklist.length;
+		for(var i=0;i&lt;len;i++){
+			var chk=fastDev(chklist[i]);
+			var oldcls=chk.getClass();
+			if(oldcls.indexOf(&quot;-disabled&quot;)===-1 &amp;&amp; oldcls.indexOf(&quot;-nocheck&quot;)===-1){
+				chk.attr(&quot;class&quot;, cls);
+			}
+		}
+	},
+<span id='fastDev-Ui-Tree-method-chkclick'>	/**
+</span>	 *  复选框选中事件
+	 * @param {Object} span
+	 * @private
+	 */
+	chkclick : function(clickTg){
+		//复选框选中事件	
+		var options = this._options;
+		var clickclass = clickTg.attr(&quot;class&quot;);
+		if(clickclass.indexOf(&quot;disabled&quot;)&gt;0){
+			return false;
+		}		
+		var tgclass = clickclass.indexOf(&quot;ico-checkbox-checked&quot;)&gt;-1 ? &quot;ico-checkbox&quot; : &quot;ico-checkbox-checked&quot;;
+		//上面选中下面一起选中
+		var chkdiv= clickTg.parent(&quot;div&quot;);
+		var li=chkdiv.parent(&quot;li&quot;);
+		var id =li.attr(&quot;id&quot;);
+		var chkdivul=chkdiv.next(&quot;ul&quot;);
+		if(li.attr(&quot;yc&quot;)===&quot;1&quot; || li.find(&quot;[yc]&quot;).elems.length&gt;0){
+			var span=clickTg.prev(&quot;span&quot;);
+			var cls=span.getClass();
+			this.setAllExpandByPid(id,true);
+			if(cls.indexOf(&quot;ico-node-close&quot;)&gt;-1){
+				this.collect(span);
+			}
+			chkdivul=chkdiv.next(&quot;ul&quot;);
+		}
+		var chkchilds = chkdivul.find(&quot;[class^='ico-checkbox']&quot;);
+		var chkdischilds=chkdivul.find(&quot;[class^='ico-checkbox'][class$='disabled']&quot;);
+		if(chkdischilds.elems.length===0){
+			chkchilds.attr(&quot;class&quot;, tgclass);
+		}else{
+			this.setChkCls(chkchilds.elems,tgclass);
+		}
+		clickTg.attr(&quot;class&quot;, tgclass);
+		//下面都选中的话，上面也选中,递归
+		
+		//父节点下所有的节点复选框
+		var pli = li.parents(&quot;li:first&quot;);
+		if(pli.elems.length===0){
+			return;
+		}
+		var pid=pli.attr(&quot;id&quot;);
+		var pchk = pli.children(&quot;div&quot;).children(&quot;span:eq(1)&quot;);			
+		var pdiv=pli.children(&quot;ul&quot;).children(&quot;li&quot;).children(&quot;div&quot;);
+		var xd = pdiv.find(&quot;[class^='ico-checkbox']&quot;);		
+		var xdchked = pdiv.find(&quot;[class^='ico-checkbox-checked']&quot;);
+		var xdchkhalfed = pdiv.find(&quot;[class^='ico-checkbox-checked'],[class^='ico-checkbox-half']&quot;);	
+		var pchkclass = pchk.attr(&quot;class&quot;);		
+		if(xd.elems.length===xdchked.elems.length){
+			//兄弟全部选中	
+			this.setChkCls(pchk.elems,&quot;ico-checkbox&quot;);
+			this.chkclick(pchk);
+		}else if(xdchkhalfed.elems.length===0){
+			//兄弟全部没选中
+			this.setChkCls(pchk.elems,&quot;ico-checkbox-checked&quot;);
+			this.chkclick(pchk);
+		}else{
+			//兄弟部分选中
+			this.setChkCls(pchk.elems,&quot;ico-checkbox-half&quot;);
+			var ppdiv=pchk.parents(&quot;li&quot;).children(&quot;div&quot;);
+			var ppchk = ppdiv.find(&quot;[class^='ico-checkbox']&quot;);			
+			var ppchkdis=ppdiv.find(&quot;[class^='ico-checkbox'][class$='disabled']&quot;);
+			if(ppchkdis.elems.length===0){
+				ppchk.attr(&quot;class&quot;, &quot;ico-checkbox-half&quot;);
+			}else{
+				this.setChkCls(ppchk.elems,&quot;ico-checkbox-half&quot;);
+			}	
+		}
+	},
+<span id='fastDev-Ui-Tree-method-radioclick'>	/**
+</span>	 *  单选框选中事件
+	 * @param {Object} span
+	 * @private
+	 */
+	radioclick : function(clickTg){
+		var options = this._options, tgclass, pa, childsameparentchbs,thistree=this._global.thistree;
+		var clickclass = clickTg.attr(&quot;class&quot;);
+		if(clickclass.indexOf(&quot;disabled&quot;)&gt;0){
+			return false;
+		}
+		//得到当前节点状态
+		tgclass =clickclass.indexOf(&quot;ico-radio-checked&quot;)&gt;-1 ? &quot;ico-radio&quot; : &quot;ico-radio-checked&quot;;
+		//	1.单选勾选分组范围有&quot;同一级内&quot;和&quot;整棵树&quot;内两种
+		if(options.radioType === &quot;level&quot;) {
+			//兄弟节点选中的单选框为未选中状态
+			pa = clickTg.parents(&quot;li:first&quot;).parent(&quot;ul&quot;);
+			childsameparentchbs = pa.children(&quot;li&quot;).children(&quot;div&quot;).children(&quot;.ico-radio-checked&quot;);
+			childsameparentchbs.attr(&quot;class&quot;, &quot;ico-radio&quot;);
+			//选中节点
+			clickTg.attr(&quot;class&quot;, tgclass);
+			//清除所有半选中状态
+			thistree.find(&quot;span.ico-radio-half&quot;).attr(&quot;class&quot;, &quot;ico-radio&quot;);
+			//得到所有选中节点，并给这些节点的直系父祖辈未选中的节点赋半选中状态
+			var allsedradio = thistree.find(&quot;.ico-radio-checked,ico-radio-checked-over&quot;);
+			allsedradio.parents(&quot;li&quot;).children(&quot;div&quot;).children(&quot;.ico-radio&quot;).attr(&quot;class&quot;, &quot;ico-radio-half&quot;);
+		} else if(options.radioType === &quot;all&quot;) {
+			//整棵树：
+			//设置所有节点都为未选状态。
+			thistree.find(&quot;[class^='ico-radio']&quot;).attr(&quot;class&quot;, &quot;ico-radio&quot;);
+			//如果当前节点选中的话，直系父祖辈节点变为半选中状态。
+			if(tgclass === &quot;ico-radio-checked&quot;) {
+				clickTg.parents(&quot;li&quot;).children(&quot;div&quot;).children(&quot;.ico-radio&quot;).attr(&quot;class&quot;, &quot;ico-radio-half&quot;);
+			}
+			clickTg.attr(&quot;class&quot;, tgclass);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-collect'>	/**
+</span>	 *  收缩
+	 * @param {Object} span
+	 * @private
+	 */ 
+	collect:function(span){
+		var sclass = span.attr(&quot;class&quot;),
+		closecls= sclass.replace(&quot;-open&quot;,&quot;-close&quot;),			
+		div=span.parent(&quot;div&quot;),
+		folderSpan = div.find(&quot;span.ico-folder-open&quot;),
+		li=div.parent(&quot;li&quot;),
+		id=li.attr(&quot;id&quot;);				
+		span.attr(&quot;class&quot;,closecls);	
+		folderSpan.attr(&quot;class&quot;,&quot;ico-folder-close&quot;);			
+		var ul=li.children(&quot;ul&quot;);		
+		ul.css(&quot;display&quot;, &quot;none&quot;);	
+		var icoCls=folderSpan.attr(&quot;ico&quot;);
+		if(icoCls){
+			folderSpan.addClass(icoCls+&quot;-close&quot;);
+		}			
+		this._options.onCollect.call(this,id);
+	},
+	addNodeByPid : function(pid,options,global){
+		    options.openFloor=1;
+			var dataSet=this.dataset.structure.getNode(pid),			
+			iddiv =global.thistree.find(&quot;li[id='&quot;+pid+&quot;']&quot;),
+			idul=iddiv.children(&quot;ul&quot;),
+			onlyli=idul.elems.length&gt;0;
+			if(pid===options.topParentid){
+			idul =this._global.thistree.find(&quot;ul:first&quot;);
+			onlyli=true;
+		    }
+			var html =this.dynamicTemplate(dataSet.children,1,true,onlyli,options,global);
+			onlyli?idul.append(fastDev(html.join(''))):iddiv.append(fastDev(html.join('')));			
+	},
+	addNodeById : function(id,options,global){
+		    options.openFloor=1;
+			var dataSet=this.dataset.structure.getNode(id),
+			pid=dataSet.parentid;
+			iddiv =global.thistree.find(&quot;li[id='&quot;+pid+&quot;']&quot;),
+			idul=iddiv.children(&quot;ul&quot;),
+			onlyli=idul.elems.length&gt;0;
+			if(pid===options.topParentid){
+			idul =this._global.thistree.find(&quot;ul:first&quot;);
+			onlyli=true;
+		    }
+			var html =this.dynamicTemplate([dataSet],1,true,onlyli,options,global);
+			onlyli?idul.append(fastDev(html.join(''))):iddiv.append(fastDev(html.join('')));			
+	},
+<span id='fastDev-Ui-Tree-method-expand'>	/**
+</span>	 *  展开
+	 * @param {Object} span
+	 * @private
+	 */ 
+	expand:function(span){
+		var options=this._options,
+		global=this._global,
+		that=this,
+		sclass = span.attr(&quot;class&quot;),
+		closecls= sclass.replace(&quot;-close&quot;,&quot;-open&quot;),
+		div=span.parent(&quot;div&quot;),	
+		folderSpan = div.find(&quot;span.ico-folder-close&quot;),
+		li=div.parent(&quot;li&quot;),
+		id=li.attr(&quot;id&quot;);		
+		span.attr(&quot;class&quot;,closecls);			
+		folderSpan.attr(&quot;class&quot;,&quot;ico-folder-open&quot;);		
+		if(li.attr(&quot;yc&quot;)===&quot;1&quot;){
+			this.addNodeByPid(id,options,global);
+			li.removeAttr(&quot;yc&quot;);
+			this.setTreeCls(li);			
+			this.setPart(li);
+		}
+		if(li.attr(&quot;asyn&quot;)===&quot;1&quot;){
+			var asyncurl=options.asyncDataSource,url=&quot;&quot;,that = this;	
+			if(asyncurl.indexOf(&quot;?&quot;)&gt;0){
+			  url=asyncurl+&quot;&amp;id=&quot;+id;	
+			}else{
+			  url=asyncurl+&quot;?id=&quot;+id;
+			}		   
+		   var createNode = function(item) {
+			this.dataset.fill(item,false,true);	
+			that.addNodeByPid(id,options,global);
+			li.removeAttr(&quot;asyn&quot;);
+			that.setTreeCls(li);
+		  };
+		  var asynProxy= fastDev.create(&quot;Proxy&quot;, {
+				url : url,
+				queue : global.queue,
+				onAfterLoad : fastDev.setFnInScope(this, createNode)
+		  });
+		  asynProxy.load();
+		}		
+		var ul=li.children(&quot;ul&quot;);		
+		ul.css(&quot;display&quot;, &quot;block&quot;);
+		var icoCls=folderSpan.attr(&quot;ico&quot;);
+		if(icoCls){
+			folderSpan.addClass(icoCls+&quot;-open&quot;);
+		}
+		this._options.onExpand.call(this,id);
+	},
+<span id='fastDev-Ui-Tree-method-setAllCollect'>	/**
+</span>	 * 把所有展开的节点全部收缩
+	 */
+	setAllCollect:function(){
+		var opennode=this._global.thistree.find(&quot;[class^='ico-node-open']&quot;);
+		var len=opennode.elems.length;
+		for(var i=0;i&lt;len;i++){
+			this.collect(fastDev(opennode.elems[i]));
+		}
+	},
+<span id='fastDev-Ui-Tree-method-setAllExpand'>	/**
+</span>	 * 把所有展开的节点全部展开
+	 */
+	setAllExpand:function(){
+		this.setAllExpandByPid(this._options.topParentid);
+	},
+<span id='fastDev-Ui-Tree-method-setAllExpandByPid'>	/**
+</span>	 * 把pid下的所有节点全部展开
+	 * param {String} pid
+	 */
+	setAllExpandByPid:function(pid,isoldstate){
+		var closenode,global=this._global;
+		if(pid===this._options.topParentid){
+			closenode=global.thistree.find(&quot;[class^='ico-node-close']&quot;);
+		}else{
+			closenode=global.thistree.find(&quot;li[id='&quot;+pid+&quot;'] [class^='ico-node-close']&quot;);
+		}		
+		var len=closenode.elems.length,span,spancls,collectspan=global.collectspan;
+		for(var i=0;i&lt;len;i++){
+			span=fastDev(closenode.elems[i]);
+			spancls=span.getClass();
+			this.expand(span);
+			if(spancls.indexOf(&quot;ico-node-close&quot;)&gt;-1 &amp;&amp; isoldstate===true){
+				collectspan.push(span);
+			}
+			if(pid===this._options.topParentid){
+			closenode=global.thistree.find(&quot;[class^='ico-node-close']&quot;);
+			}else{
+			closenode=global.thistree.find(&quot;li[id='&quot;+pid+&quot;'] [class^='ico-node-close']&quot;);
+			}
+			if(closenode.elems.length&gt;0){
+				this.setAllExpandByPid(pid);
+			}else{
+				return;
+			}
+		}
+		var slen=collectspan.length;
+		for(var j=0;j&lt;slen;j++){
+			this.collect(collectspan[j]);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-setPart'>	/**
+</span>	 * 给选中的节点的父级节点给半选值
+	 * param {String} leafs
+	 */
+	setPart : function(leafs) {
+		//给选中的节点的父级节点给半选值	
+		var options=this._options;
+		if(options.treeType===&quot;radiotree&quot; || options.treeType===&quot;multitree&quot; ){
+			var chked,type=&quot;checkbox&quot;;
+			if(options.treeType===&quot;radiotree&quot;){
+				type=&quot;radio&quot;;
+			}
+			if(leafs) {
+				chked = leafs.children(&quot;div&quot;).children(&quot;span.ico-&quot;+type+&quot;-checked&quot;).elems;
+			} else {
+				chked = this._global.thistree.find(&quot;span.ico-&quot;+type+&quot;-checked&quot;).elems;
+			}
+			var chklength = chked.length;
+			for(var i = 0; i &lt; chklength; i += 1) {
+				this.chkState(chked[i],type);
+			}
+		}
+	},
+<span id='fastDev-Ui-Tree-method-chkState'>	/**
+</span>	 * 如果当前节点是选中状态，那么其子孙节点全部选中
+	 * @private
+	 */
+	chkState : function(clickTg,type) {
+		//如果当前节点是选中状态，那么其子孙节点全部选中
+		var chkchilds = fastDev(clickTg).parent(&quot;div&quot;).next(&quot;ul&quot;).find(&quot;span[class^='ico-&quot;+type+&quot;']&quot;);
+		var tgclass = fastDev(clickTg).getClass();
+		if(chkchilds.elems.length &gt; 0 &amp;&amp; tgclass === &quot;ico-&quot;+type+&quot;-checked&quot;) {
+			chkchilds.attr(&quot;class&quot;, tgclass);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-isBranch'>	/**
+</span>	 *   判断id是否父节点
+	 * @param {String} id
+	 * @return {Boolean}
+	 */ 
+	isBranch : function(id) {
+		//是否父节点--根据原始数据源判断
+		var node=this.getItemsBypid(id);
+		if(!node || node.length===0){
+			return false;
+		}else{
+			return true;
+		}
+	},
+<span id='fastDev-Ui-Tree-method-getParentid'>	/**
+</span>	 * 得到传入id的父id
+	 * @param {String} id
+	 * @return {String} pid
+	 */
+	getParentid : function(id) {
+		// 得到传入id的父id
+		var pid,node=this.getNodeByid(id);
+		if(node){
+		   pid=node.parentid;
+		}
+		return pid;
+	},
+<span id='fastDev-Ui-Tree-method-getValByid'>	/**
+</span>	 * 得到节点id的文本
+	 * @param {String} id
+	 * @return {String}
+	 */
+	getValByid : function(id) {
+		var val,node=this.getNodeByid(id);
+		if(node){
+		   val=node.text;
+		}
+		return val;
+	},
+<span id='fastDev-Ui-Tree-method-getItems'>	/**
+</span>	 * 查找所有的节点对象
+	 * @return {Json}
+	 */
+	getItems : function(){
+		var items=this.dataset.select();
+		return items;
+	},
+<span id='fastDev-Ui-Tree-method-getNodeByid'>	/**
+</span>	 * 查找指定id的节点对象
+	 * @param {String} id
+	 * @return {Object}
+	 */
+	getNodeByid : function(id) {
+		return this.getItemsByid(id);
+	},
+<span id='fastDev-Ui-Tree-method-getItemsByid'>	/**
+</span>	 * 得到某个节点的数据
+	 * @private
+	 */
+	getItemsByid : function(id){
+		return this.dataset.structure.getNode(id);
+	},
+	getItemsBypid : function(pid){
+		return this.dataset.structure.getNode(pid).children;
+	},	
+<span id='fastDev-Ui-Tree-method-getValsByids'>	/**
+</span>	 * 查找指定id数组的节点文本数组
+	 * @param {String} ids
+	 * @return {String}
+	 */
+	getValsByids : function(ids) {
+		var vals = &quot;&quot;;
+		var idssz = ids.split(',');
+		var idssz_length = idssz.length;
+		for(var i = 0; i &lt; idssz_length; i += 1) {
+			if(i === idssz_length - 1) {
+				vals += this.getValByid(idssz[i]);
+			} else {
+				vals += this.getValByid(idssz[i]) + &quot;,&quot;;
+			}
+		}
+		return vals;
+	},	
+<span id='fastDev-Ui-Tree-method-getValueType'>	/**
+</span>	 * 得到多选框获得值的类型
+	 * @return {String}
+	 * @private
+	 */
+	getValueType : function() {
+		var options = this._options;
+		if(options.onlyLeafValue) {
+			return &quot;onlyLeafValue&quot;;
+		} else {
+			if(options.treeType===&quot;multitree&quot;){
+				return options.partchkValue?&quot;partchkValue&quot;:&quot;allchkValue&quot;;				
+			}else{
+				return options.partradioValue?&quot;partradioValue&quot;:&quot;allradioValue&quot;;
+			}
+		}
+	},	
+<span id='fastDev-Ui-Tree-method-getChkedIds'>	/**
+</span>	 *  根据参数获取复选框选中值
+	 * @param {String} type 有onlyLeafValue、partchkValue、allchkValue三种
+	 * @return {Array}
+	 */
+	getChkedIds : function(type) {
+		//获取复选框选中值
+		//1.得到所有看得见的构建好的节点的选中值
+		var ids = &quot;&quot;;
+		if(type === &quot;onlyLeafValue&quot;) {
+			ids = this.getChkLeafVal(&quot;checkbox&quot;);
+		} else if(type === &quot;partchkValue&quot;) {
+			ids = this.getChkPartAllVal(&quot;checkbox&quot;);
+		} else if(type === &quot;allchkValue&quot;) {
+			ids = this.getChkAllVal(&quot;checkbox&quot;);
+		}
+		if(!this.isYanchi()){
+			return ids;
+		}
+		//2.得到所有没构建子节点的父节点
+		var items = this.getItems();//dataset.select();
+		var noleafs = this._global.thistree.find(&quot;li[asyn!='1'][yc='1']&quot;);
+		if(noleafs.elems.length &gt; 0) {
+			if(ids !== &quot;&quot;) {
+				ids += &quot;,&quot;;
+			}
+			//3.得到2中所有选中节点
+			var nolchilddiv=noleafs.children(&quot;div&quot;);
+			var allchk = nolchilddiv.find(&quot;[class^='ico-checkbox-checked']&quot;).elems;
+			//4.得到2中所有半选中节点
+			var partchk = nolchilddiv.find(&quot;[class^='ico-checkbox-half']&quot;).elems;
+			//5.得到3中节点的所有子孙级节点，全算选中
+			var allchklen = allchk.length;
+			var idtemp = &quot;&quot;;
+			for(var i = 0; i &lt; allchklen; i += 1) {
+				var id = fastDev(allchk[i]).parent(&quot;div&quot;).parent(&quot;li&quot;).prop(&quot;id&quot;);
+				if(id !== &quot;&quot;) {
+					idtemp = this.getIdsByItems(this._findNodesByPid(id));
+					if(type === &quot;onlyLeafValue&quot;) {//叶子节点
+						var idta = idtemp.split(',');
+						var tlen = idta.length;
+						for(var j = 0; j &lt; tlen; j++) {
+							if(idta[j] &amp;&amp; (this.isBranchByData(idta[j], items) === false)) {
+								ids += idta[j] + &quot;,&quot;;
+							}
+						}
+					} else {
+						ids += idtemp + &quot;,&quot;;
+					}
+				}
+			}
+			//6.得到4中节点的所有子孙级节点在数据源中的选中节点
+			var partchklen = partchk.length;
+			for(var i = 0; i &lt; partchklen; i += 1) {
+				var id = fastDev(partchk[i]).parent(&quot;div&quot;).parent(&quot;li&quot;).attr(&quot;id&quot;);
+				if(id !== &quot;&quot;) {
+					ids += this.getChkedIdsByDataType(id, type) + &quot;,&quot;;
+				}
+			}
+			if(ids &amp;&amp; ids.length &gt; 0) {
+				ids = ids.substring(0, ids.length - 1);
+			}
+		}
+		return ids;
+	},
+<span id='fastDev-Ui-Tree-method-getRadioedIds'>	/**
+</span>	 *  根据参数获取单选框选中值
+	 * @param {String} type 有onlyLeafValue、partradioValue、allradioValue三种
+	 * @return {Array}
+	 */
+	getRadioedIds : function(type) {
+		//获取单选框选中值
+		//1.得到所有看得见的构建好的节点的选中值
+		var ids = &quot;&quot;;
+		if(type === &quot;onlyLeafValue&quot;) {
+			ids = this.getChkLeafVal(&quot;radio&quot;);
+		} else if(type === &quot;partradioValue&quot;) {
+			ids = this.getChkPartAllVal(&quot;radio&quot;);
+		} else if(type === &quot;allradioValue&quot;) {
+			ids = this.getChkAllVal(&quot;radio&quot;);
+		}
+		if(!this.isYanchi()){
+			return ids;
+		}
+		//2.得到所有没构建子节点的父节点
+		var noleafs =this._global.thistree.find(&quot;li[asyn!='1'][yc='1']&quot;);
+		if(noleafs.length &gt; 0) {
+			if(ids !== &quot;&quot;) {
+				ids += &quot;,&quot;;
+			}
+			var nolchilddiv=noleafs.children(&quot;div&quot;);
+			//3.得到2中所有选中节点
+			var allradio = nolchilddiv.children(&quot;[class=^'ico-radio-checked']&quot;).elems;
+			//4.得到2中所有半选中节点
+			var partradio = nolchilddiv.children(&quot;[class=^'ico-radio-half']&quot;).elems;
+			//5.得到3中节点的所有子孙级节点，全算选中
+			var allradiolen = allradio.length;
+			for(var i = 0; i &lt; allradiolen; i += 1) {
+				var id = fastDev(allradio[i]).parent(&quot;div&quot;).parent(&quot;li&quot;).prop(&quot;id&quot;);
+				if(id !== &quot;&quot;) {
+					ids += this.getIdsByItems(this._findNodesByPid(id)) + &quot;,&quot;;
+				}
+			}
+			//6.得到4中节点的所有子孙级节点在数据源中的选中节点
+			var partradiolen = partradio.length;
+			for(var i = 0; i &lt; partradiolen; i += 1) {
+				var id = fastDev(partradio[i]).parent(&quot;div&quot;).parent(&quot;li&quot;).prop(&quot;id&quot;);
+				if(id !== &quot;&quot;) {
+					ids += this.getRadioedIdsByDataType(id, type) + &quot;,&quot;;
+				}
+			}
+			if(ids &amp;&amp; ids.length &gt; 0) {
+				ids = ids.substring(0, ids.length - 1);
+			}
+		}
+		return ids;
+	},
+<span id='fastDev-Ui-Tree-method-getChkAllVal'>	/**
+</span>	 * 根据dom得到复选框的所有选中值
+	 * @return {Array}
+	 * @private
+	*/
+	getChkAllVal : function(type) {
+		// 得到复选框的所有选中值 页面上的
+		var chked = this._global.thistree.find(&quot;[class^='ico-&quot;+type+&quot;-checked']&quot;).elems;
+		var chkvals = &quot;&quot;;
+		var chkedlength = chked.length,li;
+		if(chked &amp;&amp; chkedlength &gt; 0) {
+			for(var i = 0; i &lt; chkedlength; i += 1) {
+				li=fastDev(chked[i]).parent(&quot;div&quot;).parent(&quot;li&quot;);
+				if(li.elems.length&gt;0){
+				chkvals = chkvals +li.prop(&quot;id&quot;) + &quot;,&quot;;
+				}
+			}
+			chkvals = chkvals.substring(0, chkvals.length - 1);
+		}
+		return chkvals;
+	},
+<span id='fastDev-Ui-Tree-method-getChkPartAllVal'>	/**
+</span>	 * 根据得到复选框的所有选中节点包括半选中节点的选中id值
+	 * @return {Array}
+	 * @private
+	 */
+	getChkPartAllVal : function(type) {
+		//得到复选框的所有选中节点包括半选中节点的选中id值ui-tree-chk-part		 页面上的
+		var chked = this._global.thistree.find(&quot;[class^='ico-&quot;+type+&quot;-checked']&quot;).elems;
+		var chkhalfed = this._global.thistree.find(&quot;[class^='ico-&quot;+type+&quot;-half']&quot;).elems;
+		var chkvals = &quot;&quot;;
+		var chkedlength = chked.length;
+		var chkhalfedlen = chkhalfed.length,li,li2;
+		for(var i = 0; i &lt; chkedlength; i += 1) {
+			li= fastDev(chked[i]).parent(&quot;div&quot;).parent(&quot;li&quot;);
+			if(li.elems.length&gt;0){
+			chkvals = chkvals +li.prop(&quot;id&quot;) + &quot;,&quot;;
+			}
+		}	
+		for(var i = 0; i &lt; chkhalfedlen; i += 1) {
+			li2=fastDev(chkhalfed[i]).parent(&quot;div&quot;).parent(&quot;li&quot;);
+			if(li2.elems.length&gt;0){
+			chkvals = chkvals +li2.prop(&quot;id&quot;) + &quot;,&quot;;
+			}
+		}			
+		chkvals = chkvals.substring(0, chkvals.length - 1);
+		return chkvals;
+	},
+<span id='fastDev-Ui-Tree-method-getChkLeafVal'>	/**
+</span>	 * 根据得到复选框的所有叶节点的选中值
+	 * @return {Array}
+	 * @private
+	 */
+	getChkLeafVal : function(type) {		
+		// 得到复选框的所有叶节点的选中值
+		var leafvalue =  this._global.thistree.find(&quot;[class='ico-node'],[class='ico-node-last']&quot;);
+		var chkvals = &quot;&quot;;
+		if(leafvalue &amp;&amp; leafvalue.elems.length &gt; 0) {
+			var chked =leafvalue.parent(&quot;div&quot;).find(&quot;[class^='ico-&quot;+type+&quot;-checked']&quot;).elems;
+			var chkedlength = chked.length,li;
+			if(chked &amp;&amp; chkedlength &gt; 0) {
+				for(var i = 0; i &lt; chkedlength; i += 1) {
+					li= fastDev(chked[i]).parent(&quot;div&quot;).parent(&quot;li&quot;);
+					if(li.elems.length&gt;0){
+						chkvals = chkvals +li.prop(&quot;id&quot;) + &quot;,&quot;;
+					}
+				}
+				chkvals = chkvals.substring(0, chkvals.length - 1);
+			}
+		}
+		return chkvals;
+	},
+<span id='fastDev-Ui-Tree-method-isYanchi'>	/**
+</span>	 * 是否延迟加载
+	 * @return {Boolean}
+	 * @private
+	 */
+	isYanchi : function() {
+		//是否延迟加载
+		return this._global.thistree.find(&quot;li[yc='1']&quot;).elems.length&gt;0?true:false;
+	},
+<span id='fastDev-Ui-Tree-method-getIdsByItems'>	/**
+</span>	 * 根据数据集得到ids
+	 * @param {Array} items 数据集
+	 * @return {String}
+	 * @private
+	 */
+	getIdsByItems : function(items) {
+		var ids = &quot;&quot;;
+		for(var i = 0; i &lt; items.length; i += 1) {
+			ids += items[i].id + &quot;,&quot;;
+		}
+		if(ids &amp;&amp; ids.length &gt; 0) {
+			ids = ids.substring(0, ids.length - 1);
+		}
+		return ids;
+	},
+<span id='fastDev-Ui-Tree-method-findNodesByPid'>	/**
+</span>	 * 查找指定pid的所有子孙节点
+	 * @param {String} pid
+	 * @return {Array}
+	 */
+	findNodesByPid : function(pid) {
+		//查找指定pid的所有子孙节点
+		this._global.findItems=[];	
+		var items=this.getNodesByPidItems(pid);
+		return items;//this.getJsonByData(items);
+	},
+<span id='fastDev-Ui-Tree-method-_findNodesByPid'>	/**
+</span>	 * 查找指定pid的所有子孙节点
+	 * @private
+	 */
+	_findNodesByPid : function(pid) {
+		//查找指定pid的所有子孙节点
+		this._global.findItems=[];
+		var items=this.getNodesByPidItems(pid);
+		return items;
+	},
+<span id='fastDev-Ui-Tree-method-getNodesByPidItems'>	/**
+</span>	 * 得到父节点下的子节点
+	 * @private
+	 */
+	getNodesByPidItems : function(pid){		
+		//var im = this.dataset.select(&quot;pid=&quot;+pid),len=im.length;
+		//if(len===0){
+			var im=this.getItemsBypid(pid),len=im.length;
+		//}
+		for(var i = 0; i &lt; len; i += 1) {
+			 var id =im[i].id;
+			 this._global.findItems = this._global.findItems.slice(0).concat(im[i]);
+			 if(this.isBranch(id)){				
+				 this.getNodesByPidItems(id);
+			 }
+		}
+		return  this._global.findItems;
+	},	
+<span id='fastDev-Ui-Tree-method-getNodesByPid'>	/**
+</span>	 * 查找指定pid的节点
+	 * @param {String} pid
+	 * @return {Array}
+	 */
+	getNodesByPid : function(pid) {
+		//查找指定pid的节点
+		return this.getItemsBypid(pid);
+	},	
+<span id='fastDev-Ui-Tree-method-getAllLeafItems'>	/**
+</span>	 * 得到所有叶子节点
+	 * @return {Array}
+	 */
+	getAllLeafItems : function(){
+		//var items = this.dataset.select(),newitems=[],n=0;		
+		var items = this.getItems(),newitems=[],n=0;
+		for(var i = 0; i &lt; items.length; i++) {
+			var im = items[i];
+			if(this.isBranch(im.id) === false) {
+				newitems[n]= im;
+				n+=1;
+			}
+		}		
+		//return this.getJsonByData(newitems);
+		return newitems;
+	},	
+<span id='fastDev-Ui-Tree-method-getChkedIdsByDataType'>	/**
+</span>	 * 根据数据源数据得到所有选中状态的节点id
+	 * @param {String} pid
+	 * @param {String} type
+	 * @return {Array}
+	 * @private
+	 */
+	getChkedIdsByDataType : function(pid, type) {
+		//根据数据源数据得到所有选中状态的节点id
+		var ids = &quot;&quot;, items = [];
+		if(pid) {
+			items = this._findNodesByPid(pid);
+		} else {
+			items = this.getItems();//dataset.select();
+		}
+		if(type === &quot;onlyLeafValue&quot;) {//仅仅叶节点值
+			for(var i = 0; i &lt; items.length; i++) {
+				var im = items[i];
+				if(im) {
+					if(this.isBranch(im.id) === false &amp;&amp; &quot;&quot; + im.chk === &quot;true&quot;) {
+						ids += im.id + &quot;,&quot;;
+					}
+				}
+			}
+		} else if(type === &quot;partchkValue&quot;) {//全选和半选状态值
+			for(var i = 0; i &lt; items.length; i++) {
+				var im = items[i];
+				if(im) {
+					var chk = &quot;&quot; + im.chk;
+					if(chk === &quot;true&quot; || chk === &quot;part&quot;) {
+						ids += im.id + &quot;,&quot;;
+					}
+				}
+			}
+		} else if(type === &quot;allchkValue&quot;) {//全选值
+			for(var i = 0; i &lt; items.length; i++) {
+				var im = items[i];
+				var chk = &quot;&quot; + im.chk;
+				if(chk === &quot;true&quot;) {
+					ids += im.id + &quot;,&quot;;
+				}
+			}
+		}
+		if(ids &amp;&amp; ids.length &gt; 0) {
+			ids = ids.substring(0, ids.length - 1);
+		}
+		return ids;
+	},
+<span id='fastDev-Ui-Tree-method-getAllCheckedByData'>	/**
+</span>	 * 根据数据源得到所有选中状态的值
+	 * @param {Array} items
+	 * @return {Array}
+	 * @private
+	 */
+	getAllCheckedByData : function(items) {
+		//根据数据源得到所以选中状态的值
+		var len = items.length, nodes = [];
+		for(var i = 0; i &lt; len; i++) {
+			var im = items[i];
+			if(im &amp;&amp; &quot;&quot; + im.chk === &quot;true&quot;) {
+				nodes = nodes.slice(0).concat(items[i]);
+			}
+		}
+		return nodes;
+	},
+<span id='fastDev-Ui-Tree-method-getRadioedIdsByDataType'>	/**
+</span>	 * 根据数据源数据得到所有选中状态的节点id
+	 * @param {String} pid
+	 * @param {String} type
+	 * @return {Array}
+	 * @private
+	 */
+	getRadioedIdsByDataType : function(pid, type) {
+		//根据数据源数据得到所有选中状态的节点id
+		var ids = &quot;&quot;, items = [];
+		if(pid) {
+			items = this._findNodesByPid(pid);
+		} else {
+			items = this.getItems();//dataset.select();
+		}
+		if(type === &quot;onlyLeafValue&quot;) {//仅仅叶节点值
+			for(var i = 0; i &lt; items.length; i++) {
+				var im = items[i];
+				if(im) {
+					if(this.isBranch(im.id) === false &amp;&amp; &quot;&quot; + im.radio === &quot;true&quot;) {
+						ids += im.id + &quot;,&quot;;
+					}
+				}
+			}
+		} else if(type === &quot;partradioValue&quot;) {//全选和半选状态值
+			for(var i = 0; i &lt; items.length; i++) {
+				var im = items[i];
+				if(im) {
+					var radio = &quot;&quot; + im.radio;
+					if(radio === &quot;true&quot; || radio === &quot;part&quot;) {
+						ids += im.id + &quot;,&quot;;
+					}
+				}
+			}
+		} else if(type === &quot;allradioValue&quot;) {//全选值
+			for(var i = 0; i &lt; items.length; i++) {
+				var im = items[i];
+				var radio = &quot;&quot; + im.radio;
+				if(radio === &quot;true&quot;) {
+					ids += im.id+ &quot;,&quot;;
+				}
+			}
+		}
+		if(ids &amp;&amp; ids.length &gt; 0) {
+			ids = ids.substring(0, ids.length - 1);
+		}
+		return ids;
+	},
+<span id='fastDev-Ui-Tree-method-isBranchByData'>	/**
+</span>	 * 是否父节点
+	 * @param {String} id
+	 * @param {Array} items 数据集
+	 * @return {Boolean}
+	 * @private
+	 */
+	isBranchByData : function(id, items) {
+		//是否父节点--根据原始数据源判断		
+		var allbraids=this.getAllBranchIds();
+		if(allbraids.indexOf(&quot;,&quot;+id+&quot;,&quot;)&gt;-1){
+			return true;
+		}else{			
+			return false;
+		}
+	},
+<span id='fastDev-Ui-Tree-method-getAllBranchIds'>	/**
+</span>	 * 得到所有父节点
+	 * @return {String}
+	 * @private
+	 */
+	getAllBranchIds : function(){
+		if(this._global.allBraIds!==&quot;&quot;){
+			return this._global.allBraIds;
+		}else{
+		var items=this.getItems(),len=items.length,ids=&quot;,&quot;;
+		for(var i = 0; i &lt; len; i += 1) {
+			if(ids.indexOf(&quot;,&quot;+items[i].pid+&quot;,&quot;)===-1){
+				ids+=items[i].pid+&quot;,&quot;;
+			}
+		}
+		this._global.allBraIds=ids;
+		}
+		return ids;
+	},
+<span id='fastDev-Ui-Tree-method-isLeaf'>	/**
+</span>	 * 判断某个id的节点是否叶节点
+	 * @param {String} id
+	 * @return {Boolean}
+	 */
+	isLeaf : function(id) {
+		return this.isBranch(id)===false?true:false;
+	},
+<span id='fastDev-Ui-Tree-method-isChecked'>	/**
+</span>	 * 判断某个id的节点是否选中
+	 * @param {String} id
+	 * @return {Boolean}
+	 */
+	isChecked : function(id) {
+		//是否选中
+		var li = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);
+		var options = this._options;
+		if(li.elems.length &gt; 0) {
+			if(options.treeType === &quot;radiotree&quot;) {
+				return li.children(&quot;div&quot;).find(&quot;[class^='ico-radio-checked']&quot;).elems.length&gt;0 ? true : false;
+			} else {
+				return li.children(&quot;div&quot;).find(&quot;[class^='ico-checkbox-checked']&quot;).elems.length&gt;0? true : false;
+			}
+		} else {
+			//var items = this.dataset.select(), items_length = items.length;
+			var items = this.getItems(), items_length = items.length;
+			if(!items) {
+				return null;
+			}
+			for(var i = 0; i &lt; items_length; i += 1) {
+				if(&quot;&quot; +items[i].id === id) {
+					if(options.treeType === &quot;radiotree&quot;) {
+						return &quot;&quot; + items[i].radio === &quot;true&quot; ? true : false;
+					} else {
+						return &quot;&quot; + items[i].chk === &quot;true&quot; ? true : false;
+					}
+				}
+			}
+		}
+	},
+<span id='fastDev-Ui-Tree-method-clearCheck'>	/**
+</span>	 * 清空复选树的值
+	 */
+	clearCheck : function() {
+		//清空
+		 this._global.thistree.find(&quot;span.ico-checkbox-half&quot;).attr(&quot;class&quot;, &quot;ico-checkbox&quot;);
+		 this._global.thistree.find(&quot;span.ico-checkbox-checked&quot;).attr(&quot;class&quot;, &quot;ico-checkbox&quot;);
+	},
+<span id='fastDev-Ui-Tree-method-unCheckedById'>	/**
+</span>	 * 清空某个复选树的值
+	 * @param {String} id
+	 */
+	unCheckedById : function(id) {
+		//清空
+		var options = this._options;
+		var currli=	this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);	
+		if(currli.elems.length === 0) {
+			this.createNodeByChildId(id);
+		}
+		currli = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);
+		if(currli.elems.length === 0) {
+			return;
+		}
+		var li=currli.children(&quot;div&quot;);		
+		if(options.treeType === &quot;multitree&quot; ){
+			//li.find(&quot;.ico-checkbox-half&quot;).attr(&quot;class&quot;, &quot;ico-checkbox&quot;);
+			//li.find(&quot;.ico-checkbox-checked&quot;).attr(&quot;class&quot;, &quot;ico-checkbox&quot;);
+			var chk= li.children(&quot;span.ico-checkbox-checked&quot;);
+			this.chkclick(chk);
+		}else if(options.treeType === &quot;radiotree&quot;){
+			//li.find(&quot;.ico-radio-half&quot;).attr(&quot;class&quot;, &quot;ico-radio&quot;);
+			//li.find(&quot;.ico-radio-checked&quot;).attr(&quot;class&quot;, &quot;ico-radio&quot;);
+			var chk= li.children(&quot;span.ico-radio-checked&quot;);
+			this.radioclick(chk);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-checkedById'>	/**
+</span>	 * 选中某个复选树的值
+	 * @param {String} id
+	 */
+	checkedById : function(id) {		
+		var options = this._options;	
+		var currli=	this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);	
+		if(currli.elems.length === 0) {
+			this.createNodeByChildId(id);
+		}
+		currli = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);
+		if(currli.elems.length === 0) {
+			return;
+		}
+		var li=currli.children(&quot;div&quot;);	
+		///var li=this._global.thistree.find(&quot;[id='&quot;+id+&quot;']&quot;).children(&quot;div&quot;);
+		if(options.treeType === &quot;multitree&quot; ){
+			//li.find(&quot;.ico-checkbox-half&quot;).attr(&quot;class&quot;, &quot;ico-checkbox&quot;);
+			//li.find(&quot;.ico-checkbox-checked&quot;).attr(&quot;class&quot;, &quot;ico-checkbox&quot;);
+			var chk= li.children(&quot;.ico-checkbox&quot;);
+			this.chkclick(chk);
+		}else if(options.treeType === &quot;radiotree&quot;){
+			//li.find(&quot;.ico-radio-half&quot;).attr(&quot;class&quot;, &quot;ico-radio&quot;);
+			//li.find(&quot;.ico-radio-checked&quot;).attr(&quot;class&quot;, &quot;ico-radio&quot;);
+			var chk= li.children(&quot;.ico-radio&quot;);
+			this.radioclick(chk);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-clearRadio'>	/**
+</span>	 * 清空单选树的值
+	 */
+	clearRadio : function() {
+		//清空
+		 this._global.thistree.find(&quot;.ico-radio-half&quot;).attr(&quot;class&quot;, &quot;ico-radio&quot;);
+		 this._global.thistree.find(&quot;.ico-radio-checked&quot;).attr(&quot;class&quot;, &quot;ico-radio&quot;);
+	},	
+<span id='fastDev-Ui-Tree-method-setValue'>	/**
+</span>	 * 设置树的值
+	 * @param {String}
+	 */
+	setValue : function(ids) {
+		var options = this._options;
+		if(ids===&quot;&quot; || ids===options.topParentid){
+			return;
+		}	
+		if(options.treeType === &quot;multitree&quot; || options.treeType === &quot;radiotree&quot;) {
+			//多选树就给选中节点打钩
+			if(typeof ids === &quot;string&quot;){
+				if(ids.indexOf(',')&gt;0){
+					ids=ids.split(',');
+				}else{
+					ids = [ids];
+				}				
+			}
+			var idslen = ids.length;
+			var txt = &quot;&quot;,type=&quot;checkbox&quot;;
+			if(options.treeType === &quot;radiotree&quot;){
+				type=&quot;radio&quot;;
+				this.clearRadio();
+			}else{
+				this.clearCheck();
+			}
+			this._global.thistree.find(&quot;.ui-tree-selected&quot;).removeClass(&quot;ui-tree-selected&quot;);
+			for(var i = 0; i &lt; idslen; i += 1) {
+				var currli = this._global.thistree.find(&quot;li[id='&quot; + ids[i] + &quot;']&quot;);
+				if(currli.elems.length === 0) {
+					this.createNodeByChildId(ids[i]);
+				}
+				currli = this._global.thistree.find(&quot;li[id='&quot; + ids[i] + &quot;']&quot;);
+				if(currli.elems.length === 0) {
+					break;
+				}
+				if((type === &quot;checkbox&quot; &amp;&amp; options.mTreeShowCkb === false) || (type=== &quot;radio&quot; &amp;&amp; options.mTreeShowRadio === false)) { 
+					currli.find(&quot;.ui-tree-content&quot;).addClass(&quot;ui-tree-selected&quot;);
+				}else{
+					currli.find(&quot;.ico-&quot;+type+&quot;,.ico-&quot;+type+&quot;-half&quot;).attr(&quot;class&quot;, &quot;ico-&quot;+type+&quot;-checked&quot;);
+				}
+			}			
+		} else {
+				this.setCurrentId(ids);			
+		}
+	},
+<span id='fastDev-Ui-Tree-method-setCurrentId'>	/**
+</span>	 * 设置当前id
+	 * @param {String}
+	 */
+	setCurrentId : function(id){
+		if(typeof id !== &quot;string&quot; || id===&quot;&quot;){
+			return;
+		}
+		this._global.thistree.find(&quot;span.ui-tree-selected&quot;).removeClass(&quot;ui-tree-selected&quot;);
+		var currli = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);
+		if(currli.elems.length === 0) {
+			this.createNodeByChildId(id);
+			currli = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);
+		}
+		if(currli.elems.length &gt; 0) {
+			currli.children(&quot;div&quot;).children(&quot;.ui-tree-content&quot;).addClass(&quot;ui-tree-selected&quot;);
+			var currparentsul = currli.parents(&quot;ul:hidden&quot;);
+			if(currparentsul &amp;&amp; currparentsul.elems.length &gt; 0) {
+				currparentsul.css(&quot;display&quot;, &quot;block&quot;);
+			}
+		}
+	},
+<span id='fastDev-Ui-Tree-method-getValue'>	/**
+</span>	 * 得到树的值
+	 * @return {String}或数组
+	 */
+	getValue : function() {
+		var value;
+		var options = this._options;
+		if(options.treeType === &quot;multitree&quot;) {
+			var ids = this.getChkedIds(this.getValueType());
+			value = ids.split(',');
+		} else if(options.treeType === &quot;radiotree&quot;) {
+			var ids = this.getRadioedIds(this.getValueType());
+			value = ids.split(',');
+		} else {
+			var id = this.getCurrentId();
+			value = id;
+		}
+		return value;
+	},
+<span id='fastDev-Ui-Tree-method-getCurrentId'>	/**
+</span>	 * 得到当前id
+	 * @return {String}
+	 */
+	getCurrentId : function() {
+		// 得到当前id
+		var curr = this._global.thistree.find(&quot;.ui-tree-selected&quot;);
+		var id = &quot;&quot;;
+		if(curr &amp;&amp; curr.elems.length &gt; 0) {
+			id = curr.parent(&quot;div&quot;).parent(&quot;li&quot;).attr(&quot;id&quot;);
+		}
+		return id;
+	},
+<span id='fastDev-Ui-Tree-method-getSelectedIds'>	/**
+</span>	 * 得到多选树的选中节点的id
+	 * @return {String}
+	 */
+	getSelectedIds : function() {
+		// 得到当前id
+		var curr = this._global.thistree.find(&quot;.ui-tree-selected&quot;).elems;
+		var id = [],len=curr.length;
+		//id = curr.parent(&quot;div&quot;).parent(&quot;li&quot;).attr(&quot;id&quot;);
+		for(var i=0;i&lt;len;i++){
+			id[i]=fastDev(curr[i]).parent(&quot;div&quot;).parent(&quot;li&quot;).attr(&quot;id&quot;);
+		}
+		return id;
+	},
+<span id='fastDev-Ui-Tree-method-isSelected'>	/**
+</span>	 * 得到是否有选中节点
+	 * @return {Boolble}
+	 */
+	isSelected:function(){
+		var ids=this.getSelectedIds();
+		return ids.length&gt;0?true:false;
+	},
+<span id='fastDev-Ui-Tree-method-getCurrentTxt'>	/**
+</span>	 * 得到当前文本
+	 * @return {String}
+	 */
+	getCurrentTxt : function() {
+		// 得到当前文本
+		var curr =  this._global.thistree.find(&quot;.ui-tree-selected&quot;);
+		var txt = &quot;&quot;;
+		if(curr &amp;&amp; curr.elems.length &gt; 0) {
+			txt = curr.children(&quot;.ui-tree-text&quot;).getText();
+			if(txt.lastIndexOf('...')&gt;0){
+				txt = curr.children(&quot;.ui-tree-text&quot;).attr(&quot;title&quot;) || txt;
+			}
+		}
+		return txt;
+	},
+<span id='fastDev-Ui-Tree-method-getValues'>	/**
+</span>	 * 得到传入枚举的值太多请具体看例子
+	 * @param {String} type
+	 * @return {Array} values
+	 */
+	getValues : function(type) {
+		var value=[];
+		switch(type) {
+			case  &quot;chkedNodes&quot;:
+				// 当前选中的所有节点id
+				var ids = this.getChkedIds(&quot;allchkValue&quot;);
+				if(ids === &quot;&quot;) {
+					return null;
+				}
+				value = ids.split(',');
+				break;
+			case  &quot;chkedLeafNodes&quot;:
+				// 当前选中的所有叶节点id
+				var ids = this.getChkedIds(&quot;onlyLeafValue&quot;);
+				if(ids === &quot;&quot;) {
+					return null;
+				}
+				value = ids.split(',');
+				break;
+			case  &quot;chkedPNodes&quot;:
+				// 当前选中和半选中的所有节点id
+				var ids = this.getChkedIds(&quot;partchkValue&quot;);
+				if(ids === &quot;&quot;) {
+					return null;
+				}
+				value = ids.split(',');
+				break;
+			case  &quot;chkedNodesIdVal&quot;:
+				// 当前选中的所有节点IdVal
+				var ids = this.getChkedIds(&quot;allchkValue&quot;);
+				if(ids === &quot;&quot;) {
+					return null;
+				}				
+				//var values = &quot;[&quot;;
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					var val = this.getValByid(id);
+					//if(i === idslen - 1) {
+						//values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'}&quot;;
+					//} else {
+						//values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'},&quot;;
+					//}
+					value.push({id:id,val:val});
+				}
+				//values += &quot;]&quot;;
+				//value = [].concat(eval(values));
+				break;
+			case  &quot;chkedPNodesIdVal&quot;:
+				// 当前选中和半选中的所有节点IdVal
+				var ids = this.getChkedIds(&quot;partchkValue&quot;);
+				if(ids === &quot;&quot;) {
+					return null;
+				}
+				//var values = &quot;[&quot;;
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					var val = this.getValByid(id);
+					//if(i === idslen - 1) {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'}&quot;;
+					//} else {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'},&quot;;
+					//}
+					value.push({id:id,val:val});
+				}
+				//values += &quot;]&quot;;
+				//value = [].concat(eval(values));
+				break;
+			case  &quot;chkedLeafNodesIdVal&quot;:
+				// 当前选中的所有叶节点IdVal
+				var ids = this.getChkedIds(&quot;onlyLeafValue&quot;);
+				if(ids === &quot;&quot;) {
+					return null;
+				}
+				//var values = &quot;[&quot;;
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					var val = this.getValByid(id);
+					//if(i === idslen - 1) {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'}&quot;;
+					//} else {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'},&quot;;
+					//}
+					value.push({id:id,val:val});
+				}
+				//values += &quot;]&quot;;
+				//value = [].concat(eval(values));
+				break;
+			case  &quot;chkedNodesArray&quot;:
+				// 当前选中的所有节点node
+				var ids = this.getChkedIds(&quot;allchkValue&quot;);
+				if(ids === &quot;&quot;) {
+					return null;
+				}
+				//var values = [];
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					//values = values.concat(this.getNodeByid(id));
+					value.push(this.getNodeByid(id));
+				}
+				//value = values;
+				break;
+			case  &quot;chkedPNodesArray&quot;:
+				// 当前选中和半选中的所有节点node
+				var ids = this.getChkedIds(&quot;partchkValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				//var values = [];
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					//values = values.concat(this.getNodeByid(id));
+					value.push(this.getNodeByid(id));
+				}
+				//value = values;
+				break;
+			case  &quot;chkedLeafNodesArray&quot;:
+				// 当前选中的所有叶节点node
+				var ids = this.getChkedIds(&quot;onlyLeafValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				//var values = [];
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					//values = values.concat(this.getNodeByid(id));
+					value.push(this.getNodeByid(id));
+				}
+				//value = values;
+				break;
+			case  &quot;radioedNodes&quot;:
+				// 当前选中的所有节点id
+				var ids = this.getRadioedIds(&quot;allradioValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				value = ids.split(',');
+				break;
+			case  &quot;radioedLeafNodes&quot;:
+				// 当前选中的所有叶节点id
+				var ids = this.getRadioedIds(&quot;onlyLeafValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				value = ids.split(',');
+				break;
+			case  &quot;radioedPNodes&quot;:
+				// 当前选中和半选中的所有节点id
+				var ids = this.getRadioedIds(&quot;partradioValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				value = ids.split(',');
+				break;
+			case  &quot;radioedNodesIdVal&quot;:
+				// 当前选中的所有节点IdVal
+				var ids = this.getRadioedIds(&quot;allradioValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				//var values = &quot;[&quot;;
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					var val = this.getValByid(id);
+					//if(i === idslen - 1) {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'}&quot;;
+					//} else {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'},&quot;;
+					//}
+					value.push({id:id,val:val});
+				}
+				//values += &quot;]&quot;;
+				//value = [].concat(eval(values));
+				break;
+			case  &quot;radioedPNodesIdVal&quot;:
+				// 当前选中和半选中的所有节点IdVal
+				var ids = this.getRadioedIds(&quot;partradioValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				//var values = &quot;[&quot;;
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					var val = this.getValByid(id);
+					//if(i === idslen - 1) {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'}&quot;;
+					//} else {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'},&quot;;
+					//}
+					value.push({id:id,val:val});
+				}
+				//values += &quot;]&quot;;
+				//value = [].concat(eval(values));
+				break;
+			case  &quot;radioedLeafNodesIdVal&quot;:
+				// 当前选中的所有叶节点IdVal
+				var ids = this.getRadioedIds(&quot;onlyLeafValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				//var values = &quot;[&quot;;
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					var val = this.getValByid(id);
+					//if(i === idslen - 1) {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'}&quot;;
+					//} else {
+					//	values += &quot;{id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'},&quot;;
+					//}
+					value.push({id:id,val:val});
+				}
+				//values += &quot;]&quot;;
+				//value = [].concat(eval(values));
+				break;
+			case  &quot;radioedNodesArray&quot;:
+				// 当前选中的所有节点node
+				var ids = this.getRadioedIds(&quot;allradioValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				//var values = [];
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					//values = values.concat(this.getNodeByid(id));
+					value.push(this.getNodeByid(id));
+				}
+				//value = values;
+				break;
+			case  &quot;radioedPNodesArray&quot;:
+				// 当前选中和半选中的所有节点node
+				var ids = this.getRadioedIds(&quot;partradioValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				//var values = [];
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					//values = values.concat(this.getNodeByid(id));
+					value.push(this.getNodeByid(id));
+				}
+				//value = values;
+				break;
+			case  &quot;radioedLeafNodesArray&quot;:
+				// 当前选中的所有叶节点node
+				var ids = this.getRadioedIds(&quot;onlyLeafValue&quot;);
+				if(ids == &quot;&quot;) {
+					return null;
+				}
+				//var values = [];
+				var idslist = ids.split(',');
+				var idslen = idslist.length;
+				for(var i = 0; i &lt; idslen; i += 1) {
+					var id = idslist[i];
+					//values = values.concat(this.getNodeByid(id));
+					value.push(this.getNodeByid(id));
+				}
+				//value = values;
+				break;
+			default:
+				value = this.getCurrentId() &amp;&amp; this.getNodeByid(this.getCurrentId());
+		}
+		return value;
+	},
+<span id='fastDev-Ui-Tree-method-isRealData'>	/**
+</span>	 * 判断id是否树的节点id
+	 * @param {String} id
+	 * @return {Boolean}
+	 */
+	isRealData : function(id) {
+		//是否真实数据
+		return !this.getNodeByid(id)?false:true;
+	},
+<span id='fastDev-Ui-Tree-method-isData'>	/**
+</span>	 * 判断数据是否是树的真实节点(有pid)
+	 * @param {Json} item
+	 * @return {Boolean}
+	 */
+	isData : function(items) {
+		//是否有跟节点
+		return !this.dataset.structure.getRoot()?false:true;
+	},
+<span id='fastDev-Ui-Tree-method-createNodeByChildId'>	/**
+</span>	 * 创建某id的所有未构建的直系父节点和兄弟节点
+	 * @private
+	 */
+	createNodeByChildId : function(id) {
+		//创建某id的所有未构建的直系父节点和兄弟节点
+		if(this.isRealData(id)) {
+			var pitem=  this.getParentNodebyId(id);
+			var len=pitem.length;
+			for(var i=len-1;i&gt;-1;i--){
+				var li=this._global.thistree.find(&quot;li[id='&quot; +pitem[i] + &quot;']&quot;);
+				if(li.elems.length&gt;0){
+				var span=li.children(&quot;div&quot;).find(&quot;[class^='ico-node']&quot;);
+				if(span.elems.length&gt;0){
+					this.expand(span);
+				}
+				}
+			}
+		}
+	},
+<span id='fastDev-Ui-Tree-method-getParentNodebyId'>	/**
+</span>	 * 得到某id的所有未构建的直系父节点和兄弟节点
+	 * @param {String} id
+	 * @return {Array}
+	 * @private
+	 */
+	getParentNodebyId : function(id) {
+		//得到某id的所有未构建的直系父节点和兄弟节点
+		//1.是否id的节点有构建
+		
+		var li = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;).elems;
+		//2.没有构建的话，将此pid的子节点保存在递归ids变量中，重复1开始。
+		if(li.length === 0) {
+			//3.找到当前节点的pid
+			var pid = this.getParentid(id);
+			this._global.parentItems = this._global.parentItems.slice(0).concat(pid);			
+			this.getParentNodebyId(pid);
+		}
+		return this._global.parentItems;
+	},
+	/* 添加树节点
+	 * @param {json} item 一个树节点数据json数据字符串
+	 * @return {Boolean}
+	 */
+	addNode : function(items) {
+		fastDev.isArray(items) || ( items = [items]);
+		var itemslen=items.length,options=this._options,global=this._global;
+		for(var i=0;i&lt;itemslen;i++){
+			var item=items[i];
+			var id=item.id;
+			var tempds=this.getItemsByid(id);//dataset.select(&quot;id=&quot;+id);
+			if(!!tempds){
+				throw &quot;id为&quot;+id+&quot;的数据已经存在，无法添加。&quot;;
+				return;
+			}
+			this.dataset.insert(item,false,true);	
+			var pid=this.dataset.structure.getNode(id).parentid;
+			//var pitem=this.getItemsByid(pid);//dataset.select(&quot;id=&quot;+pid);
+			var li=global.thistree.find(&quot;[id='&quot;+pid+&quot;']&quot;);
+			if(li.elems.length===0 &amp;&amp; pid!==options.topParentid){
+				this.dataset.structure.removeNode(id);
+				throw &quot;没有父节点为&quot;+pid+&quot;的数据存在，无法添加。&quot;;				
+				return;
+			}
+			if(options.onBeforeAdd.call(this,item)===false){
+				return false;
+			}
+			//如果父节点是展开状态，那么创建一个节点
+			
+			if(pid===options.topParentid){
+				li=global.thistree;
+			}
+			var spancls=li.children(&quot;div&quot;).children(&quot;span:first&quot;).getClass();
+			var hasul=li.children(&quot;ul&quot;).elems.length;
+			if(spancls.indexOf('ico-node-close')===-1 || pid==options.topParentid || hasul&gt;0){
+				this.addNodeById(id,options,global);
+				this.showNode(id);
+				this.changeLeafCls(li);
+				this.setTreeCls(li);
+				this.setPart(li);
+			}
+			options.onAfterAdd.call(this,item);
+		}
+		return true;
+	},
+<span id='fastDev-Ui-Tree-method-changeLeafCls'>	/**
+</span>	 * 将叶子节点变成枝节点
+	 * @private
+	 */
+	changeLeafCls : function(li){
+		li.removeAttr(&quot;yc&quot;);
+		var div=li.children(&quot;div&quot;);
+		div.find(&quot;.ico-file&quot;).setClass(&quot;ico-folder-open&quot;);
+		div.find(&quot;.ico-node-last&quot;).setClass(&quot;ico-node-open-last&quot;);
+		div.find(&quot;.ico-node&quot;).setClass(&quot;ico-node-open&quot;);
+	},	
+<span id='fastDev-Ui-Tree-method-delNode'>	/**
+</span>	 * 删除树节点
+	 * @param {String} id
+	 * @return {Boolean}
+	 */
+	delNode : function(id) {
+		var tempds=this.getItemsByid(id);//dataset.select(&quot;id=&quot;+id);
+		if(!tempds){
+			throw &quot;id为&quot;+id+&quot;的数据不存在，无法删除。&quot;;
+			return;
+		}
+		if(this._options.onBeforeDel.call(this,id)===false){
+			return false;
+		}
+		var pid=this.getParentid(id);
+		//this.dataset.remove(&quot;id=&quot;+id);
+		this.removeNodeByid(id);
+		var li = this._global.thistree.find(&quot;[id='&quot;+id+&quot;']&quot;);
+		var pli=this._global.thistree.find(&quot;[id='&quot;+pid+&quot;']&quot;);
+		if(li.elems.length&gt;0){
+			li.remove();			
+			this.setTreeCls(pli);
+		}//else{
+			var xds=this.getItemsBypid(pid);//dataset.select(&quot;pid=&quot;+pid);
+			if(xds.length===0){				
+				this.changeBranchCls(pli);
+			}
+		//}
+		this._options.onAfterDel.call(this,id);		
+		return true;
+	},
+	removeNodeByid : function(id) {		
+		this.dataset.structure.removeNode(id);
+	},
+<span id='fastDev-Ui-Tree-method-changeBranchCls'>	/**
+</span>	 * 将枝节点变成叶子节
+	 * @private
+	 */
+	changeBranchCls : function(li){
+		li.removeAttr(&quot;yc&quot;);
+		var div=li.children(&quot;div&quot;);
+		div.find(&quot;.ico-folder-open&quot;).setClass(&quot;ico-file&quot;);
+		div.find(&quot;.ico-node-open-last&quot;).setClass(&quot;ico-node-last&quot;);
+		div.find(&quot;.ico-node-open&quot;).setClass(&quot;ico-node&quot;);
+		div.find(&quot;.ico-folder-close&quot;).setClass(&quot;ico-file&quot;);
+		div.find(&quot;.ico-node-close-last&quot;).setClass(&quot;ico-node-last&quot;);
+		div.find(&quot;.ico-node-close&quot;).setClass(&quot;ico-node&quot;);
+	},
+<span id='fastDev-Ui-Tree-method-disableChk'>	/**
+</span>	 * 禁用某个复选框
+	 * @param {String} id
+	 */
+	disableChk : function(id){
+		var li=this._global.thistree.find(&quot;[id='&quot;+id+&quot;']&gt;div&quot;);
+		var chk= li.find(&quot;[class^='ico-checkbox']&quot;);
+		var oldcls=chk.getClass();
+		if(oldcls.indexOf(&quot;-disabled&quot;)===-1){
+		chk.setClass(oldcls+&quot;-disabled&quot;);
+		}
+	},
+<span id='fastDev-Ui-Tree-method-enableChk'>	/**
+</span>	 * 启用某个复选框
+	 * @param {String} id
+	 */
+	enableChk : function(id){
+		var li=this._global.thistree.find(&quot;[id='&quot;+id+&quot;']&gt;div&quot;);	
+		var chk= li.find(&quot;[class^='ico-checkbox']&quot;);
+		var oldcls=chk.getClass();
+		if(oldcls.indexOf(&quot;-disabled&quot;)&gt;-1){
+			chk.setClass(oldcls.replace(&quot;-disabled&quot;,&quot;&quot;));	
+		}
+	},
+<span id='fastDev-Ui-Tree-method-hideNode'>	/**
+</span>	 * 隐藏树节点
+	 * @param {String} id
+	 */
+	hideNode : function(id){		
+		var li=this._global.thistree.find(&quot;[id='&quot;+id+&quot;']&quot;);		
+		if(li.elems.length===0){
+			this.createNodeByChildId(id);
+			li = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);
+		}		
+			li.find(&quot;.ui-tree-selected&quot;).removeClass(&quot;ui-tree-selected&quot;);
+			li.hide();
+			this.setLast(li);		
+	},
+<span id='fastDev-Ui-Tree-method-isHideNode'>	/**
+</span>	 * 是否隐藏节点
+	 * @param {String} id
+	 * @return {Boolean}
+	 */
+	isHideNode : function(id){
+		var li=this._global.thistree.find(&quot;[id='&quot;+id+&quot;']&quot;);		
+		var lishow=this._global.thistree.find(&quot;[id='&quot;+id+&quot;'][style!='display: none;']&quot;);		
+		if(fastDev.Browser.isIE6 || fastDev.Browser.isIE7){
+			 lishow=this._global.thistree.find(&quot;[id='&quot;+id+&quot;']:visible&quot;);
+		}
+		if(li.elems.length===0){
+			return false;
+		}else{
+			return lishow.elems.length&gt;0?false:true;
+		}
+	},
+<span id='fastDev-Ui-Tree-method-showNode'>	/**
+</span>	 * 显示树节点
+	 * @param {String} id
+	 */
+	showNode : function(id){
+		var li=this._global.thistree.find(&quot;[id='&quot;+id+&quot;']&quot;);
+		li.show();
+		this.setLast(li);
+	},
+<span id='fastDev-Ui-Tree-method-setLast'>	/**
+</span>	 * 设置末端数据样式
+	 * @private
+	 */
+	setLast : function(li){
+		var lastlen=li.children(&quot;div&quot;).find(&quot;[class$='-last']&quot;).elems.length;
+		if(lastlen&gt;0){
+			var pli=li.parents(&quot;li:first&quot;);
+			var div= pli.find(&quot;ul&gt;li:visible&gt;div&quot;).elems;			
+			var len=div.length;
+			var lastdivs=fastDev(div[len-1]);
+			var lastprevdivs=fastDev(div[len-2]);
+			lastdivs.find(&quot;.ico-node&quot;).setClass(&quot;ico-node-last&quot;);
+			lastdivs.find(&quot;.ico-node-close&quot;).setClass(&quot;ico-node-close-last&quot;);
+			lastdivs.find(&quot;.ico-node-open&quot;).setClass(&quot;ico-node-open-last&quot;);
+			lastprevdivs.find(&quot;.ico-node-last&quot;).setClass(&quot;ico-node&quot;);
+			lastprevdivs.find(&quot;.ico-node-close-last&quot;).setClass(&quot;ico-node-close&quot;);
+			lastprevdivs.find(&quot;.ico-node-open-last&quot;).setClass(&quot;ico-node-open&quot;);						
+		}
+	},
+<span id='fastDev-Ui-Tree-method-editNode'>	/**
+</span>	 * 编辑树节点
+	 * @param  {json} itemstr 一个树节点数据json数据字符串，id不能变
+	 * @return {Boolean}
+	 */
+	editNode : function(item) {
+		var id=item.id;
+		var tempds=this.getItemsByid(id);//dataset.select(&quot;id=&quot;+id);
+		if(!tempds){
+			throw &quot;id为&quot;+id+&quot;的数据不存在，无法修改。&quot;;
+			return;
+		}
+		if(this._options.onBeforeEdit.call(this,item)===false){
+			return false;
+		}
+		var pid=item.parentid;
+		var val=item.text;
+		var oldpid=tempds.parentid;
+		if(pid===oldpid){
+			var li=this._global.thistree.find(&quot;[id='&quot;+id+&quot;']&quot;);
+			li.children(&quot;div&quot;).find(&quot;.ui-tree-text&quot;).setText(val);
+		}else{
+			this.delNode(id);
+			this.addNode(item);
+		}
+		this._options.onAfterEdit.call(this,item);
+		return true;
+	},
+<span id='fastDev-Ui-Tree-method-reLoad'>	/**
+</span>	 * 重新加载
+	 */
+	reLoad : function(config) {
+		this._global.thistree &amp;&amp; this._global.thistree.children(&quot;.ui-tree&quot;).remove();
+		if(!!config.data){
+			config.renderer=true;
+			this.refreshDataSet(config);
+		}else{
+			this.initRefresh(config);
+		}
+	},	
+<span id='fastDev-Ui-Tree-method-setCollect'>	/**
+</span>	 * 将节点收缩的展开或展开
+	 * param {String} id
+	 */
+	setCollect : function(id) {
+		var li = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);
+		var spanfh = li.children(&quot;div&quot;).children(&quot;:first&quot;);
+		this.collect(spanfh);
+	},
+<span id='fastDev-Ui-Tree-method-setExpand'>	/**
+</span>	 * 将节点展开
+	 * param {String} id
+	 */
+	setExpand : function(id) {
+		var li = this._global.thistree.find(&quot;li[id='&quot; + id + &quot;']&quot;);
+		var spanfh = li.children(&quot;div&quot;).children(&quot;:first&quot;);
+		this.expand(spanfh);
+	},
+	//	/**
+//	 * 通过叶子节点选中状态的数据给其父祖辈枝节点赋选中与半选值
+//	 * @param {Array} item
+//	 * @return {Array}
+//	 * @private
+//	 */
+//	getAllChkByData : function(items) {
+//		//通过叶子节点选中状态的数据给其父祖辈枝节点赋选中与半选值
+//		var allChk = this.getAllCheckedByData(items);
+//		this.getAllChkByItem(allChk, items);
+//		return items;
+//	},
+//	/**
+//	 * 通过叶子节点选中状态的数据给其父祖辈枝节点赋选中与半选值
+//	 * @param {Array} chkitems
+//	 * @param {Array} item
+//	 * @return {Array}
+//	 * @private
+//	 */
+//	getAllChkByItem : function(chkitems, items) {
+//		//通过叶子节点选中状态的数据给其父祖辈枝节点赋选中与半选值
+//		var len = chkitems.length, ilen = items.length, id, pid, xditems, pnode, piditems = [], reitems = [], options = this._options;
+//		for(var i = 0; i &lt; len; i++) {
+//			//1.得到第一个节点的父id
+//			pid = chkitems[i][&quot;pid&quot;];
+//			if(pid === options.topParentid || this.existNodeByItems(pid, piditems) === true) {
+//				continue;
+//			}
+//			//2.根据父id得到兄弟节点id
+//			xditems = this.getNodesByPid(pid);
+//			//3.判断是否兄弟节点都被选中
+//			for(var j = 0; j &lt; ilen; j++) {
+//				if(items[j][&quot;id&quot;] === pid) {
+//					pnode = items[j];
+//					if(this.allchked(xditems)) {
+//						//4.如果都被选中，则父节点选中，否则父节点半选中。
+//						pnode[&quot;chk&quot;] = &quot;true&quot;;
+//					} else {
+//						pnode[&quot;chk&quot;] = &quot;part&quot;;
+//					}
+//					//5.保存此父节点
+//					if(this.existNodeByItems(pnode[&quot;id&quot;], piditems) === false) {
+//						piditems = piditems.slice(0).concat(pnode);
+//					}
+//					break;
+//				}
+//			}
+//		}
+//		//6.得到4里所有节点，递归1-4
+//		if(len == 0) {
+//			return items;
+//		} else {
+//			this.getAllChkByItem(piditems, items);
+//		}
+//	},
+//	/**
+//	 * id是否存在与数据集中
+//	 * @param {String} id
+//	 * @param {Array} item
+//	 * @return {Boolean}
+//	 * @private
+//	 */
+//	existNodeByItems : function(id, items) {
+//		//数据里存在这个节点
+//		var len = items.length;
+//		for(var i = 0; i &lt; len; i++) {
+//			if(items[i][&quot;id&quot;] == id) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	},
+//	/**
+//	 * 是否都被选中
+//	 * @param {Array} item
+//	 * @return {Boolean}
+//	 * @private
+//	 */
+//	allchked : function(items) {
+//		//是否都被选中
+//		var chked = &quot;&quot;, nochk = &quot;&quot;, len = items.length;
+//		for(var i = 0; i &lt; len; i++) {
+//			if(&quot;&quot; + items[i][&quot;chk&quot;] === &quot;true&quot;) {
+//				chked += &quot;k&quot;;
+//			} else {
+//				nochk += &quot;k&quot;;
+//			}
+//		}
+//		if(nochk == &quot;&quot;) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	},
+//	/**
+//	 * 隐藏右键菜单
+//	 */
+//	hideReghtMenu : function() {
+//		var options = this._options;
+//		if(options.rightMenu) {
+//			var obj = options.rightMenu;
+//			obj &amp;&amp; $(&quot;#&quot; + obj).hide();
+//		}
+//		//if(options.rightMenuNotAtNode) {
+////			var obj = options.rightMenuNotAtNode;
+////			obj &amp;&amp; $(this[0]).find(&quot;#&quot; + obj).hide();
+////		}
+//		if(options.nodeEdit) {
+//			$(this[0]).find(&quot;.right_mouse_menu&quot;).hide();
+//		}
+//	},
+//	/**
+//	 * 右键节点编辑功能
+//	 * @private
+//	 */
+//	showNodeEdit : function() {
+//		var options = this._options;
+//		var that = this;
+//		var div1 = talkweb.BaseControl.Div({
+//			className : &quot;right_mouse_menu shadow&quot;
+//		});
+//		div1.hide();
+//		var addNode = function() {
+//			div1.hide();
+//			var pid = that.getCurrentId();
+//			var id = &quot;&quot;;
+//			if(options.onBeforeAdd) {
+//				id = options.onBeforeAdd(pid);
+//				if(!id)
+//					return false;
+//			} else {
+//				id = that.GetRndId(pid);
+//			}
+//			var item = &quot;[{pid:'&quot; + pid + &quot;',id:'&quot; + id + &quot;',val:'新节点&quot; + id + &quot;'}]&quot;;
+//			that.addNode(item) &amp;&amp; options.onAfterAdd &amp;&amp; options.onAfterAdd(item);
+//		};
+//		var addNode2 = function() {
+//			div1.hide();
+//			var pid =that.getParentid(that.getCurrentId());
+//			var id = &quot;&quot;;
+//			if(options.onBeforeAdd) {
+//				id = options.onBeforeAdd(pid);
+//				if(!id)
+//					return false;
+//			} else {
+//				id = that.GetRndId(pid);
+//			}
+//			var item = &quot;[{pid:'&quot; + pid + &quot;',id:'&quot; + id + &quot;',val:'新节点&quot; + id + &quot;'}]&quot;;
+//			that.addNode(item) &amp;&amp; options.onAfterAdd &amp;&amp; options.onAfterAdd(item);
+//		};
+//		var editNode = function() {
+//			div1.hide();
+//			var id = that.getCurrentId();
+//			if(options.onBeforeEdit) {
+//				var editval = options.onBeforeEdit(id);
+//				if(!editval)
+//					return false;
+//			}
+//			var val = that.getCurrentTxt();
+//			//创建一个文本框并把文本值赋进去
+//			var spantxt = $(that[0]).find(&quot;li[id='&quot; + id + &quot;']&quot;).children(&quot;div&quot;).children(&quot;:last&quot;);
+//			var spanwidth = $(spantxt).width();
+//			spantxt.html(&quot;&quot;);
+//			var txt = talkweb.BaseControl.Text({
+//				value : val,
+//				width : spanwidth + &quot;px&quot;
+//			});
+//			spantxt.html(txt[0]);
+//			$(txt[0]).focus();
+//			//失去焦点提交修改
+//			$(txt[0]).blur(function(e) {
+//				var id = that.getCurrentId();
+//				var pid = that.getParentid(id);
+//				var newval = $(this).val();
+//				if(newval != &quot;&quot;) {
+//					var item = &quot;[{pid:'&quot; + pid + &quot;',id:'&quot; + id + &quot;',val:'&quot; + newval + &quot;'}]&quot;;
+//					if(that.editNode(item)) {
+//						$(this).parent().html(newval);
+//						options.onAfterEdit &amp;&amp; options.onAfterEdit(item);
+//					}
+//				}
+//			});
+//		};
+//		var delNode = function() {
+//			div1.hide();
+//			var id = that.getCurrentId();
+//			//得到当前节点id
+//			if(options.onBeforeDel) {
+//				var delval = options.onBeforeDel(id);
+//				if(!delval)
+//					return false;
+//			}
+//			that.delNode(id) &amp;&amp; options.onAfterDel &amp;&amp; options.onAfterDel(id);
+//		};
+//		this.addrightMouse(&quot;add&quot;, &quot;添加子节点&quot;, addNode, div1);
+//		this.addrightMouse(&quot;add&quot;, &quot;添加平级节点&quot;, addNode2, div1);
+//		this.addrightMouse(&quot;edit&quot;, &quot;编辑节点&quot;, editNode, div1);
+//		this.addrightMouse(&quot;del&quot;, &quot;删除节点&quot;, delNode, div1);
+//		//this.showRightMenu(div1, div2);
+//		this.showRightMenu(div1);
+//	},
+//	//var div2 = talkweb.BaseControl.Div({
+////			className : &quot;right_mouse_menu shadow&quot;
+////		});
+////		var addNode2 = function() {
+////			div2.hide();
+////			var pid = options.topParentid;
+////			var id = &quot;&quot;;
+////			if(options.onBeforeAdd) {
+////				id = options.onBeforeAdd(pid);
+////				if(!id)
+////					return false;
+////			} else {
+////				id = that.GetRndId(pid);
+////			}
+////			var item = &quot;[{pid:'&quot; + pid + &quot;',id:'&quot; + id + &quot;',val:'新节点&quot; + id + &quot;'}]&quot;;
+////			that.addNode(item) &amp;&amp; options.onAfterAdd &amp;&amp; options.onAfterAdd(item);
+////		};
+////		this.addrightMouse(&quot;add&quot;, &quot;添加跟节点&quot;, addNode2, div2);
+//	/**
+//	 * 右键鼠标事件
+//	 * @private
+//	 */
+//	addrightMouse : function(type, zw, events, con) {
+//		var rma = talkweb.BaseControl.Anchor({
+//			href : &quot;#&quot;,
+//			container : con,
+//			click : events
+//		});
+//		var rmd1 = talkweb.BaseControl.Div({
+//			className : &quot;right_mouse_menu_item&quot;
+//		});
+//		rma.append(rmd1);
+//		var rmd2 = talkweb.BaseControl.Div({
+//			className : &quot;right_mouse_menu_text&quot;
+//		});
+//		var rms1 = talkweb.BaseControl.Span({
+//			value : zw
+//		});
+//		rmd2.append(rms1);
+//		var rmd3 = talkweb.BaseControl.Div({
+//			className : &quot;right_mouse_menu_icon right_mouse_icon_&quot; + type
+//		});
+//		rmd1.append(rmd2).append(rmd3);
+//		return rma;
+//	},
+//	/**
+//	 * 右键弹出
+//	 * @private
+//	 */
+//	showRightMenu : function(div1) {
+//		//先禁止自带的鼠标右键菜单
+//		var that = this, objmenu;
+//		document.onmouseup = function(e) {
+//			//2.触发鼠标的左键按下的事件
+//			var ev = e || window.event || that.getEvent();
+//			//只允许通过鼠标左键进行拖拽,鼠标左键为2
+//			if(ev.button != 2) {
+//				$('body').removeAttr(&quot;oncontextmenu&quot;);
+//				return;
+//			}
+//			//屏蔽鼠标右键
+//			$(document).bind(&quot;contextmenu&quot;, function(e) {
+//				return false;
+//			});
+//			var options = that._options;
+//			var clickTg = $(ev.target || ev.srcElement), ctgclass = $(clickTg).attr(&quot;class&quot;), node, id, curr, movePos = that.getMousePos(ev);
+//			that.hideReghtMenu();
+//			if(ctgclass.indexOf(&quot;i-tree-s-text&quot;) &gt; 0 || ctgclass.indexOf(&quot;i-tree-chk&quot;) &gt; 0 || ctgclass.indexOf(&quot;i-tree-radio&quot;) &gt; 0 || ctgclass.indexOf(&quot;i-tree-span-ico-&quot;) &gt; 0) {
+//				//得到拖拽的容器
+//				node = clickTg.parent(&quot;div&quot;);
+//				id = $(node).parent(&quot;li&quot;).attr(&quot;id&quot;);
+//				//curr=$(node).children(&quot;:last&quot;);
+//				$(that[0]).find(&quot;.ui-tree-s-text-current&quot;).removeClass(&quot;ui-tree-s-text-current&quot;);
+//				$(node).attr(&quot;class&quot;, &quot;ui-tree-s-text-current&quot;);
+//				if(options.rightMenu) {
+//					objmenu = options.rightMenu;
+//					//在弹出传过来的菜单
+//					$(&quot;#&quot; + objmenu).css(&quot;left&quot;, movePos.x + 15 + &quot;px&quot;);
+//					$(&quot;#&quot; + objmenu).css(&quot;top&quot;, movePos.y - 8 + &quot;px&quot;);
+//					$(&quot;#&quot; + objmenu).show();
+//				} else if(div1) {
+//					div1.setStyle({
+//						&quot;left&quot; : movePos.x + 15 + &quot;px&quot;,
+//						&quot;top&quot; : movePos.y - 8 + &quot;px&quot;
+//					});
+//					$(that[0]).parent().append(div1[0]);
+//					div1.show();
+//				}
+//			} //else {
+//				//if(options.rightMenuNotAtNode) {
+////					objmenu = options.rightMenuNotAtNode;
+////					//在弹出传过来的菜单
+////					$(that[0]).find(&quot;#&quot; + objmenu).css(&quot;left&quot;, movePos.x + 15 + &quot;px&quot;);
+////					$(that[0]).find(&quot;#&quot; + objmenu).css(&quot;top&quot;, movePos.y - 8 + &quot;px&quot;);
+////					$(that[0]).find(&quot;#&quot; + objmenu).show();
+////				} else if(div2) {
+////					div2.setStyle({
+////						&quot;left&quot; : movePos.x + 15 + &quot;px&quot;,
+////						&quot;top&quot; : movePos.y - 8 + &quot;px&quot;
+////					});
+////					$(that[0]).parent().append(div2[0]);
+////					div2.show();
+////				} else {
+////					return false;
+////				}
+//			//}
+//		}
+//	},
+//	/**
+//	 * 节点拖动事件
+//	 * @private
+//	 */
+//	nodeDragEvent : function() {
+//		var opacity = 50, originDragDiv = null, dragDiv, id, isBranchNode, collflag = true, clickTg, tmpX = 0, tmpY = 0, moveable = false, that = this;
+//		//1.当可拖动区域触发鼠标的onmousedown事件时
+//		$(this[0]).attr(&quot;unselectable&quot;, &quot;on&quot;);
+//		$(this[0]).attr(&quot;onselectstart&quot;, &quot;return false;&quot;);
+//		$(this[0]).css(&quot;-moz-user-select&quot;, &quot;none&quot;);
+//		document.body.onselectstart = function() {
+//			return false;
+//		};
+//		$(this[0]).mousedown(function(e) {
+//			var clickTg = $(e.target), ctgclass = $(clickTg).attr(&quot;class&quot;);
+//			if(ctgclass.indexOf(&quot;i-tree-s-text&quot;) &gt; 0 || ctgclass.indexOf(&quot;i-tree-chk&quot;) &gt; 0 || ctgclass.indexOf(&quot;i-tree-radio&quot;) &gt; 0 || ctgclass.indexOf(&quot;i-tree-span-ico-&quot;) &gt; 0) {
+//				//得到拖拽的容器
+//				dragDiv = clickTg.parent(&quot;div&quot;);
+//				id = $(dragDiv).parent(&quot;li&quot;).attr(&quot;id&quot;);
+//			} else {
+//				return false;
+//			}
+//			//可拖动区域
+//			var o = that._options, nw = $(clickTg).width() + (o.showIco ? 18 : 0) + (o.treeType == &quot;multitree&quot; ? 18 : 0) + (o.treeType == &quot;radiotree&quot; ? 18 : 0), ev = e || window.event || that.getEvent();
+//			//2.触发鼠标的左键按下的事件
+//			//只允许通过鼠标左键进行拖拽,IE鼠标左键为1 FireFox为0
+//			if(!(that.isIE &amp;&amp; ev.button == 1 || !that.isIE &amp;&amp; ev.button == 0))
+//				return false;
+//			//3.创建一个div，复制可拖动区域内容在里面。
+//			originDragDiv = talkweb.BaseControl.Div();
+//			originDragDiv.setClass(&quot;ui-tree-drag-node&quot;);
+//			originDragDiv.setWidth((nw + 4) + &quot;px&quot;);
+//			originDragDiv.setHeight(&quot;18px&quot;);
+//			var temphtml = $(dragDiv).clone();
+//			$(temphtml).children(&quot;:first-child&quot;).hide();
+//			$(originDragDiv).html($(temphtml).html());
+//			moveable = true;
+//			//得到拖动区域的zindex
+//			that.SetOpacity(originDragDiv, opacity);
+//			var dragbfalg = true, dragevent = true;
+//			//移动事件
+//			document.onmousemove = function(e) {
+//				if(moveable) {
+//					if(dragbfalg &amp;&amp; o.onBeforeDrag) {
+//						dragbfalg = false;
+//						if(!o.onBeforeDrag(id)) {
+//							dragevent = false;
+//							return false;
+//						}
+//					}
+//					if(dragevent == false) {
+//						return false;
+//					}
+//					//拖动的半透明节点随鼠标移动
+//					var ev = e || window.event || that.getEvent(), movePos = that.getMousePos(ev);
+//					$(originDragDiv).css(&quot;left&quot;, movePos.x - 8 + &quot;px&quot;);
+//					$(originDragDiv).css(&quot;top&quot;, movePos.y - 8 + &quot;px&quot;);
+//					$(that[0]).parent().prepend(originDragDiv);
+//					//如果原节点是枝节点，那么其子节点收缩
+//					isBranchNode = that.isBranch(id);
+//					if(isBranchNode &amp;&amp; collflag) {
+//						var spanfh = $(dragDiv).children(&quot;:first&quot;);
+//						that.expandCollect(spanfh);
+//						collflag = false;
+//					}
+//				}
+//			};
+//			//鼠标松开事件
+//			document.onmouseup = function(e) {
+//				if(dragevent == false) {
+//					return false;
+//				}
+//				moveable = false;
+//				//如果底下是有效位置，则添加新的，删除老的
+//				e = e || window.event;
+//				var ovn = $((e.target || e.srcElement)), ovc = $(ovn).attr(&quot;class&quot;), newpid, val, newnodedata;
+//				if(ovc.indexOf(&quot;i-tree-s-text&quot;) &gt; 0 || ovc.indexOf(&quot;i-tree-chk&quot;) &gt; 0 || ovc.indexOf(&quot;i-tree-radio&quot;) &gt; 0 || ovc.indexOf(&quot;i-tree-span-ico-&quot;) &gt; 0) {
+//					//得到拖拽到位置的id
+//					newpid = ovn.parent(&quot;div&quot;).parent(&quot;li&quot;).attr(&quot;id&quot;);
+//					if(newpid &amp;&amp; newpid != id) {
+//						val = that.getValByid(id);
+//						newnodedata = &quot;[{pid:'&quot; + newpid + &quot;',id:'&quot; + id + &quot;',val:'&quot; + val + &quot;'}]&quot;;
+//						//还有其他属性。。。
+//						that.editNode(newnodedata);
+//						$(originDragDiv).remove();
+//						//如果是枝节点，那么展开
+//						if(isBranchNode) {
+//							var spanfh = $(dragDiv).children(&quot;:first&quot;);
+//							that.expandCollect(spanfh);
+//						}
+//						o.onAfterDrag &amp;&amp; o.onAfterDrag(id, newpid);
+//					}
+//				} else {
+//					$(originDragDiv).remove();
+//					return false;
+//				}
+//			};
+//		});
+//	},
+//	/**
+//	 * 得到事件
+//	 * @private
+//	 */
+<span id='fastDev-Ui-Tree-method-setID'>	/**
+</span>	 * 设置id
+	 * param {String} id
+	 */
+	setID : function(id) {
+		if(!id) {
+			id = talkweb.ControlBus.getID();
+		}
+		this._global.thistree.attr(&quot;id&quot;, id);
+	}
+});
+</pre>
+</body>
+</html>

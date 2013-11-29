@@ -1,0 +1,63 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+			<link href="../../themes/base/css/main.css" rel="stylesheet"
+		type="text/css" />
+				<script src="../../src/library/jquery-1.5.1.min.js"></script>
+	<script src="../../src/library/FastDev.js"></script>
+	<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/core/ClassManager.js"></script>
+	<script src="../../src/core/Base.js"></script>
+	<script src="../../src/core/Base_Patch.js"></script>
+	<script src="../../src/core/ControlBus.js"></script>
+	<script src="../../src/core/ControlBus_Patch.js"></script>
+	<script src="../../src/core/DataBus.js"></script>
+	<script src="../../src/core/DataBus_Patch.js"></script>
+	  <script src="../../src/library/Tools.js"></script>
+	<script src="../../src/component/basecontrol/SimpleControl.js"></script>
+		<script src="../../src/component/basecontrol/Input.js"></script>
+		<script src="../../src/component/basecontrol/Anchor.js"></script>
+		<script src="../../src/component/basecontrol/Body.js"></script>
+		<script src="../../src/component/basecontrol/Button.js"></script>
+		<script src="../../src/component/basecontrol/CheckBox.js"></script>
+		<script src="../../src/component/basecontrol/Div.js"></script>
+		<script src="../../src/component/basecontrol/Dl.js"></script>
+		<script src="../../src/component/basecontrol/File.js"></script>
+		<script src="../../src/component/basecontrol/Form.js"></script>
+		<script src="../../src/component/basecontrol/Hidden.js"></script>
+		<script src="../../src/component/basecontrol/Iframe.js"></script>
+		<script src="../../src/component/basecontrol/Image.js"></script>
+		<script src="../../src/component/basecontrol/Label.js"></script>
+		<script src="../../src/component/basecontrol/Password.js"></script>
+		<script src="../../src/component/basecontrol/Pre.js"></script>
+		<script src="../../src/component/basecontrol/Radio.js"></script>
+		<script src="../../src/component/basecontrol/Span.js"></script>
+		<script src="../../src/component/basecontrol/Table.js"></script>
+		<script src="../../src/component/basecontrol/Text.js"></script>
+		<script src="../../src/component/basecontrol/TextArea.js"></script>
+		<script src="../../src/component/basecontrol/Ul.js"></script>
+        
+		<script src="../../src/library/Patch.js"></script>
+	<script src="../../src/component/Component.js"></script>
+	<script src="../../src/component/Component_Patch.js"></script>
+    <script src="../../src/component/form/Select.js"></script>
+    <script src="../../src/component/form/Select_Patch.js"></script>
+    <script src="../../src/component/ChooseList.js"></script>
+    <script src="../../src/component/ChooseList_Patch.js"></script>
+		<script type="text/javascript">
+		$(function() {
+            talkweb.Components.ChooseList({
+                container : "example",
+                initSource : "example_init.jsp",
+                dataSource : "example_load.jsp"
+            });
+        });
+     
+		</script>
+		<title>通过items属性值来配置选项</title>
+	</head>
+	<body>		
+				<div id="example"></div>
+	</body>
+	</html>

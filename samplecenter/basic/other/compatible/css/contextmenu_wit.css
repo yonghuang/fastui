@@ -1,0 +1,122 @@
+/*
+ * @name : contextmenu.css
+ * @author : 刘瑞涛
+ * @creatTime : 2012-03-07
+ */
+.contextmenu-body {
+	width: 750px;
+	display: block;
+	margin: 0 auto;
+}
+.contextmenu-left {
+	float: left;
+	width: 390px;
+}
+.contextmenu-right {
+	float: right;
+	width: 280px;
+}
+.contextmenu-center {
+	float: left;
+	width: 79px;
+}
+.contextmenu-center a {
+	width: 25px;
+	height: 63px;
+	display: block;
+	margin: 100px auto 10px;
+	background: url(../images/control_left_btn.gif) no-repeat;
+	text-indent: 200px;
+	overflow: hidden
+}
+.contextmenu-center a.all {
+	margin: 5px auto 5px;
+	background: url(../images/control_leftall_btn.gif) no-repeat;
+}
+.contextmenu-center a.right {
+	margin: 10px auto;
+	background: url(../images/control_right_btn.gif) no-repeat;
+}
+.contextmenu-title {
+	display: block;
+	width: 100%;
+	height: 25px;
+	line-height: 25px;
+	text-align: left;
+	font-weight: bold;
+	color: #bb4805
+}
+.contextmenu-searchbox {
+	float: left;
+	width: 380px;
+	height: 19px;
+	border: 1px solid #a29e9d
+}
+.contextmenu-searchbox input.ntxt {
+	float: left;
+	width: 360px;
+	height: 19px;
+	border: 0px;
+	line-height: 19px
+}
+.contextmenu-searchbox input.nbtn {
+	float: right;
+	width: 19px;
+	height: 19px;
+	border: 0px;
+	font-size: 0px;
+	background: url(../images/search_btn.gif) no-repeat;
+}
+.contextmenu-leftbox {
+	float: left;
+	width: 360px;
+	height: 280px;
+	padding: 10px;
+	border: 1px solid #a29e9d;
+	margin-top: 8px;
+	overflow: auto
+}
+.contextmenu-leftbox div {
+	margin: 0;
+	padding: 0;
+}
+.contextmenu-rightbox {
+	float: left;
+	width: 278px;
+	height: 329px;
+	border: 1px solid #a29e9d;
+	overflow: auto
+}
+.contextmenu-rightbox ul {
+	display: block;
+	width: 258px;
+	margin: 10px;
+}
+.contextmenu-rightbox ul li {
+	display: block;
+	width: 258px;
+	height: 25px;
+	line-height: 25px;
+	text-align: left;
+	text-indent: 5px;
+	list-style-type: none
+}
+.contextmenu-rightbox ul li.contextMenu_hide {
+	display: none
+}
+.contextmenu-rightbox ul li.contextMenu_show {
+	display: block
+}
+.contextmenu-rightbox ul li span {
+	float: left;
+}
+.contextmenu-rightbox ul li a {
+	float: left;
+	width: 25px;
+	height: 25px;
+	background: url(../images/delete_ico.gif) no-repeat 0px 3px;
+	font-size: 0px;
+	text-indent: 50px;
+	overflow: hidden
+}
+

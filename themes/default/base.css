@@ -1,0 +1,60 @@
+@charset "utf-8";
+*{
+	margin:0;
+	padding:0;
+}
+html,body{
+	margin:0 auto;
+	font-size:12px;
+}
+img{
+	border:0px;
+}
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+	font-size:12px;
+}
+/*body{
+	SCROLLBAR-FACE-COLOR: #D3EBF5;/*立体滚动条凸出部分的颜色*/
+	SCROLLBAR-HIGHLIGHT-COLOR: #71C5DF;/*滚动条空白部分的颜色*/
+	SCROLLBAR-SHADOW-COLOR: #DDECF1;/*立体滚动条阴影的颜色*/
+	SCROLLBAR-3DLIGHT-COLOR: #fff;/*立体滚动条凸出部分的颜色*/
+	SCROLLBAR-ARROW-COLOR: #198BC9;/*上下按钮上三角箭头的颜色*/
+	SCROLLBAR-TRACK-COLOR: #DDECF1;/**/
+	SCROLLBAR-DARK-SHADOW-COLOR: #78C8E0;/*立体滚动条强阴影的颜色*/
+	SCROLLBAR-BASE-COLOR: #DDECF1/*滚动条的基本颜色*/	
+}*/
+li {list-style-type: none;text-align: left;list-style: none;}
+ol{padding-left:15px;}
+h1 {
+	font-size: 1.8em;
+}
+
+h2 {
+	font-size: 1.6em;
+}
+
+h3 {
+	font-size: 1.1em;
+	padding-left:10px;
+}
+
+h1, h2, h3 {
+	margin: 10px 0;
+}
+
+h4, h5, h6 {
+	font-size: 1.1em;
+}
+
+h1, h2, h3, h4, h5, h6, strong {
+	font-weight: bold;
+}
+.red{color:red}
+a,area { blr:expression(this.onFocus=this.blur());}
+a:focus, input[type=button] ,input[type=submit] { outline-style: none; -moz-outline:none;}

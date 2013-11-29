@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>
+					进度条示例。
+				</li>
+				<li>
+					model属性值为progress，则控件以进度条形式展现。
+				</li>
+				<li>
+					allowLock为true时，可开启屏蔽层。
+				</li>
+			</ul></title>
+		<script src="../../../src/fastDev-import.js"></script>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">
+				默认配置
+			</div>
+			<div itype="ProgressBar" model="progress"></div>
+			<br />
+			<div class="ui-layout-text">
+				定义进度值
+			</div>
+			<div itype="ProgressBar" model="progress" value="12.8" totalValue="100"></div>
+			<br />
+			<div class="ui-layout-text">
+				带屏蔽层
+			</div>
+			<div style="width:300px;height:200px;background-color: white">
+				<br />
+				<input itype="Button" text="按钮"/>
+				<div itype="ProgressBar" model="progress" value="11" allowLock="true"></div>
+			</div>
+		</div>
+	</body>
+</html>

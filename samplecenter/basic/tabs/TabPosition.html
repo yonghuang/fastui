@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>
+<h4>右侧工具栏自定义</h4>
+<ul>
+<li>tabPosition 为tabs的标题位于整个控件的上top,下bottom,左left,右right哪个位置，默认是top</li>
+<li>tabAlign 为tab的标题位于整个标题行的左left,中center,右right哪个位置，默认是left</li>
+</ul>
+</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<script src="../../../src/fastDev-import.js"></script>
+</head><body>
+<div style="margin:10px;">
+  <table width="924px" height="100%" >
+    <tr style="height:180px">
+      <td><div class="ui-layout-text">标题在左边</div>
+      <div><div itype="Tabs" initSource="../../data/tabs_data.txt" tabPosition="left" id="a1" width="380px" height="150px"></div></div>
+      </td>
+      <td><div class="ui-layout-text">标题在右边</div>
+      <div><div itype="Tabs" initSource="../../data/tabs_data.txt" tabPosition="right" tabAlign="center"  id="a2" width="380px" height="150px"></div></div>
+       </td>
+    </tr>
+    <tr>
+      <td><div class="ui-layout-text">标题在上边</div>
+      <div><div itype="Tabs" initSource="../../data/tabs_data.txt" tabPosition="top"  id="a3" width="400px" height="150px"></div></div>
+      </td>
+      <td><div class="ui-layout-text">标题在下边</div>
+      <div><div itype="Tabs" initSource="../../data/tabs_data.txt" tabPosition="bottom" id="a4" width="400px" height="150px"></div></div>
+     </td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

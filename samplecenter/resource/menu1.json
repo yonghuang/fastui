@@ -1,0 +1,343 @@
+﻿[
+    {
+		"id": "remark",
+		"pid": "0",
+		"val": "注意事项",
+		"exampleUrl": "basic/other/default.html",
+		"hidehead":true
+	},
+    {
+        "id": "study",
+        "pid": "0",
+        "val": "框架学习建议",
+        "exampleUrl": "basic/other/fastdevStudy.html",
+        "hidehead":true
+    },{
+		"id": "event",
+		"pid": "0",
+		"val": "控件事件执行顺序",
+		"exampleUrl" : "basic/other/exec/exec.html",
+        "hidehead":true
+	},{
+		"id" : "queue",
+		"pid" : "0",
+		"val" : "多控件数据同步",
+		"exampleUrl": "basic/other/queue/queue.html"
+	},{
+		"id": "debugger",
+		"pid": "0",
+		"val": "前台调试",
+		"exampleUrl": "basic/other/jsdebugger.html",
+		"hidehead":true
+	},{
+		"id": "jsBasic",
+		"pid": "0",
+		"val": "基本操作技巧"
+	},{
+		"id" : "projectBasic",
+		"pid": "0",
+		"val" : "项目常见需求展现"
+	},{
+		"id": "pageBasic",
+		"pid": "projectBasic",
+		"val": "典型界面"
+	},{
+		"id": "Layout",
+		"pid": "pageBasic",
+		"val": "主框架布局"
+	},{
+		"id": "commondatagrid",
+		"pid": "pageBasic",
+		"val": "datagird常见功能"
+	},{
+		"id": "button_window",
+		"pid": "pageBasic",
+		"val": "按钮与弹窗选择数据"
+	},{
+		"id": "tree_other",
+		"pid": "pageBasic",
+		"val": "树与其他控件"
+	},{
+		"id": "CURD",
+		"pid": "projectBasic",
+		"val": "添删改查"
+	},{
+		"id": "login",
+		"pid": "pageBasic",
+		"val": "登录"
+	},{
+		"id": "formValidate",
+		"pid": "projectBasic",
+		"val": "数据验证"
+	},{
+		"id": "Layout_1",
+		"pid": "Layout",
+		"val": "树+选项卡",
+		"exampleUrl" : "case/Layout/tree_tabs_breadcrumb.html",
+		"dataUrl" : "data/treedata1.txt",
+		"apiUrl": "api/fastDev.Ui.Tree"
+	},{
+		"id": "Layout_2",
+		"pid": "Layout",
+		"val": "纵向导航+选项卡",
+		"exampleUrl" : "case/Layout/navigation_tabs.html",
+		"dataUrl" : "data/navigation_tabs_data.json",
+		"apiUrl": "api/fastDev.Ui.Navigation"
+	},{
+		"id": "Layout_3",
+		"pid": "Layout",
+		"val": "手风琴+树",
+		"exampleUrl" : "case/Layout/accordion_tree_tabs.html",
+		"dataUrl" : "data/treedata1.txt",
+		"apiUrl": "api/fastDev.Ui.Accordion"
+	},{
+		"id": "datagrid_3_1",
+		"pid": "commondatagrid",
+		"val": "外观显示控制",
+		"exampleUrl" : "case/datagrid/GridSurface-1.html",
+		"dataUrl" : "data/griddata.txt",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "datagrid_3_2",
+		"pid": "commondatagrid",
+		"val": "功能类",
+		"exampleUrl" : "case/datagrid/GridFunction-2.html",
+		"dataUrl" : "data/griddata.txt",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "datagrid_3_3",
+		"pid": "commondatagrid",
+		"val": "数据处理类",
+		"exampleUrl" : "case/datagrid/GridDataDeal-3.html",
+		"dataUrl" : "data/griddata1.json",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "datagrid_3_4",
+		"pid": "commondatagrid",
+		"val": "单元格编辑",
+		"exampleUrl" : "case/datagrid/CellEdit.html",
+		"dataUrl" : "data/griddata1.json",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "datagrid_3_5",
+		"pid": "commondatagrid",
+		"val": "内嵌子表",
+		"exampleUrl" : "case/datagrid/DetailInForm-62.html",
+		"dataUrl" : "data/gooddata.json",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "datagrid_3_6",
+		"pid": "commondatagrid",
+		"val": "内嵌详细表单",
+		"exampleUrl" : "case/datagrid/DetailInRow-7.html",
+		"dataUrl" : "data/griddata.txt",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "datagrid_3_7",
+		"pid": "commondatagrid",
+		"val": "3个表格联动",
+		"exampleUrl" : "case/datagrid/linkage.html",
+		"dataUrl" : "data/griddataLinkage.txt",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "datagrid_3_8",
+		"pid": "commondatagrid",
+		"val": "4个表格联动(并排)",
+		"exampleUrl" : "case/datagrid/linkageLayoutGrid.html",
+		"dataUrl" : "data/griddataLinkage.txt",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "datagrid_3_10",
+		"pid": "commondatagrid",
+		"val": "tabs下的datagrid",
+		"exampleUrl" : "case/datagrid/GridInTab-11.html",
+		"dataUrl" : "griddata.json",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+		
+	},{
+		"id": "datagrid_3_12",
+		"pid": "button_window",
+		"val": "弹出选择表格",
+		"exampleUrl" : "case/datagrid/popgrid.html",
+		"dataUrl" : "data/gridsubmitdataCellEdit.txt",
+		"apiUrl": "api/fastDev.Ui.DataGrid"
+	},{
+		"id": "tree_4_1",
+		"pid": "button_window",
+		"val": "弹出选择树",
+		"exampleUrl" : "case/tree/popTree.html",
+		"dataUrl" : "data/treegriddata.txt",
+		"apiUrl": "api/fastDev.Ui.Tree"
+	},{
+		"id": "tree_4_2",
+		"pid": "button_window",
+		"val": "弹出多选树",
+		"exampleUrl" : "case/tree/popMTree.html",
+		"dataUrl" : "data/treegriddata.txt",
+		"apiUrl": "api/fastDev.Ui.Tree"
+	},{
+		"id": "tree_4_4",
+		"pid": "tree_other",
+		"val": "tree和datagrid联动",
+		"exampleUrl" : "case/tree/tree_grid.html",
+		"dataUrl" : "data/treegriddata.txt",
+		"apiUrl": "api/fastDev.Ui.Tree"
+	},{
+		"id": "tree_4_6",
+		"pid": "tree_other",
+		"val": "带查询功能的树",
+		"exampleUrl" : "case/tree/SearchTree.html",
+		"dataUrl" : "data/treedata1.txt",
+		"apiUrl": "api/fastDev.Ui.Tree"
+	},{
+		"id": "form_5_4",
+		"pid": "formValidate",
+		"val": "密码一致验证",
+		"exampleUrl" : "case/form/passwordForm.html",
+		"dataUrl" : "data/gridsubmitdataCellEdit.txt"
+	},{
+		"id": "selectuser_6_1",
+		"pid": "tree_other",
+		"val": "树和下拉列表联动",
+		"exampleUrl" : "case/userselect/treeuserselect.html",
+		"dataUrl" : "data/selectuserdata.txt",
+		"apiUrl": "api/fastDev.Ui.Select"
+	},{
+		"id" : "ajax",
+		"pid" : "jsBasic",
+		"val" : "Ajax",
+		"exampleUrl" : "basic/other/ajax/ajax.html"
+	},{
+		"id" : "iframe",
+		"pid" : "jsBasic",
+		"val" : "Iframe处理",
+		"exampleUrl" : "basic/other/iframe/Iframe.html",
+		"hidehead":true
+	},{
+		"id" : "withjquery",
+		"pid" : "jsBasic",
+		"val" : "jquery常见方法互换",
+		"exampleUrl" : "basic/other/query/basics2.html",
+		"hidehead":true
+	},{
+		"id": "query",
+		"pid": "jsBasic",
+		"val": "选择器"
+	},{
+		"id": "query_basic",
+		"pid": "query",
+		"val": "基本选择器",
+		"exampleUrl": "basic/other/query/basics.html"
+	},{
+		"id": "query_basicfilters",
+		"pid": "query",
+		"val": "选择器进阶",
+		"exampleUrl": "basic/other/query/basicfilters.html"
+	},{
+		"id": "query_attributefilters",
+		"pid": "query",
+		"val": "属性选择器",
+		"exampleUrl": "basic/other/query/attributefilters.html"
+	},{
+		"id": "query_childfilters",
+		"pid": "query",
+		"val": "子元素选择器",
+		"exampleUrl": "basic/other/query/childfilters.html"
+	},{
+		"id": "query_contentfilters",
+		"pid": "query",
+		"val": "内容选择器",
+		"exampleUrl": "basic/other/query/contentfilters.html"
+	},{
+		"id": "query_form",
+		"pid": "query",
+		"val": "表单元素选择器",
+		"exampleUrl": "basic/other/query/form.html"
+	},{
+		"id": "query_formfilters",
+		"pid": "query",
+		"val": "表单元素选择器进阶",
+		"exampleUrl": "basic/other/query/formfilters.html"
+	},{
+		"id": "query_hierarchy",
+		"pid": "query",
+		"val": "关系选择器",
+		"exampleUrl": "basic/other/query/hierarchy.html"
+	},{
+		"id": "query_visibilityfilters",
+		"pid": "query",
+		"val": "可见性选择器",
+		"exampleUrl": "basic/other/query/visibilityfilters.html"
+	},{
+		"id": "session",
+		"pid": "projectBasic",
+		"val": "Session检查"
+	},{
+		"id": "session_autocheck",
+		"pid": "session",
+		"val": "Session自动调用检查",
+		"exampleUrl": "basic/other/session/AutoCheck.html"
+	},{
+		"id": "session_check",
+		"pid": "session",
+		"val": "Session手工调用检查",
+		"exampleUrl": "basic/other/session/Check.html"
+	},{
+		"id": "compatible",
+		"pid": "projectBasic",
+		"val": "V1.3与V1.5共存",
+		"exampleUrl": "basic/other/compatible/compatible.html"
+	},{
+		"id": "form_datagrid_page",
+		"pid": "from_datagrid_window",
+		"val": "表单+表格+弹出页面",
+		"exampleUrl": "basic/fromDatagrid/default.html",
+		"dataUrl" : "data/treegriddatadata.txt"
+	},{
+		"id": "form_datagrid_dialog",
+		"pid": "CURD",
+		"val": "一个页面完成添删改查",
+		"exampleUrl": "basic/fromDatagrid/default2.html",
+		"dataUrl" : "data/treegriddatadata.txt"
+	},{
+		"id": "CURD_fdbasic",
+		"pid": "CURD",
+		"val": "表单表格添删改查",
+		"exampleUrl": "basic/fromDatagrid/default.html",
+		"dataUrl" : "data/treegriddatadata.txt"
+	},{
+		"id": "CURD_treebasic",
+		"pid": "CURD",
+		"val": "树节点的添删改查",
+		"exampleUrl": "basic/tree/AddDelEdit.html",		
+        "dataUrl": "data/treedata1.txt",
+        "apiUrl": "api/fastDev.Ui.Tree"
+	},{
+		"id": "logindialog",
+		"pid": "login",
+		"val": "登陆的模态窗口",
+		"exampleUrl": "basic/login/default.html"
+	},{
+		"id": "form_basicValidate",
+		"pid": "formValidate",
+		"val": "常见验证",
+		"exampleUrl" : "case/form/basicValidate.html",
+		"dataUrl" : "data/gridsubmitdataCellEdit.txt"
+	},{
+		"id": "form_Validate",
+		"pid": "formValidate",
+		"val": "所有验证模式",
+		"exampleUrl" : "basic/form/ValidateRule.html"
+	},{
+		"id": "form_formValidate",
+		"pid": "formValidate",
+		"val": "表单验证",
+		"exampleUrl" : "basic/form/Validate.html"
+	},{
+		"id": "form_cuthomErrorConfig",
+		"pid": "formValidate",
+		"val": "自定义表单错误信息",
+		"exampleUrl" : "case/form/customErrorMsg.html",
+		"dataUrl" : "case/form/errorConfig.json"
+	}
+]

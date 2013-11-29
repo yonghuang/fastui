@@ -1,0 +1,30 @@
+    .formBox {
+        float:left;
+    	display:block;	
+    }
+    .formlayout {
+        display:inline;
+    	padding:2px 0;
+    }
+    .formlayout, .formBox {
+    	color:#075586;
+    	margin:3px 0;
+    	line-height:26px;
+    	text-align:left;
+    	font-family:Arial, sans-serif, "宋体";
+    }
+    .formbuttonlayout {
+        text-align:center;
+    	display: block;
+    	float:none;
+    	width:100%;
+    	clear:both;
+    	padding:12px 0;
+    }
+    .formlayout .label {
+        font-size:12px;
+    	height:26px;
+    	line-height:26px;
+    	vertical-align:top;
+    	padding:2px 0;
+    }

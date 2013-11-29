@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function (){
+    var utils = baidu.editor.utils,
+        uiUtils = baidu.editor.ui.uiUtils,
+        UIBase = baidu.editor.ui.UIBase,
+        Toolbar = baidu.editor.ui.Toolbar = function (options){
+            this.initOptions(options);
+            this.initToolbar();
+        };
+    Toolbar.prototype = {
+        items: null,
+        initToolbar: function (){
+            this.items = this.items || [];
+            this.initUIBase();
+        },
+        add: function (item){
+            this.items.push(item);
+        },
+        getHtmlTpl: function (){
+            var buff = [];
+            for (var i=0; i&lt;this.items.length; i++) {
+                buff[i] = this.items[i].renderHtml();
+            }
+            return '&lt;div id=&quot;##&quot; class=&quot;edui-toolbar %%&quot; onselectstart=&quot;return false;&quot; onmousedown=&quot;return $$._onMouseDown(event, this);&quot;&gt;' +
+                buff.join('') +
+                '&lt;/div&gt;'
+        },
+        postRender: function (){
+            var box = this.getDom();
+            for (var i=0; i&lt;this.items.length; i++) {
+                this.items[i].postRender();
+            }
+            uiUtils.makeUnselectable(box);
+        },
+        _onMouseDown: function (){
+            return false;
+        }
+    };
+    utils.inherits(Toolbar, UIBase);
+
+})();
+</pre>
+</body>
+</html>

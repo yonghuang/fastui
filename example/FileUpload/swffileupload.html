@@ -1,0 +1,463 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>SWFFileUpload</title>
+
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/layout/Window.js"></script>
+		<script src="../../src/component/form/Button.js"></script>
+		<script src="../../src/component/Toolbar.js"></script>
+		<script src="../../src/component/Dialog.js"></script>
+		<script src="../../src/component/MessageBox.js"></script>
+
+		<script src="../../src/component/form/Box.js"></script>
+		<script src="../../src/component/SWFFileUpload.js"></script>
+
+		<script type="text/javascript">
+			var fileUploader, uploader;
+			fastDev(function() {
+				fastDev.create("SWFFileUpload", {
+					container : "example1",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf"
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example2",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					sizeLimit : 1024, // 1024KB，即1M
+					typeLimit : "jpg,png"
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example3",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					sizeLimit : 1024,
+					typeLimit : "jpg,png",
+					fileTypeDescription : "图片", // 文件选取对话框中文件描叙信息
+					autoUpload : true // 自动上传，则不显示上传按钮
+
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example4",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					sizeLimit : 1024,
+					typeLimit : "jpg,png",
+					fileTypeDescription : "图片", // 文件选取对话框中文件描叙信息
+					autoUpload : true,
+					showTextInput : false
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example5",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					sizeLimit : 1024,
+					typeLimit : "jpg,png",
+					fileTypeDescription : "图片", // 文件选取对话框中文件描叙信息
+					chooseBtn : {
+						text : "点我选择图片！",
+						iconCls : "icon-add"
+					},
+					uploadBtn : {
+						text : "点我上传图片！",
+						iconCls : "icon-upload"
+					}
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example6",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					sizeLimit : 1024,
+					typeLimit : "jpg,png",
+					params : {// 添加额外的查询参数
+						name : "stone",
+						gender : "男",
+						age : "24"
+					},
+					onFileChoose : function() {
+						// 注意！getRequestAction()为私有方法，此处仅示例需要而调用，用户请不要调用此方法
+						fastDev.tips("查询字符串为：" + this.getRequestAction());
+					}
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example7",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					sizeLimit : 1024,
+					typeLimit : "jpg,png",
+					onFileChoose : function(file) {// 文件选取成功后的回调函数，file为文件信息对象
+						var content = "";
+						for (var i in file) {
+							content += (i + " : " + file[i] + "<br/>");
+						}
+						fastDev.create("Window", {
+							title : "文件信息",
+							width : 450,
+							height : 200,
+							content : content.replace(/\\/g, "/")
+						}).closeTimeout(4);
+					}
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example8",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					sizeLimit : 10,
+					typeLimit : "txt",
+					fileLimit : 1, // 最大可上传文件数
+					onChooseError : function(file, code, msg) {// 文件选取失败后的回调函数，file为文件信息对象，code为错误码，msg为默认提示信息
+						switch (code) {
+							case 1 :
+								fastDev.tips("文件类型为：" + file.type + "，仅能上传 txt 类型文件！");
+								break;
+							case 2 :
+								fastDev.tips("文件大小为：" + (file.size / 1024) + "KB，仅能上传 10KB 及以下的文件！");
+								break;
+							case 3 :
+								fastDev.tips("文件队列已满，最大可上传文件数为 1 ！");
+						}
+					}
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example9",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					onUploadStart : function(file) {// 文件开始上传时的回调函数
+						fastDev.tips("文件上传即将开始，返回false则阻止该文件上传！");
+						return false;
+					}
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example10",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					sizeLimit : -1, // -1 则文件大小不受限
+					onUploadStart : function(file) {
+						var that = this;
+						fastDev.confirm("是否取消上传？", function() {
+							that.cancelUpload();
+						}, fastDev.noop);
+					},
+					onUploadCancel : function(file) {// 当前上传进程被取消时的回调函数
+						fastDev.tips("正在上传的文件 " + file.name + " 已经被取消上传！");
+					}
+				});
+				fastDev.create("SWFFileUpload", {
+					container : "example11",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					onUploadComplete : function(file, response) {// 当前文件上传完成时的回调函数
+						var content = "文件信息：<br/>";
+						for (var i in file) {
+							content += (i + " : " + file[i] + "<br/>");
+						}
+						content += "<br/>服务器默认处理程序返回信息：<br/>";
+						if (response) {
+							for (var i in response[0]) {
+								content += (i + " : " + response[0][i] + "<br/>");
+							}
+						} else {
+							content += "（上传过程被中断或发生异常！）";
+						}
+						fastDev.create("Window", {
+							title : "文件上传完成！",
+							width : 450,
+							height : 500,
+							content : content.replace(/\\/g, "/")
+						});
+					}
+				});
+				fileUploader = fastDev.create("SWFFileUpload", {
+					container : "example12",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf"
+				});
+				var fileList = fastDev("#fileList"), isUploading, progress;
+				uploader = fastDev.create("SWFFileUpload", {
+					container : "example13",
+					action : "servlet/uploadServlet?type=attach",
+					flashUrl : "component/js/multifileupload/swfupload.swf",
+					showTextInput : false,
+					sizeLimit : -1,
+					showLoading : false,
+					chooseBtn : {
+						text : "点我选取文件！",
+						iconCls : "icon-add"
+					},
+					uploadBtn : {
+						text : "点我上传所有文件！",
+						iconCls : "icon-upload"
+					},
+					onUploadProgress : function(file, complete, total) {
+						progress.setValue(complete);
+					},
+					onFileChoose : function(file) {
+						var item, li = fastDev("<li style='font-size:17px'></li>").appendTo(fileList).prop("id", "li" + file.id);
+						li.append( item = fastDev("<div></div>").prop("id", "item" + file.id).css({
+							height : 25
+						}));
+						item.elems[0].innerHTML = "<span style='margin-right:10px'>" + file.name + "</span><span style='margin-right:10px' id='status" + file.id + "'>等待上传</span><span id='loading" + file.id + "' style='margin-right:10px'><a id='upload" + file.id + "' href='###'>上传</a></span><span style='margin-right:10px'><a id='cancel" + file.id + "' href='###'>删除</a></span><span id='progress" + file.id + "'></span>";
+						fastDev("#upload"+file.id).elems[0].onclick = function() {
+							if (isUploading) {
+								fastDev.tips("已经有文件正在上传，请耐心等待其上传完成后再尝试此操作！");
+								return;
+							}
+							uploader.startUpload(file.id);
+							fastDev("#status" + file.id).setText("正在上传");
+							fastDev("#loading" + file.id).empty().addClass("ui-loading-indicator");
+							fastDev("#cancel"+file.id).setText("取消").elems[0].onclick = function() {
+								// 取消当前文件上传
+								uploader.cancelUpload();
+							};
+						};
+						fastDev("#cancel"+file.id).elems[0].onclick = function() {
+							// 从文件队列中移除指定ID的文件
+							uploader.removeFile(file.id);
+							li.remove();
+						};
+					},
+					onUploadStart : function(file) {
+						isUploading = true;
+						fastDev("#status" + file.id).setText("正在上传");
+						fastDev("#loading" + file.id).empty().addClass("ui-loading-indicator");
+						fastDev("#cancel"+file.id).setText("取消").elems[0].onclick = function() {
+							// 取消当前文件上传
+							uploader.cancelUpload();
+						};
+						progress = fastDev.create("ProgressBar", {
+							container : "progress" + file.id,
+							totalValue : file.size,
+							model : "progress"
+						});
+					},
+					onUploadSuccess : function(file, response) {
+						isUploading = false;
+						fastDev.tips("文件 " + file.name + " 上传成功");
+						fastDev("#item" + file.id).css("color", "green");
+						fastDev("#status" + file.id).setText("上传成功");
+						fastDev("#loading" + file.id).remove();
+						fastDev("#cancel" + file.id).prop("href", response.url).prop("target", "_blank").setText("下载");
+						progress && progress.close();
+					},
+					onUploadFail : function(file) {
+						isUploading = false;
+						fastDev.tips("文件 " + file.name + " 上传失败");
+						fastDev("#item" + file.id).css("color", "red");
+						fastDev("#status" + file.id).setText("上传失败");
+						fastDev("#loading" + file.id).remove();
+						fastDev("#cancel" + file.id).remove();
+						progress && progress.close();
+					},
+					onUploadCancel : function(file) {
+						isUploading = false;
+						fastDev.tips("文件 " + file.name + " 已经取消上传");
+						fastDev("#item" + file.id).css("color", "gray");
+						fastDev("#status" + file.id).setText("已经取消");
+						fastDev("#loading" + file.id).remove();
+						fastDev("#cancel" + file.id).remove();
+						progress && progress.close();
+					}
+				});
+				fastDev.create("Button", {
+					container : "example14",
+					text : "点我移除所有文件！",
+					iconCls : "icon-delete",
+					onBtnClick : function() {
+						if (isUploading) {
+							fastDev.tips("当前正在上传文件中，请等待其上传完成后再尝试此操作！");
+							return;
+						}
+						fileList.empty();
+						// 清空文件队列
+						uploader.cleanFileQueue();
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div>
+			<p>
+				HTML文件上传控件使用纯HTML及JavaScript来处理页面无刷新文件上传。
+			</p>
+			<p>
+				由于某些浏览器下（如IE）HTML文件域提供的文件选择对话框不支持多选，所以，此HTML文件上传控件一次只能选取一个文件，
+				<br />
+				而要实现可一次选取多个文件，则需借助HTML5兼容的浏览器或者flash文件上传。
+				<br />
+				可一次性选取多个文件且支持文件实时上传进度显示的控件，请使用SWFFileUpload控件。
+			</p>
+			<p>
+				本控件的相关配置参数及回调函数，请参考本控件的API文档说明。
+			</p>
+		</div>
+		<br />
+		<div id="example1">
+			最小配置
+			<br />
+			<code>
+				container : "example1",
+				action : "servlet/uploadServlet?type=attach"
+			</code>
+		</div>
+		<br />
+		<div id="example2">
+			设置文件大小及扩展名限制（文件大小在某些浏览器下不能通过javascript获取）
+			<br />
+			<code>
+				sizeLimit : 1024,
+				typeLimit : "jpg,png"
+			</code>
+		</div>
+		<br />
+		<div id="example3">
+			选取文件成功后自动上传文件
+			<br />
+			<code>
+				autoUpload : true
+			</code>
+		</div>
+		<br />
+		<div id="example4">
+			不显示文本输入框
+			<br />
+			<code>
+				showTextInput : false
+			</code>
+		</div>
+		<br />
+		<div id="example5">
+			自定义浏览文件按钮和上传按钮
+			<br />
+			<code>
+				chooseBtn : {},
+				uploadBtn : {}
+			</code>
+		</div>
+		<br />
+		<div id="example6">
+			添加额外的查询参数（也可以调用addParams(obj)方法来动态变更查询参数）
+			<br />
+			<code>
+				params : {
+				name : "stone",
+				gender : "男",
+				age : "24"
+				}
+			</code>
+		</div>
+		<br />
+		<div id="example7">
+			定义文件选取成功后的回调函数，并获取文件信息（返回false则放弃此次选取）
+			<br />
+			<code>
+				onFileChoose : function(file){}
+			</code>
+		</div>
+		<br />
+		<div id="example8">
+			定义文件选取失败（如文件大小限制或类型限制等）后的回调函数，获取文件信息，并自定义提示信息
+			<br />
+			<code>
+				onChooseError : function(file,code,msg){}
+			</code>
+		</div>
+		<br />
+		<div id="example9">
+			定义每个文件上传开始时的回调函数，获取文件信息（可用来更新自定义文件展现UI等，回调返回false则放弃上传，注意，此时该文件已经从文件队列中移除！）
+			<br />
+			<code>
+				onUploadStart : function(file){}
+			</code>
+		</div>
+		<br />
+		<div id="example10">
+			可随时取消正在上传的进程，并定义文件上传取消回调函数
+			<br />
+			（调用cancelUpload()方法，如果文件队列中还有其他的文件且为自动上传模式，则仍会继续上传其他的文件，调用stopUpload()能立即终止整个文件队列的上传）
+			<br />
+			<code>
+				onUploadCancel : function(file){}
+			</code>
+		</div>
+		<br />
+		<div id="example11">
+			定义每个文件上传完成时的回调函数，用于自定义服务器端的上传返回结果的处理（默认的回调用于处理默认的后台处理程序返回的结果信息，用户可以更换后台处理并自定义结果处理函数）
+			<br />
+			<code>
+				onUploadComplete : function(file,response){}
+			</code>
+		</div>
+		<br />
+		<div id="example12">
+			启用或禁用上传控件
+			<br />
+			<code>
+				enable(),disable(),
+			</code>
+			<br />
+			<button class="ui-button" onclick="javascript:fileUploader.enable();">
+				启用
+			</button>
+			<button class="ui-button" onclick="javascript:fileUploader.disable();">
+				禁用
+			</button>
+		</div>
+		<br />
+		<div>
+			自定义文件列表展现等较完善的用法（以下为一个简单的示例）
+			<br />
+			<table>
+				<tbody>
+					<tr>
+						<td width="263px"></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><div id="example13"></div></td>
+						<td><div id="example14"></div></td>
+					</tr>
+					<tr>
+						<td colspan="2"><ul id="fileList"></ul></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+	</body>
+</html>

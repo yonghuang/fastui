@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">fastDev.define(&quot;fastDev.Data.Structure.Array&quot;, {
+	alias : &quot;S_Array&quot;,
+	prototype : function(data, separator, model) {
+		if(model){
+			model.objectify(data);
+		}
+		
+		if(fastDev.isArray(data)) {
+			this.items = data;
+		} else if(fastDev.isString(data) &amp;&amp; separator) {
+			this.items = data.split(separator);
+		} else {
+			this.items = [];
+		}
+	}
+});
+
+fastDev.apply(fastDev.Data.Structure.Array.prototype.prototype, {
+	each : function(fn, context) {
+		for(var i = 0, item, rs; item = this.items[i]; i++) {
+			if( rs = fn.call(context || window, i, item)) {
+				break;
+			}
+		}
+		return rs;
+	},
+	splice : function(index, count, item) {
+		return fastDev.create(&quot;S_Array&quot;, {
+			data : this.items.splice(index, count, item)
+		});
+	},
+	slice : function(begin, end) {
+		return fastDev.create(&quot;S_Array&quot;, {
+			data : this.items.slice(begin, end)
+		});
+	},
+	findby : function(target) {
+		if(!target) {
+			return this;
+		}
+		return this.each(function(index, item) {
+			return item === target ? index + 1 : 0;
+		}) - 1;
+	},
+	contains : function(target) {
+		return this.each(function(index, item) {
+			return item === target;
+		});
+	},
+	push : function(data) {
+		return this.items.push(data);
+	},
+	pop : function() {
+		return this.items.pop();
+	},
+	shift : function() {
+		return this.items.shift();
+	},
+	getSource : function() {
+		return this.source;
+	},
+	getSize : function() {
+		return this.items.length;
+	},
+	remove : function(target) {
+		this.each(function(index, item) {
+			if(target === item) {
+				this.items.splice(index, 1);
+			}
+		});
+	}
+});
+
+fastDev.Data.Structure.Array.constructor = function(setting) {
+	return new this.prototype(setting.data, setting.separator, setting.model);
+};
+
+</pre>
+</body>
+</html>

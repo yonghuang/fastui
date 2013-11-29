@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>animate</title>
+		<meta name="author" content="admin" />
+		<script src="../src/library/jquery-1.7.2.js"></script>
+		<!-- Date: 2012-07-17 -->
+		<script>
+			var t, line, startTime, time = 3000, div, a = "linear", b = "", chart;
+			var easing = {
+				linear : function(t, b, c, d) {
+					return c * t / d + b;
+				},
+				quad : {
+					easeIn : function(t, b, c, d) {
+						return c * (t /= d) * t + b;
+					},
+					easeOut : function(t, b, c, d) {
+						return -c * (t /= d) * (t - 2) + b;
+					},
+					easeInOut : function(t, b, c, d) {
+						if((t /= d / 2) < 1)
+							return c / 2 * t * t + b;
+						return -c / 2 * ((--t) * (t - 2) - 1) + b;
+					}
+				},
+				cubic : {
+					easeIn : function(t, b, c, d) {
+						return c * (t /= d) * t * t + b;
+					},
+					easeOut : function(t, b, c, d) {
+						return c * (( t = t / d - 1) * t * t + 1) + b;
+					},
+					easeInOut : function(t, b, c, d) {
+						if((t /= d / 2) < 1)
+							return c / 2 * t * t * t + b;
+						return c / 2 * ((t -= 2) * t * t + 2) + b;
+					}
+				},
+				quart : {
+					easeIn : function(t, b, c, d) {
+						return c * (t /= d) * t * t * t + b;
+					},
+					easeOut : function(t, b, c, d) {
+						return -c * (( t = t / d - 1) * t * t * t - 1) + b;
+					},
+					easeInOut : function(t, b, c, d) {
+						if((t /= d / 2) < 1)
+							return c / 2 * t * t * t * t + b;
+						return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+					}
+				},
+				quint : {
+					easeIn : function(t, b, c, d) {
+						return c * (t /= d) * t * t * t * t + b;
+					},
+					easeOut : function(t, b, c, d) {
+						return c * (( t = t / d - 1) * t * t * t * t + 1) + b;
+					},
+					easeInOut : function(t, b, c, d) {
+						if((t /= d / 2) < 1)
+							return c / 2 * t * t * t * t * t + b;
+						return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
+					}
+				},
+				sine : {
+					easeIn : function(t, b, c, d) {
+						return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+					},
+					easeOut : function(t, b, c, d) {
+						return c * Math.sin(t / d * (Math.PI / 2)) + b;
+					},
+					easeInOut : function(t, b, c, d) {
+						return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+					}
+				},
+				expo : {
+					easeIn : function(t, b, c, d) {
+						return (t == 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
+					},
+					easeOut : function(t, b, c, d) {
+						return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
+					},
+					easeInOut : function(t, b, c, d) {
+						if(t == 0)
+							return b;
+						if(t == d)
+							return b + c;
+						if((t /= d / 2) < 1)
+							return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
+						return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
+					}
+				},
+				circ : {
+					easeIn : function(t, b, c, d) {
+						return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
+					},
+					easeOut : function(t, b, c, d) {
+						return c * Math.sqrt(1 - ( t = t / d - 1) * t) + b;
+					},
+					easeInOut : function(t, b, c, d) {
+						if((t /= d / 2) < 1)
+							return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
+						return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
+					}
+				},
+				elastic : {
+					easeIn : function(t, b, c, d, a, p) {
+						if(t == 0)
+							return b;
+						if((t /= d) == 1)
+							return b + c;
+						if(!p)
+							p = d * .3;
+						if(!a || a < Math.abs(c)) {
+							a = c;
+							var s = p / 4;
+						} else
+							var s = p / (2 * Math.PI) * Math.asin(c / a);
+						return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+					},
+					easeOut : function(t, b, c, d, a, p) {
+						if(t == 0)
+							return b;
+						if((t /= d) == 1)
+							return b + c;
+						if(!p)
+							p = d * .3;
+						if(!a || a < Math.abs(c)) {
+							a = c;
+							var s = p / 4;
+						} else
+							var s = p / (2 * Math.PI) * Math.asin(c / a);
+						return (a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
+					},
+					easeInOut : function(t, b, c, d, a, p) {
+						if(t == 0)
+							return b;
+						if((t /= d / 2) == 2)
+							return b + c;
+						if(!p)
+							p = d * (.3 * 1.5);
+						if(!a || a < Math.abs(c)) {
+							a = c;
+							var s = p / 4;
+						} else
+							var s = p / (2 * Math.PI) * Math.asin(c / a);
+						if(t < 1)
+							return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+						return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
+					}
+				},
+				back : {
+					easeIn : function(t, b, c, d, s) {
+						if(s == undefined)
+							s = 1.70158;
+						return c * (t /= d) * t * ((s + 1) * t - s) + b;
+					},
+					easeOut : function(t, b, c, d, s) {
+						if(s == undefined)
+							s = 1.70158;
+						return c * (( t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
+					},
+					easeInOut : function(t, b, c, d, s) {
+						if(s == undefined)
+							s = 1.70158;
+						if((t /= d / 2) < 1)
+							return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
+						return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
+					}
+				},
+				bounce : {
+					easeIn : function(t, b, c, d) {
+						return c - easing.bounce.easeOut(d - t, 0, c, d) + b;
+					},
+					easeOut : function(t, b, c, d) {
+						if((t /= d) < (1 / 2.75)) {
+							return c * (7.5625 * t * t) + b;
+						} else if(t < (2 / 2.75)) {
+							return c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
+						} else if(t < (2.5 / 2.75)) {
+							return c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+						} else {
+							return c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+						}
+					},
+					easeInOut : function(t, b, c, d) {
+						if(t < d / 2)
+							return easing.bounce.easeIn(t * 2, 0, c, d) * .5 + b;
+						else
+							return easing.bounce.easeOut(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
+					}
+				}
+			}
+
+			function start() {
+				startTime = (+new Date);
+				t = setInterval(move, 18);
+			}
+
+			function createChart() {
+				chart.innerHTML = "";
+				chart.appendChild(line);
+				var method = easing[a];
+				method = method[b] || method;
+				for(var i = 1; i < 550; i++) {
+					//alert(test1(i,0,550,551)+":"+test1(i,-197,200,556));
+					var obj = document.createElement("div");
+					obj.style.left = easing["linear"](i, 0, 550, 550) + "px";
+					obj.style.top = Math.abs(method(i, -200, 200, 550)) + "px";
+					obj.style.width = "3px";
+					obj.style.height = "3px";
+					obj.style.position = "absolute";
+					obj.style.backgroundColor = "red";
+					document.getElementById("chart").appendChild(obj);
+				}
+			}
+
+			function change(event) {
+				a = document.getElementById("a").value;
+				b = document.getElementById("b").value;
+				createChart();
+			}
+
+
+			window.onload = function() {
+				line = document.createElement("div");
+				line.style.left = "0px";
+				line.style.top = "0px";
+				line.style.width = "1px";
+				line.style.height = "200px";
+				line.style.position = "absolute";
+				line.style.backgroundColor = "#000000";
+				line.style.zIndex = 200;
+				line.id = "line";
+				chart = document.getElementById("chart");
+				chart.appendChild(line);
+				document.getElementById("btn").onclick = start;
+				div = document.getElementById("div");
+				document.getElementById("a").onchange = change;
+				document.getElementById("b").onchange = change;
+				createChart();
+
+			}
+			function move() {
+				var method = easing[a];
+				method = method[b] || method;
+				var nowTime = (+new Date), newLeft = method(nowTime - startTime, 0, 550, time);
+				divleft = method(nowTime - startTime, 0, 500, time);
+				if(nowTime - startTime > time || newLeft >= 550) {
+					clearInterval(t);
+					line.style.left = "550px";
+					div.style.left = "500px";
+				} else {
+					line.style.left = newLeft + "px";
+					div.style.left = divleft + "px";
+				}
+
+			}
+
+		</script>
+	</head>
+	<body>
+		<div id="" style="border: 1px solid rgb(0, 0, 0); height: 50px;width: 550px;position: absolute;top:50px;left:50px">
+			<div id="div" style="border: 0px solid rgb(0, 0, 0); height: 50px;width: 50px;position: absolute;background-color: #654321"></div>
+		</div>
+
+		<div id="chart" style="border: 1px solid rgb(0, 0, 0); height: 200px;width: 550px;position: absolute;top:150px;left:50px"></div>
+		
+		<div style="position: absolute;top:450px;left:50px">
+			<select id="a">
+				<option value="linear" selected="">linear</option>
+				<option value="quad">quad</option>
+				<option value="cubic">cubic</option>
+				<option value="quart">quart</option>
+				<option value="quint">quint</option>
+				<option value="sine">sine</option>
+				<option value="expo">expo</option>
+				<option value="circ">circ</option>
+				<option value="elastic">elastic</option>
+				<option value="back">back</option>
+				<option value="bounce">bounce</option>
+			</select>
+			<select id="b">
+				<option value="easeIn" selected="">easeIn</option>
+				<option value="easeOut">easeOut</option>
+				<option value="easeInOut">easeInOut</option>
+			</select>
+			<input type="button" value="begin" id="btn" >
+		</div>
+	</body>
+
+</html>
+

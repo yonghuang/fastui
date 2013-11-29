@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>form</title>
+		<meta name="author" content="admin" />
+		<link href="../../themes/default/css/ui-main.css" rel="stylesheet" type="text/css" />
+<style>
+tr{ height:30px}
+#example2{ margin:10px 0}
+</style>
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+        <script src="../../src/core/ControlBus_Patch.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+        <script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+        <script src="../../src/component/layout/Panel.js"></script>
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+		<script src="../../src/component/Validation.js"></script>
+		<script src="../../src/component/form/Box.js"></script>
+		<script src="../../src/component/form/TextBox.js"></script>
+        <script src="../../src/component/form/AutoComplete.js"></script>
+        <script src="../../src/component/form/CheckBoxGroup.js"></script>
+        <script src="../../src/component/form/DatePicker.js"></script>
+        <script src="../../src/component/form/RadioGroup.js"></script>
+        <script src="../../src/component/form/Select.js"></script>
+        <script src="../../src/component/list/Tree.js"></script> 
+        <script src="../../src/component/form/SelectTree.js"></script>
+        <script src="../../src/component/form/Form.js"></script>
+        <script src="../../src/component/form/Button.js"></script>
+        <script src="../../src/component/business/chooseusers.js"></script>
+		<script>
+			var submit=function(){
+					var form=fastDev.getInstance("form1");
+					form.submit();
+			}
+			var submitSuccess=function(data){				
+				alert("成功将数据"+data.text+"提交到后台");	
+				var chooseusers1=fastDev.getInstance("chooseusers1");
+				chooseusers1.unDisabledSubmitBtn();
+			}
+				
+			var clear=function(){
+					var form=fastDev.getInstance("form1");
+					form.cleanData();
+				}
+				
+			var	submitbefore=function(data){				
+				if(data.length===0){
+					alert("没有选中用户，不能提交");
+					return false;
+				}
+				return true;
+			}
+				
+			$(function() {				
+				fastDev.Core.ControlBus.compile();
+			});
+		</script>
+	</head>
+	<body>
+   验证
+    <form itype="Form" action="example_submit.jsp" id="form1"  saveInstance="true" onSubmitSuccess="submitSuccess()">
+		<p>&nbsp;</p>
+		<table width="80%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+		    <td width="25%">&nbsp;text:</td>
+		    <td width="75%"><div id="example1">
+			<div itype="TextBox" id="txt1" saveInstance="true" container="example1"  rule="required"></div>
+		</div></td>
+	      </tr>
+		 <tr>
+         <td colspan="2">
+         <div>
+         <div itype="Chooseusers" name="chooseusers1" id="chooseusers1"  saveInstance="true"  selectInitSource="selectuser2.jsp" treeInitSource="usertree2.jsp" beforeSubmit="submitbefore()"></div>
+         </div>
+         </td>
+         </tr>
+	  </table>
+	</form>   
+    
+</body>
+</html>
+

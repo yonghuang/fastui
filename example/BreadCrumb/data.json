@@ -1,0 +1,11 @@
+[{
+	href : "http://www.baidu.com",
+	value : "百度"
+}, {
+	href : "http://www.sina.com.cn",
+	value : "新浪",
+	target : "_blank"
+}, {
+	href : "http://www.163.com",
+	value : "网易"
+}]

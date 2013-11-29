@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="model.css" />
+<script type="text/javascript" src="fastui/fastDev-import.js"></script>
+<script type="text/javascript" src="selectuser.js"></script>
+</head>
+<body>
+	<div id="left" class="left">
+    	<div class="search">
+    		<input class="textbox"  onkeypress="searchontext(event)" id="searchBox" type="text" width="100%" />  
+    		<input name="searchbutton" id="searchbutton" onClick="searchli()" type="button" class="inputBtn" /> 
+    	</div>
+        <div class="tab">
+        
+        <div itype="Tabs" id="tabs"  saveInstance="true" height="277px" width="99%" >
+        	<div title="按部门选择" type="div" >
+        	<div itype="Tree"  onBeforeReady="onBeforeReady()" onCheckClick="checkClick()" treeType="multitree" onAfterInitRender="onAfterInitRender()" onNodeClick="onNodeClick()" showIco="true" topParentid="0" openFloor=2  id="tree1" saveInstance="true"></div>
+        	</div>
+        	
+        	<div title="按角色选择" type="div" >
+        	<div itype="Tree"  onBeforeReady="onBeforeReady()" onCheckClick="checkClick()" treeType="multitree"  onNodeClick="onNodeClick()" showIco="true" topParentid="0" openFloor=2  id="tree2" saveInstance="true"></div>
+        	</div>
+        </div>
+        
+        </div>
+    </div>
+    <div id="right" class="right">
+    	<div class="tool">
+    		<div itype="Button" cls="hideList" onclick="hideList()" text="隐藏人员列表"></div>
+			<div itype="Button" cls="removeAll" onclick="removeAll()" text="全部清空"></div>
+    		
+    	</div>
+        <div class="right-content">
+        	<div id="content-left" class="content-left">
+        		<div class="content-left-top">
+        			<div class="content-left-title">
+        				<span id="nodeName" class="content-left-title-text"></span>
+        			</div>
+        		<div class="content-left-selectall"><div itype="Button"  cls="selectAll" onclick="selectAll()" text="全部选择"></div></div>
+
+        		</div>
+        		<div width="100%">
+        			<ul id="content-left-list" class="content-left-list">
+
+        			</ul>
+        		</div>
+        	</div>
+            <div id="content-right" class="content-right">
+            	<div class="content-right-tool">
+            		当前选择人数：<span id="selectedNum" style="color:#FF0000">0</span>人
+            	</div>
+            	<div id="content-right-selected" class="content-right-selected">
+            		
+            	</div>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</body>
+</html>

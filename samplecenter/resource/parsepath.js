@@ -1,0 +1,1 @@
+var path = /(.*8888\/)/.exec(window.location.href)[1];

@@ -1,0 +1,84 @@
+    @charset "utf-8";
+	
+	/*
+     * 消息框控件header div样式
+     * */
+	.messageboard_header {
+        background:url(../images/messageboard.gif) no-repeat right 0;
+    	height:30px;
+    }
+    .messageboard_header span {
+        background:url(../images/messageboard.gif) no-repeat left -40px;
+    	color:#333;
+    	display:block;
+    	font:bold 14px/30px "宋体";
+    	text-indent:12px;
+		width:90%;
+    }
+    /*
+     * 消息框控件内容 div样式
+     * */
+    .messageboard_content {
+    	background:#f3f7fa;
+        border-left:1px solid #969ea6;
+		border-right:1px solid #969ea6;
+    	padding:0 2px;
+    }
+    .messageboard_content ul {
+    	background:#fff;
+		height:auto;
+    }
+    .messageboard_content li {
+    	background:#fff;
+    	border-bottom:1px solid #f3f7fa;
+    	font:12px/26px "宋体";
+		height:26px;
+		float:none;
+    	padding:0 12px;
+    	table-layout:fixed;
+    	white-space:nowrap;
+    }
+    .messageboard_content li div {
+    	display:inline;
+    	overflow:hidden;
+    	text-overflow:ellipsis;
+    }
+    .messageboard_content li div span {
+    	color:#999;
+    	float:right;
+    	font-family:Arial, Helvetica, sans-serif, "宋体";
+    	overflow:hidden;
+    	text-overflow:ellipsis;
+    	width:30%;
+    }
+	/*
+     * 消息框控件链接字样式
+     * */
+	.messageboard_content li a {
+	    color:#075587;
+		line-height:26px;
+	}
+	.messageboard_content li a:link, .messageboard_contentli a:visited {
+	    background:#fff;
+    	color:#075587;
+		text-decoration:none;
+    }
+    .messageboard_content li a:hover, .messageboard_content li a:active {
+    	background:#fff;
+    }
+    /*
+     * 消息框控件footer div样式
+     * */
+    .messageboard_footer {
+        background:url(../images/messageboard.gif) no-repeat left -110px;
+    	clear:none;
+    	cursor:pointer;
+    	height:26px;
+    }
+    .messageboard_footer a {
+        background:url(../images/messageboard.gif) no-repeat right -80px;
+    	float:right;
+    	padding:0 12px; width:50%;
+    	text-align:right;
+    	font:10px/26px Verdana, "宋体";
+    }

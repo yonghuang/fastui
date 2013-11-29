@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///commands 快捷键
+///commandsName  ShortCutKeys
+///commandsTitle  快捷键
+//配置快捷键
+UE.plugins['shortcutkeys'] = function(){
+    var me = this,
+        shortcutkeys =  utils.extend({
+    		 &quot;ctrl+66&quot; : &quot;Bold&quot; //^B
+        	,&quot;ctrl+90&quot; : &quot;Undo&quot; //undo
+        	,&quot;ctrl+89&quot; : &quot;Redo&quot; //redo
+       		,&quot;ctrl+73&quot; : &quot;Italic&quot; //^I
+       		,&quot;ctrl+85&quot; : &quot;Underline&quot; //^U
+        	,&quot;ctrl+shift+67&quot; : &quot;removeformat&quot; //清除格式
+        	,&quot;ctrl+shift+76&quot; : &quot;justify:left&quot; //居左
+        	,&quot;ctrl+shift+82&quot; : &quot;justify:right&quot; //居右
+        	,&quot;ctrl+65&quot; : &quot;selectAll&quot;
+//        	,&quot;9&quot;	   : &quot;indent&quot; //tab
+    	},me.options.shortcutkeys);
+    me.addListener('keydown',function(type,e){
+
+        var keyCode = e.keyCode || e.which,value;
+		for ( var i in shortcutkeys ) {
+		    if ( /^(ctrl)(\+shift)?\+(\d+)$/.test( i.toLowerCase() ) || /^(\d+)$/.test( i ) ) {
+		        if ( ( (RegExp.$1 == 'ctrl' ? (e.ctrlKey||e.metaKey) : 0)
+                        &amp;&amp; (RegExp.$2 != &quot;&quot; ? e[RegExp.$2.slice(1) + &quot;Key&quot;] : 1)
+                        &amp;&amp; keyCode == RegExp.$3
+                    ) ||
+                     keyCode == RegExp.$1
+                ){
+
+                    value = shortcutkeys[i].split(':');
+                    me.execCommand( value[0],value[1]);
+                    domUtils.preventDefault(e)
+
+		        }
+		    }
+		}
+    });
+};</pre>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title><ul>        
+        <li>设置值和得到值</li>
+        </ul></title>
+<script src="../../../src/fastDev-import.js"></script>
+<script language="javascript" src="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/editor_config.js"></script>
+<script language="javascript" src="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/editor_all.js"></script>
+<link rel="stylesheet" type="text/css" href="http://fastui.talkweb.com.cn:8888/src/component/thirdparty/ueditor/themes/default/ueditor.css"/>	
+  <script>
+         function btnsetValue(){
+			var obj=fastDev.getInstance("editor1");
+			obj.setValue("新的文本值");
+		 }
+		 function btngetValue(){
+			var obj=fastDev.getInstance("editor1");
+			fastDev.tips(obj.getValue());
+		 }
+  </script>
+</head>
+
+<body>
+	<div id="example" style="width:500px; height:400px;margin: 10px">
+        <div class="ui-layout-text">得到值与设置值</div>
+		<div itype="Editor"  container="example" id="editor1" saveInstance="true" value="sssssddd"></div>
+	</div>
+     <div id="example1" style="margin: 10px">
+		<div itype="Button"  text="设置值" onclick="btnsetValue()" ></div>
+        <div itype="Button"  text="得到值" onclick="btngetValue()" ></div>
+     </div>
+</body>
+</html>

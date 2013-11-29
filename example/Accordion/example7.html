@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>accordion各种事件 </title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+    <style>
+    .ui-nav-content > div{ padding:5px;}
+    </style>
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+        <script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+     <script src="../../src/component/layout/Accordion.js"></script>
+     	<script src="../../src/component/layout/Panel.js"></script>
+        <script src="../../src/component/form/CheckBoxGroup.js"></script>
+        
+     <script>
+			$(function() {
+			var obj=	$.create("Accordion", {
+					container : "example",
+					onAdd:function(item){
+						alert("添加"+item.text+"成功");
+					},
+					onBeforeRemove:function(id){
+						alert("删除"+id+"前方法，返回false不执行删除");
+						return false;
+					},
+					onRemove:function(id){
+						alert("删除"+id+"成功");
+					},
+					onExpand:function(id){
+						alert("展开"+id);
+					},
+					onCollect:function(id){
+						alert("收缩"+id);
+					},
+					onItemClick:function(id){
+						alert("点击"+id)
+					},
+					items : [{
+						id : "accordion1",
+						text : "1级菜单"
+					}, {
+						id : "accordion2",
+						text : "2级菜单"
+					}, {
+						id : "accordion3",
+						text : "3级菜单"
+					}]
+				});		
+				createChk123();	
+				function createChk123(){
+				$.create("CheckBoxGroup", {
+					container : "accordion1",
+					name:"check1",		
+					itemHeight : "30px",
+					items: [ {
+						value : "4",
+						checked:true,
+						text : "音乐"
+					},{
+						value : "5",
+						checked:true,
+						text : "电影"
+					}]
+				});
+				
+				$.create("CheckBoxGroup", {
+					container : "accordion2",
+					name:"check2",		
+					itemHeight : "30px",
+					items: [ {
+						value : "1",
+						checked:true,
+						text : "旅游"
+					}, {
+						value : "2",
+						checked:true,
+						text : "唱歌"
+					}]
+				});
+				
+				$.create("CheckBoxGroup", {
+					container : "accordion3",
+					name:"check3",	
+					itemHeight : "30px",
+					items: [{
+						value : "3",
+						checked:false,
+						text : "跳舞"
+					}, {
+						value : "7",
+						checked:true,
+						text : "上网"
+					}]
+				});
+				}
+				
+				function createChk4(){
+				$.create("CheckBoxGroup", {
+					container : "accordion4",
+					name:"check1",		
+					itemHeight : "30px",
+					items: [ {
+						value : "4",
+						checked:true,
+						text : "音乐4"
+					},{
+						value : "5",
+						checked:true,
+						text : "电影4"
+					}]
+				});
+				}
+				$("#btn1").bind("click", function() {
+					obj.addItem({id:"accordion4",text:"4级菜单"});
+					createChk123();	
+					createChk4();
+				});
+				
+				$("#btn2").bind("click", function() {
+					obj.removeItem("accordion4");
+				
+				});
+				
+				$("#btn3").bind("click", function() {
+					obj.reLoad();
+					createChk123();	
+					createChk4();
+				});
+				
+				$("#btn4").bind("click", function() {
+					alert("当前id为"+ obj.getSelected());					
+				});
+				
+			});
+		
+	
+		
+	</script>
+</head>
+<body>
+	<div id="example" style="width:260px"></div>
+    <div>
+			<input type="button" value="添加一条" id="btn1"/>
+			<input type="button" value="删除一条" id="btn2"/>
+			<input type="button" value="刷新" id="btn3"/>
+			<input type="button" value="得到当前id" id="btn4"/>
+		</div>
+</body>
+</html>
+

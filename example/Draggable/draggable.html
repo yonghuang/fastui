@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Draggable</title>
+
+		<link rel="stylesheet" href="../../themes/default/css/ui-main.css"/>
+
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/interaction/Draggable.js"></script>
+		<script src="../../src/component/interaction/Resizable.js"></script>
+
+		<script type="text/javascript">
+			var dragger;
+			fastDev(function() {
+				fastDev.create("Draggable", {
+					element : "#example1" // 元素选择器格式需满足fastDev选择器格式
+				});
+				fastDev.create("Draggable", {
+					element : "#example2",
+					ghost : false
+				});
+				fastDev.create("Draggable", {
+					element : "#example3",
+					ghost : false,
+					axis : "x"
+				});
+				fastDev.create("Draggable", {
+					element : "#example4",
+					ghost : false,
+					axis : "y"
+				});
+				fastDev.create("Draggable", {
+					element : "#example5",
+					ghost : false,
+					grid : [80, 80]
+				});
+				fastDev.create("Draggable", {
+					element : "#example6",
+					ghost : false,
+					visible : false	// 是否限制在可见区域内拖动
+				});
+				fastDev.create("Draggable", {
+					element : "#example7",
+					handle : "#handle", // 指定触发拖动的元素
+					ghost : false
+				});
+				dragger = fastDev.create("Draggable", {
+					element : "#example8",
+					handle : "#handle2",
+					ghost : false
+				});
+				fastDev.create("Resizable", {
+					element : "#example9",
+					handles : "se"
+				});
+				fastDev.create("Draggable", {
+					element : "#example9",
+					handle : "#handle3",
+					ghost : false
+				});
+				fastDev.create("Draggable", {
+					element : "#example",
+					ghost : false,
+					inside : true
+				});
+			});
+
+			// 禁用拖动
+			function disable() {
+				dragger.disable();
+			}
+
+			// 启用拖动
+			function enable() {
+				dragger.enable();
+			}
+
+			// 注销拖动
+			function destroy() {
+				dragger.destroy();
+			}
+		</script>
+	</head>
+	<body>
+		<div id="example1" style="width: 200px;height: 100px;background-color: #008000;">
+			可拖动的层（自动变更定位类型，支持fixed定位类型）
+			<br />
+			属性说明及事件回调请参见API文档
+		</div>
+		<br />
+		<div id="example2" style="position:absolute;top:120px; width: 200px;height: 100px;background-color: #808000;">
+			不使用辅助层拖动
+		</div>
+		<div id="example3" style="position:absolute;top:240px; width: 200px;height: 100px;background-color: #008080;">
+			只能沿着X轴方向拖动（横向）
+		</div>
+		<div id="example4" style="position:absolute;top:360px; width: 200px;height: 100px;background-color: #800080;">
+			只能沿着Y轴方向拖动（纵向）
+		</div>
+		<div id="example5" style="position:absolute;top:480px; width: 200px;height: 100px;background-color: #808000;">
+			以指定宽高的格子拖动
+		</div>
+		<div id="example6" style="position:absolute;top:600px; width: 200px;height: 100px;background-color: #FF9900;">
+			可以拖出可见区域
+			<br/>
+			（默认是只能在可见区域内拖动）
+		</div>
+		<div id="example7" style="position:absolute;top:0;left:220px; width: 200px;height: 100px;background-color: #00CCFF;">
+			<p id="handle" style="width: 100%;height:30px; background-color: #999900;">
+				点我拖动
+			</p>
+			指定触发拖动的元素
+		</div>
+		<div id="example8" style="position:absolute;top:120px;left:220px; width: 200px;height: 100px;background-color: #33CC33;">
+			<p id="handle2" style="width: 100%;height:30px; background-color: #FF9900;">
+				点我拖动
+			</p>
+			<button onclick ="disable()">
+				禁用拖动
+			</button>
+			<button onclick="enable()">
+				启用拖动
+			</button>
+			<button onclick="destroy()">
+				注销拖动（不可恢复）
+			</button>
+		</div>
+		<div id="example9" style="position:absolute;top:240px;left:220px; width: 200px;height: 100px;background-color: #00FFFF;">
+			<p id="handle3" style="width: 100%;height:30px; background-color: #FF9900;">
+				点我拖动
+			</p>
+			可拖动
+			<br />
+			可调节大小
+		</div>
+		<div style="float:right; top:0;left:400px; width: 600px;height:500px;background-color: #c0c0c0;border: 10px solid red;padding: 10px;">
+			<div id="example" style="width: 200px;height: 100px;background-color: #808000;">
+				只能在父容器内拖动
+			</div>
+		</div>
+
+	</body>
+</html>
+

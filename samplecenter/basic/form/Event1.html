@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>接口与事件</h4>     
+        <ul>   
+         <li>主要包括表单初始化前、加载完成后事件接口，数据初始化后，表单提交前、提交成功后事件接口</li>
+        </ul></title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>   
+	  <script>			
+			//提交表单事件		
+			var submit=function(){
+				var form=fastDev.getInstance("form1");
+				form.submit();
+			}
+			//提交成功之后的事件
+			var submitSuccess=function(data){				
+				fastDev.tips("5、成功将数据"+fastDev.Util.JsonUtil.parseString(data.msg)+"提交到后台");	
+			}	
+			//清空表单事件			
+			var clear=function(){
+				var form=fastDev.getInstance("form1");
+				form.cleanData();
+			}
+			//表单初始化之前的回调方法
+			var  beforeInitalize=function(){
+				//fastDev.alert("表单初始化之前的回调方法");
+				 fastDev("#divmsg").addText("2、表单初始化之前的回调方法：beforeInitalize。");
+			}
+			//表单加载完成时的回调方法
+			var  afterLoadData=function(){
+				//fastDev.alert("表单加载完成时的回调方法");
+				fastDev("#divmsg").addText("3、afterLoadData表单加载完成时的回调方法：afterLoadData。");
+			}
+			//initSource数据返回后回调触发
+			var  afterLoadInit=function(){
+				//fastDev.alert("initSource数据返回后回调触发");
+				 fastDev("#divmsg").addText("1、initSource数据返回后回调触发方法：afterLoadInit。");
+			}
+			//提交之前的方法，返回"false"阻止提交。
+			var  beforeSubmit=function(){
+				//fastDev.alert("提交之前的方法，返回false阻止提交。");
+				fastDev("#divmsg").addText("4、提交之前的方法，返回false阻止提交：beforeSubmit。");
+			}			
+		</script>
+	</head>
+	<body style="width:820px;">
+    <div style="margin:10px;"><div style="color:#03F" id="divmsg"></div>
+    <div class="ui-layout-text">接口与事件</div>
+		 <form itype="Form" action="../../data/form_example_submit.jsp" id="form1" requestType="get" saveInstance="true"  onSubmitSuccess="submitSuccess()" onBeforeInitalize="beforeInitalize()" onAfterLoadData="afterLoadData()" onAfterLoadInit="afterLoadInit()" onBeforeSubmit="beforeSubmit()">
+		<table width="800px" border="0" cellspacing="0" cellpadding="0" class="ui-form-table">
+		  <tr>
+		    <td class="ui-form-table-dt">text：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="txt1" ></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">password：</td>
+		    <td class="ui-form-table-dd"><input itype="TextBox" id="pwd1"   type="password" ></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt" style="height:57px;">textarea：</td>
+		    <td class="ui-form-table-dd"><textarea itype="TextBox" id="area1"   type="textarea" height="50px" width="400px"></textarea></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">智能提示框：</td>
+		    <td class="ui-form-table-dd">
+        <input id="autotxt1" itype="AutoComplete"   initSource="../../data/form_data.jsp" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" iwidth="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100">
+        </td>
+	      </tr>
+           <tr>
+		    <td class="ui-form-table-dt">智能提示框1：</td>
+		    <td class="ui-form-table-dd">
+        <input id="autotxt11" itype="AutoComplete"    multiple="true"  items="Aaron,Abel,Baird,Barnett,Carr,Christian,David,Derrick,Eden,Emmanuel,Franklin" hintText="输入字符查询" searchingText="正在查询中..." noResultsText="未查询到相关结果" iwidth="400px" minChars="1" scrollHeight="500px" selectFirst="true" autoFill="false" keyDelay="100">
+        </td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">复选框：</td>
+		    <td class="ui-form-table-dd"><div itype="CheckBoxGroup"  name="check1" id="check1"  ></div></td>
+	      </tr>
+		  <tr>
+		    <td class="ui-form-table-dt">单选框：</td>
+		    <td class="ui-form-table-dd"><div itype="RadioGroup"  name="radio1" id="radio1"   >
+			<div value=1 text="男" checked=true></div>			
+			<div value=0 text="女"></div>
+			</div>
+			</td>
+	      </tr>
+          <tr>
+          <td class="ui-form-table-dt">下拉框：</td>
+          <td class="ui-form-table-dd">
+			<select itype="Select"  id="select1"    width="200px"  value="test1,test3"  onValueChange="handle1()"><option  text="-请选择-"></option>	<option value="test5" text="测试5"></option></select>
+			
+		   </td>
+          </tr>
+           <tr>
+          <td class="ui-form-table-dt">下拉树：</td>
+          <td class="ui-form-table-dd">
+			<div itype="SelectTree"  initSource="../../data/form_data2.txt" rootValue="-请选择-" topParentid="0" openFloor=2 id="selecttree1" >
+			</div>
+		  </td>
+          </tr>          
+           <tr>
+          <td class="ui-form-table-dt">日历控件：</td>
+          <td class="ui-form-table-dd"><input itype="DatePicker" id="data1"   trigger="click"></td>
+          </tr>          
+         </table>
+         <div style="width:800px; text-align:center">
+			<div itype="Button" text="提交" onclick="submit()" ></div>
+			<div itype="Button" text="清空" onclick="clear()" ></div>
+		</div>
+	</form>       
+    </div>
+	</body>
+</html>

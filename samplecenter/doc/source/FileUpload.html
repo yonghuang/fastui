@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-FileUpload'>/**
+</span> * @class fastDev.Ui.FileUpload
+ * @extends fastDev.Ui.Box
+ * @author chengwei
+ * &lt;p&gt;HTML文件上传控件。&lt;/p&gt;
+ * &lt;p&gt;使用纯HTML实现页面无刷新文件上传功能。&lt;/p&gt;
+ * &lt;p&gt;支持多文件队列，以及选取文件后自动上传文件等。&lt;/p&gt;
+ * &lt;p&gt;作者：程伟&lt;/p&gt;
+ *     
+ *     &lt;input itype=&quot;FileUpload&quot; action=&quot;../../data/fileupload.jsp&quot;/&gt;
+ */
+fastDev.define(&quot;fastDev.Ui.FileUpload&quot;, {
+    alias: &quot;FileUpload&quot;,
+    extend: &quot;fastDev.Ui.Box&quot;,
+    _options: {
+<span id='fastDev-Ui-FileUpload-property-action'>        /**
+</span>         * 文件上传后台处理程序链接
+         * @type {String}
+         */
+        action: &quot;&quot;,
+<span id='fastDev-Ui-FileUpload-property-name'>        /**
+</span>         * 文件域表单请求参数名
+         * @type {String}
+         */
+        name: &quot;&quot;,
+<span id='fastDev-Ui-FileUpload-property-showTextInput'>        /**
+</span>         * 是否显示文件域的文本输入框
+         * @type {Boolean}
+         */
+        showTextInput: true,
+<span id='fastDev-Ui-FileUpload-property-showUploadBtn'>        /**
+</span>         * 是否显示&quot;上传&quot;按钮
+         * 指定为自动上传时不会显示上传按钮
+         * @type {Boolean}
+         */
+        showUploadBtn: true,
+<span id='fastDev-Ui-FileUpload-property-showLoading'>        /**
+</span>         * 是否在上传进行时显示loading图标
+         * @type {Boolean}
+         */
+        showLoading: true,
+<span id='fastDev-Ui-FileUpload-property-chooseBtn'>        /**
+</span>         * &quot;浏览文件&quot;按钮配置
+         * @type {Object}
+         */
+        chooseBtn: {},
+<span id='fastDev-Ui-FileUpload-property-uploadBtn'>        /**
+</span>         * &quot;上传文件&quot;按钮配置
+         * @type {Object}
+         */
+        uploadBtn: {},
+<span id='fastDev-Ui-FileUpload-property-autoUpload'>        /**
+</span>         * 是否在选取文件后自动开始上传
+         * 开启自动上传功能 后，文件仅在验证通过后才会开始上传
+         * @type {Boolean}
+         */
+        autoUpload: false,
+<span id='fastDev-Ui-FileUpload-property-multiple'>        /**
+</span>         * 是否允许上传多个文件
+         * 若已开启自动上传，则总是允许上传多个文件
+         * @type {Boolean}
+         */
+        multiple: false,
+<span id='fastDev-Ui-FileUpload-property-sizeLimit'>        /**
+</span>         * 单个可上传文件的最大字节数限制
+         * 单位为千字节（KB）
+         * -1表示可上传文件大小不受限制（默认为 10 MB）
+         * @type {Number}
+         */
+        sizeLimit: 10240,
+<span id='fastDev-Ui-FileUpload-property-typeLimit'>        /**
+</span>         * 允许上传的文件扩展名（扩展名并非文件真实的MIME类型，真实的文件类型需由后台处理程序验证）
+         * 参数为字符串时，扩展名用逗号分隔
+         * 空串或空数组则表示文件扩展名不受限制
+         * @type {String|Array}
+         */
+        typeLimit: [],
+<span id='fastDev-Ui-FileUpload-property-fileLimit'>        /**
+</span>         * 指定可上传文件文件数限制
+         * -1表示可上传任意数量的文件
+         * @type {Number}
+         */
+        fileLimit: null,
+<span id='fastDev-Ui-FileUpload-property-params'>        /**
+</span>         * 额外附加的查询参数，对象的属性名为参数名，属性值为参数值
+         * 也可以调用addParams(obj)方法来动态变更查询参数
+         * @type {Object}
+         */
+        params: {},
+<span id='fastDev-Ui-FileUpload-property-stopOnFailed'>        /**
+</span>         * 在自动上传的情况下，当文件上传失败时，是否继续上传文件队列中的其他文件
+         * 参数值为false时，将会继续上传其他文件
+         * 也可通过调用stopUpload()方法来终止整个上传进程
+         * @type {Boolean}
+         */
+        stopOnFailed: false,
+<span id='fastDev-Ui-FileUpload-event-onFileChoose'>        /**
+</span>         * 用户选取文件后的回调函数
+         * 回调函数返回false，则表示放弃此次选取
+         * 回调函数内this指向本控件
+         * @type {Function}
+         * @param {Object} file 文件对象
+         * @param {String} file.id 文件ID值，可以根据该ID值调用startUpload(id)方法上传该文件
+         * @param {String} file.path 文件物理路径
+         * @param {String} file.name 文件名称
+         * @param {String} file.type 文件扩展名
+         * @param {Number} file.size 文件大小，当js不能获取该值时，其值为null
+         * @event
+         */
+        onFileChoose: function (file) {},
+<span id='fastDev-Ui-FileUpload-event-onChooseError'>        /**
+</span>         * 选取失败时回调函数
+         * 默认的回调处理函数提供简单的错误提示，可自定义该回调函数来处理错误信息
+         * 回调函数内this指向本控件
+         * @type {Function}
+         * @param {Object} file 文件对象
+         * @param {String} file.id 文件ID值
+         * @param {String} file.path 文件物理路径
+         * @param {String} file.name 文件名称
+         * @param {String} file.type 文件扩展名
+         * @param {Number} file.size 文件大小，当js不能获取该值时，其值为null
+         * @param {String} code 错误代码，为以下常量（数值类型）：
+         * &lt;p&gt;1 - 文件扩展名受限&lt;/p&gt;
+         * &lt;p&gt;2 - 文件大小受限&lt;/p&gt;
+         * &lt;p&gt;3 - 超过最大可上传文件数&lt;/p&gt;
+         * @param {String} msg 默认的错误提示消息
+         * @event
+         */
+        onChooseError: function (file, code, msg) {
+            fastDev.tips(msg);
+        },
+<span id='fastDev-Ui-FileUpload-event-onUploadStart'>        /**
+</span>         * 每个文件上传开始时的回调函数
+         * 回调函数返回false，则取消上传该文件
+         * 回调函数内this指向本控件
+         * @type {Function}
+         * @param {Object} file 文件对象
+         * @param {String} file.id 文件ID值
+         * @param {String} file.path 文件物理路径
+         * @param {String} file.name 文件名称
+         * @param {String} file.type 文件扩展名
+         * @param {Number} file.size 文件大小，当js不能获取该值时，其值为null
+         * @event
+         */
+        onUploadStart: function (file) {},
+<span id='fastDev-Ui-FileUpload-event-onUploadCancel'>        /**
+</span>         * 文件上传被取消时的回调函数
+         * 回调函数内this指向本控件
+         * @type {Function}
+         * @param {Object} file 文件对象
+         * @param {String} file.id 文件ID值
+         * @param {String} file.path 文件物理路径
+         * @param {String} file.name 文件名称
+         * @param {String} file.type 文件扩展名
+         * @param {Number} file.size 文件大小，当js不能获取该值时，其值为null
+         * @event
+         */
+        onUploadCancel: function (file) {
+            fastDev.tips(&quot;文件 &quot; + file.name + &quot; 已经取消上传&quot;);
+        },
+<span id='fastDev-Ui-FileUpload-event-onUploadSuccess'>        /**
+</span>         * 每个文件上传成功时的回调函数
+         * 回调函数内this指向本控件
+         * @type {Function}
+         * @param {Object} file 文件对象
+         * @param {String} file.id 文件ID值
+         * @param {String} file.path 文件物理路径
+         * @param {String} file.name 文件名称
+         * @param {String} file.type 文件扩展名
+         * @param {Number} file.size 文件大小，当js不能获取该值时，其值为null
+         * @param {Object|String} response 服务器端返回的上传结果，若上传发生异常或服务器端未返回任何结果，则其值为null
+         * @event
+         */
+        onUploadSuccess: function (file, response) {
+            fastDev.tips(&quot;文件 &quot; + file.name + &quot; 上传成功&quot;);
+        },
+<span id='fastDev-Ui-FileUpload-event-onUploadFail'>        /**
+</span>         * 每个文件上传失败时的回调函数
+         * 回调函数内this指向本控件
+         * @type {Function}
+         * @param {Object} file 文件对象
+         * @param {String} file.id 文件ID值
+         * @param {String} file.path 文件物理路径
+         * @param {String} file.name 文件名称
+         * @param {String} file.type 文件扩展名
+         * @param {Number} file.size 文件大小，当js不能获取该值时，其值为null
+         * @param {Object|String} response 服务器端返回的上传结果，若上传发生异常或服务器端未返回任何结果，则其值为null
+         * @event
+         */
+        onUploadFail: function (file, response) {
+            fastDev.tips(&quot;文件 &quot; + file.name + &quot; 上传失败&quot;);
+        },
+<span id='fastDev-Ui-FileUpload-event-onUploadComplete'>        /**
+</span>         * 每个文件上传完成后的回调函数
+         * &lt;strong&gt;回调函数返回布尔值false，则表示上传失败，无返回值或者返回非布尔值false则表示上传成功&lt;/strong&gt;
+         * 传递参数file为当前上传文件对象，response为服务器返回的上传结果JSON对象或字符串（不能解析为JSON对象时）
+         * 注意！若上传发生异常或服务器未返回任何结果时，参数response为null
+         * 默认回调是根据后台默认处理程序的返回结果来判断文件上传成功与否并给与相关提示的
+         * 可以通过重定义该回调函数，然后自己处理后台处理程序的返回结果（上传失败的话，必须返回false值来通知控件更新上传状态）
+         * &lt;p&gt;若上传成功，则会回调onUploadSuccess函数&lt;/p&gt;
+         * &lt;p&gt;若上传失败，则会回调onUploadFail函数&lt;/p&gt;
+         * 回调函数内this指向本控件
+         * @type {Function}
+         * @param {Object} file 文件对象
+         * @param {String} file.id 文件ID值
+         * @param {String} file.path 文件物理路径
+         * @param {String} file.name 文件名称
+         * @param {String} file.type 文件扩展名
+         * @param {Number} file.size 文件大小，当js不能获取该值时，其值为null
+         * @param {Object|String} response 服务器端返回的上传结果，若上传发生异常或服务器端未返回任何结果，则其值为null
+         * @return {Boolean} 若上传失败，请返回布尔值false来更新控件内部状态
+         * @event
+         */
+        onUploadComplete: function (file, response) {
+            // 下面的实现与本控件后台处理程序处理结果绑定，如果更换后台处理程序，请自己实现相应的结果处理
+            if (!response) {
+                // 上传失败，返回false
+                return false;
+            }
+            if (fastDev.isArray(response) &amp;&amp; !! response.length) {
+                response = response[0];
+                if (!response.allowed || response.missing) {
+                    // 上传失败，返回false
+                    return false;
+                }
+            }
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-staticTemplate'>    /**
+</span>     * 静态模板
+     * @param {Object} params 模板参数
+     * @private 
+     */
+    staticTemplate: function (params) {
+        var html = [];
+        html.push('&lt;form id=&quot;fileupload-form-' + params.sequence + '&quot; action=&quot;' + params.action + '&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; target=&quot;fileupload-iframe-' + params.sequence + '&quot; style=&quot;width:' + params.width + '&quot;&gt;');
+        html.push('&lt;table class=&quot;ui-form-upload-wrap&quot; style=&quot;width:' + params.wrapperWidth + '&quot;&gt;&lt;tbody&gt;&lt;tr&gt;');
+        if (params.showTextInput) {
+            html.push('&lt;td id=&quot;fileupload-text-box-' + params.sequence + '&quot; class=&quot;ui-form-upload-cell&quot;&gt;&lt;/td&gt;');
+        }
+        html.push('&lt;td style=&quot;width:1px&quot;&gt;&lt;div id=&quot;fileupload-fileinput-container-' + params.sequence + '&quot; style=&quot;position:relative;direction:ltr;overflow:hidden;&quot;&gt;');
+        html.push('&lt;div id=&quot;fileupload-choosebtn-' + params.sequence + '&quot; class=&quot;ui-form-upload-btn&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;');
+        if (params.showUploadBtnContainer) {
+            html.push('&lt;td style=&quot;width:18px&quot;&gt;');
+            if (params.showUploadBtn) {
+                html.push('&lt;div id=&quot;fileupload-uploadbtn-' + params.sequence + '&quot;&gt;&lt;/div&gt;');
+            }
+            if (params.showLoading) {
+                html.push('&lt;span id=&quot;fileupload-loading-' + params.sequence + '&quot; class=&quot;ui-loading-indicator&quot; style=&quot;display:none;background-position:0 0;padding:0&quot;&gt;　&lt;/span&gt;');
+            }
+            html.push('&lt;/td&gt;');
+        }
+        html.push('&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/form&gt;');
+        html.push('&lt;iframe src=&quot;about:blank&quot; id=&quot;fileupload-iframe-' + params.sequence + '&quot; name=&quot;fileupload-iframe-' + params.sequence + '&quot; style=&quot;display:none;position:absolute;left:-1000px;width:1px;height:1px&quot;&gt;&lt;/iframe&gt;');
+        return html.join(&quot;&quot;);
+    },
+    tplParam: [&quot;sequence&quot;, &quot;action&quot;, &quot;showTextInput&quot;, &quot;showUploadBtnContainer&quot;, &quot;id&quot;, &quot;width&quot;, &quot;wrapperWidth&quot;, &quot;name&quot;, &quot;showLoading&quot;, &quot;showUploadBtn&quot;],
+<span id='fastDev-Ui-FileUpload-method-ready'>    /**
+</span>     * 参数准备
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有变量
+     * @protected
+     */
+    ready: function (options, global) {
+        var width;
+        options.showTextInput = typeof options.showTextInput === &quot;boolean&quot; ? options.showTextInput : true;
+        if (width = /^(-?\d+\.?\d+|-?\d)(px|%|em|cm)?$/.exec(fastDev.Util.StringUtil.trim(options.width + &quot;&quot;))) {
+            options.width = width[1] + (width[2] || &quot;px&quot;);
+        } else {
+            options.width = options.showTextInput ? &quot;280px&quot; : &quot;&quot;;
+        }
+        global.wrapperWidth = options.showTextInput ? &quot;100%&quot; : &quot;&quot;;
+        fastDev.apply(options, {
+            id: options.id ? options.id : fastDev.getID(),
+            sizeLimit: parseInt(options.sizeLimit, 10) || 10240,
+            showLoading: !! options.showLoading,
+            params: fastDev.isPlainObject(options.params) ? options.params : {},
+            typeLimit: options.typeLimit ? fastDev.isArray(options.typeLimit) ? options.typeLimit : typeof options.typeLimit === &quot;string&quot; ? options.typeLimit.split(&quot;,&quot;) : [] : [],
+            autoUpload: !! options.autoUpload
+        });
+        fastDev.each([&quot;FileChoose&quot;, &quot;ChooseError&quot;, &quot;UploadStart&quot;, &quot;UploadCancel&quot;, &quot;UploadSuccess&quot;, &quot;UploadFail&quot;, &quot;UploadComplete&quot;], function (i, name) {
+            options[&quot;on&quot; + name] = typeof options[&quot;on&quot; + name] === &quot;function&quot; ? options[&quot;on&quot; + name] : fastDev.noop;
+        });
+        options.showUploadBtn = options.autoUpload ? false : typeof options.showUploadBtn === &quot;boolean&quot; ? options.showUploadBtn : true;
+        options.fileLimit = parseInt(options.fileLimit, 10);
+        options.fileLimit = fastDev.isNumber(options.fileLimit) ? options.fileLimit : -1;
+        options.multiple = options.autoUpload || !! options.multiple;
+        fastDev.apply(global, {
+            // &quot;浏览文件&quot;按钮默认配置
+            chooseBtnOpts: {
+                text: &quot;浏览...&quot;
+            },
+            // &quot;上传文件&quot;按钮默认配置
+            uploadBtnOpts: {
+                text: &quot;上传&quot;
+            },
+            sequence: fastDev.getID(),
+            showUploadBtnContainer: options.showUploadBtn || options.showLoading,
+            onBlur: fastDev.noop,
+            // 当前窗口unload事件（特殊事件，可能会被用户事件覆盖）
+            winBeforeUnloadEvent: fastDev.setFnInScope(this, this.winBeforeUnloadEvent)
+        });
+    },
+<span id='fastDev-Ui-FileUpload-method-construct'>    /**
+</span>     * 构造控件
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有变量
+     * @protected
+     */
+    construct: function (options, global) {
+        var sequence = global.sequence,
+            chooseBtnContainer;
+        // 添加浏览文件按钮
+        // 合并用户配置
+        fastDev.apply(global.chooseBtnOpts, options.chooseBtn);
+        global.chooseBtnOpts.container = chooseBtnContainer = this.find(&quot;[id='fileupload-choosebtn-&quot; + sequence + &quot;']&quot;);
+        if (options.showTextInput) {
+            options.width = &quot;100%&quot;;
+            options.iwidth = &quot;100%&quot;;
+            options.container = this.find(&quot;[id='fileupload-text-box-&quot; + sequence + &quot;']&quot;);
+            global.textBox = fastDev.create(&quot;TextBox&quot;, options).setReadonly(true);
+        }
+        if (options.showUploadBtn) {
+            // 添加上传文件按钮
+            var that = this;
+            fastDev.apply(global.uploadBtnOpts, options.uploadBtn);
+            global.uploadBtnOpts.container = global.uploadBtnContainer = this.find(&quot;[id='fileupload-uploadbtn-&quot; + sequence + &quot;']&quot;);
+            global.uploadBtnClick = global.uploadBtnOpts.onclick;
+            global.uploadBtnClick = typeof global.uploadBtnClick === &quot;function&quot; ? global.uploadBtnClick : fastDev.noop;
+            global.uploadBtnOpts.onclick = function (event) {
+                global.uploadBtnClick.apply(this, arguments);
+                that.uploadEventHandle();
+            };
+            global.uploadBtn = fastDev.create(&quot;Button&quot;, global.uploadBtnOpts);
+        }
+        // 保存控件结构对象
+        fastDev.apply(global, {
+            textInput: this.find(&quot;[id='&quot; + options.id + &quot;']&quot;),
+            iframe: this.find(&quot;[id='fileupload-iframe-&quot; + sequence + &quot;']&quot;),
+            form: this.find(&quot;[id='fileupload-form-&quot; + sequence + &quot;']&quot;),
+            fileContainer: this.find(&quot;[id='fileupload-fileinput-container-&quot; + sequence + &quot;']&quot;),
+            chooseBtnContainer: chooseBtnContainer,
+            chooseBtn: fastDev.create(&quot;Button&quot;, global.chooseBtnOpts),
+            loading: this.find(&quot;[id='fileupload-loading-&quot; + sequence + &quot;']&quot;),
+            win: fastDev(window)
+        });
+        global.iframeElement = global.iframe.elems[0];
+        if (fastDev.Browser.isIE6) {
+            // IE6存在容器高度未显示设置时，overflow样式失效的bug
+            global.fileContainer.css(&quot;height&quot;, global.fileContainer.height());
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-init'>    /**
+</span>     * 初始化
+     * @param {Object} options 用户配置参数
+     * @param {Object} global 控件私有变量
+     * @protected
+     */
+    init: function (options, global) {
+        var that = this;
+        // 初始一个文件域，若为Flash按钮，则不初始HTML上传按钮
+        if (!global.isSWFUploader) {
+            global.fileContainer.append(this.createFileInput());
+        }
+        // 绑定相关事件
+        global.fileContainer.bind(&quot;mouseover&quot;, function () {
+            global.chooseBtnContainer.addClass(&quot;ui-button-over&quot;);
+        }).bind(&quot;mouseout&quot;, function () {
+            global.chooseBtnContainer.removeClass(&quot;ui-button-over&quot;);
+        });
+        // 初始文件队列
+        global.fileQueue = [];
+        // 统计对象
+        global.fileStats = {
+            success: 0,
+            failed: 0,
+            cancelled: 0
+        };
+    },
+<span id='fastDev-Ui-FileUpload-method-bind'>    /**
+</span>     * 绑定事件
+     * @param {String} type 事件类型
+     * @param {Function} handle 事件句柄 
+     * @private 
+     */
+    bind: function (type, handle) {
+        if (type === &quot;blur&quot;) {
+            this._global.onBlur = handle;
+        } else {
+            this.superClass.bind.apply(this, arguments);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-FileUpload-method-uploadEventHandle'>    /**
+</span>     * 上传按钮点击事件回调
+     * @private
+     */
+    uploadEventHandle: function () {
+        if (!this._options.readonly) {
+            this.startUpload();
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-setFile'>    /**
+</span>     * 选取文件
+     * @private
+     */
+    setFile: function () {
+        var global = this._global,
+            options = this._options,
+            // 活动文件域
+            fileInput = global.chooseFileInput,
+            // 文件域ID
+            fileId = fileInput.prop(&quot;id&quot;),
+            // 文件域的值
+            fileValue = fileInput.prop(&quot;value&quot;),
+            // 文件路径
+            filePath = fileValue.replace(/\\/g, &quot;/&quot;),
+            // 文件名称
+            fileName = filePath.substring(filePath.lastIndexOf(&quot;/&quot;) + 1),
+            // 文件扩展名
+            fileExtension = fileName.substring(fileName.lastIndexOf(&quot;.&quot;) + 1).toLowerCase(),
+            // 文件对象
+            file = fileInput.elems[0].files ? fileInput.elems[0].files[0] : null,
+            // 文件大小
+            fileSize = file ? file.fileSize ? file.fileSize : file.size : null;
+        // 文件对象，包含属性声明如下：
+        file = {
+            id: fileId,
+            path: fileValue,
+            name: fileName,
+            type: fileExtension,
+            size: fileSize
+        };
+        if (!options.multiple) {
+            global.fileQueue = [];
+        }
+        // 验证文件
+        if ( !! filePath &amp;&amp; this.checkFile(file) &amp;&amp; options.onFileChoose.call(this, file) !== false) {
+            this.addFile(file);
+            if (options.multiple) {
+                fileInput.prop(&quot;disabled&quot;, &quot;disabled&quot;);
+                global.fileContainer.append(this.createFileInput());
+            }
+            if (options.autoUpload) {
+                this.startUpload(fileId);
+            }
+        } else {
+            global.textInput.prop(&quot;value&quot;, &quot;&quot;);
+            fileInput.prop(&quot;value&quot;, &quot;&quot;);
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-createFileInput'>    /**
+</span>     * 创建新的文件域
+     * @private
+     */
+    createFileInput: function () {
+        var global = this._global,
+            options = this._options,
+            newFileInput = fastDev(document.createElement(&quot;input&quot;)),
+            id = fastDev.getID();
+        global.chooseFileInput = newFileInput.prop(&quot;type&quot;, &quot;file&quot;)
+        // 设置ID
+        .prop(&quot;id&quot;, &quot;file&quot; + id)
+        // 设置文件域的名称
+        .prop(&quot;name&quot;, (options.name + &quot;&quot;) || (&quot;file&quot; + id))
+        // 该样式使得该文件域构成一个假按钮
+        .addClass(&quot;ui-form-upload-file&quot;)
+        // 绑定值变更事件，以便对选取的文件进行验证或上传
+        .bind(&quot;change&quot;, fastDev.setFnInScope(this, this.setFile));
+        return newFileInput;
+    },
+<span id='fastDev-Ui-FileUpload-method-checkFile'>    /**
+</span>     * 检查文件是否符合上传要求
+     * @param {Object} file
+     * @return {Boolean}
+     * @private
+     */
+    checkFile: function (file) {
+        var options = this._options,
+            global = this._global,
+            size = file.size,
+            extension = file.type,
+            valid;
+        // 检查是否超过最大可上传文件数限制
+        if (options.fileLimit !== -1) {
+            if (global.fileQueue.length &gt;= options.fileLimit || global.fileStats.success &gt;= options.fileLimit) {
+                options.onChooseError.call(this, file, 3, &quot;超过最大可上传文件数&quot;);
+                return false;
+            }
+        }
+        // 检查文件扩展名
+        if (options.typeLimit.length &gt; 0) {
+            fastDev.each(options.typeLimit, function (i, type) {
+                valid = (type + &quot;&quot;).toLowerCase() === extension;
+                return !valid;
+            });
+            if (!valid) {
+                options.onChooseError.call(this, file, 1, &quot;文件类型受到限制&quot;);
+                return false;
+            }
+        }
+        // 检查文件大小，前端js验证仅适用于某些浏览器
+        if ( !! size &amp;&amp; options.sizeLimit !== -1) {
+            if (options.sizeLimit &lt; size / 1024) {
+                options.onChooseError.call(this, file, 2, &quot;文件大小超过限制&quot;);
+                return false;
+            }
+        }
+        if (size === null &amp;&amp; options.sizeLimit !== -1) {
+            // 需服务器端验证
+            global.needCheckSize = true;
+        }
+        return true;
+    },
+<span id='fastDev-Ui-FileUpload-method-doUpload'>    /**
+</span>     * 执行上传
+     * @param {Object} file 需上传的文件对象
+     * @private
+     */
+    doUpload: function (uploadFile) {
+        var global = this._global,
+            options = this._options;
+        // onUploadStart 回调返回false则取消本文件上传
+        if (options.onUploadStart.call(this, uploadFile) !== false) {
+            // 设置请求链接地址
+            global.form.prop(&quot;action&quot;, this.getRequestAction());
+            global.iframe.bind(&quot;load&quot;, global.iframeLoadEvent || (global.iframeLoadEvent = fastDev.setFnInScope(this, this.doComplete)));
+            this.uploadReady();
+            // 正在上传
+            global.uploadFile = uploadFile;
+            global.form.elems[0].submit();
+        } else if (global.uploadAllFile) {
+            this.startUpload();
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-winBeforeUnloadEvent'>    /**
+</span>     * 窗口卸载前回调事件
+     * @private
+     */
+    winBeforeUnloadEvent: function () {
+        var file = this._global.uploadFile;
+        return &quot;文件&quot; + ( !! file ? file.name : &quot;&quot;) + &quot;正在上传中，确定中断上传并离开此页？&quot;;
+    },
+<span id='fastDev-Ui-FileUpload-method-uploadReady'>    /**
+</span>     * 上传前的最后准备工作
+     * @private
+     */
+    uploadReady: function () {
+        var global = this._global,
+            options = this._options;
+        global.win.bind(&quot;beforeunload&quot;, global.winBeforeUnloadEvent);
+        global.boundUnloadEventHandle = true;
+        global.isUploading = true;
+        if (options.showLoading) {
+            global.loading.css({
+                display: &quot;block&quot;,
+                width: global.loading.parent().width()
+            });
+            if (options.showUploadBtn) {
+                global.uploadBtnContainer.hide();
+            }
+        } else if (options.showUploadBtn) {
+            global.uploadBtn.disable();
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-uploadFinish'>    /**
+</span>     * 上传完成后的扫尾工作
+     * @private
+     */
+    uploadFinish: function () {
+        var global = this._global,
+            options = this._options;
+        if (global.boundUnloadEventHandle) {
+            global.win.unbind(&quot;beforeunload&quot;, global.winBeforeUnloadEvent);
+            global.boundUnloadEventHandle = false;
+        }
+        global.isUploading = false;
+        global.uploadFile = null;
+        if (!options.multiple &amp;&amp; !global.isSWFUploader) {
+            global.chooseFileInput.prop(&quot;value&quot;, &quot;&quot;);
+        }
+        if (options.showLoading) {
+            global.loading.hide();
+            if (options.showUploadBtn) {
+                global.uploadBtnContainer.show();
+            }
+        } else if (options.showUploadBtn) {
+            global.uploadBtn.enable();
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-doComplete'>    /**
+</span>     * 文件上传完成时的回调函数
+     * @private
+     */
+    doComplete: function () {
+        var options = this._options,
+            global = this._global,
+            iframe = global.iframeElement,
+            uploadFile = global.uploadFile,
+            doc, response, json, elem;
+        global.iframe.unbind(&quot;load&quot;, global.iframeLoadEvent);
+        this.uploadFinish();
+        if (!global.isCancelled) {
+            try {
+                doc = iframe.contentDocument ? iframe.contentDocument : iframe.contentWindow.document;
+            } catch (e) {
+                // 上传发生异常
+                response = null;
+            }
+            if (doc) {
+                response = fastDev.Util.StringUtil.trim(!(elem = fastDev(doc.body).children(&quot;pre&quot;)).isEmpty() ? elem.elems[0].innerHTML : doc.body.innerHTML);
+                try {
+                    json = fastDev.Util.JsonUtil.parseJson(response);
+                } catch (e) {} finally {
+                    response = !! json ? json : response;
+                }
+                doc.body.innerHTML = &quot;&quot;;
+            }
+            this[&quot;do&quot; + (options.onUploadComplete.call(this, uploadFile, response) !== false ? &quot;Success&quot; : &quot;Fail&quot;)](uploadFile, response);
+        } else if ( !! uploadFile) {
+            options.onUploadCancel.call(this, uploadFile);
+        }
+        global.uploadFileInput.prop(&quot;disabled&quot;, &quot;disabled&quot;);
+        global.isCancelled = false;
+        if (global.uploadAllFile) {
+            // 上传队列中的所有文件
+            this.startUpload();
+        } else {
+            global.chooseFileInput.removeProp(&quot;disabled&quot;);
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-doSuccess'>    /**
+</span>     * 上传成功后执行的操作
+     * @param {Object} file
+     * @param {Object} response
+     * @private
+     */
+    doSuccess: function (file, response) {
+        this._global.fileStats.success++;
+        this._options.onUploadSuccess.call(this, file, response);
+    },
+<span id='fastDev-Ui-FileUpload-method-doFail'>    /**
+</span>     * 上传失败后执行的操作
+     * @param {Object} file
+     * @param {Object} response
+     * @param {String} msg
+     * @private
+     */
+    doFail: function (file, response, msg) {
+        var options = this._options;
+        this._global.fileStats.failed++;
+        this.cleanTextInput();
+        if (options.stopOnFailed) {
+            this.stopUpload();
+        }
+        options.onUploadFail.call(this, file, response);
+    },
+<span id='fastDev-Ui-FileUpload-method-getRequestAction'>    /**
+</span>     * 获取请求链接地址
+     * @return {String}
+     * @private
+     */
+    getRequestAction: function () {
+        var options = this._options,
+            global = this._global,
+            // 链接中也许带了查询参数
+            query = options.action.indexOf(&quot;?&quot;) === -1 ? false : true;
+        query = query ? options.action : options.action + &quot;?&quot; + fastDev.getID() + &quot;=1&quot;;
+        // 最大字节数限制
+        if (global.needCheckSize) {
+            query += &quot;&amp;maxSize=&quot; + options.sizeLimit * 1024;
+        }
+        for (var key in options.params) {
+            query += (&quot;&amp;&quot; + key + &quot;=&quot; + window.encodeURIComponent(options.params[key]));
+        }
+        return query;
+    },
+<span id='fastDev-Ui-FileUpload-method-nextFile'>    /**
+</span>     * 删除并返回文件队列中指定ID的文件
+     * 若ID为null，则删除并返回队列中的第一个文件
+     * @param {String} id 文件ID
+     * @return {Object} 文件对象
+     * @private
+     */
+    nextFile: function (id) {
+        var global = this._global,
+            queue = global.fileQueue,
+            uploadFile;
+        if (id) {
+            fastDev.each(queue, function (idx, file) {
+                if (file.id === id) {
+                    uploadFile = file;
+                    // 删除数组中的对应元素
+                    queue.splice(idx, 1);
+                    return false;
+                }
+            });
+        } else {
+            // 返回队列中的第一个文件对象
+            uploadFile = queue.shift();
+        }
+        if (!global.isSWFUploader &amp;&amp; !! uploadFile) {
+            global.uploadFileInput = this.find(&quot;[id='&quot; + uploadFile.id + &quot;']&quot;).removeProp(&quot;disabled&quot;);
+        }
+        return uploadFile;
+    },
+<span id='fastDev-Ui-FileUpload-method-addFile'>    /**
+</span>     * 向文件队列中添加一个文件
+     * @param {Object} file 文件对象
+     * @param {Boolean} only
+     * @private
+     */
+    addFile: function (file, only) {
+        var global = this._global,
+            options = this._options,
+            fileName = file.name,
+            fileValue = file.path;
+        global.fileQueue.push(file);
+        if (!only &amp;&amp; options.showTextInput) {
+            global.textInput.attr(&quot;fileId&quot;, file.id).prop(&quot;value&quot;, fileName.length &gt; 23 ? fileName.slice(0, 9) + &quot;...&quot; + fileName.slice(-10) : fileName).prop(&quot;title&quot;, fileValue);
+        }
+    },
+<span id='fastDev-Ui-FileUpload-method-addParams'>    /**
+</span>     * 添加查询参数
+     * 会覆盖之前添加的同名的查询参数
+     * @param {Object} params 参数对象，仅接受普通的javascript对象（即使用&quot;{}&quot;声明的对象字面量），对象属性名为查询参数名，属性值为查询参数值
+     * @return {fastDev.Ui.FileUpload} 本控件实例
+     */
+    addParams: function (params) {
+        if (fastDev.isPlainObject(params)) {
+            fastDev.apply(this._options.params, params);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-FileUpload-method-startUpload'>    /**
+</span>     * 开始文件上传
+     * 若未指定需上传的文件ID，则上传文件队列中的所有文件
+     * @param {String} id 文件ID值
+     * @return {fastDev.Ui.FileUpload} 本控件实例
+     */
+    startUpload: function (id) {
+        var global = this._global,
+            options = this._options,
+            uploadFile;
+        if (!options.action) {
+            // 未设置后台处理程序链接
+            fastDev.error(&quot;FileUpload&quot;, &quot;startUpload&quot;, &quot;未设置上传处理程序链接（action）&quot;);
+            return this;
+        }
+        if (global.fileQueue.length === 0) {
+            // 文件队列为空则返回
+            global.chooseFileInput.prop(&quot;value&quot;, &quot;&quot;).removeProp(&quot;disabled&quot;);
+            this.uploadFinish();
+            return this;
+        }
+        if (global.isUploading) {
+            // 正在上传则返回
+            return this;
+        }
+        global.isCancelled = false;
+        global.chooseFileInput.prop(&quot;disabled&quot;, &quot;disabled&quot;);
+        // 如果未指定文件ID或者自动上传，则上传文件队列中的所有文件
+        global.uploadAllFile = !id || options.autoUpload;
+        // 执行上传
+        uploadFile = this.nextFile(id);
+        if (uploadFile) {
+            this.doUpload(uploadFile);
+        }
+        return this;
+    },
+<span id='fastDev-Ui-FileUpload-method-stopUpload'>    /**
+</span>     * 立即取消当前上传进程并停止整个上传队列
+     * 区别于cancelUpload的是，该方法会终止整个上传队列
+     * @return {fastDev.Ui.FileUpload} 本控件实例
+     */
+    stopUpload: function () {
+        this._global.uploadAllFile = false;
+        this.cancelUpload();
+        return this;
+    },
+<span id='fastDev-Ui-FileUpload-method-cancelUpload'>    /**
+</span>     * 取消当前的上传过程
+     * 若上传队列中存在其他待上传的文件，仍会继续上传下一个文件
+     * 若要取消整个上传进程，请调用stopUpload方法
+     * @return {fastDev.Ui.FileUpload} 本控件实例
+     */
+    cancelUpload: function () {
+        var global = this._global;
+        if ( !! global.uploadFile) {
+            // 标记为取消状态
+            global.isCancelled = true;
+            this.cleanTextInput();
+            global.fileStats.cancelled++;
+            if (!global.isSWFUploader) {
+                // javascript:false是为解决IE6在https协议下使用空页面时会有BUG的问题
+                global.iframe.prop(&quot;src&quot;, &quot;javascript:false;&quot;);
+            }
+        }
+        return this;
+    },
+<span id='fastDev-Ui-FileUpload-method-getFileQueue'>    /**
+</span>     * 获取当前上传队列的一份快照
+     * @return {Array} 文件队列
+     */
+    getFileQueue: function () {
+        return this._global.fileQueue.slice(0);
+    },
+<span id='fastDev-Ui-FileUpload-method-cleanFileQueue'>    /**
+</span>     * 清空并返回当前上传文件队列
+     * @return {Array} 文件队列
+     */
+    cleanFileQueue: function () {
+        var global = this._global,
+            queue = this.getFileQueue();
+        global.fileQueue = [];
+        this.cleanTextInput();
+        if (!global.isSWFUploader) {
+            global.chooseFileInput.prop(&quot;value&quot;, &quot;&quot;);
+        }
+        return queue;
+    },
+<span id='fastDev-Ui-FileUpload-method-removeFile'>    /**
+</span>     * 从文件上传队列中移除文件
+     * @param {String} id 文件ID
+     * @param {Boolean} only 仅从文件队列中移除而不清空文本输入框的值
+     * @return {Object} 被移除的文件对象（未找到对应ID文件时返回null）
+     */
+    removeFile: function (id, only) {
+        var global = this._global,
+            uploadFile = null;
+        if (id) {
+            uploadFile = this.nextFile(id);
+            if (!only &amp;&amp; global.textInput.attr(&quot;fileId&quot;) === id) {
+                this.cleanTextInput();
+                if (!this._options.multiple &amp;&amp; !global.isSWFUploader) {
+                    global.chooseFileInput.prop(&quot;value&quot;, &quot;&quot;);
+                }
+            }
+        }
+        return uploadFile;
+    },
+<span id='fastDev-Ui-FileUpload-method-cleanTextInput'>    /**
+</span>     * 清空文本输入框的值
+     * @param {Boolean} removeFile 是否同时移除文件队列中的对应文件
+     * @return {fastDev.Ui.FileUpload}
+     */
+    cleanTextInput: function (removeFile) {
+        var global = this._global;
+        if (this._options.showTextInput) {
+            global.textInput.prop(&quot;value&quot;, &quot;&quot;).prop(&quot;title&quot;, &quot;&quot;);
+        }
+        if (removeFile) {
+            this.removeFile(global.textInput.attr(&quot;fileId&quot;));
+        }
+        return this;
+    },
+<span id='fastDev-Ui-FileUpload-method-setReadonly'>    /**
+</span>     * 设置是否只读 
+     * @param {Boolean} [readonly=true] 是否只读
+     * @return {fastDev.Ui.FileUpload} 当前控件实例
+     */
+    setReadonly: function (readonly) {
+        var global = this._global;
+        this._options.readonly = (readonly = readonly === false ? false : true);
+        if (!global.isSWFUploader) {
+            global.chooseFileInput[readonly ? &quot;prop&quot; : &quot;removeProp&quot;](&quot;disabled&quot;, &quot;disabled&quot;).css(&quot;cursor&quot;, readonly ? &quot;default&quot; : &quot;pointer&quot;);
+        }
+        this.find(&quot;.ui-button&quot;)[readonly ? &quot;css&quot; : &quot;removeCss&quot;](&quot;cursor&quot;, &quot;default&quot;);
+        return this;
+    },
+<span id='fastDev-Ui-FileUpload-method-toggle'>    /**
+</span>     * 开启与禁用切换
+     * @param {Boolean} disabled
+     * @private
+     */
+    toggle: function (disabled) {
+        var global = this._global,
+            toggle = disabled ? &quot;disable&quot; : &quot;enable&quot;;
+        if (disabled ? !global.disabled : !! global.disabled) {
+            if (this._options.showUploadBtn) {
+                global.uploadBtn[toggle]();
+            }
+            global.chooseBtn[toggle]();
+            if (!global.isSWFUploader) {
+                global.chooseFileInput[disabled ? &quot;prop&quot; : &quot;removeProp&quot;](&quot;disabled&quot;, &quot;disabled&quot;).css(&quot;cursor&quot;, disabled ? &quot;default&quot; : &quot;pointer&quot;);
+            }
+            if (global.textBox) {
+                global.textBox[toggle]();
+            }
+            global.disabled = !! disabled;
+        }
+        return this;
+    },
+<span id='fastDev-Ui-FileUpload-method-disable'>    /**
+</span>     * 禁用文件上传
+     * @return {fastDev.Ui.FileUpload} 本控件实例
+     */
+    disable: function () {
+        return this.toggle(true);
+    },
+<span id='fastDev-Ui-FileUpload-method-enable'>    /**
+</span>     * 启用文件上传
+     * @return {fastDev.Ui.FileUpload} 本控件实例
+     */
+    enable: function () {
+        return this.toggle(false);
+    },
+<span id='fastDev-Ui-FileUpload-method-getStats'>    /**
+</span>     * 获取统计信息，返回的统计信息对象包含以下属性：
+     * &lt;p&gt;-success 上传成功文件数&lt;/p&gt;
+     * &lt;p&gt;-fail 上传失败文件数&lt;/p&gt;
+     * &lt;p&gt;-cancel 取消上传的文件数&lt;/p&gt;
+     * &lt;p&gt;-progress 正在上传的文件数（0或者1）&lt;/p&gt;
+     * &lt;p&gt;-queued 文件队列中待上传的文件数&lt;/p&gt;
+     * @return {Object} 
+     */
+    getStats: function () {
+        var global = this._global;
+        return {
+            success: global.fileStats.success,
+            fail: global.fileStats.failed,
+            cancel: global.fileStats.cancelled,
+            progress: global.isUploading ? 1 : 0,
+            queued: this.getFileQueue().length
+        };
+    }
+});</pre>
+</body>
+</html>

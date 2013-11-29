@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">///import core
+///commands 字数统计
+///commandsName  WordCount,wordCount
+///commandsTitle  字数统计
+/*
+ * Created by JetBrains WebStorm.
+ * User: taoqili
+ * Date: 11-9-7
+ * Time: 下午8:18
+ * To change this template use File | Settings | File Templates.
+ */
+UE.commands[&quot;wordcount&quot;]={
+    queryCommandValue:function(cmd,onlyCount){
+        var length,contentText,reg;
+        if(onlyCount){
+            reg = new RegExp(&quot;[\r\t\n]&quot;,&quot;g&quot;);
+            contentText = this.getContentTxt().replace(reg,&quot;&quot;);
+            return contentText.length;
+        }
+        var open = this.options.wordCount,
+             max= this.options.maximumWords,
+             msg = this.options.messages.wordCountMsg,
+            errMsg=this.options.messages.wordOverFlowMsg;
+
+        if(!open) return &quot;&quot;;
+        reg = new RegExp(&quot;[\r\t\n]&quot;,&quot;g&quot;);
+        contentText = this.getContentTxt().replace(reg,&quot;&quot;);
+        length = contentText.length;
+        if(max-length&lt;0){
+            return &quot;&lt;span style='color:red;direction: none'&gt;&quot;+errMsg+&quot;&lt;/span&gt; &quot;
+        }
+        msg = msg.replace(&quot;{#leave}&quot;,max-length &gt;= 0 ? max-length:0);
+        msg = msg.replace(&quot;{#count}&quot;,length);
+
+        return msg;
+    }
+};</pre>
+</body>
+</html>

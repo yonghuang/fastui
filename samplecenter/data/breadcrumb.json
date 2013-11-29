@@ -1,0 +1,17 @@
+[
+	{
+		"href": "http://www.baidu.com",
+		"value": "百度",
+		"sortValue": "2",
+		"current": "true"
+	}, {
+		"href": "http://www.sina.com.cn",
+		"value": "新浪",
+		"target": "_blank",
+		"sortValue": "1"
+	}, {
+		"href": "http://www.163.com",
+		"value": "网易",
+		"sortValue": "0"
+	}
+]

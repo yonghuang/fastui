@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>test</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-23 -->
+		<script src="../../src/library/jquery-1.7.2.js"></script>
+		<script>
+		$(function() {
+				$("#datepicker-1351474208046").bind("mouseover", function(event) { 
+					debugger;
+					alert(event.target.tagName);
+				})
+			});
+		
+		
+		//$(window).unbind('beforeunload',fn);
+			
+		</script>
+	</head>
+	<body>
+		<DIV style="Z-INDEX: 2012; DISPLAY: block; TOP: 219px; LEFT: 2px" id=datepicker-1351474208046 class="ui-datepicker ui-shadow" >
+			
+						<INPUT style="WIDTH: 16px" id=timepicker-hours-1351474208046 name=timePickerHours value=00 type=text autocomplete="off">
+						<INPUT style="WIDTH: 16px" id=timepicker-minutes-1351474208046  disabled name=timePickerMinutes value=00 type=text autocomplete="off">
+						<INPUT style="WIDTH: 16px" id=timepicker-seconds-1351474208046 disabled name=timePickerSeconds value=00 type=text autocomplete="off">
+				
+		</DIV>
+	</body>
+</html>
+

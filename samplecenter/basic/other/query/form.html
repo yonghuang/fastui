@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>表单元素选择器</li>
+			</ul>
+		</title>
+		<style type="text/css">
+			input{border:1px solid #8FB1DB}
+		</style>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function() {
+				var container = fastDev("#example");
+				function clearCss() {
+					container.find("*").css("border", "1px solid #8FB1DB");
+					container.find("*").parent().css("border", "1px solid #fff");
+				}
+
+
+				fastDev("#btn1").bind("click", function() {
+					clearCss();
+					// 查找所有input元素
+		
+					container.find(":input").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn2").bind("click", function() {
+					clearCss();
+					// 查找input type="text"的元素  
+		
+					container.find(":text").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn3").bind("click", function() {
+					clearCss();
+					// 查找input type="password"的元素
+		
+					container.find(":password").css("border", "1px dashed #f00");
+				});
+				fastDev("#btn4").bind("click", function() {
+					clearCss();
+					// 查找input type="radio"的元素
+					container.find(":radio").parent().css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn5").bind("click", function() {
+					clearCss();
+					// 查找input type="checkbox"的元素
+					container.find(":checkbox").parent().css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn6").bind("click", function() {
+					clearCss();
+					// 查找input type="submit"的元素
+					container.find(":submit").css("border", "1px dashed #f00");
+				});
+				
+				fastDev("#btn7").bind("click", function() {
+					clearCss();
+					// 查找input type="image"的元素
+					container.find(":image").css("border", "1px dashed #f00");
+				});
+				
+				fastDev("#btn8").bind("click", function() {
+					clearCss();
+					// 查找input type="reset"的元素
+					container.find(":reset").css("border", "1px dashed #f00");
+				});
+				
+				fastDev("#btn9").bind("click", function() {
+					clearCss();
+					//  查找input type="button"的元素
+					container.find(":button").css("border", "1px dashed #f00");
+				});
+				
+					fastDev("#btn10").bind("click", function() {
+					clearCss();
+					// 查找input type="file"的元素
+					container.find(":file").css("border", "1px dashed #f00");
+				});
+				fastDev("#btn11").bind("click", function() {
+					clearCss();
+					// 获取input type="hidden"的值:<a id="btn11" href="#">:hidden</a><br>
+					fastDev.tips(container.find("input:hidden").prop("value"));
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="ui-other-content">
+		<p>查找所有input元素:<a id="btn1" href="#">:input</a></p>
+		<p>查找input type="text"的元素:<a id="btn2" href="#">:text</a></p>
+		<p>查找input type="password"的元素:<a id="btn3" href="#">:password</a></p>
+		<p>查找input type="radio"的元素:<a id="btn4" href="#">:radio</a></p>
+		<p>查找input type="checkbox"的元素:<a id="btn5" href="#">:checkbox</a></p>
+		<p>查找input type="submit"的元素:<a id="btn6" href="#">:submit</a></p>
+		<p>查找input type="image"的元素:<a id="btn7" href="#">:image</a></p>
+		<p>查找input type="reset"的元素:<a id="btn8" href="#">:reset</a></p>
+		<p>查找input type="button"的元素:<a id="btn9" href="#">:button</a></p>
+		<p>查找input type="file"的元素:<a id="btn10" href="#">:file</a></p>
+		<p>获取input type="hidden"的值:<a id="btn11" href="#">:hidden</a></p>
+		
+
+		<!-- HTML元素测试区 -->
+		<div id="example">
+		<form>
+			text:<input type="text" /><br>
+			password:<input type="password" /><br>
+			radio:<span><input type="radio" /></span><br>
+		    checkbox:<span><input type="checkbox" /></span><br>
+			submit:<input type="submit" /><br>
+			image:<input type="image" /><br>
+			reset:<input type="reset" /><br>
+			button:<input type="button" value="Input Button"/><br>
+			button标签:<button>Button</button><br>
+		    file:<input type="file" /><br>
+		    hidden:<input type="hidden" value="这是隐藏文本框值"/><br>
+		</form>
+		</div>
+		</div>
+	</body>
+</html>
+

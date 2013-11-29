@@ -1,0 +1,99 @@
+    @charset "utf-8";
+	
+	/*
+     * 该控件分为三部分，即一级菜单，二级菜单，三级菜单，此样式为一级菜单样式
+     * */
+     .menubar {
+    	margin:0;
+    	padding:0;
+    	width: auto;
+    }
+    /*
+     * 一级菜单样式
+     * */
+    .menubar ul {
+    	background:url(../images/menubarbg.gif) repeat-x;
+    	height:30px;
+    }
+    .menubar li, .submenubar li {
+    	font:normal 12px/26px "宋体", Verdana;
+    	height:30px;
+    	list-style:none;
+    	width:auto;
+    }
+    .menubar li {
+    	background:url(../images/menubarbg_line.gif) no-repeat right;
+    	cursor:pointer;
+    	float:left;
+    	position:relative;
+    }
+    .menubar li a {
+    	color:#fff;
+    	display:inline-block;
+    	line-height:30px;
+    	padding:0 12px;
+    }
+    .menubar li a:link, .menubar li a:visited {
+    	color:#fff;
+    }
+    .menubar li a:hover, .menubar li a:active {
+    	background:url(../images/menubarbg_hover.gif) repeat-x;
+    }
+    /*
+     * 二级菜单div样式
+     * */
+    .submenubar {
+    	border:1px solid #0195c5;
+    	position:absolute;
+    	left:0;
+    	margin:0;
+    	padding:0;
+        *top:30px;
+    	width:120px;
+    	z-index:99;
+    }
+    /*
+     * 三级菜单div样式
+     * */
+    .submenubar_level2 {
+    	border:1px solid #0195c5;
+    	left:160px;
+    	margin:0;
+    	padding:0;
+    	position:absolute;
+    	top:0;
+    	width:120px;
+    	z-index:100;
+    }
+    /*
+     * 二、三级菜单样式
+     * */
+    .submenubar ul, .submenubar_level2 ul {
+    	height:auto;
+    	margin:0;
+    	padding:0;
+    }
+    .submenubar li, .submenubar_level2 li {
+    	background:#f0f8fc;
+    	border:1px solid #fff;
+    	border-bottom:1px solid #c7dfea;
+    	cursor:pointer;
+    	float:none;
+    	height:26px;
+    	line-height:26px;
+    }
+    .submenubar li a, .submenubar_level2 li a {
+    	color:#075587;
+    	line-height:26px;
+    	margin:0;
+    	padding:0 12px;
+    	width:94px;
+    }
+    .submenubar li a:link, .submenubar li a:visited, .submenubar_level2 li a:link, .submenubar_level2 li a:visited {
+    	color:#075587;
+    }
+    .submenubar li a:hover, .submenubar li a:active, .submenubar_level2 li a:hover, .submenubar_level2 li a:active {
+    	background:url(../images/submenubarbg_hover.gif) repeat-x;
+    	color:#075587;
+    	font-weight:bold;
+    }

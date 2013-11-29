@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>
+		<script>
+			function add() {
+				fastDev.tips("增加");
+			}
+
+			function edit() {
+				fastDev.tips("修改");
+			}
+
+			function remove() {
+				fastDev.tips("删除");
+			}
+
+			function save() {
+				fastDev.tips("保存");
+			}
+
+			function search() {
+				fastDev.tips("查询");
+			}
+
+			function print() {
+				fastDev.tips("打印");
+			}
+		</script>
+		<title>
+			<ul>
+				<li>
+					工具栏上支持的类型有text(文本)、button(按钮)、textbox(输入框)以及三种内置位置标识spacer(空格分隔)、separator(竖线分隔)、end(左侧布局结束)
+				</li>
+				<li>
+					工具栏在布局上分为左右结构，分别靠左右对齐，如果需要放置按钮区别于左侧时，可用end标识声明，end标识以后的配置将会被放置于右侧
+				</li>
+			</ul></title>
+	</head>
+	<body>
+		<div style="margin: 10px">
+			<div class="ui-layout-text">工具栏基础使用配置</div>
+			<div itype="Toolbar" width="800px">
+				<div itype="text" text="工具栏文本"></div>
+				<div itype="spacer"></div>
+				<div plain=true text="增加" iconCls="icon-add" onclick="add()"></div>
+				<div itype="separator"></div>
+				<div plain=true text="修改" iconCls="icon-edit" onclick="edit()"></div>
+				<div itype="separator"></div>
+				<div plain=true text="保存" iconCls="icon-save" onclick="save()"></div>
+				<div itype="separator"></div>
+				<div plain=true text="删除" iconCls="icon-delete" onclick="remove()"></div>
+				<div itype="end"></div>
+				<div iconCls="icon-search" text="搜索" onclick="search()"></div>
+				<div itype="separator"></div>
+				<div iconCls="icon-print" text="打印" onclick="print()"></div>
+			</div>
+		</div>
+	</body>
+</html>

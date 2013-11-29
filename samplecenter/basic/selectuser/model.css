@@ -1,0 +1,221 @@
+﻿@charset "utf-8";
+/* CSS Document */
+.left {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	width: 200px;
+	height: 320px;
+	border:1px solid #999;
+	margin:5px 5px 0 5px;
+}
+.right {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	width:380px;
+	height:320px;
+	border:1px solid #999;
+	margin-top: 5px;
+}
+/*包裹搜索框的div*/
+.search {
+	position: relative;
+	top: 5px;
+	left: -1px;
+	width: 100%;
+	height: 40px;
+	border-bottom: solid 1px #999;
+}
+.textbox {
+	float: left;
+	padding-left: 26px;
+	width: 120px;
+	height: 27px;
+	line-height: 27px;
+	margin-left: 5px;
+	background: url(searchbox.jpg) left no-repeat;
+	border: 0;
+}
+.inputBtn {
+	float: left;
+	margin-top: 1px;
+	width: 46px;
+	height: 27px;
+	background: url(searchbutton.jpg) repeat-x;
+	background-position:-10px 0px;
+	border: 0;
+	cursor: pointer;
+}
+
+/*右侧顶端工具栏*/
+.tool {
+	width:100%;
+	height:40px;
+	border-bottom:solid 1px #999;
+
+}
+/*右侧下部分*/
+
+.right-content {
+	width:100%;
+	height:275px;
+	position:relative;
+	
+}
+/*下部分左边的选人栏*/
+
+.content-left {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	width:35%;
+	height:280px;
+	border-right:solid 1px #999;
+	text-align: center;
+	overflow: auto;
+	padding-right: 2px;
+}
+/*下部分左边头部的标题和全选按钮*/
+.content-left-top{
+	width:100%;
+	height:auto;
+	border: solid 1px #aabaca;
+}
+.content-left-title {
+	width:100%;
+	
+	font-size: 14px;
+	color:#336699;
+	text-align: center;
+	line-height: 100%;
+	padding: 5px 0 5px 0;
+	background: url("title.jpg");
+}
+.content-left-title-text {
+	height:100%;
+	width:100%;
+}
+.content-left-selectall {
+	border-top: solid 1px #aabaca;
+	height:35px;
+	background-color: #e7eeff;
+}
+/*下部分左边列表*/
+.content-left-list {
+	width:100%;
+}
+.list-1 {
+	width:100%;
+	border: solid 1px #aabaca;
+	border-top:none;
+	border-bottom-color:#e5e5e5;
+	cursor:pointer;
+	line-height: 100%;
+}
+.list-2 {
+	width:100%;
+	border: solid 1px #aabaca;
+	border-top:none;
+	border-bottom-color:#e5e5e5;
+	cursor:pointer;
+	background: #F2F2F2;
+	line-height: 100%;
+}
+.list-3 {
+	width:100%;
+	border: solid 1px #aabaca;
+	border-top:none;
+	border-bottom-color:#e5e5e5;
+	line-height: 100%;
+	padding: 8px 0 8px 0;
+}
+.list_div {
+	height:100%;
+	padding: 8px 0 8px 0;
+}
+.list-selected {
+	background: #000066;
+	color: #FFFFFF;
+}
+/*下部分右边*/
+.content-right {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+ 	width:63%;
+	height:100%;
+}
+/*下部分右边的工具栏*/
+.content-right-tool {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	height:25px;
+	width:100%;
+	border-bottom:solid 1px #999;
+	line-height: 25px;
+	text-align: left;
+	background-color: #ebf2fb;
+}
+/*下部分右边已选择人员的区域*/
+.content-right-selected {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	height:250px;
+	width:100%;
+	overflow: auto;
+}
+/*已选人员样式*/
+.content-right-selected-pos {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	float:left;
+	margin-top: 10px;
+	margin-left: 10px;
+	
+}
+.content-right-selected-user {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	vertical-align:top;
+	display:table-cell;
+	vertical-align:middle;
+	border:1px solid #a3bfff;
+	width:50px; 
+	height:35px;
+	line-height:35px;
+	background:#e6f2ff;
+	text-align: center;
+	cursor:pointer;
+}
+.content-right-selected-user-span {
+	display:inline-block;
+	vertical-align:middle;
+}
+/*功能按钮*/
+.removeAll {
+	float:right;
+	right:15px;
+	top:8px;
+}
+.hideList {
+	float:right;
+	right:5px;
+	top:8px;
+}
+.selectAll {
+	position:static !important;
+	margin-top: 6px !important;
+	margin-left: 5px !important;
+}

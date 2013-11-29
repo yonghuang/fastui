@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fastDev-Ui-Form'>/**
+</span>* @class fastDev.Ui.Form
+* @extends fastDev.Ui.Component 
+* 此控件用于表单操作,对表单的加载、提交以及验证三大功能做了封装，继承自Component，表单类控件。&lt;p&gt;
+* 注意事项：本版本的表单只有html模式，表单里的布局自由控制。如想实现类似之前js布局，可用表格布局，在table上加样式ui-form-table，放文本的td加样式ui-form-table-dt，放控件的td加样式ui-form-table-dd即可。&lt;p&gt;
+* 作者：姜玲&lt;p&gt;
+*
+*		&lt;form itype=&quot;Form&quot; action=&quot;example_submit.jsp&quot; id=&quot;form1&quot; initSource=&quot;example_1_init.jsp&quot; 
+*		dataSource=&quot;example_1_load.jsp&quot; requestType=&quot;post&quot; saveInstance=&quot;true&quot; 
+*		onSubmitSuccess=&quot;submitSuccess()&quot;&gt;
+*			&lt;!--表单内的各个控件...--&gt;
+*		&lt;/form&gt;
+*/
+fastDev.define(&quot;fastDev.Ui.Form&quot;, {
+	extend : &quot;fastDev.Ui.Component&quot;,
+	alias : &quot;Form&quot;,
+	_options : {
+<span id='fastDev-Ui-Form-property-initSource'>		/**
+</span>		 * 表单控件初始化数据来源URL地址
+		 * @type {String}
+		 */
+		initSource : null,
+<span id='fastDev-Ui-Form-property-dataSource'>		/**
+</span>		 * 表单控件的值来源URL地址
+		 * @type {String}
+		 */
+		dataSource : null,
+<span id='fastDev-Ui-Form-property-action'>		/**
+</span>		 * 表单提交目标URL地址
+		 * @type {String}
+		 */
+		action : null,		
+<span id='fastDev-Ui-Form-property-requestType'>		/**
+</span>		 * 表单提交方式&quot;get&quot;、&quot;post&quot;，默认&quot;get&quot;
+		 * @type {String}[requestType=&quot;get&quot;]
+		 */
+		requestType : &quot;get&quot;,		
+<span id='fastDev-Ui-Form-property-submitJson'>		/**
+</span>		 * 是否提交Json格式数据，默认true
+		 * @type {Boolean}[submitJson=true]
+		 */
+		submitJson : true,	
+<span id='fastDev-Ui-Form-property-otherSubmitData'>		/**
+</span>		 * 追加提交的数据
+		 * @type {Json}
+		 */	
+		otherSubmitData : &quot;&quot;,
+<span id='fastDev-Ui-Form-property-errorFile'>		/**
+</span>		 * 验证信息配置.json文件地址
+		 * @type {String}
+		 */
+		errorFile : null,
+<span id='fastDev-Ui-Form-property-validate'>		/**
+</span>		 * 是否开启验证，默认true
+		 * @type {Boolean}
+		 */
+		validate : true,		
+<span id='fastDev-Ui-Form-property-saveInstance'>		/**
+</span>		 * 是否设置为实例，默认true
+		 * @type {Boolean}
+		 */
+		saveInstance: true,
+<span id='fastDev-Ui-Form-property-errorMsg'>		/**
+</span>		 * 验证提示信息
+		 * @type {json}
+		 */
+		errorMsg : null,
+<span id='fastDev-Ui-Form-property-resetToBlank'>		/**
+</span>		 * 清空数据,如设false重置到表单的dataSource值，默认true
+		 * @type {Boolean}[resetToBlank=true]
+		 */
+		resetToBlank : true,		
+<span id='fastDev-Ui-Form-event-onDisplayError'>		/**
+</span>		 * @event onDisplayError
+		 * 自定义错误显示处理  
+		 * @param {Array} errorArray
+		 */
+		onDisplayError : fastDev.noop,
+<span id='fastDev-Ui-Form-event-onBeforeInitalize'>		/**
+</span>		 * @event onBeforeInitalize
+		 * 表单初始化之前的回调方法
+		 */
+		onBeforeInitalize : fastDev.noop,
+<span id='fastDev-Ui-Form-event-onAfterLoadData'>		/**
+</span>		 * @event onAfterLoadData
+		 * 表单加载完成时的回调方法
+		 */
+		onAfterLoadData : fastDev.noop,
+<span id='fastDev-Ui-Form-event-onSubmitSuccess'>		/**
+</span>		 * @event onSubmitSuccess
+		 * 提交之后的回调事件
+		 * @param {Object}  返回action请求结果
+		 */
+		onSubmitSuccess : fastDev.noop,
+<span id='fastDev-Ui-Form-event-onAfterLoadInit'>		/**
+</span>		 * @event onAfterLoadInit
+		 * initSource数据返回后回调触发。继承自基类
+		 * @param {Object}  返回action请求结果
+		 */
+		onAfterLoadInit:fastDev.noop,
+<span id='fastDev-Ui-Form-event-onBeforeSubmit'>			/**
+</span>		 * @event onBeforeSubmit
+		 * 提交之前的方法，返回&quot;false&quot;阻止提交。
+		 * @param {Boolean}  
+		 */
+		onBeforeSubmit:fastDev.noop,
+<span id='fastDev-Ui-Form-event-onSubmitError'>		/**
+</span>		 * @event onSubmitError
+		 * 提交失败的回调事件(未实现)
+		 * @param {Object}  返回action请求结果
+		 */
+		onSubmitError:fastDev.noop
+	},
+	_global : {
+		controlMap : [],		
+		errorConfig : null,
+		cacheValue : null,
+		errorMsg:&quot;&quot;
+	},	
+	fields : [&quot;id&quot;,&quot;data&quot;],
+<span id='fastDev-Ui-Form-method-ready'>	/**
+</span>	 * 面板参数准备
+	 * @protected
+	 */
+	 ready : function(options,global){				
+		 if(options.id===&quot;&quot;){
+			options.id=fastDev.getID();
+		}
+	 },
+<span id='fastDev-Ui-Form-method-construct'>	 /**
+</span>	 * 控件创建
+	 * @protected
+	 */
+	construct : function(options,global){
+		options.errorFile &amp;&amp; this.initErrorConfig();
+	},	
+<span id='fastDev-Ui-Form-method-constructItems'>	 /**
+</span>	 * 初始化控件列表
+	 * @param {Array} items数据项
+	 * @protected
+	 */
+	constructItems : function() {				
+	    var options=this._options, global=this._global;		
+		options.onBeforeInitalize.call(this);
+		var form=fastDev(&quot;form[id='&quot;+options.id+&quot;']&quot;);
+		if(form.elems.length===0){
+			return;
+		}
+		this.initProxy.setAction(options.action);
+		form.bind(&quot;submit&quot;,this.submit);
+		var fchild=form.find(&quot;[itype][id]&quot;).elems,len=fchild.length,ids=[],data,child,dom,ftype,olditems,newitems;		
+		for(var i=0;i&lt;len;i++){
+			child=fastDev(fchild[i]);
+			ids[i]=child.prop(&quot;id&quot;);
+			data=this.dataset.select(&quot;id=&quot;+ids[i]);
+			child.attr(&quot;saveInstance&quot;,&quot;true&quot;);
+			if(data.length&gt;0){	
+				ftype	 =child.attr(&quot;itype&quot;);				
+				child.removeAttr(&quot;initSource&quot;);
+				if(ftype===&quot;AutoComplete&quot;){
+					olditems=child.attr(&quot;items&quot;);
+					olditems?	olditems+=&quot;,&quot;:olditems=&quot;&quot;;
+					newitems=olditems+data[0].data.data;
+					child.attr(&quot;items&quot;,newitems);
+				}else if(ftype===&quot;Select&quot;){
+					dom=this.createChildOption(data[0]._options.data.data);
+					child.append(dom);
+				}else{										
+					dom=this.createChildDom(data[0]._options.data.data);
+					child.append(dom);
+				}
+			}			
+		}
+		fastDev.Core.ControlBus.compile(&quot;ftype&quot;);	
+		
+			  global.controlMap={};	
+			  var controlMap=global.controlMap,ilen=ids.length,tempControl;
+			  for(var i=0;i&lt;ilen;i++){
+				  tempControl=fastDev.getInstance(ids[i]);
+				  if(tempControl){				
+					  controlMap[ids[i]] = tempControl;
+					  this.setErrorConfig(tempControl);
+				  }
+			  }	
+	},	
+<span id='fastDev-Ui-Form-method-createChildOption'>	/**
+</span>	 * 创建子控件的option
+	 * @private
+	 */
+	createChildOption : function(data){
+		var optionArray=[],len=data.length,item,htmlStr;
+		for(var i=0;i&lt;len;i++){
+			optionArray[i]=document.createElement(&quot;option&quot;);
+			item=data[i];
+			fastDev(optionArray[i]).prop(&quot;value&quot;,item[&quot;value&quot;] || &quot;&quot;);
+			fastDev(optionArray[i]).setText(item[&quot;text&quot;] || &quot;&quot;);
+		}
+		return 	optionArray;
+	},
+<span id='fastDev-Ui-Form-method-createChildDom'>	/**
+</span>	 * 创建子控件的Dom
+	 * @private
+	 */
+	createChildDom : function(data){
+		var htmlStr=&quot;&quot;,len=data.length,item,ilen;
+		for(var i=0;i&lt;len;i++){
+			htmlStr+=&quot;&lt;div &quot;;
+			item=data[i];
+			for (var p in item){	
+				htmlStr+=p+&quot;=\&quot;&quot;+item[p]+&quot;\&quot; &quot;;
+			}
+			htmlStr+=&quot; &gt;&lt;/div&gt;&quot;;
+		}		
+		return fastDev.Dom.createByHTML(htmlStr);
+	},		
+<span id='fastDev-Ui-Form-method-submit'>	/**
+</span>	 * 表单提交
+	 */
+	submit : function() {
+		// 调用controlMap中各控件验证并封装数据
+		var data = &quot;&quot;, options = this._options;
+		//if(options.hasSpecialCode === true &amp;&amp; options.submitJson === false) {
+		//	data = this.getItems();
+		//} else {
+			data = this.getValues();
+		//}
+		options.otherSubmitData &amp;&amp; (data= this.addData(data));
+		if(!data) {
+			return false;
+		}		
+		if(options.submitJson === false) {
+			data = data;
+		} else {
+			data = &quot;data={&quot; + data + &quot;}&quot;;
+		}
+		var msg= this._global.errorMsg;
+		if(options.onDisplayError!==fastDev.noop){			
+			options.onDisplayError.call(this,msg);
+		}
+		if(!fastDev.isEmptyObject(msg)){
+			return false;
+		}
+		if(options.onBeforeSubmit.call(this)===false){
+			return false;
+		}		
+		this.initProxy.save(data,options.onSubmitSuccess);
+		return false;
+	},
+<span id='fastDev-Ui-Form-method-addData'>	/**
+</span>	 * 追加表单提交的数据
+	 * @private
+	 */
+	addData:function (data) {
+		var options = this._options;
+		var otherData=options.otherSubmitData;
+		&quot;string&quot; == typeof otherData &amp;&amp; (otherData=(new Function(&quot;return &quot; + otherData))());
+		if(options.haveSpecialCode===true &amp;&amp; options.submitJson === false){
+			for(var i=0;i&lt;otherData.length;i++){
+				var p=otherData[i][&quot;name&quot;];
+				var result=otherData[i][&quot;value&quot;];
+				if(p &amp;&amp; result){
+					data[p]=result;
+				}
+			}
+		}else{
+			var value=&quot;&quot;;
+			 if(options.submitJson === false) {
+				 for(var i=0;i&lt;otherData.length;i++){
+					  var p=otherData[i][&quot;name&quot;];
+					  var result=otherData[i][&quot;value&quot;];
+					  if(p &amp;&amp; result){
+						   value = p + &quot;=&quot; +  result; data.length &gt; 0 ? data += &quot;&amp;&quot; + value : data += value;
+					  }
+				  }					 
+			  } else {
+				  for(var i=0;i&lt;otherData.length;i++){
+					  var p=otherData[i][&quot;name&quot;];
+					  var result=otherData[i][&quot;value&quot;];
+					  if(p &amp;&amp; result){
+						   /^\[.*\]$/g.test(result) ? result : result = '&quot;' + result + '&quot;';
+						   value = p + &quot;:&quot; + result; data.length &gt; 0 ? data += &quot;,&quot; + value : data += value;
+					  }
+				  }	
+			  }
+		}		
+		return data;	
+	  },
+<span id='fastDev-Ui-Form-method-getValues'>	/**
+</span>	 * 获取当前表单的值集合
+	 * @return {String} values控件值集合
+	 */
+	getValues : function(type) {		
+		var value, data = &quot;&quot;, validation = true, options = this._options, controlMap = this._global.controlMap,errorMsg={};
+		type===&quot;map&quot; &amp;&amp; (data ={});
+		for(var p in controlMap) {
+			var result;
+			if(controlMap[p]) {
+				if(controlMap[p].getValue) {
+					result=controlMap[p].getValue();
+				}
+				if(controlMap[p].validate) {
+					var errmsg=controlMap[p].validate();
+					if(!!errmsg){
+						//if(options.onDisplayError!== fastDev.noop){
+							errorMsg[p]=errmsg;
+						//}
+						continue;
+					}
+				}
+				if(type === &quot;map&quot;){
+					data[p] = result;
+					continue;
+				}else{
+					if(options.submitJson === false){
+						value = p + &quot;=&quot; + result;
+						data.length &gt; 0 ? data += &quot;&amp;&quot; + value : data += value;
+					} else {
+						/^\[.*\]$/g.test(result) ? result : result = '&quot;' + result + '&quot;';
+						value = p + &quot;:&quot; + result;
+						data.length &gt; 0 ? data += &quot;,&quot; + value : data += value;
+					}
+				}
+			}
+		}	
+		this._global.errorMsg=errorMsg;
+		return data;
+	},
+<span id='fastDev-Ui-Form-method-getItems'>	/**
+</span>	 * 获取当前表单的值集合的键值对的对象
+	 * @return {Object} values控件集的键值对集合
+	 */
+	getItems : function() {
+		return this.getValues(&quot;map&quot;);
+	},
+<span id='fastDev-Ui-Form-method-setValue'>	/**
+</span>	 * 设置表单的值
+	 * @param {Object} value控件的json格式键值对对象
+	 * &lt;p&gt;- 此方法不能在onAfterLoadData方法内使用&lt;/p&gt;
+	 */
+	setValue : function(value) {
+		var options = this._options,global=this._global, controlMap =global.controlMap;
+		if(value){
+			global.cacheValue=value;
+		}
+		for(var p in value) {
+			controlMap[p] &amp;&amp; controlMap[p].setValue(value[p]);
+		}
+		if(options.dataSource) {
+			options.onAfterLoadData &amp;&amp; options.onAfterLoadData.call(this);
+		}
+	},
+<span id='fastDev-Ui-Form-method-setValues'>	/**
+</span>	 * 设置表单的值
+	 * @param {Object} value控件的json格式键值对对象
+	 */
+	setValues : function(value) {
+		var options = this._options,global=this._global, controlMap =global.controlMap;
+		for(var p in value) {
+			controlMap[p] &amp;&amp; controlMap[p].setValue(value[p]);
+		}		
+	},
+<span id='fastDev-Ui-Form-method-cleanData'>	/**
+</span>	 * 清空表单
+	 */
+	cleanData:function(){
+		var controlMap=this._global.controlMap;
+		for(var p in controlMap){					
+			   controlMap[p].reset &amp;&amp; controlMap[p].reset() || controlMap[p].clean &amp;&amp; controlMap[p].clean();			
+		}
+	},
+<span id='fastDev-Ui-Form-method-resetData'>	/**
+</span>	 * 重置表单（给表单控件赋上原来的值）
+	 */
+	resetData:function(){
+		var value=this._global.cacheValue;
+		this.setValue(value);
+	},
+<span id='fastDev-Ui-Form-method-refreshData'>	/**
+</span>	 * 刷新数据(刷新initSource数据)
+	 */
+	refreshData : function() {
+		this.initRefresh();
+	},
+<span id='fastDev-Ui-Form-method-initErrorConfig'>	/**
+</span>	 * 初始化验证错误配置信息
+	 * @private
+	 */
+	initErrorConfig : function() {
+		var that = this, options = this._options;
+		//if(!/.*json$/g.test(options.errorFile)) {
+		//	return false;
+		//}
+		var saveErrorConfig = function(data) {
+			that._global.errorConfig =data;		
+		};		
+		var dataSysJob = {
+				name : &quot;exec&quot;,
+				object : fastDev.setFnInScope(this, saveErrorConfig)
+		};	
+		var queue = this._queue = fastDev.Queue.getInstance();		
+		var errorProxy= fastDev.create(&quot;Proxy&quot;, {
+				url : options.errorFile,
+				queue : queue
+		 });
+		errorProxy.addJob(dataSysJob);				
+		errorProxy.load();
+		//fastDev.Ajax.doGet(options.errorFile,{
+		//	complete :saveErrorConfig
+		//});	
+	},	
+<span id='fastDev-Ui-Form-method-isValid'>	/**
+</span>	 * 表单是否验证通过
+	 */
+	isValid:function(){
+		if(this.getValues()!=false){
+			return true;
+		}else{
+			return false;
+		}
+	},
+<span id='fastDev-Ui-Form-method-setErrorConfig'>	/**
+</span>	 * 设置控件验证配置
+	 * @param {Object} control控件实例
+	 * @return {Object}
+	 * @private
+	 */
+	setErrorConfig : function(control){		
+   	    var options=this._options,cOptions=control._options,rule=cOptions.rule,errorConfig=cOptions.errorConfig,validateMode=cOptions.validateMode,id=cOptions.id;
+		if(rule &amp;&amp; (options.validate || validateMode!='none')){
+			control._options.errorConfig=this.getErrorList(rule,errorConfig,id);
+		}
+	},
+<span id='fastDev-Ui-Form-method-getErrorList'>	/**
+</span>	 * 得到验证配置
+	 * @param {String} rule错误类型
+	 * @param {String} errorConfig错误配置
+	 * @param {String} id控件id
+	 * @return {Object}
+	 * @private
+	 */
+	getErrorList : function(rule,errorConfig,id){
+		var me = this, rules = rule.split(&quot;;&quot;), errorList = {},len=rules.length,type;
+		for(var i=0;i&lt;len;i++){
+			type=rules[i];
+			if(errorConfig &amp;&amp; errorConfig[type]){
+				errorList[type]=errorConfig[type];
+			}else{
+				errorList[type]=this.getErrorConfig(id,type);
+			}
+		}
+		return errorList;
+	},
+<span id='fastDev-Ui-Form-method-getErrorConfig'>	/**
+</span>	 * 得到验证配置
+	 * @param {String} name控件名称
+	 * @param {String} type错误类型
+	 * @return {Object}
+	 * @private
+	 */
+	getErrorConfig : function(id, type) {		
+		var msg=&quot;&quot;,errorConfig = this._global.errorConfig;
+		var loadDefault = false;
+		if(errorConfig) {
+			if(errorConfig[id]) {
+				if(errorConfig[id][type]) {
+					msg = errorConfig[id][type];
+				} else {
+					loadDefault = true;
+				}
+			} else {
+				loadDefault = true;
+			}
+			if(loadDefault &amp;&amp; errorConfig[&quot;defaultInfo&quot;]) {
+				if(errorConfig[&quot;defaultInfo&quot;][type]) {
+					msg = errorConfig[&quot;defaultInfo&quot;][type];
+				}
+			}
+		}
+		return msg;
+	}	
+});</pre>
+</body>
+</html>

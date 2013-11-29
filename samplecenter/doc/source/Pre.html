@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+	
+	talkweb.BaseControl.Pre = function(settings){
+		return fastDev.create(&quot;talkweb.BaseControl.Pre.Class&quot;,settings)
+	};
+	
+	fastDev.define(&quot;talkweb.BaseControl.Pre.Class&quot;,{
+		extend : &quot;talkweb.BaseControl.SimpleControl&quot;,
+		_options : {
+			id : null,
+			name : null,
+			className : &quot;pre&quot;
+		},
+		_global : {
+			textNode : null
+		},
+		construct : function() {
+ 			var pre = this.create(&quot;pre&quot;);
+ 			this.storage(pre);
+ 		},
+ 		setValue : function( value ) {
+ 			value &amp;&amp; this.setText(value);
+ 		},
+ 		getValue : function() {
+ 			return this.getText();
+ 		},
+		reConstruct : function( obj ) { 
+			this.reConstruct_TextNode.call(this, obj);
+			return this.superClass.reConstruct.call(this, obj);
+		}
+	})
+
+})()
+</pre>
+</body>
+</html>

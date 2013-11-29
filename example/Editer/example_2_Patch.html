@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Editer</title>
+	<meta name="author" content="admin" />
+	<!-- Date: 2012-07-18 -->
+	<link href="../../themes/base/css/main.css" rel="stylesheet" type="text/css" />
+		<script src="../../src/library/jquery-1.5.1.min.js"></script>
+	<script src="../../src/library/FastDev.js"></script>
+	<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/core/ClassManager.js"></script>
+	<script src="../../src/core/Base.js"></script>
+	<script src="../../src/core/Base_Patch.js"></script>
+	<script src="../../src/core/ControlBus.js"></script>
+	<script src="../../src/core/ControlBus_Patch.js"></script>
+	<script src="../../src/core/DataBus.js"></script>
+	<script src="../../src/core/DataBus_Patch.js"></script>
+	  <script src="../../src/library/Tools.js"></script>
+	<script src="../../src/component/basecontrol/SimpleControl.js"></script>
+		<script src="../../src/component/basecontrol/Input.js"></script>
+		<script src="../../src/component/basecontrol/Anchor.js"></script>
+		<script src="../../src/component/basecontrol/Body.js"></script>
+		<script src="../../src/component/basecontrol/Button.js"></script>
+		<script src="../../src/component/basecontrol/CheckBox.js"></script>
+		<script src="../../src/component/basecontrol/Div.js"></script>
+		<script src="../../src/component/basecontrol/Dl.js"></script>
+		<script src="../../src/component/basecontrol/File.js"></script>
+		<script src="../../src/component/basecontrol/Form.js"></script>
+		<script src="../../src/component/basecontrol/Hidden.js"></script>
+		<script src="../../src/component/basecontrol/Iframe.js"></script>
+		<script src="../../src/component/basecontrol/Image.js"></script>
+		<script src="../../src/component/basecontrol/Label.js"></script>
+		<script src="../../src/component/basecontrol/Password.js"></script>
+		<script src="../../src/component/basecontrol/Pre.js"></script>
+		<script src="../../src/component/basecontrol/Radio.js"></script>
+		<script src="../../src/component/basecontrol/Span.js"></script>
+		<script src="../../src/component/basecontrol/Table.js"></script>
+		<script src="../../src/component/basecontrol/Text.js"></script>
+		<script src="../../src/component/basecontrol/TextArea.js"></script>
+		<script src="../../src/component/basecontrol/Ul.js"></script>
+        
+		<script src="../../src/library/Patch.js"></script>
+	<script src="../../src/component/Component.js"></script>
+	<script src="../../src/component/Component_Patch.js"></script>
+	<script src="../../src/component/form/RadioGroup.js"></script>
+	<script src="../../src/component/form/RadioGroup_Patch.js"></script>
+       <script src="../../src/component/Form.js"></script>
+	<script src="../../src/component/Form_Patch.js"></script>
+    <script src="../../src/component/list/Tree.js"></script>
+	<script src="../../src/component/list/Tree_Patch.js"></script>
+    
+    <script src="../../src/component/form/Editor.js"></script>
+    <script src="../../src/component/form/Editor_Patch.js"></script>
+    <script src="../../src/component/thirdparty/ueditor/editor_all.js"></script>
+    <script src="../../src/component/thirdparty/ueditor/editor_config.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../src/component/thirdparty/ueditor/themes/default/ueditor.css"/>
+	<script>
+				talkweb.Bus.ready({
+				items : [{
+					classPath : "Components.Editor",
+					options : {
+						container : "example",
+						mode:"complete",
+					    name:"testediter1",
+					    dataSource : "value.jsp"
+					}
+				}]
+			})
+	</script>
+</head>
+<body>
+	<div id="example" ></div>
+</body>
+</html>
+

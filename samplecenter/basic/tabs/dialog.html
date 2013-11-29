@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<script type="text/javascript" src="jquery/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+	var select=[];
+	function show(){
+		var i,j,tt=[];
+		for(i=0;i<2000;i++){
+			select.push({"id":i,"name":"name:"+i,"pid":i-1});
+		}
+		var data = [{"id":200,"name":"name:"+200,"pid":199},{"id":1355,"name":"name:"+1355,"pid":1354},{"id":1888,"name":"name:"+1888,"pid":1887}];
+		var date1 = new Date();
+		for(i=0;i<data.length;i++){
+			for(j=0;j<select.length;j++){
+				if(data[i].id==select[j].id){
+					tt.push(select[j].id);
+				}
+			}
+		}
+		var date2 = new Date();
+		var dd = date2.getTime()-date1.getTime();
+		
+		document.getElementById("test").value=dd;
+		
+	}
+</script>
+</head>
+
+<body>
+
+
+<input type="text" id="test" />
+
+<input type="button" value="弹出" onclick="show()"/>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>修改信息</title>
+		<script src="../../../src/fastDev-import.js"></script>   
+		<script src="edit.js"></script>       
+    </head>
+    <body>
+    <form itype="Form" saveInstance="true" action="data/fromsubmit.jsp" onSubmitSuccess="submitSuccess()"  id="editForm" initSource="data/from_init.jsp" onBeforeReady="onBeforeReady()">
+      <table class="ui-form-table" >
+           <tr>
+               <td class="ui-form-table-dt">姓名：<input itype="TextBox" id="id" type="hidden"/></td>
+               <td  class="ui-form-table-dd" width="245">
+               <input itype="TextBox" id="name" iwidth="200px" readonly="true" /></td>               
+           </tr>
+           <tr>
+               <td class="ui-form-table-dt">部门：</td>
+               <td class="ui-form-table-dd" width="205"><div id="orgid" itype="Select" width="200px" height="200px" >
+                 <div>请选择</div>
+               </div></td>
+                                                           
+           </tr> 
+           <tr>
+               <td class="ui-form-table-dt">类型：</td>
+               <td class="ui-form-table-dd" width="205"><div id="type" itype="Select" width="200px" height="200px" >
+                 <div>请选择</div>
+               </div></td>
+                                                           
+           </tr>
+          
+            <tr>
+               <td class="ui-form-table-dt">时间：</td>
+               <td class="ui-form-table-dd" width="205"><input itype="DatePicker" id="date" iwidth="200px"/></td>
+                                                         
+           </tr>
+            <tr>
+               <td class="ui-form-table-dt">备注：</td>
+               <td class="ui-form-table-dd" width="205"><input itype="TextBox" type="textarea" id="remark" iwidth="200px"  validatemode="blur" rule="MaxLength:100"/></td>                                          
+           </tr>                 
+       </table>
+    </form>		
+    </body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title><h4>带查询功能的树</h4>
+			<ul>
+				<li>在文本框输入查询内容，查不到该内容会进行提示，查到节点会将节点选中。</li>
+				</ul>
+		</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script src="../../../src/fastDev-import.js"></script>		
+        <script>
+		var btnsetCurrentId=function(){
+			var txtKeyWord=fastDev.getInstance("txtKey");
+			var keyword=txtKeyWord.getValue();
+			var tree1=fastDev.getInstance("tree1");
+			var items = tree1.getItems();
+			//alert(items.length);
+			var alllen = items.length;
+			var hasFind = false;
+			for(var i = 0; i < alllen; i += 1) {
+				//alert(items[i]["val"]);
+				if(items[i]["val"]==keyword)
+				{
+					tree1.setCurrentId(items[i]["id"]);
+					hasFind = true;
+					return;
+				}
+			}
+			if(hasFind == false)
+			alert("没有找到该节点");
+		}
+        </script>
+	</head>
+	<body>
+		<div >
+			 <div>
+			 	<table>
+			 		<tr><td height="20px"></td></tr>
+			 		<tr>
+			 		<td>
+        	关键字</td><td><div itype="TextBox" id="txtKey" saveInstance="true"></div></td>
+         	<td><div itype="Button"  text="查询" onclick="btnsetCurrentId()" ></div></td>
+         	</tr></table>
+		</div>
+			<div itype="Tree"  initSource="../../data/treedata2.txt"  customFields="url" showIco="true" topParentid="0" openFloor=2  id="tree1" saveInstance="true"></div>            
+        
+	</div>
+	</body>
+</html>

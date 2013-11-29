@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Button</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-08-09 -->
+		<link rel="stylesheet" type="text/css" href="../../themes/default/css/ui-main.css">
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Queue.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+     
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/ControlBus.js"></script>
+        <script src="../../src/core/ControlBus_Patch.js"></script>
+		<script src="../../src/core/DataBus.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script src="../../src/core/Template.js"></script>
+		<script src="../../src/data/Proxy.js"></script>
+		<script src="../../src/data/DataSet.js"></script>
+		<script src="../../src/data/Record.js"></script>
+		<script src="../../src/data/Field.js"></script>
+		<script src="../../src/data/Reader.js"></script>
+
+		<script src="../../src/component/Component.js"></script>
+		<script src="../../src/component/layout/Panel.js"></script>
+        <script src="../../src/component/form/Button.js"></script>
+
+		<script>
+			$(function() {
+					////////////////////////////////////////普通的按钮 开始//////////////////////////////
+				//无图按钮
+				$.create("Button", {
+					container : "example",
+					text:"无图按钮",
+					name:"btn1",	
+					id:"btn1",
+					saveInstance:true
+				});
+				//debugger;
+				var btn=fastDev.Core.ControlBus.getInstance("btn1");
+				//chk1.setValue(["1","2"]);
+				//alert(chk1.getValue());
+				
+				//常用按钮
+
+				$.create("Button", {
+					container : "example",
+					text:"添加",
+					width:"200px",
+					iconCls:"icon-add"
+				});
+				
+				$.create("Button", {
+					container : "example",
+					text:"删除",
+					iconCls:"icon-delete"
+				});
+				
+			 var editbtn=	$.create("Button", {
+					container : "example",
+					text:"修改",
+					iconCls:"icon-edit"
+				});
+				
+				$.create("Button", {
+					container : "example",
+					text:"查询",
+					iconCls:"icon-search"
+				});
+				
+				$.create("Button", {
+					container : "example",
+					text:"打印",
+					iconCls:"icon-print"
+				});
+				////////////////////////////////////////普通的按钮 结束//////////////////////////////
+				////////////////////////////////////////背景透明的按钮 开始//////////////////////////////
+				//无文字按钮
+				$.create("Button", {
+					container : "example4",
+					onBtnClick:function(){
+						alert("aaa");
+					},
+					title:"提交",
+					iconCls:"icon-add"
+				});
+				
+				$.create("Button", {
+					container : "example4",
+					iconCls:"icon-delete"
+				});
+				//无图按钮
+				$.create("Button", {
+					container : "example4",
+					plain:true,
+					text:"无图按钮"
+				});
+				
+				//常用按钮
+
+				$.create("Button", {
+					container : "example4",
+					plain:true,
+					text:"添加",
+					iconCls:"icon-add"
+				});
+				
+				$.create("Button", {
+					container : "example4",
+					plain:true,
+					text:"删除",
+					iconCls:"icon-delete"
+				});
+				
+			  $.create("Button", {
+					container : "example4",
+					plain:true,
+					text:"修改",
+					iconCls:"icon-edit"
+				});
+				
+				$.create("Button", {
+					container : "example4",
+					plain:true,
+					text:"查询",
+					iconCls:"icon-search"
+				});
+				
+				$.create("Button", {
+					container : "example4",
+					plain:true,
+					text:"打印",
+					iconCls:"icon-print"
+				});
+				
+				//自定义样式按钮,满足不同图片等不同样式的需求
+				$.create("Button", {
+					container : "example4",
+					plain:true,
+					text:"保存",
+					iconStyle:{
+						"background" : "url('../../themes/default/images/ico/menu-save.gif') no-repeat scroll 3px 50% transparent"}
+				});
+				////////////////////////////////////////背景透明的按钮 结束//////////////////////////////
+				////////////////////////////////////////带链接的按钮以及按钮事件 开始//////////////////////////////
+				//带链接的按钮
+				$.create("Button", {
+					container : "example1",
+					text:"去百度搜索下",
+					href:"http://www.baidu.com",
+					target:"_blank"
+				});
+											
+				//按钮的事件
+				var btnclick=function(){
+		
+					alert("你点击了按钮");
+				}
+				var btn= $.create("Button", {
+					container : "example1",
+					text:"点击事件",
+					width:"200px",
+					onBtnClick:btnclick
+				});
+				
+				var disableEdit=function(){
+					btn.disable();
+				}
+				$.create("Button", {
+					container : "example1",
+					text:"禁用点击事件按钮",
+					iconCls:"icon-edit",
+					onBtnClick:disableEdit			
+				});
+				
+				var enableEdit=function(){
+					btn.enable();
+				}
+				$.create("Button", {
+					container : "example1",
+					text:"启用点击事件按钮",
+					iconCls:"icon-edit",
+					onBtnClick:enableEdit			
+				});
+				
+				
+			////////////////////////////////////////带链接的按钮以及按钮事件 结束//////////////////////////////											
+							
+			//无图按钮
+		
+				////////////////////////////////////////上下结构按钮开始//////////////////////////////								
+
+			var btn1=	$.create("Button", {
+					container : "example2",
+					iconPosition:"top",
+					text:"添加",
+					iconCls:"icon-add"
+				});
+			
+				
+				var disableEdit=function(){
+					btn1.disable();
+				}
+				$.create("Button", {
+					container : "example3",
+					iconPosition:"top",
+					text:"禁用添加按钮",
+					iconCls:"icon-edit",
+					onBtnClick:disableEdit			
+				});
+				
+				var enableEdit=function(){
+					btn1.enable();
+				}
+				$.create("Button", {
+					container : "example3",
+					text:"启用添加按钮",
+					iconPosition:"top",
+					iconCls:"icon-edit",
+					onBtnClick:enableEdit			
+				});
+				
+				////////////////////////////////////////上下结构按钮结束//////////////////////////////					
+							
+							
+							
+			   ////////////////////////////////////////pager按钮 开始//////////////////////////////
+				//pager按钮
+				$.create("Button", {
+					container : "example5",					
+					iconCls:"icon-pagefirst",
+					cls:"ui-button-page"
+				});
+				
+				$.create("Button", {
+					container : "example5",
+					iconCls:"icon-pageprev",
+					cls:"ui-button-page"
+				});
+				
+				$.create("Button", {
+					container : "example5",					
+					iconCls:"icon-pagefirst",
+					cls:"ui-button-page"
+				});
+				
+				var pbtn= $.create("Button", {
+					container : "example5",
+					iconCls:"icon-pagelast",
+					cls:"ui-button-page"
+				});
+				
+				$.create("Button", {
+					container : "example5",
+					iconCls:"icon-refresh",
+					cls:"ui-button-page",
+					onBtnClick:function(){
+						pbtn.disable();
+					}
+				});
+				
+				$.create("Button", {
+					container : "example5",
+					iconCls:"icon-refresh",
+					cls:"ui-button-page",
+					onBtnClick:function(){
+						pbtn.enable();
+					}
+				});
+				//////////////////////////////////////pager按钮 结束///////////////////////////////////////////////////////////
+			});
+		</script>
+	</head>
+	<body>
+    <div id="example" ></div>
+	<div id="example1" ></div>
+    
+    <div id="example2" ></div>
+	<div id="example3" ></div>
+    
+    
+    <div id="example4" class="ui-toolbar ui-toolbar-bg"></div>
+    
+    
+    <div class="ui-toolbar ui-toolbar-bg ui-pagebar ui-pagebar-bg">
+            <div class="ui-left" id="example5">
+           
+            </div>
+    </div>
+    
+    
+	</body>
+
+</html>
+

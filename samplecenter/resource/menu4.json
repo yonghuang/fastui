@@ -1,0 +1,28 @@
+[
+	{
+		"id": "datagrid1000",
+		"pid": "0",
+		"val": "DataGrid1000行数据直接显示",
+		"exampleUrl": "bigdata/datagrid1000.html"
+	}, {
+		"id": "datagrid10000",
+		"pid": "0",
+		"val": "DataGrid10000行数据懒加载",
+		"exampleUrl": "bigdata/datagrid10000.html"
+	}, {
+		"id" : "template",
+		"pid": "0",
+		"val" : "模板性能测试",
+		"exampleUrl": "bigdata/template.htm"
+	}, {
+		"id": "form130",
+		"pid": "0",
+		"val": "表单内置130个控件加载",
+		"exampleUrl": "bigdata/form130.html"
+	}, {
+		"id": "tree5000",
+		"pid": "0",
+		"val": "树5000行数据加载",
+		"exampleUrl": "bigdata/tree5000.html"
+	}
+]

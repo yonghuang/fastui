@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Basics</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../src/library/FastDev.js"></script>
+		<script src="../../src/library/Ajax.js"></script>
+		<script src="../../src/library/Tools.js"></script>
+		<script src="../../src/library/Dom.js"></script>
+		<script src="../../src/library/Query.js"></script>
+		<script src="../../src/library/Event.js"></script>
+		<script src="../../src/library/Browser.js"></script>
+
+		<script src="../../src/core/ClassManager.js"></script>
+		<script src="../../src/core/EventManager.js"></script>
+		<script src="../../src/core/Base.js"></script>
+		<script src="../../src/core/DomObject.js"></script>
+		<script>
+			$(function() {
+				function clearCss() {
+					$("*").css("border", "none");
+				}
+
+
+				$("#btn1").bind("click", function() {
+					clearCss();
+					// 根据给定的ID匹配一个元素
+					$("#div1").css("border", "2px dotted blue");
+				});
+
+				$("#btn2").bind("click", function() {
+					clearCss();
+					// 根据给定的元素名匹配所有元素
+					$("div").css("border", "2px dotted blue");
+				});
+
+				$("#btn3").bind("click", function() {
+					clearCss();
+					// 根据给定的类匹配元素
+					$(".elemClass").css("border", "2px dotted blue");
+				});
+				
+				$("#btn4").bind("click", function() {
+					clearCss();
+					// 匹配拥有多个相同类元素
+					$(".elemClass.spanClass").css("border", "2px dotted blue");
+				});
+				
+				$("#btn5").bind("click", function() {
+					clearCss();
+					// 匹配所有元素
+					$("*").css("border", "2px dotted blue");
+				});
+				
+				$("#btn6").bind("click", function() {
+					clearCss();
+					// 将每一个选择器匹配到的元素合并后一起返
+					$("div,span,p.pClass").css("border", "2px dotted blue");
+				});
+
+			});
+		</script>
+	</head>
+	<body style="height: 600px">
+		id查找：<input type="button" value="#div1" id="btn1"/><br>
+		标签查找：<input type="button" value="div" id="btn2"/><br>
+		样式查找：<input type="button" value=".elemClass" id="btn3"/>
+		<input type="button" value=".elemClass.spanClass" id="btn4"/><br>
+		查找所有文档元素:<input type="button" value="*" id="btn5"/><br>
+		多条件匹配:<input type="button" value="div,span,p.pClass" id="btn6"/><br>
+
+		<!-- HTML元素测试区 -->
+		<div id="div1" class="elemClass">
+			<p>
+				div id="div1" class="elemClass"
+			</p>
+		</div>
+
+		<div id="div2">
+			div id="div2"
+		</div>
+
+		<span class="elemClass spanClass">span class="elemClass  spanClass"</span>
+		<p class="pClass">p class="pClass"</p>
+	</body>
+</html>
+

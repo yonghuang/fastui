@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>
+			<ul>
+				<li>选择器进阶</li>
+			</ul>
+		</title>
+		<meta name="author" content="admin" />
+		<!-- Date: 2012-09-05 -->
+		<script src="../../../../src/fastDev-import.js"></script>
+		<script>
+			fastDev(function() {
+				var container = fastDev("#example");
+				
+				function clearCss() {
+					container.find("*").css("border", "1px dashed #fff");
+				}
+
+
+				fastDev("#btn1").bind("click", function() {
+					clearCss();
+					// 查找第一个li元素
+					container.find("li:first").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn2").bind("click", function() {
+					clearCss();
+					// 查找最后一个li元素
+					container.find("li:last").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn3").bind("click", function() {
+					clearCss();
+					// 查找样式名不包含liClass的li元素
+					container.find("li:not(.liClass)").css("border", "1px dashed #f00");
+				});
+				fastDev("#btn4").bind("click", function() {
+					clearCss();
+					// 查找所有索引值为偶数的li元素(索引从0开始:0、2、4...)
+					container.find("li:even").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn5").bind("click", function() {
+					clearCss();
+					// 查找所有索引值为奇数的li元素(索引从0开始:1、3...)
+					container.find("li:odd").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn6").bind("click", function() {
+					clearCss();
+					// 查找索引值为4的li元素(索引从0开始)
+					container.find("li:eq(4)").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn7").bind("click", function() {
+					clearCss();
+					// 查找所有索引值大于(索引从0开始;不包括等于)2的li元素
+					container.find("li:gt(2)").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn8").bind("click", function() {
+					clearCss();
+					// 查找所有索引值小于(索引从0开始;不包括等于)2的li元素
+					container.find("li:lt(2)").css("border", "1px dashed #f00");
+				});
+
+				fastDev("#btn9").bind("click", function() {
+					clearCss();
+					// 查找如 h1, h2, h3之类的标题元素
+					container.find(":header").css("border", "1px dashed #f00");
+				});
+
+			});
+		</script>
+	</head>
+	<body>
+	<div class="ui-other-content">
+		<p>查找第一个li元素:
+		<a id="btn1" href="#">li:first</a>
+		</p>
+		<p>查找最后一个li元素:
+		<a id="btn2" href="#">li:last</a>
+		</p>
+		<p>查找样式名不包含liClass的li元素:
+		<a id="btn3" href="#">li:not(.liClass)</a>
+		</p>
+		<p>查找所有索引值为偶数的li元素(索引从0开始:0、2、4...):
+		<a id="btn4" href="#">li:even</a>
+		</p>
+		<p>查找所有索引值为奇数的li元素(索引从0开始:1、3...):
+		<a id="btn5" href="#">li:odd</a>
+		</p>
+		<p>查找索引值为4的li元素(索引从0开始):
+		<a id="btn6" href="#">li:eq(4)</a>
+		</p>
+		<p>查找所有索引值大于(索引从0开始;不包括等于)2的li元素:
+		<a id="btn7" href="#">li:gt(2)</a>
+		</p>
+		<p>查找所有索引值小于(索引从0开始;不包括等于)2的li元素:
+		<a id="btn8" href="#">li:lt(2)</a>
+		</p>
+		<p>查找如 h1, h2, h3之类的标题元素:
+		<a id="btn9" href="#">:header</a>
+		</p>
+		<p>&nbsp;</p>
+		<!-- HTML元素测试区 -->
+		<div id="example">
+			<ul>
+				<li>&lt;li>&lt;/li></li>
+				<li>&lt;li>&lt;/li></li>
+				<li class="liClass">&lt;li class="liClass">&lt;/li></li>
+				<li>&lt;li>&lt;/li></li>
+				<li class="liClass">&lt;li class="liClass">&lt;/li></li>
+			</ul>
+			<h1>&lt;h1>&lt;/h1></h1>
+			
+			<h2>&lt;h2>&lt;/h2></h2>
+		</div>
+	</div>
+	</body>
+</html>
+
